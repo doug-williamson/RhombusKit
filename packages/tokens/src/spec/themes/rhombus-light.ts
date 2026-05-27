@@ -1,5 +1,5 @@
 import type { SemanticTokenName } from '../../types';
-import { slate, violet, green, amber } from '../primitives';
+import { slate, violet, green, amber, red } from '../primitives';
 
 export const rhombusLight: Record<SemanticTokenName, string> = {
   '--bg':           slate[50],
@@ -24,6 +24,9 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   // --focus-ring is the soft glow halo painted as box-shadow.
   '--focus-ring':   'rgb(124 58 237 / 0.22)',
   '--focus-border': violet[600],
+
+  '--error':    red[600],
+  '--error-bg': red[50],
 
   '--btn-primary-bg':    violet[600],
   '--btn-primary-text':  '#ffffff',

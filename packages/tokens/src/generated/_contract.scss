@@ -23,6 +23,8 @@
   --border-accent: map.get($values, 'border-accent');
   --focus-ring: map.get($values, 'focus-ring');
   --focus-border: map.get($values, 'focus-border');
+  --error: map.get($values, 'error');
+  --error-bg: map.get($values, 'error-bg');
   --btn-primary-bg: map.get($values, 'btn-primary-bg');
   --btn-primary-text: map.get($values, 'btn-primary-text');
   --btn-primary-hover: map.get($values, 'btn-primary-hover');

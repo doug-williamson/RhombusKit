@@ -21,6 +21,8 @@
   --border-accent: initial;
   --focus-ring: initial;
   --focus-border: initial;
+  --error: initial;
+  --error-bg: initial;
   --btn-primary-bg: initial;
   --btn-primary-text: initial;
   --btn-primary-hover: initial;

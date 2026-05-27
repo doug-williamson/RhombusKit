@@ -28,6 +28,10 @@ export const CONTRACT = [
   '--focus-ring',
   '--focus-border',
 
+  // Error
+  '--error',
+  '--error-bg',
+
   // Buttons
   '--btn-primary-bg',
   '--btn-primary-text',

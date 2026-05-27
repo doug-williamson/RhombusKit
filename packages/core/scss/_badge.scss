@@ -24,7 +24,7 @@
   }
 
   &[data-variant='danger'] {
-    --mat-badge-background-color: var(--status-archived-text);
+    --mat-badge-background-color: var(--error);
     --mat-badge-text-color:       var(--bg);
   }
 }
