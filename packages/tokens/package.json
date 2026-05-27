@@ -1,0 +1,27 @@
+{
+  "name": "@rhombuskit/tokens",
+  "version": "0.1.0",
+  "license": "MIT",
+  "sideEffects": ["*.css", "*.scss"],
+  "publishConfig": { "access": "public" },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./css": "./dist/css/theme-rhombus.css",
+    "./css/primitives": "./dist/css/primitives.css",
+    "./css/contract": "./dist/css/contract.css",
+    "./scss": { "sass": "./dist/scss/index.scss" },
+    "./scss/*": { "sass": "./dist/scss/_*.scss" },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "generate": "tsx ../../tools/generate-tokens.mjs",
+    "build": "pnpm run generate && tsup && node ../../tools/copy-token-assets.mjs",
+    "prepublishOnly": "pnpm run build && node ../../tools/verify-tokens.mjs"
+  }
+}

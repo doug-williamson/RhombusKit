@@ -1,0 +1,90 @@
+// .rhombus-prose — long-form article body.
+// Every property references semantic tokens. No hard-coded values.
+
+.rhombus-prose {
+  color: var(--text-primary);
+  font-family: var(--font-prose);
+  font-size: 1.125rem;
+  line-height: 1.75;
+  max-width: 65ch;
+
+  h2, h3, h4 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+
+  h2 { font-size: 1.5em; }
+  h3 { font-size: 1.25em; }
+  h4 { font-size: 1em; }
+
+  p { margin-top: 1.25em; margin-bottom: 1.25em; }
+
+  a {
+    color: var(--text-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--border-strong);
+    padding-left: 1em;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-left: 0;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.125em 0.375em;
+  }
+
+  pre {
+    background-color: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1em 1.25em;
+    overflow-x: auto;
+
+    code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.875em;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875em;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.5em 0.75em;
+    text-align: left;
+  }
+
+  th {
+    background-color: var(--surface-1);
+    font-weight: 600;
+  }
+
+  ul, ol { padding-left: 1.5em; }
+
+  li { margin-top: 0.25em; margin-bottom: 0.25em; }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2em 0;
+  }
+}

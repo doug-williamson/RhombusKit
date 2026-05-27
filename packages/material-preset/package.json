@@ -1,0 +1,26 @@
+{
+  "name": "@rhombuskit/material-preset",
+  "version": "0.1.0",
+  "license": "MIT",
+  "sideEffects": ["*.css", "*.scss"],
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@angular/material": "^19.0.0"
+  },
+  "dependencies": {
+    "@rhombuskit/tokens": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsup"
+  }
+}

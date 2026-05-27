@@ -1,0 +1,35 @@
+/* GENERATED — do not edit. Source: packages/tokens/src/spec/ */
+
+// Semantic token contract mixin.
+// Usage: @include rhombus-contract($values-map);
+
+@use 'sass:map';
+
+@mixin rhombus-contract($values) {
+  --bg: map.get($values, 'bg');
+  --surface-0: map.get($values, 'surface-0');
+  --surface-1: map.get($values, 'surface-1');
+  --surface-2: map.get($values, 'surface-2');
+  --surface-3: map.get($values, 'surface-3');
+  --text-primary: map.get($values, 'text-primary');
+  --text-secondary: map.get($values, 'text-secondary');
+  --text-muted: map.get($values, 'text-muted');
+  --text-accent: map.get($values, 'text-accent');
+  --text-on-accent: map.get($values, 'text-on-accent');
+  --border: map.get($values, 'border');
+  --border-strong: map.get($values, 'border-strong');
+  --focus-ring: map.get($values, 'focus-ring');
+  --focus-ring-offset: map.get($values, 'focus-ring-offset');
+  --shadow-sm: map.get($values, 'shadow-sm');
+  --shadow-md: map.get($values, 'shadow-md');
+  --shadow-lg: map.get($values, 'shadow-lg');
+  --shadow-xl: map.get($values, 'shadow-xl');
+  --status-draft-bg: map.get($values, 'status-draft-bg');
+  --status-draft-text: map.get($values, 'status-draft-text');
+  --status-published-bg: map.get($values, 'status-published-bg');
+  --status-published-text: map.get($values, 'status-published-text');
+  --status-scheduled-bg: map.get($values, 'status-scheduled-bg');
+  --status-scheduled-text: map.get($values, 'status-scheduled-text');
+  --status-archived-bg: map.get($values, 'status-archived-bg');
+  --status-archived-text: map.get($values, 'status-archived-text');
+}

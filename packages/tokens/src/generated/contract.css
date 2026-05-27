@@ -1,0 +1,33 @@
+/* GENERATED — do not edit. Source: packages/tokens/src/spec/ */
+
+/* Semantic token contract. Values are intentionally `initial`.
+   Import a theme pack to supply real values. */
+
+:root {
+  --bg: initial;
+  --surface-0: initial;
+  --surface-1: initial;
+  --surface-2: initial;
+  --surface-3: initial;
+  --text-primary: initial;
+  --text-secondary: initial;
+  --text-muted: initial;
+  --text-accent: initial;
+  --text-on-accent: initial;
+  --border: initial;
+  --border-strong: initial;
+  --focus-ring: initial;
+  --focus-ring-offset: initial;
+  --shadow-sm: initial;
+  --shadow-md: initial;
+  --shadow-lg: initial;
+  --shadow-xl: initial;
+  --status-draft-bg: initial;
+  --status-draft-text: initial;
+  --status-published-bg: initial;
+  --status-published-text: initial;
+  --status-scheduled-bg: initial;
+  --status-scheduled-text: initial;
+  --status-archived-bg: initial;
+  --status-archived-text: initial;
+}

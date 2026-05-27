@@ -1,0 +1,63 @@
+/* GENERATED — do not edit. Source: packages/tokens/src/spec/ */
+
+
+@use 'sass:map';
+
+
+[data-theme="rhombus-light"] {
+  --bg: #f8fafc;
+  --surface-0: #ffffff;
+  --surface-1: #f1f5f9;
+  --surface-2: #e2e8f0;
+  --surface-3: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-accent: #7c3aed;
+  --text-on-accent: #ffffff;
+  --border: #e2e8f0;
+  --border-strong: #94a3b8;
+  --focus-ring: #8b5cf6;
+  --focus-ring-offset: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --status-draft-bg: #fffbeb;
+  --status-draft-text: #d97706;
+  --status-published-bg: #f0fdf4;
+  --status-published-text: #16a34a;
+  --status-scheduled-bg: #f5f3ff;
+  --status-scheduled-text: #7c3aed;
+  --status-archived-bg: #f1f5f9;
+  --status-archived-text: #64748b;
+}
+
+[data-theme="rhombus-dark"] {
+  --bg: #020617;
+  --surface-0: #0f172a;
+  --surface-1: #1e293b;
+  --surface-2: #334155;
+  --surface-3: #475569;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --text-accent: #a78bfa;
+  --text-on-accent: #ffffff;
+  --border: #334155;
+  --border-strong: #64748b;
+  --focus-ring: #a78bfa;
+  --focus-ring-offset: #0f172a;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --status-draft-bg: #2a1f00;
+  --status-draft-text: #f59e0b;
+  --status-published-bg: #002a0f;
+  --status-published-text: #22c55e;
+  --status-scheduled-bg: #1a0a3a;
+  --status-scheduled-text: #a78bfa;
+  --status-archived-bg: #1e293b;
+  --status-archived-text: #94a3b8;
+}

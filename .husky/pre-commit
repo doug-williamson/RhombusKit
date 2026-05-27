@@ -1,0 +1,11 @@
+#!/bin/sh
+# Forbid manual edits to generated token files. Run `pnpm --filter @rhombuskit/tokens run generate` instead.
+staged=$(git diff --cached --name-only --diff-filter=MR -- 'packages/tokens/src/generated/**')
+if [ -n "$staged" ]; then
+  echo "✗ Refusing to commit manual edits to generated files:"
+  echo "$staged" | sed 's/^/    /'
+  echo ""
+  echo "  These files are produced by tools/generate-tokens.mjs."
+  echo "  Edit the spec files under packages/tokens/src/spec/ then re-run the generator."
+  exit 1
+fi

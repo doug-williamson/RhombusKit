@@ -1,0 +1,17 @@
+// Canonical focus-visible ring. References only semantic tokens.
+// Apply .rhombus-focus-ring to any element that needs a custom focus style,
+// or rely on the :focus-visible selector for automatic coverage.
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+// Utility class for components that manage focus programmatically.
+.rhombus-focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@rhombuskit/tokens": ["packages/tokens/src/index.ts"],
+      "@rhombuskit/theme-engine": ["packages/theme-engine/src/index.ts"],
+      "@rhombuskit/material-preset": ["packages/material-preset/src/index.ts"],
+      "@rhombuskit/core": ["packages/core/src/index.ts"]
+    }
+  }
+}
