@@ -1,0 +1,49 @@
+// App shell — Phase 2 keeps this minimal. Full nav / sidebar lands in Phase 4.
+
+.showcase-shell {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 2rem;
+    background-color: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+
+  &__brand {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.125rem;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  &__nav {
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+
+    a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+
+      &:hover {
+        color: var(--text-primary);
+      }
+
+      &.is-active {
+        color: var(--nav-active-text);
+        background-color: var(--nav-active-bg);
+      }
+    }
+  }
+
+  &__main {
+    min-height: calc(100vh - 4rem);
+    background-color: var(--bg);
+  }
+}
