@@ -12,7 +12,11 @@ export const appRoutes: Route[] = [
         path: 'badge',
         loadComponent: () => import('./pages/badge/badge-page.component'),
       },
-      // Phase 2 adds: card, chip — one route per component PR.
+      {
+        path: 'card',
+        loadComponent: () => import('./pages/card/card-page.component'),
+      },
+      // Phase 2 adds: chip — one route per component PR.
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
