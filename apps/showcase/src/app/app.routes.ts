@@ -16,7 +16,10 @@ export const appRoutes: Route[] = [
         path: 'card',
         loadComponent: () => import('./pages/card/card-page.component'),
       },
-      // Phase 2 adds: chip — one route per component PR.
+      {
+        path: 'chip',
+        loadComponent: () => import('./pages/chip/chip-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
