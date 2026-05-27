@@ -8,3 +8,5 @@ coverage/
 tmp/
 
 .angular
+
+.claude/worktrees
