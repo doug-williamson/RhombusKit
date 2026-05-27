@@ -55,6 +55,19 @@
   --mat-sys-focus-state-layer-opacity:   0.12;
   --mat-sys-pressed-state-layer-opacity: 0.12;
   --mat-sys-dragged-state-layer-opacity: 0.16;
+
+  // Corner / shape scale (M3 defaults). Component tokens like
+  // --mat-badge-container-shape default to var(--mat-sys-corner-full);
+  // without these declared, badge / card / dialog containers fall back to
+  // border-radius: 0 (boxy). Numbers match
+  // @angular/material/core/tokens/m3/_md-sys-shape.scss.
+  --mat-sys-corner-none:        0;
+  --mat-sys-corner-extra-small: 4px;
+  --mat-sys-corner-small:       8px;
+  --mat-sys-corner-medium:      12px;
+  --mat-sys-corner-large:       16px;
+  --mat-sys-corner-extra-large: 28px;
+  --mat-sys-corner-full:        9999px;
 }
 
 // --- Component-level overrides (Phase 2) --------------------------------
