@@ -2,39 +2,50 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  computed,
   inject,
   signal,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RhombusButtonComponent } from '@rhombuskit/core';
 
 type ThemeName = 'rhombus-light' | 'rhombus-dark';
 
 /**
- * Inline theme toggle for the showcase shell.
- * Phase 2 keeps this local to the app; in a later phase it moves into
+ * Icon-only theme toggle for the showcase shell header.
+ * Phase 2 keeps this local; in a later phase it moves into
  * `@rhombuskit/theme-engine` as a `ThemeService` + directive.
+ *
+ * Uses Material 21's `<button matIconButton>` directly (rather than
+ * wrapping rhombus-button) because the icon-only variant has its own
+ * sizing / padding tokens and reads cleanly in a header.
  */
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
-  imports: [RhombusButtonComponent, MatIconModule],
+  imports: [MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <rhombus-button
-      variant="secondary"
-      size="sm"
-      appearance="outlined"
+    <button
+      matIconButton
+      class="theme-toggle"
       (click)="toggle()"
-      attr.aria-label="Switch to {{ theme() === 'rhombus-dark' ? 'light' : 'dark' }} theme"
+      [attr.aria-label]="ariaLabel()"
+      [title]="ariaLabel()"
     >
-      <mat-icon aria-hidden="true">
-        {{ theme() === 'rhombus-dark' ? 'light_mode' : 'dark_mode' }}
-      </mat-icon>
-      {{ theme() === 'rhombus-dark' ? 'Light' : 'Dark' }}
-    </rhombus-button>
+      <mat-icon aria-hidden="true">{{ icon() }}</mat-icon>
+    </button>
+  `,
+  styles: `
+    .theme-toggle {
+      color: var(--text-primary);
+
+      &:hover {
+        color: var(--text-accent);
+      }
+    }
   `,
 })
 export class ThemeToggleComponent {
@@ -43,6 +54,16 @@ export class ThemeToggleComponent {
   readonly theme = signal<ThemeName>(
     (this.doc.documentElement.getAttribute('data-theme') as ThemeName) ??
       'rhombus-light'
+  );
+
+  /** Icon name shows the theme the toggle will switch TO. */
+  protected readonly icon = computed(() =>
+    this.theme() === 'rhombus-dark' ? 'light_mode' : 'dark_mode'
+  );
+
+  protected readonly ariaLabel = computed(
+    () =>
+      `Switch to ${this.theme() === 'rhombus-dark' ? 'light' : 'dark'} theme`
   );
 
   toggle(): void {
