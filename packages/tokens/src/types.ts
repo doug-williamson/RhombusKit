@@ -44,6 +44,11 @@ export const CONTRACT = [
   '--shadow-xl',
   '--shadow-btn-primary',
 
+  // Font families (CONTRACT aliases of font-family-* primitives)
+  '--font-sans',
+  '--font-mono',
+  '--font-prose',
+
   // Status
   '--status-draft-bg',
   '--status-draft-text',

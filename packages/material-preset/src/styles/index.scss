@@ -1,0 +1,7 @@
+// @rhombuskit/material-preset — SCSS entry point
+// Consume from app global styles via:
+//   @use '@rhombuskit/material-preset/scss';
+// Must be loaded AFTER @use '@rhombuskit/tokens/scss' so the bridge can
+// reference CONTRACT variables that the tokens package has already declared.
+
+@forward 'bridge';

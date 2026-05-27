@@ -5,7 +5,7 @@
   "sideEffects": ["*.css", "*.scss"],
   "publishConfig": { "access": "public" },
   "peerDependencies": {
-    "@angular/material": "^19.0.0"
+    "@angular/material": "^21.0.0"
   },
   "dependencies": {
     "@rhombuskit/tokens": "workspace:*"
@@ -16,11 +16,17 @@
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
+    "./scss": {
+      "sass": "./dist/scss/index.scss"
+    },
+    "./scss/*": {
+      "sass": "./dist/scss/_*.scss"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "scripts": {
-    "build": "tsup"
+    "build": "tsup && node ../../tools/copy-material-preset-assets.mjs"
   }
 }

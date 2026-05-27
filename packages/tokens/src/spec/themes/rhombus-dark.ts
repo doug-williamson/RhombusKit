@@ -38,6 +38,12 @@ export const rhombusDark: Record<SemanticTokenName, string> = {
   '--shadow-xl':           '0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4)',
   '--shadow-btn-primary':  '0 1px 2px 0 rgb(0 0 0 / 0.4)',
 
+  // Font families — CONTRACT aliases over the font-family-* primitives,
+  // so consumers can write var(--font-sans) instead of var(--font-family-sans).
+  '--font-sans':  'var(--font-family-sans)',
+  '--font-mono':  'var(--font-family-mono)',
+  '--font-prose': 'var(--font-family-prose)',
+
   '--status-draft-bg':        '#2a1f00',
   '--status-draft-text':      amber[500],
   '--status-published-bg':    '#002a0f',
