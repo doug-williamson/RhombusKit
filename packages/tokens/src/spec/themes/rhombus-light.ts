@@ -3,6 +3,7 @@ import { slate, violet, green, amber } from '../primitives';
 
 export const rhombusLight: Record<SemanticTokenName, string> = {
   '--bg':           slate[50],
+  '--bg-subtle':    slate[100],
   '--surface-0':    '#ffffff',
   '--surface-1':    slate[100],
   '--surface-2':    slate[200],
@@ -11,19 +12,31 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--text-primary':   slate[900],
   '--text-secondary': slate[600],
   '--text-muted':     slate[400],
+  '--text-disabled':  slate[300],
   '--text-accent':    violet[600],
   '--text-on-accent': '#ffffff',
 
-  '--border':       slate[200],
+  '--border':        slate[200],
   '--border-strong': slate[400],
+  '--border-accent': violet[200],
 
-  '--focus-ring':        violet[500],
-  '--focus-ring-offset': '#ffffff',
+  // Two-layer focus: --focus-border is the sharp 1px outline,
+  // --focus-ring is the soft glow halo painted as box-shadow.
+  '--focus-ring':   'rgb(124 58 237 / 0.22)',
+  '--focus-border': violet[600],
 
-  '--shadow-sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  '--shadow-md': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  '--shadow-lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  '--shadow-xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  '--btn-primary-bg':    violet[600],
+  '--btn-primary-text':  '#ffffff',
+  '--btn-primary-hover': violet[700],
+
+  '--nav-active-bg':   violet[50],
+  '--nav-active-text': violet[700],
+
+  '--shadow-sm':           '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  '--shadow-md':           '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  '--shadow-lg':           '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+  '--shadow-xl':           '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  '--shadow-btn-primary':  '0 1px 2px 0 rgb(124 58 237 / 0.25)',
 
   '--status-draft-bg':        amber[50],
   '--status-draft-text':      amber[600],

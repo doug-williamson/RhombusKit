@@ -5,6 +5,7 @@
 
 :root {
   --bg: initial;
+  --bg-subtle: initial;
   --surface-0: initial;
   --surface-1: initial;
   --surface-2: initial;
@@ -12,16 +13,24 @@
   --text-primary: initial;
   --text-secondary: initial;
   --text-muted: initial;
+  --text-disabled: initial;
   --text-accent: initial;
   --text-on-accent: initial;
   --border: initial;
   --border-strong: initial;
+  --border-accent: initial;
   --focus-ring: initial;
-  --focus-ring-offset: initial;
+  --focus-border: initial;
+  --btn-primary-bg: initial;
+  --btn-primary-text: initial;
+  --btn-primary-hover: initial;
+  --nav-active-bg: initial;
+  --nav-active-text: initial;
   --shadow-sm: initial;
   --shadow-md: initial;
   --shadow-lg: initial;
   --shadow-xl: initial;
+  --shadow-btn-primary: initial;
   --status-draft-bg: initial;
   --status-draft-text: initial;
   --status-published-bg: initial;

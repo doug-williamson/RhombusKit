@@ -5,6 +5,7 @@
 export const CONTRACT = [
   // Backgrounds
   '--bg',
+  '--bg-subtle',
   '--surface-0',
   '--surface-1',
   '--surface-2',
@@ -14,22 +15,34 @@ export const CONTRACT = [
   '--text-primary',
   '--text-secondary',
   '--text-muted',
+  '--text-disabled',
   '--text-accent',
   '--text-on-accent',
 
   // Borders
   '--border',
   '--border-strong',
+  '--border-accent',
 
-  // Focus
+  // Focus (two-layer: solid outline + soft glow halo)
   '--focus-ring',
-  '--focus-ring-offset',
+  '--focus-border',
+
+  // Buttons
+  '--btn-primary-bg',
+  '--btn-primary-text',
+  '--btn-primary-hover',
+
+  // Nav
+  '--nav-active-bg',
+  '--nav-active-text',
 
   // Shadows
   '--shadow-sm',
   '--shadow-md',
   '--shadow-lg',
   '--shadow-xl',
+  '--shadow-btn-primary',
 
   // Status
   '--status-draft-bg',

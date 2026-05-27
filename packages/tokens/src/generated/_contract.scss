@@ -7,6 +7,7 @@
 
 @mixin rhombus-contract($values) {
   --bg: map.get($values, 'bg');
+  --bg-subtle: map.get($values, 'bg-subtle');
   --surface-0: map.get($values, 'surface-0');
   --surface-1: map.get($values, 'surface-1');
   --surface-2: map.get($values, 'surface-2');
@@ -14,16 +15,24 @@
   --text-primary: map.get($values, 'text-primary');
   --text-secondary: map.get($values, 'text-secondary');
   --text-muted: map.get($values, 'text-muted');
+  --text-disabled: map.get($values, 'text-disabled');
   --text-accent: map.get($values, 'text-accent');
   --text-on-accent: map.get($values, 'text-on-accent');
   --border: map.get($values, 'border');
   --border-strong: map.get($values, 'border-strong');
+  --border-accent: map.get($values, 'border-accent');
   --focus-ring: map.get($values, 'focus-ring');
-  --focus-ring-offset: map.get($values, 'focus-ring-offset');
+  --focus-border: map.get($values, 'focus-border');
+  --btn-primary-bg: map.get($values, 'btn-primary-bg');
+  --btn-primary-text: map.get($values, 'btn-primary-text');
+  --btn-primary-hover: map.get($values, 'btn-primary-hover');
+  --nav-active-bg: map.get($values, 'nav-active-bg');
+  --nav-active-text: map.get($values, 'nav-active-text');
   --shadow-sm: map.get($values, 'shadow-sm');
   --shadow-md: map.get($values, 'shadow-md');
   --shadow-lg: map.get($values, 'shadow-lg');
   --shadow-xl: map.get($values, 'shadow-xl');
+  --shadow-btn-primary: map.get($values, 'shadow-btn-primary');
   --status-draft-bg: map.get($values, 'status-draft-bg');
   --status-draft-text: map.get($values, 'status-draft-text');
   --status-published-bg: map.get($values, 'status-published-bg');
