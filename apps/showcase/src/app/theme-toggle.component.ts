@@ -39,8 +39,21 @@ type ThemeName = 'rhombus-light' | 'rhombus-dark';
     </button>
   `,
   styles: `
-    .theme-toggle {
+    .theme-toggle.mat-mdc-icon-button {
+      // Compact the button so it matches the header text rhythm
+      // (~28px tall) instead of Material's default 40x40 touch target.
+      width: 32px;
+      height: 32px;
+      padding: 4px;
+      line-height: 24px;
       color: var(--text-primary);
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
 
       &:hover {
         color: var(--text-accent);
