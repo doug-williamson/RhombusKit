@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ThemeToggleComponent } from './theme-toggle.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ThemeToggleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="showcase-shell__header">
@@ -15,6 +16,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         <a routerLink="/components/card"   routerLinkActive="is-active">Card</a>
         <a routerLink="/components/chip"   routerLinkActive="is-active">Chip</a>
       </nav>
+      <div class="showcase-shell__spacer"></div>
+      <app-theme-toggle />
     </header>
     <main class="showcase-shell__main">
       <router-outlet />

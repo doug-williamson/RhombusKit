@@ -36,11 +36,44 @@ import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core'
 
       <section class="showcase-section">
         <h2>On a mat-icon</h2>
-        <div class="showcase-row" style="gap: 1.5rem">
-          <mat-icon [rhombusBadge]="2"     rhombusBadgeVariant="primary" rhombusBadgeDescription="2 unread notifications" aria-hidden="false">notifications</mat-icon>
-          <mat-icon [rhombusBadge]="'NEW'" rhombusBadgeVariant="success" rhombusBadgeDescription="New inbox items"           aria-hidden="false">inbox</mat-icon>
-          <mat-icon [rhombusBadge]="'!'"   rhombusBadgeVariant="warning" rhombusBadgeDescription="Warning"                   aria-hidden="false">warning</mat-icon>
-          <mat-icon [rhombusBadge]="4"     rhombusBadgeVariant="danger"  rhombusBadgeDescription="4 reported bugs"           aria-hidden="false">bug_report</mat-icon>
+        <p class="showcase-section__note">
+          Icons sized up to 36px and badges set
+          <code>[rhombusBadgeOverlap]="false"</code> so the badge sits
+          beside the glyph rather than over it.
+        </p>
+        <div class="showcase-row" style="gap: 2rem">
+          <mat-icon
+            class="icon-host"
+            [rhombusBadge]="2"
+            [rhombusBadgeOverlap]="false"
+            rhombusBadgeVariant="primary"
+            rhombusBadgeDescription="2 unread notifications"
+            aria-hidden="false"
+          >notifications</mat-icon>
+          <mat-icon
+            class="icon-host"
+            [rhombusBadge]="'NEW'"
+            [rhombusBadgeOverlap]="false"
+            rhombusBadgeVariant="success"
+            rhombusBadgeDescription="New inbox items"
+            aria-hidden="false"
+          >inbox</mat-icon>
+          <mat-icon
+            class="icon-host"
+            [rhombusBadge]="'!'"
+            [rhombusBadgeOverlap]="false"
+            rhombusBadgeVariant="warning"
+            rhombusBadgeDescription="Warning"
+            aria-hidden="false"
+          >warning</mat-icon>
+          <mat-icon
+            class="icon-host"
+            [rhombusBadge]="4"
+            [rhombusBadgeOverlap]="false"
+            rhombusBadgeVariant="danger"
+            rhombusBadgeDescription="4 reported bugs"
+            aria-hidden="false"
+          >bug_report</mat-icon>
         </div>
       </section>
 
@@ -87,14 +120,6 @@ import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core'
         </div>
       </section>
 
-      <section class="showcase-section">
-        <h2>Theme</h2>
-        <div class="showcase-row">
-          <rhombus-button variant="primary" (click)="toggleTheme()">
-            Toggle dark / light
-          </rhombus-button>
-        </div>
-      </section>
     </div>
   `,
   styles: `
@@ -108,15 +133,27 @@ import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core'
       font-family: var(--font-sans);
       font-size: 0.875rem;
     }
+    .icon-host {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+      color: var(--text-secondary);
+    }
+    .showcase-section__note {
+      font-family: var(--font-sans);
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: -0.5rem 0 1rem;
+      max-width: 60ch;
+
+      code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        background-color: var(--surface-1);
+        padding: 0.1em 0.35em;
+        border-radius: 0.25em;
+      }
+    }
   `,
 })
-export default class BadgePageComponent {
-  protected toggleTheme(): void {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    html.setAttribute(
-      'data-theme',
-      current === 'rhombus-dark' ? 'rhombus-light' : 'rhombus-dark'
-    );
-  }
-}
+export default class BadgePageComponent {}

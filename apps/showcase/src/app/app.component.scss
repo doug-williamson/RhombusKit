@@ -42,6 +42,10 @@
     }
   }
 
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
   &__main {
     min-height: calc(100vh - 4rem);
     background-color: var(--bg);
