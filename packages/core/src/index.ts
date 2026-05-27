@@ -11,3 +11,9 @@ export type {
 
 export { RhombusBadgeDirective } from './lib/badge/rhombus-badge.directive';
 export type { BadgeVariant } from './lib/badge/rhombus-badge.directive';
+
+export { RhombusCardComponent } from './lib/card/rhombus-card.component';
+export type {
+  CardVariant,
+  CardPadding,
+} from './lib/card/rhombus-card.component';

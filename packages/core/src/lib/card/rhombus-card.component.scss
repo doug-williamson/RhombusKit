@@ -1,0 +1,64 @@
+// RhombusKit card — every value through @rhombuskit/tokens CONTRACT vars.
+// No hard-coded colour / shadow / radius literals; no .mat-mdc-* selectors.
+
+.rhombus-card {
+  display: block;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+
+  // --- Variant: elevated (default; Material's "raised" appearance) ---
+  // Already gets var(--mat-sys-surface) via the bridge; the bridge also
+  // provides --mat-sys-shadow so the card gets RhombusKit's shadow ramp
+  // without further wiring.
+  &--elevated {
+    --mat-card-elevated-container-color: var(--surface-0);
+    box-shadow: var(--shadow-md);
+  }
+
+  // --- Variant: outlined ---
+  &--outlined {
+    --mat-card-outlined-container-color: var(--surface-0);
+    --mat-card-outlined-outline-color:   var(--border);
+    box-shadow: none;
+  }
+
+  // --- Variant: filled ---
+  // No system-token equivalent in M3, so paint the container directly.
+  &--filled {
+    --mat-card-filled-container-color: var(--surface-1);
+    box-shadow: none;
+  }
+
+  // --- Header ---
+  .rhombus-card__header {
+    padding-bottom: 0;
+
+    mat-card-title {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    mat-card-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  // --- Body padding scale ---
+  &--padding-none .rhombus-card__content { padding: 0; }
+  &--padding-sm   .rhombus-card__content { padding: 0.5rem; }
+  &--padding-md   .rhombus-card__content { padding: 1rem; }
+  &--padding-lg   .rhombus-card__content { padding: 1.5rem; }
+
+  // --- Actions ---
+  .rhombus-card__actions {
+    padding: 0.5rem 1rem 1rem;
+
+    // Collapse the actions slot when nothing is projected so the card
+    // doesn't reserve empty space at the bottom.
+    &:empty {
+      display: none;
+    }
+  }
+}
