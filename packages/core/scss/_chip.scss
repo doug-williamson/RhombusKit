@@ -1,0 +1,66 @@
+// RhombusKit chip + chip-group styles. Variants targeted via the
+// `data-variant` host attribute set by the [rhombusChip] directive.
+// Every value through @rhombuskit/tokens CONTRACT vars; no hard-coded
+// colour / shadow / radius literals; no .mat-mdc-* selectors.
+
+.rhombus-chip {
+  // Variant: primary
+  // Unselected: subtle tint over the nav-active surface (matches the
+  // brand colour at a low intensity).
+  // Selected: paint with the contract's primary role.
+  &[data-variant='primary'] {
+    --mat-chip-container-color:                 var(--nav-active-bg);
+    --mat-chip-elevated-container-color:        var(--nav-active-bg);
+    --mat-chip-label-text-color:                var(--nav-active-text);
+  }
+
+  &[data-variant='primary'][aria-selected='true'] {
+    --mat-chip-selected-container-color:        var(--btn-primary-bg);
+    --mat-chip-elevated-selected-container-color: var(--btn-primary-bg);
+    --mat-chip-selected-label-text-color:       var(--btn-primary-text);
+    --mat-chip-selected-leading-icon-color:     var(--btn-primary-text);
+    --mat-chip-selected-trailing-icon-color:    var(--btn-primary-text);
+    --mat-chip-with-icon-selected-icon-color:   var(--btn-primary-text);
+  }
+
+  // Variant: success / warning / danger
+  // These are "tag" variants — they show the status colour regardless
+  // of selection state, so unselected + selected share one colour pair.
+
+  &[data-variant='success'] {
+    --mat-chip-container-color:                 var(--status-published-bg);
+    --mat-chip-elevated-container-color:        var(--status-published-bg);
+    --mat-chip-label-text-color:                var(--status-published-text);
+    --mat-chip-selected-container-color:        var(--status-published-text);
+    --mat-chip-elevated-selected-container-color: var(--status-published-text);
+    --mat-chip-selected-label-text-color:       var(--status-published-bg);
+    --mat-chip-with-icon-icon-color:            var(--status-published-text);
+  }
+
+  &[data-variant='warning'] {
+    --mat-chip-container-color:                 var(--status-draft-bg);
+    --mat-chip-elevated-container-color:        var(--status-draft-bg);
+    --mat-chip-label-text-color:                var(--status-draft-text);
+    --mat-chip-selected-container-color:        var(--status-draft-text);
+    --mat-chip-elevated-selected-container-color: var(--status-draft-text);
+    --mat-chip-selected-label-text-color:       var(--status-draft-bg);
+    --mat-chip-with-icon-icon-color:            var(--status-draft-text);
+  }
+
+  &[data-variant='danger'] {
+    --mat-chip-container-color:                 var(--status-archived-bg);
+    --mat-chip-elevated-container-color:        var(--status-archived-bg);
+    --mat-chip-label-text-color:                var(--status-archived-text);
+    --mat-chip-selected-container-color:        var(--status-archived-text);
+    --mat-chip-elevated-selected-container-color: var(--status-archived-text);
+    --mat-chip-selected-label-text-color:       var(--status-archived-bg);
+    --mat-chip-with-icon-icon-color:            var(--status-archived-text);
+  }
+}
+
+.rhombus-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+}

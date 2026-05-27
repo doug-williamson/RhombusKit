@@ -17,3 +17,8 @@ export type {
   CardVariant,
   CardPadding,
 } from './lib/card/rhombus-card.component';
+
+export { RhombusChipDirective } from './lib/chip/rhombus-chip.directive';
+export type { ChipVariant } from './lib/chip/rhombus-chip.directive';
+export { RhombusChipGroupDirective } from './lib/chip/rhombus-chip-group.directive';
+export type { ChipGroupSelection } from './lib/chip/rhombus-chip-group.directive';
