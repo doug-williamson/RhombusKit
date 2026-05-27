@@ -2,6 +2,7 @@
   "name": "@rhombuskit/core",
   "version": "0.1.0",
   "license": "MIT",
+  "sideEffects": ["*.css", "*.scss"],
   "publishConfig": { "access": "public" },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
@@ -11,5 +12,13 @@
   "dependencies": {
     "@rhombuskit/tokens": "workspace:*",
     "@rhombuskit/theme-engine": "workspace:*"
+  },
+  "exports": {
+    "./scss": {
+      "sass": "./scss/index.scss"
+    },
+    "./scss/*": {
+      "sass": "./scss/_*.scss"
+    }
   }
 }

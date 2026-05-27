@@ -1,7 +1,10 @@
 // Order matters: tokens (CONTRACT declarations) must load first so the
 // material-preset bridge can reference --btn-primary-bg, --surface-0, etc.
+// @rhombuskit/core/scss ships global styles for directive-based components
+// (e.g. [rhombusBadge]) that can't attach a per-instance stylesheet.
 @use '@rhombuskit/tokens/scss' as tokens;
 @use '@rhombuskit/material-preset/scss' as material-preset;
+@use '@rhombuskit/core/scss' as core;
 
 html, body {
   margin: 0;

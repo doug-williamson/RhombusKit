@@ -5,14 +5,24 @@
   "sourceRoot": "packages/core/src",
   "targets": {
     "build": {
-      "executor": "@nx/angular:ng-packagr-lite",
+      "executor": "nx:run-commands",
       "options": {
-        "project": "packages/core/ng-package.json",
-        "tsConfig": "packages/core/tsconfig.lib.json"
+        "commands": [
+          "nx run core:ng-packagr",
+          "node tools/copy-core-assets.mjs"
+        ],
+        "parallel": false
       },
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"],
       "outputs": ["{workspaceRoot}/dist/packages/core"]
+    },
+    "ng-packagr": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "options": {
+        "project": "packages/core/ng-package.json",
+        "tsConfig": "packages/core/tsconfig.lib.json"
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint",

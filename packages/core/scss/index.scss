@@ -1,0 +1,7 @@
+// @rhombuskit/core — global SCSS entry point.
+// Loads styles for directive-based components (which can't attach styles
+// via Angular's per-component encapsulation). Consume via:
+//   @use '@rhombuskit/core/scss';
+// Must be loaded AFTER @use '@rhombuskit/material-preset/scss'.
+
+@forward 'badge';
