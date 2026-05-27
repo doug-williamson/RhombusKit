@@ -1,0 +1,24 @@
+{
+  "name": "theme-engine",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/theme-engine/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "options": {
+        "project": "packages/theme-engine/ng-package.json",
+        "tsConfig": "packages/theme-engine/tsconfig.lib.json"
+      },
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"],
+      "outputs": ["{workspaceRoot}/dist/packages/theme-engine"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["packages/theme-engine/**/*.ts"]
+      }
+    }
+  }
+}

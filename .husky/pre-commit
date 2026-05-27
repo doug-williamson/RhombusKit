@@ -1,0 +1,14 @@
+#!/bin/sh
+# Catch isolated hand-edits to generated token files.
+# Allow legitimate regeneration commits where spec or generator files are co-staged.
+generated=$(git diff --cached --name-only --diff-filter=MR -- 'packages/tokens/src/generated/**')
+spec=$(git diff --cached --name-only -- 'packages/tokens/src/types.ts' 'packages/tokens/src/spec/**' 'tools/generate-tokens.mjs')
+if [ -n "$generated" ] && [ -z "$spec" ]; then
+  echo "✗ Generated files changed without a matching spec/generator change:"
+  echo "$generated" | sed 's/^/    /'
+  echo ""
+  echo "  Either re-run tools/generate-tokens.mjs after editing spec files,"
+  echo "  or revert the manual edit. Generated files are produced from"
+  echo "  packages/tokens/src/types.ts and packages/tokens/src/spec/."
+  exit 1
+fi

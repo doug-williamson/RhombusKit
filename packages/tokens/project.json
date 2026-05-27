@@ -1,0 +1,38 @@
+{
+  "name": "tokens",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/tokens/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run build",
+        "cwd": "packages/tokens"
+      },
+      "dependsOn": [],
+      "inputs": ["production"],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "generate-tokens": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx ../../tools/generate-tokens.mjs",
+        "cwd": "packages/tokens"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/tokens"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["packages/tokens/**/*.ts"]
+      }
+    }
+  }
+}

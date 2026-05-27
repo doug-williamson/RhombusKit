@@ -1,0 +1,14 @@
+{
+  "name": "@rhombuskit/core",
+  "version": "0.1.0",
+  "license": "MIT",
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@angular/core": "^19.0.0",
+    "@angular/material": "^19.0.0"
+  },
+  "dependencies": {
+    "@rhombuskit/tokens": "workspace:*",
+    "@rhombuskit/theme-engine": "workspace:*"
+  }
+}

@@ -1,0 +1,21 @@
+// Canonical focus-visible treatment. References only semantic tokens.
+//
+// Two-layer pattern (Material/Tailwind ring + ring-offset):
+//   --focus-border: sharp 1px outline color
+//   --focus-ring:   soft glow halo, painted as box-shadow at low alpha
+//
+// Apply .rhombus-focus-ring to any element that manages focus programmatically;
+// the bare :focus-visible rule covers everything else.
+
+:focus-visible {
+  outline: 1px solid var(--focus-border);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.rhombus-focus-ring {
+  &:focus-visible {
+    outline: 1px solid var(--focus-border);
+    box-shadow: 0 0 0 4px var(--focus-ring);
+    border-radius: var(--radius-md);
+  }
+}
