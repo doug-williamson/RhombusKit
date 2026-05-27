@@ -31,6 +31,9 @@
   --shadow-lg: initial;
   --shadow-xl: initial;
   --shadow-btn-primary: initial;
+  --font-sans: initial;
+  --font-mono: initial;
+  --font-prose: initial;
   --status-draft-bg: initial;
   --status-draft-text: initial;
   --status-published-bg: initial;

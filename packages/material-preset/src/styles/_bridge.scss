@@ -1,0 +1,70 @@
+// @rhombuskit/material-preset — M3 system token bridge
+// Maps Angular Material's --mat-sys-* M3 system tokens to @rhombuskit/tokens
+// CONTRACT names so that [data-theme="rhombus-*"] switches automatically
+// reach every Material component.
+//
+// Phase 2 coverage: button, badge, card, chip.
+// Form field, dialog, table, snackbar tokens land in Phase 3.
+
+@use '@angular/material' as mat;
+
+// --- M3 system token bridge ---------------------------------------------
+// Every value is a var() reference into the @rhombuskit/tokens CONTRACT.
+// Do NOT introduce hard-coded colour/shadow/radius values here, and do NOT
+// reference --slate-*, --violet-*, or any primitive name directly.
+
+:root {
+  // Primary role — filled button bg, chip selected bg, badge bg
+  --mat-sys-primary:                var(--btn-primary-bg);
+  --mat-sys-on-primary:             var(--btn-primary-text);
+  --mat-sys-primary-container:      var(--surface-2);
+  --mat-sys-on-primary-container:   var(--text-primary);
+
+  // Secondary role — tonal / outlined button, unselected chip
+  --mat-sys-secondary:              var(--text-secondary);
+  --mat-sys-on-secondary:           var(--bg);
+  --mat-sys-secondary-container:    var(--surface-1);
+  --mat-sys-on-secondary-container: var(--text-primary);
+
+  // Surface roles — card bg, dialog bg
+  --mat-sys-surface:                var(--surface-0);
+  --mat-sys-on-surface:             var(--text-primary);
+  --mat-sys-surface-variant:        var(--surface-1);
+  --mat-sys-on-surface-variant:     var(--text-secondary);
+
+  // Outline — card border, chip border, input border
+  --mat-sys-outline:                var(--border);
+  --mat-sys-outline-variant:        var(--border);
+
+  // Error role
+  --mat-sys-error:                  var(--status-archived-text);
+  --mat-sys-on-error:               var(--bg);
+
+  // Shadow
+  --mat-sys-shadow:                 var(--shadow-md);
+
+  // Focus halo (Material reads this for its focus state layer)
+  --mat-sys-secondary-fixed-dim:    var(--focus-ring);
+}
+
+// --- Component-level overrides (Phase 2) --------------------------------
+// Use the official mat.*-overrides() mixins for shape / radius / behaviour
+// tokens not covered by --mat-sys-* mapping. Never target .mat-mdc-* class
+// selectors directly — that breaks across Material upgrades.
+
+:root {
+  @include mat.button-overrides((
+    filled-container-shape:   8px,
+    outlined-container-shape: 8px,
+    text-container-shape:     8px,
+  ));
+
+  @include mat.card-overrides((
+    elevated-container-shape: 12px,
+    outlined-container-shape: 12px,
+  ));
+
+  @include mat.chips-overrides((
+    container-shape-radius: 9999px,
+  ));
+}

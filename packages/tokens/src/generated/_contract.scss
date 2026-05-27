@@ -33,6 +33,9 @@
   --shadow-lg: map.get($values, 'shadow-lg');
   --shadow-xl: map.get($values, 'shadow-xl');
   --shadow-btn-primary: map.get($values, 'shadow-btn-primary');
+  --font-sans: map.get($values, 'font-sans');
+  --font-mono: map.get($values, 'font-mono');
+  --font-prose: map.get($values, 'font-prose');
   --status-draft-bg: map.get($values, 'status-draft-bg');
   --status-draft-text: map.get($values, 'status-draft-text');
   --status-published-bg: map.get($values, 'status-published-bg');
