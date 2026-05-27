@@ -45,6 +45,16 @@
 
   // Focus halo (Material reads this for its focus state layer)
   --mat-sys-secondary-fixed-dim:    var(--focus-ring);
+
+  // State-layer opacities (M3 defaults). These are scalar values, not role
+  // colours — without them, Material's per-component state layers default
+  // to opacity 1 and paint an opaque overlay on hover / focus / press,
+  // making button labels unreadable. Numbers match
+  // @angular/material/core/tokens/m3/_md-sys-state.scss.
+  --mat-sys-hover-state-layer-opacity:   0.08;
+  --mat-sys-focus-state-layer-opacity:   0.12;
+  --mat-sys-pressed-state-layer-opacity: 0.12;
+  --mat-sys-dragged-state-layer-opacity: 0.16;
 }
 
 // --- Component-level overrides (Phase 2) --------------------------------

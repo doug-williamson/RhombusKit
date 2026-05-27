@@ -1,0 +1,52 @@
+// RhombusKit button — every value flows through @rhombuskit/tokens CONTRACT
+// vars. No hard-coded colour / shadow / radius literals.
+
+.rhombus-button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: box-shadow 150ms ease, opacity 150ms ease;
+
+  // --- Size variants (padding + font scale only) ---
+  &--sm { font-size: 0.75rem;  padding: 0.25rem 0.75rem; }
+  &--md { font-size: 0.875rem; padding: 0.5rem  1rem;     }
+  &--lg { font-size: 1rem;     padding: 0.75rem 1.5rem;   }
+
+  // --- Colour variants ---
+  // Each variant locally rebinds the --mat-sys-* roles that Material reads
+  // at paint time, so the button picks up our colours without us touching
+  // .mat-mdc-* selectors.
+
+  &--secondary {
+    --mat-sys-primary:    var(--surface-2);
+    --mat-sys-on-primary: var(--text-primary);
+  }
+
+  &--ghost {
+    // For filled+ghost: transparent base, hover lifts onto a subtle surface.
+    --mat-sys-primary:    transparent;
+    --mat-sys-on-primary: var(--text-primary);
+
+    &:hover:not(:disabled) {
+      --mat-sys-primary: var(--surface-1);
+    }
+  }
+
+  &--danger {
+    --mat-sys-primary:    var(--status-archived-text);
+    --mat-sys-on-primary: var(--bg);
+
+    &:hover:not(:disabled) {
+      --mat-sys-primary: var(--status-archived-bg);
+    }
+  }
+
+  // --- State ---
+  &:hover:not(:disabled) {
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

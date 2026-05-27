@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@rhombuskit/core": "workspace:*",
     "@rhombuskit/material-preset": "workspace:*",
     "@rhombuskit/tokens": "workspace:*"
   }
