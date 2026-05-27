@@ -1,0 +1,30 @@
+// RhombusKit badge variant styles.
+// Loaded globally because [rhombusBadge] is a directive (no per-instance
+// stylesheet). All overrides target the --mat-badge-* tokens that Material
+// already reads; we never touch .mat-badge or .mdc-* selectors.
+
+// `default` variant inherits Material's M3 defaults via the bridge mapping
+// (--mat-sys-error / --mat-sys-on-error). The others rebind the badge's
+// per-component tokens to CONTRACT colours.
+
+.rhombus-badge {
+  &[data-variant='primary'] {
+    --mat-badge-background-color: var(--btn-primary-bg);
+    --mat-badge-text-color:       var(--btn-primary-text);
+  }
+
+  &[data-variant='success'] {
+    --mat-badge-background-color: var(--status-published-bg);
+    --mat-badge-text-color:       var(--status-published-text);
+  }
+
+  &[data-variant='warning'] {
+    --mat-badge-background-color: var(--status-draft-bg);
+    --mat-badge-text-color:       var(--status-draft-text);
+  }
+
+  &[data-variant='danger'] {
+    --mat-badge-background-color: var(--status-archived-text);
+    --mat-badge-text-color:       var(--bg);
+  }
+}

@@ -60,24 +60,7 @@ import { RhombusButtonComponent } from '@rhombuskit/core';
         </div>
       </section>
 
-      <section class="showcase-section">
-        <h2>Theme</h2>
-        <div class="showcase-row">
-          <rhombus-button variant="ghost" (click)="toggleTheme()">
-            Toggle dark / light
-          </rhombus-button>
-        </div>
-      </section>
     </div>
   `,
 })
-export default class ButtonPageComponent {
-  protected toggleTheme(): void {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    html.setAttribute(
-      'data-theme',
-      current === 'rhombus-dark' ? 'rhombus-light' : 'rhombus-dark'
-    );
-  }
-}
+export default class ButtonPageComponent {}

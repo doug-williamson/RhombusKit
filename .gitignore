@@ -10,3 +10,6 @@ tmp/
 .angular
 
 .claude/worktrees
+# Local dev artifacts from /run skill (Playwright + screenshots)
+/.playwright-mcp/
+/*.png

@@ -8,3 +8,6 @@ export type {
   ButtonSize,
   ButtonAppearance,
 } from './lib/button/rhombus-button.component';
+
+export { RhombusBadgeDirective } from './lib/badge/rhombus-badge.directive';
+export type { BadgeVariant } from './lib/badge/rhombus-badge.directive';
