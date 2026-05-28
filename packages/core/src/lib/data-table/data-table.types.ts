@@ -11,6 +11,8 @@ export interface ColumnDef<T> {
   width?: string;
   minWidth?: string;
   align?: 'start' | 'center' | 'end';
+  /** Hide this column below the named breakpoint (sm=640px, md=768px). */
+  hideBelow?: 'sm' | 'md';
   cellTemplate?: TemplateRef<{ $implicit: T; index: number }>;
   sortable?: boolean;
 }

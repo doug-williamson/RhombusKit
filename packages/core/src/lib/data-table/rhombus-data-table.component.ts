@@ -6,6 +6,7 @@ import {
   contentChild,
   effect,
   input,
+  isDevMode,
   output,
   viewChild,
 } from '@angular/core';
@@ -51,6 +52,9 @@ import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
           mat-table
           [dataSource]="resolvedDataSource()"
           matSort
+          [matSortActive]="activeSortColumn()"
+          [matSortDirection]="activeSortDirection()"
+          [matSortStart]="sortStart()"
           (matSortChange)="onSortChange($event)"
           class="rhombus-data-table__table"
         >
@@ -67,6 +71,8 @@ import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
                   'rhombus-data-table__header rhombus-data-table__header--' +
                   (col.align ?? 'start')
                 "
+                [class.rhombus-data-table__col--hide-sm]="col.hideBelow === 'sm'"
+                [class.rhombus-data-table__col--hide-md]="col.hideBelow === 'md'"
               >
                 {{ col.header }}
               </th>
@@ -79,6 +85,8 @@ import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
                   'rhombus-data-table__cell rhombus-data-table__cell--' +
                   (col.align ?? 'start')
                 "
+                [class.rhombus-data-table__col--hide-sm]="col.hideBelow === 'sm'"
+                [class.rhombus-data-table__col--hide-md]="col.hideBelow === 'md'"
                 (click)="onRowClick(row)"
               >
                 @if (col.cellTemplate) {
@@ -140,6 +148,16 @@ export class RhombusDataTableComponent<T> {
   readonly columns = input.required<ColumnDef<T>[]>();
   readonly loading = input<boolean>(false);
 
+  // --- Sort ---
+  /** `'internal'` (default): the table owns client-side sort order via
+   * `MatTableDataSource.sort`. `'controlled'`: the consumer owns order; the table
+   * uses `MatSort` for the header affordance only and never reorders the data. */
+  readonly sortMode = input<'internal' | 'controlled'>('internal');
+  /** Consumer-owned sort state, reflected into `MatSort`. Read only in controlled mode. */
+  readonly sortState = input<SortState | null>(null);
+  /** Direction a column sorts to when first activated. */
+  readonly sortStart = input<'asc' | 'desc'>('asc');
+
   // --- Pagination ---
   readonly paginated = input<boolean>(true);
   readonly pageSize = input<number>(10);
@@ -178,6 +196,15 @@ export class RhombusDataTableComponent<T> {
     this.columns().map((c) => c.key)
   );
 
+  // Reflect consumer sort state into MatSort only in controlled mode. In internal
+  // mode these resolve empty so MatSort manages its own state as before.
+  protected readonly activeSortColumn = computed(() =>
+    this.sortMode() === 'controlled' ? this.sortState()?.active ?? '' : ''
+  );
+  protected readonly activeSortDirection = computed<'asc' | 'desc' | ''>(() =>
+    this.sortMode() === 'controlled' ? this.sortState()?.direction ?? '' : ''
+  );
+
   protected readonly isEmpty = computed(() => {
     const d = this.data();
     if (Array.isArray(d)) return d.length === 0;
@@ -208,20 +235,36 @@ export class RhombusDataTableComponent<T> {
     // Wire client-side sort/paginator once their view queries resolve. In
     // server mode these are no-ops — the consumer drives sort/page via outputs.
     // The paginator renders conditionally, so an effect (not ngAfterViewInit)
-    // is required to catch it when it appears.
+    // is required to catch it when it appears. Sort is wired ONLY in internal
+    // mode; controlled mode uses MatSort for the affordance but never binds it
+    // to the data source. Pagination is independent of sort mode.
     effect(() => {
       if (this.isServerMode()) return;
-      this.clientDataSource.sort = this.matSort() ?? null;
+      this.clientDataSource.sort =
+        this.sortMode() === 'internal' ? this.matSort() ?? null : null;
       this.clientDataSource.paginator = this.paginated()
         ? this.matPaginator() ?? null
         : null;
+    });
+
+    // A DataSource owns its own data; the table cannot sort it. internal mode
+    // with a DataSource is a silent-coercion trap, so fail loudly in dev.
+    effect(() => {
+      if (isDevMode() && this.isServerMode() && this.sortMode() === 'internal') {
+        throw new Error(
+          '[rhombus-data-table] sortMode="internal" is invalid with a DataSource. ' +
+            'A DataSource owns its own data; the table cannot sort it. ' +
+            'Use sortMode="controlled" and handle (sortChange) to re-fetch sorted data.'
+        );
+      }
     });
   }
 
   protected onSortChange(sort: Sort): void {
     this.sortChange.emit({ active: sort.active, direction: sort.direction });
-    // Client-side sorting is applied automatically via clientDataSource.sort.
-    // Server-side consumers react to this event and refetch.
+    // Internal mode: clientDataSource.sort has already reordered the data.
+    // Controlled / server mode: we do NOTHING to the data — the consumer reacts
+    // to this event and supplies the new order (or refetches).
   }
 
   protected onPageChange(event: PageEvent): void {

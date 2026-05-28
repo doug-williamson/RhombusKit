@@ -93,3 +93,14 @@
     border-top: 1px solid var(--border);
   }
 }
+
+// Responsive column visibility. Breakpoints hardcoded to mirror Tailwind's
+// default scale (sm=640, md=768). NOT tokenized: CSS custom properties are
+// invalid in media query conditions, so a token could not drive these rules.
+@media (max-width: 639.98px) {
+  .rhombus-data-table__col--hide-sm { display: none; }
+}
+
+@media (max-width: 767.98px) {
+  .rhombus-data-table__col--hide-md { display: none; }
+}

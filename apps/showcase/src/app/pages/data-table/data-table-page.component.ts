@@ -137,6 +137,70 @@ const POSTS: Post[] = [
       </section>
 
       <section class="showcase-section">
+        <h2>Controlled sort</h2>
+        <p class="showcase-section__lead">
+          <code>sortMode="controlled"</code>. The page owns both the data array
+          and the <code>sortState</code> signal. Clicking a header emits
+          <code>sortChange</code> — the table does NOT reorder; the page's handler
+          re-sorts the array and updates <code>sortState</code>, which flows back
+          into the header arrow.
+        </p>
+        <rhombus-data-table
+          [data]="controlledPosts()"
+          [columns]="controlledColumns"
+          sortMode="controlled"
+          [sortState]="controlledSort()"
+          [paginated]="false"
+          (sortChange)="onControlledSort($event)"
+        />
+        <div class="event-log">
+          <p>
+            Page-owned sortState:
+            <strong>{{ controlledSortLabel() }}</strong>
+          </p>
+          <p>First row title: <strong>{{ controlledPosts()[0]?.title }}</strong></p>
+        </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>Desc-first sort</h2>
+        <p class="showcase-section__lead">
+          <code>sortStart="desc"</code> (internal mode). Clicking a fresh sortable
+          column sorts descending on the first click instead of ascending.
+        </p>
+        <rhombus-data-table
+          [data]="posts()"
+          [columns]="controlledColumns"
+          sortStart="desc"
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10]"
+        />
+      </section>
+
+      <section class="showcase-section">
+        <h2>Responsive columns</h2>
+        <p class="showcase-section__lead">
+          <code>hideBelow</code> hides low-priority columns on narrow viewports.
+          Author is <code>hideBelow: 'md'</code> (hidden &lt; 768px); Views is
+          <code>hideBelow: 'sm'</code> (hidden &lt; 640px). Resize the window or use
+          device mode — remaining columns stay aligned.
+        </p>
+        <rhombus-data-table
+          [data]="posts()"
+          [columns]="responsiveColumns"
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10]"
+        />
+      </section>
+
+      <!--
+        Dev-mode assertion (not a live demo — it throws): passing a MatTableDataSource
+        / CDK DataSource as [data] together with the default sortMode="internal"
+        throws under isDevMode(). A DataSource owns its own data, so the table cannot
+        sort it; use sortMode="controlled" and react to (sortChange) instead.
+      -->
+
+      <section class="showcase-section">
         <h2>Empty state — default</h2>
         <p class="showcase-section__lead">
           <code>[data]="[]"</code> with custom <code>emptyTitle</code> /
@@ -228,6 +292,47 @@ export default class DataTablePageComponent {
   protected readonly posts = signal<Post[]>(POSTS);
   protected readonly loading = signal(false);
 
+  // --- Controlled-sort demo: the PAGE owns order + sort state. ---
+  protected readonly controlledPosts = signal<Post[]>(POSTS.slice(0, 6));
+  protected readonly controlledSort = signal<SortState | null>(null);
+  protected readonly controlledSortLabel = computed(() => {
+    const s = this.controlledSort();
+    return s?.direction ? `${s.active} ${s.direction}` : '—';
+  });
+
+  // Plain-text columns reused by the controlled-sort and desc-first demos.
+  protected readonly controlledColumns: ColumnDef<Post>[] = [
+    { key: 'title', header: 'Title', minWidth: '240px', sortable: true },
+    { key: 'author', header: 'Author', minWidth: '160px', sortable: true },
+    {
+      key: 'viewCount',
+      header: 'Views',
+      width: '110px',
+      align: 'end',
+      sortable: true,
+    },
+  ];
+
+  // Responsive demo: hide Author below md, Views below sm.
+  protected readonly responsiveColumns: ColumnDef<Post>[] = [
+    { key: 'title', header: 'Title', minWidth: '200px', sortable: true },
+    {
+      key: 'author',
+      header: 'Author',
+      minWidth: '160px',
+      hideBelow: 'md',
+      sortable: true,
+    },
+    {
+      key: 'viewCount',
+      header: 'Views',
+      width: '110px',
+      align: 'end',
+      hideBelow: 'sm',
+      sortable: true,
+    },
+  ];
+
   protected readonly selectedRow = signal<Post | null>(null);
   protected readonly lastSort = signal('—');
   protected readonly lastPage = signal('—');
@@ -301,6 +406,26 @@ export default class DataTablePageComponent {
   protected onSort(sort: SortState): void {
     this.lastSort.set(
       sort.direction ? `${sort.active} ${sort.direction}` : 'cleared'
+    );
+  }
+
+  // The table emits but never reorders in controlled mode — the PAGE owns order.
+  protected onControlledSort(sort: SortState): void {
+    this.controlledSort.set(sort);
+    if (!sort.direction) {
+      this.controlledPosts.set(POSTS.slice(0, 6));
+      return;
+    }
+    const key = sort.active as keyof Post;
+    const dir = sort.direction === 'asc' ? 1 : -1;
+    this.controlledPosts.update((list) =>
+      [...list].sort((a, b) => {
+        const av = a[key];
+        const bv = b[key];
+        if (av < bv) return -1 * dir;
+        if (av > bv) return 1 * dir;
+        return 0;
+      })
     );
   }
 
