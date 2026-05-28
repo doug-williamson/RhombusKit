@@ -61,7 +61,7 @@ import { RhombusInputComponent } from '@rhombuskit/core';
           error message appears once the control is invalid <em>and</em>
           touched.
         </p>
-        <form class="input-form" (ngSubmit)="onSubmit()">
+        <div class="input-form">
           <rhombus-input
             label="Email"
             type="email"
@@ -80,13 +80,14 @@ import { RhombusInputComponent } from '@rhombuskit/core';
 
           <button
             mat-flat-button
-            type="submit"
+            type="button"
             [disabled]="email.invalid"
             class="input-form__submit"
+            (click)="onSubmit()"
           >
             Submit
           </button>
-        </form>
+        </div>
         <p class="input-form__status">
           Status: <strong>{{ email.status }}</strong> · touched:
           <strong>{{ email.touched }}</strong>

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import {
   RhombusSelectComponent,
   SelectOption,
@@ -9,7 +10,7 @@ import {
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [RhombusSelectComponent],
+  imports: [MatButtonModule, RhombusSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -77,7 +78,7 @@ import {
         <p class="showcase-section__lead">
           Pass a <code>FormControl</code> via <code>[control]</code>.
         </p>
-        <form class="select-form" (ngSubmit)="onSubmit()">
+        <div class="select-form">
           <rhombus-select
             label="Priority"
             placeholder="Choose priority"
@@ -90,8 +91,15 @@ import {
               }
             </span>
           </rhombus-select>
-          <button type="submit" [disabled]="priority.invalid">Submit</button>
-        </form>
+          <button
+            mat-flat-button
+            type="button"
+            [disabled]="priority.invalid"
+            (click)="onSubmit()"
+          >
+            Submit
+          </button>
+        </div>
       </section>
 
       <section class="showcase-section">
