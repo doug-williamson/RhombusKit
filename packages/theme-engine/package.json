@@ -12,8 +12,10 @@
   "bugs": {
     "url": "https://github.com/doug-williamson/RhombusKit/issues"
   },
+  "sideEffects": false,
   "peerDependencies": {
-    "@angular/core": "^19.0.0"
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0"
   },
   "dependencies": {
     "@rhombuskit/tokens": "workspace:*"

@@ -1,0 +1,26 @@
+.rhombus-theme-menu {
+  &__trigger {
+    --mat-icon-button-icon-color: var(--text-secondary);
+
+    &:hover {
+      --mat-icon-button-icon-color: var(--text-primary);
+    }
+  }
+
+  &__check {
+    margin-left: auto;
+    color: var(--text-accent);
+  }
+
+  &__item--active {
+    --mat-menu-item-label-text-color: var(--text-accent);
+  }
+}
+
+// The menu panel renders in the CDK overlay, outside this component's DOM, so
+// its tokens are scoped through the overlay container rather than the host.
+.cdk-overlay-container .rhombus-theme-menu__panel {
+  --mat-menu-container-color: var(--surface-0);
+  --mat-menu-item-label-text-color: var(--text-primary);
+  --mat-menu-item-icon-color: var(--text-secondary);
+}
