@@ -40,3 +40,14 @@ export type {
   FormFieldAppearance,
   FormFieldSize,
 } from './lib/form-field/form-field.types';
+
+// Phase 3b — data table. Hybrid column API (config + cellTemplate escape
+// hatch), array = client-side / DataSource = server-side, distinct loading and
+// empty paths. Row selection deferred.
+export { RhombusDataTableComponent } from './lib/data-table/rhombus-data-table.component';
+export { RhombusEmptyStateDirective } from './lib/data-table/rhombus-empty-state.directive';
+export type {
+  ColumnDef,
+  SortState,
+  PageState,
+} from './lib/data-table/data-table.types';

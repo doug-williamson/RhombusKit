@@ -1,0 +1,95 @@
+.rhombus-data-table {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: var(--font-sans);
+
+  // Sort header arrow colour (component-scoped; bridge sets the global default).
+  --mat-sort-arrow-color: var(--text-accent);
+
+  &__scroll {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  &__table {
+    width: 100%;
+    background-color: transparent;
+
+    // M3 table tokens → CONTRACT. Names verified against Material 21.2.12.
+    --mat-table-background-color:          transparent;
+    --mat-table-header-headline-color:     var(--text-secondary);
+    --mat-table-row-item-label-text-color: var(--text-primary);
+    --mat-table-row-item-outline-color:    var(--border);
+  }
+
+  &__header {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary);
+
+    &--start  { text-align: left;   }
+    &--center { text-align: center; }
+    &--end    { text-align: right;  }
+  }
+
+  &__cell {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+
+    &--start  { text-align: left;   }
+    &--center { text-align: center; }
+    &--end    { text-align: right;  }
+  }
+
+  &__row {
+    &--clickable {
+      cursor: pointer;
+      transition: background-color 120ms ease;
+
+      &:hover {
+        background-color: var(--surface-1);
+      }
+    }
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    --mat-progress-spinner-active-indicator-color: var(--text-accent);
+  }
+
+  &__empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  &__empty-default {
+    color: var(--text-secondary);
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 0.5rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      margin: 0 0 1rem;
+    }
+  }
+
+  &__paginator {
+    --mat-paginator-container-background-color: transparent;
+    --mat-paginator-container-text-color:       var(--text-secondary);
+    border-top: 1px solid var(--border);
+  }
+}
