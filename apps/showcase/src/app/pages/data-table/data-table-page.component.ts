@@ -1,18 +1,25 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   TemplateRef,
   computed,
+  inject,
   signal,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs/operators';
 import {
   ColumnDef,
+  OverflowMenuItem,
   PageState,
   RhombusBadgeDirective,
   RhombusButtonComponent,
+  RhombusConfirmService,
   RhombusDataTableComponent,
   RhombusEmptyStateDirective,
+  RhombusOverflowMenuComponent,
   SortState,
   type BadgeVariant,
 } from '@rhombuskit/core';
@@ -55,6 +62,7 @@ const POSTS: Post[] = [
     RhombusEmptyStateDirective,
     RhombusBadgeDirective,
     RhombusButtonComponent,
+    RhombusOverflowMenuComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -72,20 +80,7 @@ const POSTS: Post[] = [
 
     <ng-template #actionsTpl let-row>
       <div class="actions-cell">
-        <rhombus-button
-          variant="ghost"
-          size="sm"
-          (click)="onAction('Edit', row, $event)"
-        >
-          Edit
-        </rhombus-button>
-        <rhombus-button
-          variant="ghost"
-          size="sm"
-          (click)="onAction('Delete', row, $event)"
-        >
-          Delete
-        </rhombus-button>
+        <rhombus-overflow-menu [items]="rowMenuItems(row)" />
       </div>
     </ng-template>
 
@@ -227,6 +222,9 @@ const POSTS: Post[] = [
   `,
 })
 export default class DataTablePageComponent {
+  private readonly confirm = inject(RhombusConfirmService);
+  private readonly destroyRef = inject(DestroyRef);
+
   protected readonly posts = signal<Post[]>(POSTS);
   protected readonly loading = signal(false);
 
@@ -310,8 +308,40 @@ export default class DataTablePageComponent {
     this.lastPage.set(`index ${page.pageIndex} · size ${page.pageSize}`);
   }
 
-  protected onAction(action: string, row: Post, event: Event): void {
-    event.stopPropagation();
-    this.lastAction.set(`${action} → ${row.title}`);
+  protected rowMenuItems(row: Post): OverflowMenuItem[] {
+    return [
+      {
+        label: 'Edit',
+        icon: 'edit',
+        action: () => this.lastAction.set(`Edit → ${row.title}`),
+      },
+      {
+        label: 'Archive',
+        icon: 'archive',
+        action: () => this.lastAction.set(`Archive → ${row.title}`),
+      },
+      {
+        label: 'Delete…',
+        icon: 'delete',
+        variant: 'danger',
+        dividerBefore: true,
+        action: () => this.confirmDelete(row),
+      },
+    ];
+  }
+
+  private confirmDelete(row: Post): void {
+    this.confirm
+      .confirm({
+        title: 'Delete post?',
+        message: `"${row.title}" will be permanently removed.`,
+        variant: 'danger',
+        confirmLabel: 'Delete',
+      })
+      .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.posts.update((list) => list.filter((p) => p.id !== row.id));
+        this.lastAction.set(`Deleted → ${row.title}`);
+      });
   }
 }

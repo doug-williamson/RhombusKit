@@ -1,0 +1,23 @@
+.rhombus-overflow-menu {
+  &__trigger {
+    --mat-icon-button-icon-color: var(--text-secondary);
+
+    &:hover {
+      --mat-icon-button-icon-color: var(--text-primary);
+    }
+  }
+}
+
+// Panel renders in CDK overlay — scope to overlay container (same pattern as select).
+.cdk-overlay-container .rhombus-overflow-menu__panel {
+  --mat-menu-container-color: var(--surface-0);
+  --mat-menu-item-label-text-color: var(--text-primary);
+  --mat-menu-item-icon-color: var(--text-secondary);
+  --mat-menu-item-hover-state-layer-color: var(--surface-1);
+  --mat-menu-item-focus-state-layer-color: var(--surface-2);
+
+  .rhombus-overflow-menu__item--danger {
+    --mat-menu-item-label-text-color: var(--error);
+    --mat-menu-item-icon-color: var(--error);
+  }
+}

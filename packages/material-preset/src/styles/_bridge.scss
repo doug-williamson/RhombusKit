@@ -177,4 +177,21 @@
   @include mat.sort-overrides((
     arrow-color: var(--text-accent),
   ));
+
+  // Menu (Phase 3b) — global defaults. The overflow-menu panel renders in the
+  // CDK overlay, so rhombus-overflow-menu.component.scss also scopes these.
+  @include mat.menu-overrides((
+    container-color:       var(--surface-0),
+    item-label-text-color: var(--text-primary),
+    item-icon-color:       var(--text-secondary),
+  ));
+
+  // Dialog (Phase 3b) — global defaults. The confirm dialog surface renders in
+  // the CDK overlay, so rhombus-confirm-dialog.component.scss also scopes these.
+  @include mat.dialog-overrides((
+    container-color:       var(--surface-0),
+    container-shape:       12px,
+    subhead-color:         var(--text-primary),
+    supporting-text-color: var(--text-secondary),
+  ));
 }

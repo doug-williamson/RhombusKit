@@ -51,3 +51,14 @@ export type {
   SortState,
   PageState,
 } from './lib/data-table/data-table.types';
+
+// Phase 3b — overflow menu + confirm dialog. The overflow menu is a MatMenu
+// wrapper driven by a config array with callback-per-item dispatch. The confirm
+// service wraps MatDialog and returns Observable<boolean>; its rendered dialog
+// component (RhombusConfirmDialogComponent) is intentionally NOT exported —
+// consumers only ever use the service.
+export { RhombusOverflowMenuComponent } from './lib/overflow-menu/rhombus-overflow-menu.component';
+export type { OverflowMenuItem } from './lib/overflow-menu/overflow-menu.types';
+
+export { RhombusConfirmService } from './lib/confirm-dialog/rhombus-confirm.service';
+export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';

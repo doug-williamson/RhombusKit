@@ -37,6 +37,16 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/data-table/data-table-page.component'),
       },
+      {
+        path: 'overflow-menu',
+        loadComponent: () =>
+          import('./pages/overflow-menu/overflow-menu-page.component'),
+      },
+      {
+        path: 'confirm-dialog',
+        loadComponent: () =>
+          import('./pages/confirm-dialog/confirm-dialog-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

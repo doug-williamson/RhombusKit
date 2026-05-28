@@ -82,6 +82,8 @@ export class AppComponent {
     { path: '/components/textarea', label: 'Textarea' },
     { path: '/components/select', label: 'Select' },
     { path: '/components/data-table', label: 'Data Table' },
+    { path: '/components/overflow-menu', label: 'Overflow Menu' },
+    { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
   ];
 
   protected readonly isMobile = signal(false);

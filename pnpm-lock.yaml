@@ -134,6 +134,9 @@ importers:
       prettier:
         specifier: ^3.0.0
         version: 3.8.3
+      rxjs:
+        specifier: ^7.8.0
+        version: 7.8.2
       ts-jest:
         specifier: 29.4.11
         version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(esbuild@0.27.7)(jest-util@30.0.5)(jest@30.0.5(@types/node@18.16.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.1(@swc/core@1.15.5(@swc/helpers@0.5.18))(@types/node@18.16.9)(typescript@5.9.3)))(typescript@5.9.3)
@@ -188,6 +191,9 @@ importers:
       '@rhombuskit/tokens':
         specifier: workspace:*
         version: link:../tokens
+      rxjs:
+        specifier: ^7.8.0
+        version: 7.8.2
 
   packages/material-preset:
     dependencies:
