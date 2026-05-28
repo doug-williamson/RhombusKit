@@ -2,7 +2,16 @@
   "name": "@rhombuskit/theme-engine",
   "version": "0.1.0",
   "license": "MIT",
-  "publishConfig": { "access": "public" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doug-williamson/RhombusKit.git",
+    "directory": "packages/theme-engine"
+  },
+  "homepage": "https://rhombuskit.online",
+  "bugs": {
+    "url": "https://github.com/doug-williamson/RhombusKit/issues"
+  },
   "peerDependencies": {
     "@angular/core": "^19.0.0"
   },

@@ -3,7 +3,16 @@
   "version": "0.1.0",
   "license": "MIT",
   "sideEffects": ["*.css", "*.scss"],
-  "publishConfig": { "access": "public" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doug-williamson/RhombusKit.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://rhombuskit.online",
+  "bugs": {
+    "url": "https://github.com/doug-williamson/RhombusKit/issues"
+  },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0",
