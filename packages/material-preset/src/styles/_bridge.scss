@@ -159,4 +159,22 @@
     focused-arrow-color: var(--focus-ring),
     enabled-arrow-color: var(--text-secondary),
   ));
+
+  // Data table (Phase 3b) — global defaults for any direct mat-table consumer.
+  // rhombus-data-table.component.scss also sets these scoped to the component.
+  @include mat.table-overrides((
+    background-color:          transparent,
+    header-headline-color:     var(--text-secondary),
+    row-item-label-text-color: var(--text-primary),
+    row-item-outline-color:    var(--border),
+  ));
+
+  @include mat.paginator-overrides((
+    container-background-color: transparent,
+    container-text-color:       var(--text-secondary),
+  ));
+
+  @include mat.sort-overrides((
+    arrow-color: var(--text-accent),
+  ));
 }

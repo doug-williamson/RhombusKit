@@ -81,6 +81,7 @@ export class AppComponent {
     { path: '/components/input', label: 'Input' },
     { path: '/components/textarea', label: 'Textarea' },
     { path: '/components/select', label: 'Select' },
+    { path: '/components/data-table', label: 'Data Table' },
   ];
 
   protected readonly isMobile = signal(false);

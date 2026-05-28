@@ -32,6 +32,11 @@ export const appRoutes: Route[] = [
         path: 'select',
         loadComponent: () => import('./pages/select/select-page.component'),
       },
+      {
+        path: 'data-table',
+        loadComponent: () =>
+          import('./pages/data-table/data-table-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
