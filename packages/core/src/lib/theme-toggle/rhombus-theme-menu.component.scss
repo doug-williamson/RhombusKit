@@ -7,11 +7,6 @@
     }
   }
 
-  &__check {
-    margin-left: auto;
-    color: var(--text-accent);
-  }
-
   &__item--active {
     --mat-menu-item-label-text-color: var(--text-accent);
   }

@@ -61,8 +61,8 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
       <section class="showcase-section">
         <h2>Theme menu</h2>
         <p>
-          Each item calls <code>setTheme()</code> directly &mdash; no cycling. A
-          check mark marks the active preference; clicking it is a no-op.
+          Each item calls <code>setTheme()</code> directly &mdash; no cycling.
+          The active preference is highlighted; clicking it is a no-op.
         </p>
         <div class="showcase-row">
           <rhombus-theme-menu />
@@ -70,13 +70,12 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
       </section>
 
       <section class="showcase-section">
-        <h2>Theme menu &mdash; custom icons, tooltip off</h2>
+        <h2>Theme menu &mdash; custom icons</h2>
         <div class="showcase-row">
           <rhombus-theme-menu
             lightIcon="wb_sunny"
             darkIcon="nightlight"
             systemIcon="settings_brightness"
-            [showTooltip]="false"
           />
         </div>
       </section>
