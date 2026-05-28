@@ -1,0 +1,29 @@
+// Select option panel — the only place in @rhombuskit/core that styles
+// outside the component's BEM namespace. The mat-select panel renders
+// inside the CDK overlay (.cdk-overlay-container), appended to <body>
+// outside the component host, so mat.select-overrides() in the bridge
+// can't reach it. All values flow through CONTRACT vars. No ::ng-deep.
+//
+// Reference: angular/components#30779.
+//
+// Two scopes are needed because Material registers its component design
+// tokens with different inheritance:
+//   * Option-level tokens (--mat-option-*) inherit, so the container scope
+//     reaches every <mat-option>.
+//   * The panel background token is registered non-inheriting, so setting
+//     it on the container does NOT cascade to the panel. It must sit on
+//     the panel element itself — reached here via the panelClass that
+//     rhombus-select sets on <mat-select> ("rhombus-select-panel").
+
+.cdk-overlay-container {
+  --mat-option-label-text-color:                var(--text-primary);
+  --mat-option-hover-state-layer-color:         var(--surface-1);
+  --mat-option-focus-state-layer-color:         var(--surface-2);
+  --mat-option-selected-state-label-text-color: var(--text-accent);
+  --mat-option-selected-state-layer-color:      var(--surface-1);
+}
+
+.rhombus-select-panel.mat-mdc-select-panel {
+  --mat-select-panel-background-color: var(--surface-0);
+  background-color: var(--surface-0);
+}

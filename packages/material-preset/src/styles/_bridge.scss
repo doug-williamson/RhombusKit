@@ -37,8 +37,10 @@
   --mat-sys-outline-variant:        var(--border);
 
   // Error role
-  --mat-sys-error:                  var(--status-archived-text);
+  --mat-sys-error:                  var(--error);
+  --mat-sys-error-container:        var(--error-bg);
   --mat-sys-on-error:               var(--bg);
+  --mat-sys-on-error-container:     var(--error);
 
   // Shadow
   --mat-sys-shadow:                 var(--shadow-md);
@@ -138,5 +140,23 @@
 
   @include mat.chips-overrides((
     container-shape-radius: 9999px,
+  ));
+
+  // Form field — outlined/filled label + container shape + error text.
+  // mat.form-field-overrides() emits --mat-form-field-* component tokens.
+  @include mat.form-field-overrides((
+    error-text-color:                var(--error),
+    outlined-label-text-color:       var(--text-secondary),
+    outlined-focus-label-text-color: var(--text-accent),
+    outlined-container-shape:        8px,
+    filled-container-shape:          8px,
+  ));
+
+  // Select — arrow colours. Panel + option colours are overridden in
+  // packages/core's rhombus-select.component.scss because the panel
+  // renders outside the host (CDK overlay).
+  @include mat.select-overrides((
+    focused-arrow-color: var(--focus-ring),
+    enabled-arrow-color: var(--text-secondary),
   ));
 }

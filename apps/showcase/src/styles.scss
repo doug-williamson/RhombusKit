@@ -19,12 +19,21 @@ html, body {
 .showcase-page {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  // Mobile-first: tighter gutter on small screens, roomier on desktop.
+  padding: 1.5rem 1rem;
   color: var(--text-primary);
   font-family: var(--font-sans);
 
+  @media (min-width: 960px) {
+    padding: 2rem;
+  }
+
   &__header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+
+    @media (min-width: 960px) {
+      margin-bottom: 3rem;
+    }
 
     h1 {
       font-size: 2rem;

@@ -22,9 +22,12 @@
   }
 
   &--ghost {
-    // For filled+ghost: transparent base, hover lifts onto a subtle surface.
+    // Transparent base; explicit accent text so contrast clears WCAG AA
+    // in both themes (filled-ghost otherwise inherits on-primary which
+    // is tuned for filled surfaces, not transparent).
     --mat-sys-primary:    transparent;
-    --mat-sys-on-primary: var(--text-primary);
+    --mat-sys-on-primary: var(--text-accent);
+    color: var(--text-accent);
 
     &:hover:not(:disabled) {
       --mat-sys-primary: var(--surface-1);
@@ -32,11 +35,12 @@
   }
 
   &--danger {
-    --mat-sys-primary:    var(--status-archived-text);
+    --mat-sys-primary:    var(--error);
     --mat-sys-on-primary: var(--bg);
 
     &:hover:not(:disabled) {
-      --mat-sys-primary: var(--status-archived-bg);
+      --mat-sys-primary: var(--error-bg);
+      color: var(--error);
     }
   }
 

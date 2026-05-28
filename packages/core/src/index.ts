@@ -22,3 +22,21 @@ export { RhombusChipDirective } from './lib/chip/rhombus-chip.directive';
 export type { ChipVariant } from './lib/chip/rhombus-chip.directive';
 export { RhombusChipGroupDirective } from './lib/chip/rhombus-chip-group.directive';
 export type { ChipGroupSelection } from './lib/chip/rhombus-chip-group.directive';
+
+// Phase 3a — form primitives. Each component inlines its own
+// <mat-form-field>; shared styling ships via @rhombuskit/core/scss.
+export { RhombusInputComponent } from './lib/input/rhombus-input.component';
+export type { InputType } from './lib/input/rhombus-input.component';
+
+export { RhombusTextareaComponent } from './lib/textarea/rhombus-textarea.component';
+
+export { RhombusSelectComponent } from './lib/select/rhombus-select.component';
+export type {
+  SelectOption,
+  SelectOptionGroup,
+} from './lib/select/rhombus-select.component';
+
+export type {
+  FormFieldAppearance,
+  FormFieldSize,
+} from './lib/form-field/form-field.types';
