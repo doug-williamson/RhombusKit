@@ -10,6 +10,17 @@
   width: 100%;
   font-family: var(--font-sans);
 
+  // Material's notched outline already signals focus for form-field
+  // controls. Suppress the global :focus-visible ring (from
+  // @rhombuskit/tokens _focus.scss) on the native control so it doesn't
+  // paint a second inner outline + glow on top of the notched outline.
+  input:focus-visible,
+  textarea:focus-visible,
+  mat-select:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
   // Size variants nudge the wrapper font scale; the label, hint, and error
   // subscript inherit proportionally.
   &--sm { font-size: 0.75rem;  }
