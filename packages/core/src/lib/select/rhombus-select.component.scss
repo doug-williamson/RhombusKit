@@ -1,0 +1,22 @@
+// Select option panel — the only place in @rhombuskit/core that styles
+// outside the component's BEM namespace. The mat-select panel renders
+// inside the CDK overlay (.cdk-overlay-container), which is appended
+// to <body> outside the component host. mat.select-overrides() in the
+// bridge can't reach those nodes for the panel-background and option
+// colour tokens, so we set the --mat-select-* / --mat-option-*
+// component tokens directly under the overlay container. All values
+// flow through CONTRACT vars. No ::ng-deep — that's deprecated.
+//
+// Reference: angular/components#30779 (select panel token reach).
+
+.cdk-overlay-container {
+  --mat-select-panel-background-color:           var(--surface-0);
+  --mat-select-enabled-trigger-text-color:       var(--text-primary);
+  --mat-select-placeholder-text-color:           var(--text-muted);
+
+  --mat-option-label-text-color:                 var(--text-primary);
+  --mat-option-hover-state-layer-color:          var(--surface-1);
+  --mat-option-focus-state-layer-color:          var(--surface-2);
+  --mat-option-selected-state-label-text-color:  var(--text-accent);
+  --mat-option-selected-state-layer-color:       var(--surface-1);
+}

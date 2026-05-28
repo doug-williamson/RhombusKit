@@ -1,0 +1,39 @@
+// RhombusKit form-field — every value flows through @rhombuskit/tokens
+// CONTRACT vars. No hard-coded colour literals.
+//
+// We rebind --mat-form-field-* component tokens locally on the wrapper so
+// the bridge's mat.form-field-overrides() defaults can be tightened
+// per-appearance (outlined vs filled) without touching .mat-mdc-* selectors.
+
+.rhombus-form-field {
+  width: 100%;
+  font-family: var(--font-sans);
+
+  // Size variants — control the wrapper's font scale; Material derives the
+  // input text size from `--mat-form-field-container-text-size` which we
+  // leave at its default. Adjusting font-size on the host nudges the label,
+  // hint, and error subscript proportionally.
+  &--sm { font-size: 0.75rem;  }
+  &--md { font-size: 0.875rem; }
+  &--lg { font-size: 1rem;     }
+
+  &--outline {
+    --mat-form-field-outlined-label-text-color:       var(--text-secondary);
+    --mat-form-field-outlined-focus-label-text-color: var(--text-accent);
+    --mat-form-field-outlined-hover-label-text-color: var(--text-primary);
+    --mat-form-field-outlined-outline-color:          var(--border);
+    --mat-form-field-outlined-hover-outline-color:    var(--border-strong);
+    --mat-form-field-outlined-focus-outline-color:    var(--focus-border);
+    --mat-form-field-outlined-input-text-color:       var(--text-primary);
+    --mat-form-field-outlined-input-text-placeholder-color: var(--text-muted);
+  }
+
+  &--fill {
+    --mat-form-field-filled-label-text-color:       var(--text-secondary);
+    --mat-form-field-filled-focus-label-text-color: var(--text-accent);
+    --mat-form-field-filled-hover-label-text-color: var(--text-primary);
+    --mat-form-field-filled-container-color:        var(--surface-1);
+    --mat-form-field-filled-input-text-color:       var(--text-primary);
+    --mat-form-field-filled-input-text-placeholder-color: var(--text-muted);
+  }
+}
