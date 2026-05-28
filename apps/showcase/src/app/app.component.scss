@@ -66,6 +66,9 @@
       color: var(--text-secondary);
       padding: 0.5rem 0.75rem;
       border-radius: 0.5rem;
+      // Suppress the default mobile tap-flash; the .is-active state below
+      // is the real selection feedback.
+      -webkit-tap-highlight-color: transparent;
 
       &:hover {
         color: var(--text-primary);
