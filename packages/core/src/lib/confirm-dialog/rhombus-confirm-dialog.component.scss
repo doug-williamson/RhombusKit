@@ -1,0 +1,31 @@
+.rhombus-confirm-dialog {
+  font-family: var(--font-sans);
+  padding: 1.5rem;
+  color: var(--text-primary);
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+    color: var(--text-primary);
+  }
+
+  &__message {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+}
+
+// Dialog surface renders in CDK overlay — scope panel styling there.
+.cdk-overlay-container .rhombus-confirm-dialog-panel {
+  --mat-dialog-container-color: var(--surface-0);
+  --mat-dialog-container-shape: 12px;
+}
