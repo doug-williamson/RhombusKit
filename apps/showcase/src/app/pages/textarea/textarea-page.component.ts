@@ -4,20 +4,13 @@ import {
   computed,
   signal,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { TextFieldModule } from '@angular/cdk/text-field';
+import { FormControl, Validators } from '@angular/forms';
 import { RhombusTextareaComponent } from '@rhombuskit/core';
 
 @Component({
   selector: 'app-textarea-page',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatInputModule,
-    TextFieldModule,
-    RhombusTextareaComponent,
-  ],
+  imports: [RhombusTextareaComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -29,8 +22,9 @@ import { RhombusTextareaComponent } from '@rhombuskit/core';
           shared form-field inputs (appearance, size, hint, etc.) it
           exposes <code>rows</code> for the fixed-height mode and
           <code>autosize</code> + <code>minRows</code> / <code>maxRows</code>
-          for the CDK autosize mode. As with input, no
-          <code>FormControl</code> is owned by the component.
+          for the CDK autosize mode. As with input, the component owns the
+          control; reactive-forms consumers pass a <code>FormControl</code>
+          via <code>[control]</code>.
         </p>
       </header>
 
@@ -74,8 +68,8 @@ import { RhombusTextareaComponent } from '@rhombuskit/core';
       <section class="showcase-section">
         <h2>Reactive forms with character count</h2>
         <p class="showcase-section__lead">
-          The hint subscript and error message both bind to the
-          <code>FormControl</code> on the projected <code>&lt;textarea&gt;</code>.
+          The hint subscript binds the live character count; the error
+          message binds the control's validity.
         </p>
         <form class="textarea-form">
           <rhombus-textarea
@@ -84,16 +78,9 @@ import { RhombusTextareaComponent } from '@rhombuskit/core';
             [autosize]="true"
             [minRows]="3"
             [maxRows]="6"
+            [control]="bio"
+            [hint]="charCountLabel()"
           >
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              [cdkAutosizeMinRows]="3"
-              [cdkAutosizeMaxRows]="6"
-              [formControl]="bio"
-              placeholder="A sentence or two about yourself."
-            ></textarea>
-            <span slot="hint">{{ charCountLabel() }}</span>
             <span slot="error">
               @if (bio.hasError('required')) {
                 A short bio is required.

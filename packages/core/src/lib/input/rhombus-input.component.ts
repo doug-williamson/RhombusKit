@@ -2,20 +2,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  computed,
   input,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
   FormFieldAppearance,
   FormFieldSize,
-  RhombusFormFieldComponent,
-} from '../form-field/rhombus-form-field.component';
+} from '../form-field/form-field.types';
 
 /**
  * HTML input types we surface. `password` triggers no special behaviour
  * here — the show/hide affordance is the consumer's responsibility
- * (typically a matIconSuffix toggle button).
+ * (typically a matIconSuffix toggle button, projected).
  */
 export type InputType =
   | 'text'
@@ -29,56 +30,70 @@ export type InputType =
   | 'time';
 
 /**
- * `<rhombus-input>` — presentational wrapper over `<mat-form-field>` +
- * `<input matInput>`. The component does NOT implement
- * ControlValueAccessor and does NOT own a FormControl. Consumers attach
- * `[formControl]` / `[(ngModel)]` to the projected `<input>` from outside
- * (see input-page showcase for the reactive forms example).
+ * `<rhombus-input>` — wrapper over `<mat-form-field>` + `<input matInput>`.
  *
- * Slot usage:
- *   <span slot="label">…</span>                     → label text
- *   <span slot="hint">…</span>                      → hint subscript
- *   <span slot="error">…</span>                     → mat-error subscript
- *   <mat-icon matIconPrefix>…</mat-icon>            → leading affordance
- *   <button matIconSuffix>…</button>                → trailing affordance
+ * The component OWNS the native input (Material's MatFormField finds its
+ * control via a content query that does not pierce ng-content, so the
+ * control cannot be projected). For reactive forms, pass a FormControl
+ * via the `control` input — no ControlValueAccessor is implemented.
+ *
+ *   <rhombus-input label="Email" [control]="emailCtrl" />
+ *
+ * Projected slots (found by Material's descendants:true queries):
+ *   <mat-icon matIconPrefix>…</mat-icon>   leading affordance
+ *   <button matIconSuffix>…</button>       trailing affordance
+ *   <span slot="error">…</span>            error subscript text
  */
 @Component({
   selector: 'rhombus-input',
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, RhombusFormFieldComponent],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <rhombus-form-field
-      [appearance]="appearance()"
-      [size]="size()"
+    <mat-form-field
+      [appearance]="appearance() === 'outline' ? 'outline' : 'fill'"
+      [class]="hostClasses()"
       [subscriptSizing]="subscriptSizing()"
     >
-      <span slot="label">{{ label() }}</span>
+      <mat-label>{{ label() }}</mat-label>
 
-      <ng-content select="[matIconPrefix]" ngProjectAs="[matIconPrefix]" />
-      <ng-content select="[matTextPrefix]" ngProjectAs="[matTextPrefix]" />
-      <ng-content select="[matPrefix]" ngProjectAs="[matPrefix]" />
+      <ng-content select="[matPrefix]" />
+      <ng-content select="[matIconPrefix]" />
+      <ng-content select="[matTextPrefix]" />
 
-      <input
-        matInput
-        [type]="type()"
-        [placeholder]="placeholder()"
-        [disabled]="disabled()"
-        [required]="required()"
-        [attr.autocomplete]="autocomplete()"
-      />
-
-      <ng-content select="[matIconSuffix]" ngProjectAs="[matIconSuffix]" />
-      <ng-content select="[matTextSuffix]" ngProjectAs="[matTextSuffix]" />
-      <ng-content select="[matSuffix]" ngProjectAs="[matSuffix]" />
-
-      @if (hint()) {
-        <span slot="hint">{{ hint() }}</span>
+      @if (control(); as ctrl) {
+        <input
+          matInput
+          [formControl]="ctrl"
+          [type]="type()"
+          [placeholder]="placeholder()"
+          [required]="required()"
+          [attr.autocomplete]="autocomplete()"
+        />
+      } @else {
+        <input
+          matInput
+          [type]="type()"
+          [placeholder]="placeholder()"
+          [disabled]="disabled()"
+          [required]="required()"
+          [attr.autocomplete]="autocomplete()"
+        />
       }
 
-      <ng-content select="[slot=error]" ngProjectAs="[slot=error]" />
-    </rhombus-form-field>
+      <ng-content select="[matSuffix]" />
+      <ng-content select="[matIconSuffix]" />
+      <ng-content select="[matTextSuffix]" />
+
+      @if (hint()) {
+        <mat-hint>{{ hint() }}</mat-hint>
+      }
+
+      <mat-error>
+        <ng-content select="[slot=error]" />
+      </mat-error>
+    </mat-form-field>
   `,
 })
 export class RhombusInputComponent {
@@ -92,4 +107,13 @@ export class RhombusInputComponent {
   readonly hint = input<string | null>(null);
   readonly autocomplete = input<string>('off');
   readonly subscriptSizing = input<'fixed' | 'dynamic'>('dynamic');
+  readonly control = input<FormControl | null>(null);
+
+  protected readonly hostClasses = computed(() =>
+    [
+      'rhombus-form-field',
+      `rhombus-form-field--${this.appearance()}`,
+      `rhombus-form-field--${this.size()}`,
+    ].join(' ')
+  );
 }

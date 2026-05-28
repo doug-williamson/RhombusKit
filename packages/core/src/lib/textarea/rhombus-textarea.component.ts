@@ -2,48 +2,51 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  computed,
   input,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import {
   FormFieldAppearance,
   FormFieldSize,
-  RhombusFormFieldComponent,
-} from '../form-field/rhombus-form-field.component';
+} from '../form-field/form-field.types';
 
 /**
- * `<rhombus-textarea>` — presentational wrapper over `<mat-form-field>` +
- * `<textarea matInput>` with optional CDK autosize. Same constraints as
- * `<rhombus-input>`: no ControlValueAccessor, no internal FormControl.
+ * `<rhombus-textarea>` — wrapper over `<mat-form-field>` +
+ * `<textarea matInput>` with optional CDK autosize. Same ownership model
+ * as `<rhombus-input>`: the component owns the control; reactive-forms
+ * consumers pass a FormControl via `control`. No ControlValueAccessor.
  */
 @Component({
   selector: 'rhombus-textarea',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    MatFormFieldModule,
     MatInputModule,
     TextFieldModule,
-    RhombusFormFieldComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <rhombus-form-field
-      [appearance]="appearance()"
-      [size]="size()"
+    <mat-form-field
+      [appearance]="appearance() === 'outline' ? 'outline' : 'fill'"
+      [class]="hostClasses()"
       [subscriptSizing]="subscriptSizing()"
     >
-      <span slot="label">{{ label() }}</span>
+      <mat-label>{{ label() }}</mat-label>
 
-      @if (autosize()) {
+      @if (control(); as ctrl) {
         <textarea
           matInput
-          cdkTextareaAutosize
+          [formControl]="ctrl"
           [placeholder]="placeholder()"
-          [disabled]="disabled()"
           [required]="required()"
+          [rows]="rows()"
+          [cdkTextareaAutosize]="autosize()"
           [cdkAutosizeMinRows]="minRows()"
           [cdkAutosizeMaxRows]="maxRows()"
         ></textarea>
@@ -54,15 +57,20 @@ import {
           [disabled]="disabled()"
           [required]="required()"
           [rows]="rows()"
+          [cdkTextareaAutosize]="autosize()"
+          [cdkAutosizeMinRows]="minRows()"
+          [cdkAutosizeMaxRows]="maxRows()"
         ></textarea>
       }
 
       @if (hint()) {
-        <span slot="hint">{{ hint() }}</span>
+        <mat-hint>{{ hint() }}</mat-hint>
       }
 
-      <ng-content select="[slot=error]" ngProjectAs="[slot=error]" />
-    </rhombus-form-field>
+      <mat-error>
+        <ng-content select="[slot=error]" />
+      </mat-error>
+    </mat-form-field>
   `,
 })
 export class RhombusTextareaComponent {
@@ -78,4 +86,13 @@ export class RhombusTextareaComponent {
   readonly minRows = input<number>(2);
   readonly maxRows = input<number>(10);
   readonly subscriptSizing = input<'fixed' | 'dynamic'>('dynamic');
+  readonly control = input<FormControl | null>(null);
+
+  protected readonly hostClasses = computed(() =>
+    [
+      'rhombus-form-field',
+      `rhombus-form-field--${this.appearance()}`,
+      `rhombus-form-field--${this.size()}`,
+    ].join(' ')
+  );
 }

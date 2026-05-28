@@ -1,0 +1,38 @@
+// RhombusKit form-field — shared styling for rhombus-input,
+// rhombus-textarea, rhombus-select. Each of those components inlines its
+// own <mat-form-field class="rhombus-form-field rhombus-form-field--{appearance}
+// rhombus-form-field--{size}">, so these rules are authored once here and
+// loaded globally via @rhombuskit/core/scss. Every value flows through the
+// @rhombuskit/tokens CONTRACT — no hard-coded colour literals, no
+// .mat-mdc-* selectors.
+
+.rhombus-form-field {
+  width: 100%;
+  font-family: var(--font-sans);
+
+  // Size variants nudge the wrapper font scale; the label, hint, and error
+  // subscript inherit proportionally.
+  &--sm { font-size: 0.75rem;  }
+  &--md { font-size: 0.875rem; }
+  &--lg { font-size: 1rem;     }
+
+  &--outline {
+    --mat-form-field-outlined-label-text-color:             var(--text-secondary);
+    --mat-form-field-outlined-focus-label-text-color:       var(--text-accent);
+    --mat-form-field-outlined-hover-label-text-color:       var(--text-primary);
+    --mat-form-field-outlined-outline-color:                var(--border);
+    --mat-form-field-outlined-hover-outline-color:          var(--border-strong);
+    --mat-form-field-outlined-focus-outline-color:          var(--focus-border);
+    --mat-form-field-outlined-input-text-color:             var(--text-primary);
+    --mat-form-field-outlined-input-text-placeholder-color: var(--text-muted);
+  }
+
+  &--fill {
+    --mat-form-field-filled-label-text-color:               var(--text-secondary);
+    --mat-form-field-filled-focus-label-text-color:         var(--text-accent);
+    --mat-form-field-filled-hover-label-text-color:         var(--text-primary);
+    --mat-form-field-filled-container-color:                var(--surface-1);
+    --mat-form-field-filled-input-text-color:               var(--text-primary);
+    --mat-form-field-filled-input-text-placeholder-color:   var(--text-muted);
+  }
+}

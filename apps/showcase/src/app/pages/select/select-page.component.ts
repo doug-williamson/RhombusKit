@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
+import { FormControl, Validators } from '@angular/forms';
 import {
   RhombusSelectComponent,
   SelectOption,
@@ -10,7 +9,7 @@ import {
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatSelectModule, RhombusSelectComponent],
+  imports: [RhombusSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -22,12 +21,14 @@ import {
           as input and textarea. Pass <code>options</code> (flat) or
           <code>groups</code> (grouped). <code>multiple</code> toggles
           multi-select. The component is generic — option <code>value</code>
-          can be any type. Because the option panel renders inside the CDK
-          overlay (outside the host), <code>--mat-select-*</code> and
+          can be any type — and owns the control, so reactive-forms
+          consumers pass a <code>FormControl</code> via <code>[control]</code>.
+          Because the option panel renders inside the CDK overlay (outside
+          the host), <code>--mat-select-*</code> and
           <code>--mat-option-*</code> tokens are bound under
           <code>.cdk-overlay-container</code> rather than the component
-          host. The colour walk below validates that the workaround
-          reaches the panel.
+          host. The colour walk below validates that the workaround reaches
+          the panel.
         </p>
       </header>
 
@@ -74,16 +75,15 @@ import {
       <section class="showcase-section">
         <h2>Reactive forms with validation</h2>
         <p class="showcase-section__lead">
-          Bind a <code>FormControl</code> on the projected
-          <code>&lt;mat-select&gt;</code>.
+          Pass a <code>FormControl</code> via <code>[control]</code>.
         </p>
         <form class="select-form" (ngSubmit)="onSubmit()">
-          <rhombus-select label="Priority" placeholder="Choose priority">
-            <mat-select [formControl]="priority" placeholder="Choose priority">
-              @for (opt of priorities; track opt.value) {
-                <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
-              }
-            </mat-select>
+          <rhombus-select
+            label="Priority"
+            placeholder="Choose priority"
+            [options]="priorities"
+            [control]="priority"
+          >
             <span slot="error">
               @if (priority.hasError('required')) {
                 Pick a priority before submitting.

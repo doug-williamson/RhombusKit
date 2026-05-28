@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RhombusInputComponent } from '@rhombuskit/core';
@@ -7,12 +7,7 @@ import { RhombusInputComponent } from '@rhombuskit/core';
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule,
-    RhombusInputComponent,
-  ],
+  imports: [MatIconModule, MatButtonModule, RhombusInputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -25,11 +20,11 @@ import { RhombusInputComponent } from '@rhombuskit/core';
           <code>placeholder</code>, <code>appearance</code>
           (<code>outline</code> | <code>fill</code>), <code>size</code>
           (<code>sm</code> | <code>md</code> | <code>lg</code>),
-          <code>hint</code>, plus the usual <code>disabled</code> /
-          <code>required</code>. The component is presentational — no
-          ControlValueAccessor — so consumers attach
-          <code>[formControl]</code> to the native projected input from
-          outside (see the email example below).
+          <code>hint</code>, <code>disabled</code>, <code>required</code>.
+          The component owns the native input — Material's form field can't
+          see a projected control — so reactive-forms consumers pass a
+          <code>FormControl</code> via <code>[control]</code> rather than
+          binding <code>[formControl]</code> directly.
         </p>
       </header>
 
@@ -62,8 +57,9 @@ import { RhombusInputComponent } from '@rhombuskit/core';
       <section class="showcase-section">
         <h2>Reactive forms with validation</h2>
         <p class="showcase-section__lead">
-          Bind a <code>FormControl</code> from outside. The error message
-          appears once the control is invalid <em>and</em> touched.
+          Pass a <code>FormControl</code> via <code>[control]</code>. The
+          error message appears once the control is invalid <em>and</em>
+          touched.
         </p>
         <form class="input-form" (ngSubmit)="onSubmit()">
           <rhombus-input
@@ -71,13 +67,8 @@ import { RhombusInputComponent } from '@rhombuskit/core';
             type="email"
             placeholder="you@example.com"
             hint="We never share this."
+            [control]="email"
           >
-            <input
-              matInput
-              type="email"
-              placeholder="you@example.com"
-              [formControl]="email"
-            />
             <span slot="error">
               @if (email.hasError('required')) {
                 Email is required.
@@ -106,8 +97,7 @@ import { RhombusInputComponent } from '@rhombuskit/core';
         <h2>Password with show/hide</h2>
         <p class="showcase-section__lead">
           The trailing icon button is projected via Material's
-          <code>matIconSuffix</code> directive. The wrapper forwards it
-          through without modification.
+          <code>matIconSuffix</code> directive.
         </p>
         <div class="input-grid input-grid--narrow">
           <rhombus-input
