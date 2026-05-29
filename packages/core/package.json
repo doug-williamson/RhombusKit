@@ -8,7 +8,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "directory": "../../dist/packages/core"
   },
   "repository": {
     "type": "git",

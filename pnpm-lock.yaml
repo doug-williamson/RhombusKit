@@ -166,7 +166,7 @@ importers:
     dependencies:
       '@rhombuskit/core':
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../../dist/packages/core
       '@rhombuskit/material-preset':
         specifier: workspace:*
         version: link:../../packages/material-preset
@@ -187,13 +187,14 @@ importers:
         version: 21.2.12(ab0b385370d4356422a9421f6c83f0c2)
       '@rhombuskit/theme-engine':
         specifier: workspace:*
-        version: link:../theme-engine
+        version: link:../../dist/packages/theme-engine
       '@rhombuskit/tokens':
         specifier: workspace:*
         version: link:../tokens
       rxjs:
         specifier: ^7.8.0
         version: 7.8.2
+    publishDirectory: ../../dist/packages/core
 
   packages/material-preset:
     dependencies:
@@ -215,6 +216,7 @@ importers:
       '@rhombuskit/tokens':
         specifier: workspace:*
         version: link:../tokens
+    publishDirectory: ../../dist/packages/theme-engine
 
   packages/tokens: {}
 

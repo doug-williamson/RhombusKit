@@ -4,7 +4,7 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "directory": "../../dist/packages/theme-engine"
   },
   "repository": {
     "type": "git",
