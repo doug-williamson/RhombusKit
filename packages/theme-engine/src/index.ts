@@ -6,7 +6,11 @@ export {
 export {
   STORAGE_KEY as THEME_STORAGE_KEY,
   THEME_ATTRIBUTE,
+  RHOMBUS_THEME_CONFIG,
+  RHOMBUS_THEME_DEFAULT_CONFIG,
+  provideRhombusTheme,
 } from './lib/theme.tokens';
+export type { RhombusThemeConfig } from './lib/theme.tokens';
 export type {
   ThemeName,
   ThemePreference,

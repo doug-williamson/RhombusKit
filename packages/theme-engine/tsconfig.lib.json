@@ -11,5 +11,5 @@
     "compilationMode": "partial"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "node_modules", "dist"]
+  "exclude": ["src/**/*.spec.ts", "src/test-setup.ts", "node_modules", "dist"]
 }

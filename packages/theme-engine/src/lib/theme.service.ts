@@ -9,20 +9,23 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import type { ThemeName, ThemePreference } from './theme.types';
-import { STORAGE_KEY, THEME_ATTRIBUTE } from './theme.tokens';
+import { RHOMBUS_THEME_CONFIG, STORAGE_KEY, THEME_ATTRIBUTE } from './theme.tokens';
 
 /**
  * Theme management service.
  *
  * Tracks two pieces of state:
- *   - preference: what the user explicitly chose ('rhombus-light' | 'rhombus-dark' | 'system')
+ *   - preference: what the user explicitly chose (config.light | config.dark | 'system')
  *   - current:    the resolved theme actually applied to the DOM (never 'system')
+ *
+ * The concrete light/dark theme names come from RHOMBUS_THEME_CONFIG (see
+ * provideRhombusTheme). Unconfigured, they are 'rhombus-light'/'rhombus-dark'.
  *
  * When preference is 'system', current resolves via prefers-color-scheme and
  * updates reactively if the OS theme changes mid-session.
  *
  * SSR-safe. On the server, all operations are no-ops; the service resolves to
- * 'rhombus-light' and never touches localStorage or matchMedia.
+ * the configured light theme and never touches localStorage or matchMedia.
  *
  * Persistence: the LITERAL preference is stored (including 'system'), not the
  * resolved theme. This preserves the user's "follow system" intent across
@@ -37,13 +40,20 @@ export class RhombusThemeService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
+  /**
+   * Resolved theme names this service uses. Defaults to rhombus-* unless the
+   * consumer registered provideRhombusTheme(). Declared before _preference so
+   * its field initializer can read config.default.
+   */
+  private readonly config = inject(RHOMBUS_THEME_CONFIG);
+
   // --- Reactive state ---
 
   /** Internal signal wrapping the matchMedia query state. */
   private readonly systemPrefersDark = signal<boolean>(false);
 
   /** The user's chosen preference. Backed by localStorage. */
-  private readonly _preference = signal<ThemePreference>('system');
+  private readonly _preference = signal<ThemePreference>(this.config.default);
 
   /**
    * The user's preference. Read-only externally; use setTheme()/toggle() to change.
@@ -58,15 +68,16 @@ export class RhombusThemeService {
   readonly current = computed<ThemeName>(() => {
     const pref = this._preference();
     if (pref === 'system') {
-      return this.systemPrefersDark() ? 'rhombus-dark' : 'rhombus-light';
+      return this.systemPrefersDark() ? this.config.dark : this.config.light;
     }
     return pref;
   });
 
   constructor() {
     if (!this.isBrowser) {
-      // Server: do nothing. current() resolves to 'rhombus-light' because
-      // systemPrefersDark stays false and preference stays 'system'.
+      // Server: do nothing. current() resolves to config.light because
+      // systemPrefersDark stays false and preference stays the default
+      // (typically 'system').
       return;
     }
 
@@ -97,11 +108,12 @@ export class RhombusThemeService {
   /**
    * Set the user's theme preference.
    *
-   * Note: consumers who augment ThemeRegistry with custom theme names can pass
-   * those names here and they apply within the session. However, the cross-session
-   * hydration in this release only recognizes 'rhombus-light', 'rhombus-dark', and
-   * 'system' — an augmented theme persisted to localStorage will be ignored on the
-   * next session (preference falls back to 'system'). This is a known limitation.
+   * Note: cross-session hydration only recognizes the two configured theme
+   * names (config.light, config.dark) plus 'system'. A consumer that configures
+   * provideRhombusTheme({ light, dark }) gets those two names persisted across
+   * sessions. Any OTHER augmented theme name passed here applies within the
+   * session but is ignored on the next load (preference falls back to the
+   * default). Full multi-theme persistence is deferred to the theme registry.
    */
   setTheme(preference: ThemePreference): void {
     this._preference.set(preference);
@@ -116,9 +128,9 @@ export class RhombusThemeService {
   toggle(): void {
     const pref = this._preference();
     const next: ThemePreference =
-      pref === 'rhombus-light' ? 'rhombus-dark' :
-      pref === 'rhombus-dark'  ? 'system' :
-      'rhombus-light';
+      pref === this.config.light ? this.config.dark :
+      pref === this.config.dark  ? 'system' :
+      this.config.light;
     this._preference.set(next);
   }
 
@@ -127,11 +139,15 @@ export class RhombusThemeService {
   private hydrateFromStorage(): void {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === 'rhombus-light' || stored === 'rhombus-dark' || stored === 'system') {
+      if (
+        stored === this.config.light ||
+        stored === this.config.dark ||
+        stored === 'system'
+      ) {
         this._preference.set(stored as ThemePreference);
       }
       // If stored value is null or an unrecognized string (e.g. a custom theme
-      // from a removed augmentation), leave preference at the default 'system'.
+      // from a removed augmentation), leave preference at the default.
     } catch {
       // localStorage unavailable. Leave default.
     }
