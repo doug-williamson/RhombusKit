@@ -1,9 +1,15 @@
 {
   "name": "@rhombuskit/tokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
-  "sideEffects": ["*.css", "*.scss"],
-  "publishConfig": { "access": "public", "provenance": true },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doug-williamson/RhombusKit.git",
@@ -22,8 +28,12 @@
     "./css": "./dist/css/theme-rhombus.css",
     "./css/primitives": "./dist/css/primitives.css",
     "./css/contract": "./dist/css/contract.css",
-    "./scss": { "sass": "./dist/scss/index.scss" },
-    "./scss/*": { "sass": "./dist/scss/_*.scss" },
+    "./scss": {
+      "sass": "./dist/scss/index.scss"
+    },
+    "./scss/*": {
+      "sass": "./dist/scss/_*.scss"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
