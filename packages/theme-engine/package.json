@@ -1,8 +1,11 @@
 {
   "name": "@rhombuskit/theme-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
-  "publishConfig": { "access": "public", "provenance": true },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doug-williamson/RhombusKit.git",
