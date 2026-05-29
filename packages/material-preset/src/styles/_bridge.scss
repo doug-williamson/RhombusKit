@@ -32,6 +32,13 @@
   --mat-sys-surface-variant:        var(--surface-1);
   --mat-sys-on-surface-variant:     var(--text-secondary);
 
+  // App background + surface-container roles. M3 has more surface roles than
+  // CONTRACT has steps, so -container / -container-high reuse --surface-1 /
+  // --surface-2 (the -surface-variant overlap above is intentional).
+  --mat-sys-background:             var(--bg);
+  --mat-sys-surface-container:      var(--surface-1);
+  --mat-sys-surface-container-high: var(--surface-2);
+
   // Outline — card border, chip border, input border
   --mat-sys-outline:                var(--border);
   --mat-sys-outline-variant:        var(--border);
