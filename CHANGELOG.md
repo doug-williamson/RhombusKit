@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/doug-williamson/RhombusKit/compare/v0.2.0...v0.3.0) (2026-05-29)
+
+
+### Features
+
+* bridge --mat-sys background + surface-container to CONTRACT ([341d9d4](https://github.com/doug-williamson/RhombusKit/commit/341d9d4259798f843cf2f0774314316732bcc24c))
+* provideRhombusTheme for configurable resolved theme names ([d49e355](https://github.com/doug-williamson/RhombusKit/commit/d49e3559449e588c14630d34c3185e41e920c541))
+
+
+### Bug Fixes
+
+* build theme-engine and core as publishable FESM bundles ([42864ab](https://github.com/doug-williamson/RhombusKit/commit/42864abaebb1619dc4b16633b31a16d678df8949))
+* declare @angular/cdk and @angular/forms peer deps for core ([e8d064a](https://github.com/doug-williamson/RhombusKit/commit/e8d064ae7b69e2353b6f522008f6efccdea0938d))
+* drop residual publishConfig.provenance from tokens and material-preset ([e00ca77](https://github.com/doug-williamson/RhombusKit/commit/e00ca77c6993450a88958cc932e603f671f01e7f))
+* ship correct published artifacts for theme-engine and core ([bfa27f1](https://github.com/doug-williamson/RhombusKit/commit/bfa27f12a981c737a7591eb149e93102a22275f6))
+
 ## [0.2.0](https://github.com/doug-williamson/RhombusKit/compare/v0.1.0...v0.2.0) (2026-05-29)
 
 
