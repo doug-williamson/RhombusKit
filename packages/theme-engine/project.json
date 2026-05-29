@@ -5,7 +5,7 @@
   "sourceRoot": "packages/theme-engine/src",
   "targets": {
     "build": {
-      "executor": "@nx/angular:ng-packagr-lite",
+      "executor": "@nx/angular:package",
       "options": {
         "project": "packages/theme-engine/ng-package.json",
         "tsConfig": "packages/theme-engine/tsconfig.lib.json"

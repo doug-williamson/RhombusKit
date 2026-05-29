@@ -21,7 +21,7 @@
       "outputs": ["{workspaceRoot}/dist/packages/core"]
     },
     "ng-packagr": {
-      "executor": "@nx/angular:ng-packagr-lite",
+      "executor": "@nx/angular:package",
       "options": {
         "project": "packages/core/ng-package.json",
         "tsConfig": "packages/core/tsconfig.lib.json"
