@@ -44,6 +44,13 @@ const PNPM = process.env.SMOKE_PNPM || 'pnpm';
 // Angular app consumer always provides them, so the gate does too — pinned to
 // the monorepo's versions for fidelity.
 const ROOT_DEV = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8')).devDependencies || {};
+// Pin every @angular/* package to its own monorepo-resolved version (core/common
+// at 21.2.x, material/cdk lag at 21.2.y — they are NOT in lockstep). The declared
+// peers use ranges (^21) that otherwise float to the newest patch on a fresh
+// registry and then conflict with the pinned runtime supplements — float + strict
+// npm = ERESOLVE. Exact pins from ROOT_DEV remove the float; NG_VERSION is the
+// fallback for any @angular package not in devDependencies.
+const NG_VERSION = ROOT_DEV['@angular/core'];
 // rxjs/zone.js/tslib: statically imported by @angular/* FESM. @angular/compiler:
 // partial-Ivy (ngDeclare*) libraries are linked at the consumer's build; to
 // evaluate them in plain node we load the compiler so Angular JIT-links them at
@@ -182,6 +189,8 @@ try {
       if (dep.startsWith('@rhombuskit/')) {
         if (!tarballs[dep]) die(`${pkg.name} depends on ${dep} which was not packed`);
         deps[dep] = `file:${tarballs[dep].replace(/\\/g, '/')}`;
+      } else if (dep.startsWith('@angular/')) {
+        deps[dep] = ROOT_DEV[dep] || NG_VERSION; // pin to monorepo version (no float)
       } else {
         deps[dep] = range; // external: install the declared range from the registry
       }
@@ -191,7 +200,9 @@ try {
     const needsAngular = Object.keys(declared).some((d) => d.startsWith('@angular/'));
     if (needsAngular) {
       for (const rt of ANGULAR_RUNTIME) {
-        if (!deps[rt] && ROOT_DEV[rt]) deps[rt] = ROOT_DEV[rt];
+        if (deps[rt]) continue;
+        const v = ROOT_DEV[rt] || NG_VERSION; // monorepo-pinned (all runtime entries are in devDeps)
+        if (v) deps[rt] = v;
       }
     }
     deps[pkg.name] = `file:${tarballPath.replace(/\\/g, '/')}`;
@@ -204,8 +215,13 @@ try {
     );
 
     console.log('  installing (declared deps from manifest + local tarballs)...');
-    // Tolerate transitive peer warnings (no --strict-peer-deps).
-    sh('npm install --no-audit --no-fund --no-package-lock --loglevel=error', { cwd: proj });
+    // --legacy-peer-deps: the smoke env validates importability, not peer
+    // resolution. Angular's tight exact-version internal peers (material/cdk)
+    // don't cleanly resolve in an isolated dir under strict npm; legacy mode
+    // installs a working tree regardless.
+    sh('npm install --no-audit --no-fund --no-package-lock --legacy-peer-deps --loglevel=error', {
+      cwd: proj,
+    });
 
     writeFileSync(
       join(proj, 'check.mjs'),
