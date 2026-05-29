@@ -1,0 +1,7 @@
+.rhombus-theme-toggle {
+  --mat-icon-button-icon-color: var(--text-secondary);
+
+  &:hover {
+    --mat-icon-button-icon-color: var(--text-primary);
+  }
+}

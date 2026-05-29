@@ -5,6 +5,17 @@
     <title>showcase</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      Flash-of-wrong-theme prevention. Must run before Angular bootstraps and
+      before first paint. Copy-pasted from @rhombuskit/theme-engine's
+      THEME_INIT_SCRIPT constant — this showcase is the canonical reference, so
+      future changes to that constant must be mirrored here by hand. Drift
+      between the two is a bug (the service expects the same STORAGE_KEY,
+      THEME_ATTRIBUTE, and recognized values).
+    -->
+    <script>
+      (function(){try{var s=localStorage.getItem('rhombuskit:theme-preference');var r;if(s==='rhombus-light'||s==='rhombus-dark'){r=s;}else{r=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'rhombus-dark':'rhombus-light';}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"

@@ -5,7 +5,7 @@ import { MatSidenavModule, MatDrawerMode } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ThemeToggleComponent } from './theme-toggle.component';
+import { RhombusThemeMenuComponent } from '@rhombuskit/core';
 
 interface NavItem {
   path: string;
@@ -25,7 +25,7 @@ const MOBILE_QUERY = '(max-width: 959.98px)';
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
-    ThemeToggleComponent,
+    RhombusThemeMenuComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -40,7 +40,7 @@ const MOBILE_QUERY = '(max-width: 959.98px)';
       </button>
       <a routerLink="/" class="showcase-shell__brand">RhombusKit</a>
       <span class="showcase-shell__spacer"></span>
-      <app-theme-toggle />
+      <rhombus-theme-menu />
     </header>
 
     <mat-sidenav-container class="showcase-shell__container">
@@ -84,6 +84,7 @@ export class AppComponent {
     { path: '/components/data-table', label: 'Data Table' },
     { path: '/components/overflow-menu', label: 'Overflow Menu' },
     { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
+    { path: '/components/theme-toggle', label: 'Theme Controls' },
   ];
 
   protected readonly isMobile = signal(false);

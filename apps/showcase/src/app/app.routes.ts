@@ -47,6 +47,11 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/confirm-dialog/confirm-dialog-page.component'),
       },
+      {
+        path: 'theme-toggle',
+        loadComponent: () =>
+          import('./pages/theme-toggle/theme-toggle-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

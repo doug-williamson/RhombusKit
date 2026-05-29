@@ -62,3 +62,10 @@ export type { OverflowMenuItem } from './lib/overflow-menu/overflow-menu.types';
 
 export { RhombusConfirmService } from './lib/confirm-dialog/rhombus-confirm.service';
 export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
+
+// 0.2.0 — theme controls. Both driven by RhombusThemeService from
+// @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
+// (light → dark → system); the menu exposes the same three options as discrete
+// items so any preference is one click away.
+export { RhombusThemeToggleComponent } from './lib/theme-toggle/rhombus-theme-toggle.component';
+export { RhombusThemeMenuComponent } from './lib/theme-toggle/rhombus-theme-menu.component';
