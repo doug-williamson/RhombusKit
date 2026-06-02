@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/doug-williamson/RhombusKit/compare/v0.3.0...v0.4.0) (2026-06-02)
+
+
+### Features
+
+* **core:** render default icons as inline SVG (overflow-menu, theme toggle/menu) ([c65c236](https://github.com/doug-williamson/RhombusKit/commit/c65c236c47579b117839a4946f1c5784d4cbae14))
+* **core:** render default icons as inline SVG (overflow-menu, theme toggle/menu) ([f74e060](https://github.com/doug-williamson/RhombusKit/commit/f74e060ff5868f494ee236b447df55057b50ed8d))
+
 ## [0.3.0](https://github.com/doug-williamson/RhombusKit/compare/v0.2.0...v0.3.0) (2026-05-29)
 
 
