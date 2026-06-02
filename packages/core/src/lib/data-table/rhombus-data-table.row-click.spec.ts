@@ -43,7 +43,9 @@ class HostComponent {
   readonly data: Row[] = [{ id: 'a', name: 'Alpha' }];
   readonly clicked: Row[] = [];
 
-  private readonly actionsCell = viewChild<TemplateRef<unknown>>('actionsCell');
+  private readonly actionsCell = viewChild<TemplateRef<{ $implicit: Row; index: number }>>(
+    'actionsCell',
+  );
 
   readonly columns = computed<ColumnDef<Row>[]>(() => [
     { key: 'name', header: 'Name' },
