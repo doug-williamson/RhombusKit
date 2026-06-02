@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RHOMBUS_THEME_CONFIG, RhombusThemeService } from '@rhombuskit/theme-engine';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
@@ -41,9 +41,9 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
     <mat-menu #menu="matMenu" class="rhombus-theme-menu__panel">
       <button
         mat-menu-item
-        (click)="theme.setTheme('rhombus-light')"
+        (click)="theme.setTheme(config.light)"
         [class.rhombus-theme-menu__item--active]="
-          theme.preference() === 'rhombus-light'
+          theme.preference() === config.light
         "
       >
         <rhombus-icon [name]="lightIcon()" />
@@ -51,9 +51,9 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
       </button>
       <button
         mat-menu-item
-        (click)="theme.setTheme('rhombus-dark')"
+        (click)="theme.setTheme(config.dark)"
         [class.rhombus-theme-menu__item--active]="
-          theme.preference() === 'rhombus-dark'
+          theme.preference() === config.dark
         "
       >
         <rhombus-icon [name]="darkIcon()" />
@@ -74,6 +74,8 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 })
 export class RhombusThemeMenuComponent {
   protected readonly theme = inject(RhombusThemeService);
+  /** Resolved theme names (rhombus-* unless provideRhombusTheme overrides). */
+  protected readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
   readonly lightIcon = input<string>('light_mode');
@@ -82,8 +84,8 @@ export class RhombusThemeMenuComponent {
 
   protected readonly currentIcon = computed(() => {
     const pref = this.theme.preference();
-    if (pref === 'rhombus-light') return this.lightIcon();
-    if (pref === 'rhombus-dark') return this.darkIcon();
+    if (pref === this.config.light) return this.lightIcon();
+    if (pref === this.config.dark) return this.darkIcon();
     return this.systemIcon(); // 'system'
   });
 

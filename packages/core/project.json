@@ -33,6 +33,14 @@
       "options": {
         "lintFilePatterns": ["packages/core/**/*.ts"]
       }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/core/jest.config.ts",
+        "tsConfig": "packages/core/tsconfig.spec.json"
+      }
     }
   }
 }

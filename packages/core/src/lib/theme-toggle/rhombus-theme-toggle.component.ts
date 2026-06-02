@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RHOMBUS_THEME_CONFIG, RhombusThemeService } from '@rhombuskit/theme-engine';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
@@ -41,6 +41,8 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 })
 export class RhombusThemeToggleComponent {
   private readonly theme = inject(RhombusThemeService);
+  /** Resolved theme names (rhombus-* unless provideRhombusTheme overrides). */
+  private readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
   readonly lightIcon = input<string>('light_mode');
@@ -52,16 +54,16 @@ export class RhombusThemeToggleComponent {
 
   protected readonly currentIcon = computed(() => {
     const pref = this.theme.preference();
-    if (pref === 'rhombus-light') return this.lightIcon();
-    if (pref === 'rhombus-dark') return this.darkIcon();
+    if (pref === this.config.light) return this.lightIcon();
+    if (pref === this.config.dark) return this.darkIcon();
     return this.systemIcon(); // 'system'
   });
 
   protected readonly tooltipText = computed(() => {
     if (!this.showTooltip()) return '';
     const pref = this.theme.preference();
-    if (pref === 'rhombus-light') return 'Light mode (click for dark)';
-    if (pref === 'rhombus-dark') return 'Dark mode (click for system)';
+    if (pref === this.config.light) return 'Light mode (click for dark)';
+    if (pref === this.config.dark) return 'Dark mode (click for system)';
     return 'System mode (click for light)';
   });
 
