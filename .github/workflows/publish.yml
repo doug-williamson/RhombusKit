@@ -1,13 +1,49 @@
 name: publish
 on:
-  workflow_call:
+  # Fires when a release-please release PR merges: that is the only push to main
+  # that bumps the manifest. workflow_dispatch is a manual fallback.
+  push:
+    branches:
+      - main
+    paths:
+      - .release-please-manifest.json
   workflow_dispatch:
 permissions:
-  contents: read
-  id-token: write
+  contents: write # create the tag + GitHub release
+  id-token: write # npm provenance
+  pull-requests: write # relabel the merged release PR
 jobs:
-  publish:
+  # Resolve the release version and short-circuit if it is already on npm, so a
+  # re-run or an unrelated manifest touch is a no-op instead of a failed publish.
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      should_publish: ${{ steps.v.outputs.should_publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - id: v
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if npm view "@rhombuskit/core@$VERSION" version >/dev/null 2>&1; then
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::@rhombuskit/core@$VERSION is already published — nothing to do."
+          else
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Publishing $VERSION."
+          fi
+
+  release:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.should_publish == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,3 +82,34 @@ jobs:
         run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Finalize the release ourselves (replaces release-please's github-release
+      # step, whose component matching cannot round-trip this single-package repo):
+      # create the tag + GitHub release, then clear the merged release PR's
+      # pending label so release-please can open the next one.
+      - name: Tag, GitHub release, and relabel the release PR
+        run: |
+          set -euo pipefail
+          VERSION="${{ needs.prepare.outputs.version }}"
+          TAG="v${VERSION}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists — skipping tag/release creation."
+          else
+            # Pull this version's section out of CHANGELOG.md for the release notes.
+            # index()-based match avoids awk regex-bracket portability issues.
+            awk -v v="$VERSION" '
+              BEGIN { s = "## [" v "]" }
+              index($0, s) == 1 { grab = 1; next }
+              grab && index($0, "## [") == 1 { exit }
+              grab { print }
+            ' CHANGELOG.md > release-notes.md
+            [ -s release-notes.md ] || echo "Release $TAG" > release-notes.md
+            gh release create "$TAG" \
+              --target "$GITHUB_SHA" \
+              --title "$TAG" \
+              --notes-file release-notes.md
+          fi
+          PR=$(gh pr list --state merged --label "autorelease: pending" --json number --jq '.[0].number // empty')
+          if [ -n "$PR" ]; then
+            echo "Relabeling release PR #$PR: autorelease: pending -> tagged"
+            gh pr edit "$PR" --remove-label "autorelease: pending" --add-label "autorelease: tagged"
+          fi
