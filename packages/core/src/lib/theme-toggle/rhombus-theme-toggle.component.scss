@@ -4,4 +4,10 @@
   &:hover {
     --mat-icon-button-icon-color: var(--text-primary);
   }
+
+  // Icon renders as inline SVG (fill: currentColor); route its colour through
+  // the same token Material applies to <mat-icon>, preserving the hover above.
+  .rhombus-icon {
+    color: var(--mat-icon-button-icon-color);
+  }
 }

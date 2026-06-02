@@ -8,12 +8,19 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 import type { OverflowMenuItem } from './overflow-menu.types';
 
 @Component({
   selector: 'rhombus-overflow-menu',
   standalone: true,
-  imports: [MatMenuModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    RhombusIconComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-overflow-menu.component.scss',
@@ -25,7 +32,7 @@ import type { OverflowMenuItem } from './overflow-menu.types';
       class="rhombus-overflow-menu__trigger"
       (click)="$event.stopPropagation()"
     >
-      <mat-icon>{{ triggerIcon() }}</mat-icon>
+      <rhombus-icon [name]="triggerIcon()" />
     </button>
 
     <mat-menu #menu="matMenu" class="rhombus-overflow-menu__panel">

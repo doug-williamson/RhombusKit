@@ -7,9 +7,9 @@ import {
   input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
  * Theme menu: explicit Light / Dark / System options.
@@ -25,7 +25,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
 @Component({
   selector: 'rhombus-theme-menu',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [MatButtonModule, MatMenuModule, RhombusIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-theme-menu.component.scss',
@@ -36,7 +36,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
       [attr.aria-label]="ariaLabel()"
       class="rhombus-theme-menu__trigger"
     >
-      <mat-icon>{{ currentIcon() }}</mat-icon>
+      <rhombus-icon [name]="currentIcon()" />
     </button>
     <mat-menu #menu="matMenu" class="rhombus-theme-menu__panel">
       <button
@@ -46,7 +46,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
           theme.preference() === 'rhombus-light'
         "
       >
-        <mat-icon>{{ lightIcon() }}</mat-icon>
+        <rhombus-icon [name]="lightIcon()" />
         <span>Light</span>
       </button>
       <button
@@ -56,7 +56,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
           theme.preference() === 'rhombus-dark'
         "
       >
-        <mat-icon>{{ darkIcon() }}</mat-icon>
+        <rhombus-icon [name]="darkIcon()" />
         <span>Dark</span>
       </button>
       <button
@@ -66,7 +66,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
           theme.preference() === 'system'
         "
       >
-        <mat-icon>{{ systemIcon() }}</mat-icon>
+        <rhombus-icon [name]="systemIcon()" />
         <span>System</span>
       </button>
     </mat-menu>

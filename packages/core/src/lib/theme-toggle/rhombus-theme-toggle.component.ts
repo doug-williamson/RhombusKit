@@ -7,9 +7,9 @@ import {
   input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
  * Three-state theme toggle: light → dark → system → light.
@@ -23,7 +23,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
 @Component({
   selector: 'rhombus-theme-toggle',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatButtonModule, MatTooltipModule, RhombusIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-theme-toggle.component.scss',
@@ -35,7 +35,7 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
       class="rhombus-theme-toggle"
       (click)="onToggle()"
     >
-      <mat-icon>{{ currentIcon() }}</mat-icon>
+      <rhombus-icon [name]="currentIcon()" />
     </button>
   `,
 })
