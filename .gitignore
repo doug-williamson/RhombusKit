@@ -13,3 +13,7 @@ tmp/
 # Local dev artifacts from /run skill (Playwright + screenshots)
 /.playwright-mcp/
 /*.png
+
+# Firebase emulator state + scratch prompt files (never commit)
+.firebase/emulator-data/
+prompt.md
