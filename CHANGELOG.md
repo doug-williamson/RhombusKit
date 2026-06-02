@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/doug-williamson/RhombusKit/compare/v0.4.0...v0.4.1) (2026-06-02)
+
+
+### Bug Fixes
+
+* **core:** theme controls honor RHOMBUS_THEME_CONFIG ([2057766](https://github.com/doug-williamson/RhombusKit/commit/20577666427986d99f0a0611e888c540814c0d83))
+* **core:** theme controls honor RHOMBUS_THEME_CONFIG ([701aaeb](https://github.com/doug-williamson/RhombusKit/commit/701aaeb1150c49c73262c23e91ba9824f7ad9777))
+
 ## [0.4.0](https://github.com/doug-williamson/RhombusKit/compare/v0.3.0...v0.4.0) (2026-06-02)
 
 
