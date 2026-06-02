@@ -48,6 +48,8 @@ export { RhombusDataTableComponent } from './lib/data-table/rhombus-data-table.c
 export { RhombusEmptyStateDirective } from './lib/data-table/rhombus-empty-state.directive';
 export type {
   ColumnDef,
+  DataColumn,
+  DisplayColumn,
   SortState,
   PageState,
 } from './lib/data-table/data-table.types';
