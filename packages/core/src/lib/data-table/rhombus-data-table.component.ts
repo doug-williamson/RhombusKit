@@ -24,6 +24,16 @@ import type { ColumnDef, SortState, PageState } from './data-table.types';
 import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
 
 /**
+ * Elements whose click is their own action, not a row selection. A row click
+ * that bubbles up from one of these (or a descendant) is ignored, so an
+ * actions/overflow button or link inside a cell doesn't also "open the row".
+ */
+const INTERACTIVE_ELEMENT_SELECTOR =
+  'a[href], button, input, select, textarea, label, ' +
+  '[role="button"], [role="link"], [role="menuitem"], ' +
+  '[role="checkbox"], [role="switch"], [contenteditable="true"]';
+
+/**
  * `<rhombus-data-table>` — config-driven table with a `cellTemplate` escape
  * hatch. Auto-detects its mode from the `data` input type: a plain array runs
  * client-side (Material handles sort + pagination); a `DataSource` runs
@@ -87,7 +97,7 @@ import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
                 "
                 [class.rhombus-data-table__col--hide-sm]="col.hideBelow === 'sm'"
                 [class.rhombus-data-table__col--hide-md]="col.hideBelow === 'md'"
-                (click)="onRowClick(row)"
+                (click)="onRowClick(row, $event)"
               >
                 @if (col.cellTemplate) {
                   <ng-container
@@ -275,7 +285,18 @@ export class RhombusDataTableComponent<T> {
     });
   }
 
-  protected onRowClick(row: T): void {
+  protected onRowClick(row: T, event: Event): void {
+    // Every body cell carries this handler, so a click that bubbles up from an
+    // interactive element a consumer renders in a cell (an actions/overflow
+    // button, a link, a form control) would otherwise fire rowClick too — e.g.
+    // opening the row when the user only meant to open its menu. Treat such a
+    // click as the element's own action, not a row selection. Consumers can
+    // still stopPropagation for bespoke interactive content.
+    if (
+      (event.target as HTMLElement | null)?.closest(INTERACTIVE_ELEMENT_SELECTOR)
+    ) {
+      return;
+    }
     this.rowClick.emit(row);
   }
 }
