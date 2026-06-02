@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.2](https://github.com/doug-williamson/RhombusKit/compare/v0.4.1...v0.4.2) (2026-06-02)
+
+
+### Bug Fixes
+
+* **core:** data-table ignores row clicks from interactive cell content ([19e1be2](https://github.com/doug-williamson/RhombusKit/commit/19e1be2b45c3a39b6c7c7812d90febc0601f9473))
+* **core:** data-table ignores row clicks from interactive cell content ([d56949b](https://github.com/doug-williamson/RhombusKit/commit/d56949b8d11cd14c4744eee91f6f430689d662e1))
+
 ## [0.4.1](https://github.com/doug-williamson/RhombusKit/compare/v0.4.0...v0.4.1) (2026-06-02)
 
 
