@@ -18,6 +18,18 @@
   }
 }
 
+// matIconButton is inline-block (line-height: normal), so the inline-flex
+// <rhombus-icon> aligns to the text baseline and seats ~4px below centre.
+// Flex-centre the button content. Top-level + `button.` (0,1,1) deterministically
+// out-specifies Material's .mat-mdc-icon-button (0,1,0) — no !important, no
+// .mat-mdc-* selector. (Kept out of the nested block above so it isn't rewritten
+// into a `.rhombus-theme-menu <descendant>` selector — the host is a tag, not a class.)
+button.rhombus-theme-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 // The menu panel renders in the CDK overlay, outside this component's DOM, so
 // its tokens are scoped through the overlay container rather than the host.
 .cdk-overlay-container .rhombus-theme-menu__panel {

@@ -1,0 +1,40 @@
+// rhombus-empty-state — structure + type only.
+//
+// Ports FolioKit's canonical _layout.scss empty-state values onto CONTRACT:
+// colours via @rhombuskit/tokens names, spacing/type literal px. The icon needs
+// no theming and the CTA's colours are owned by rhombus-button, so this file
+// consumes no --mat-sys-* values and authors no button rules.
+
+.rhombus-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px 24px;
+  text-align: center;
+
+  &__icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: var(--text-disabled);
+    margin-bottom: 4px;
+  }
+
+  &__heading {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  &__body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 240px;
+    color: var(--text-muted);
+  }
+}

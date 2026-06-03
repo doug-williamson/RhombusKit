@@ -1,0 +1,53 @@
+// rhombus-page-header — structure + type only.
+//
+// Colours come from @rhombuskit/tokens CONTRACT names; spacing and type are
+// literal px/rem (CONTRACT has no spacing / type-ramp tokens). The badge is a
+// composed [rhombusChip], themed globally through the chips bridge — this file
+// authors no chip rules and consumes no --mat-sys-* values.
+
+.rhombus-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+
+  &__heading-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+  }
+
+  &__description {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: var(--text-secondary);
+  }
+
+  // Trailing actions region. Collapses when nothing is projected so the header
+  // doesn't reserve empty space on the right (mirrors rhombus-card actions).
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:empty {
+      display: none;
+    }
+  }
+}

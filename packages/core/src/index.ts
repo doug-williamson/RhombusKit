@@ -80,3 +80,13 @@ export { RhombusAppShellComponent } from './lib/app-shell/rhombus-app-shell.comp
 export { RhombusShellNavFooterDirective } from './lib/app-shell/rhombus-shell-nav-footer.directive';
 export { RhombusShellAuthDirective } from './lib/app-shell/rhombus-shell-auth.directive';
 export { RhombusShellAsideDirective } from './lib/app-shell/rhombus-shell-aside.directive';
+
+// 1.0 — content composites. Leaf components ported from FolioKit. page-header
+// composes [rhombusChip] for its badge; code-block lazily + optionally loads
+// highlight.js (degrades to plain code); empty-state composes rhombus-button for
+// its CTA. None export a public type.
+export { RhombusPageHeaderComponent } from './lib/page-header/rhombus-page-header.component';
+export { RhombusCodeBlockComponent } from './lib/code-block/rhombus-code-block.component';
+// Element block — distinct from the data-table [rhombusEmptyState] attribute
+// directive exported above; the element may nest inside that directive.
+export { RhombusEmptyStateComponent } from './lib/empty-state/rhombus-empty-state.component';

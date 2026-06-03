@@ -1,0 +1,59 @@
+// rhombus-code-block — structure + type only.
+//
+// Colours come from @rhombuskit/tokens CONTRACT names; spacing and type are
+// literal px/rem. The copy button is a matIconButton: there is no icon-button
+// override in the material-preset bridge, so its colour/size are set locally on
+// the owned host via --mat-icon-button-* component tokens (no !important, no
+// --mat-sys-* consumed as a value). No .hljs-* syntax-token rules ship in 1.0.
+
+.rhombus-code-block {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem 0.25rem 1rem;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+  }
+
+  &__lang {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+  }
+
+  &__copy-btn {
+    --mat-icon-button-icon-color: var(--text-secondary);
+    --mat-icon-button-state-layer-size: 28px;
+    --mat-icon-button-icon-size: 18px;
+
+    &:hover {
+      --mat-icon-button-icon-color: var(--text-primary);
+    }
+  }
+
+  &__pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: var(--surface-0);
+    overflow-x: auto;
+    tab-size: 2;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+
+    code {
+      font-family: inherit;
+      font-size: inherit;
+      background: transparent;
+      padding: 0;
+    }
+  }
+}
