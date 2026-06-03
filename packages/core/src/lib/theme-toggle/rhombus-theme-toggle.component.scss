@@ -1,4 +1,14 @@
-.rhombus-theme-toggle {
+// `button.` qualifier (0,1,1) deterministically out-specifies Material's
+// .mat-mdc-icon-button (0,1,0) so the flex centring below always wins,
+// independent of stylesheet order — no !important, no .mat-mdc-* selector.
+button.rhombus-theme-toggle {
+  // matIconButton is inline-block (line-height: normal), so the inline-flex
+  // <rhombus-icon> aligns to the text baseline and seats ~4px below centre.
+  // Flex-centre the button content to put the icon dead-centre.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   --mat-icon-button-icon-color: var(--text-secondary);
 
   &:hover {
