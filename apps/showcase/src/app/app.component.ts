@@ -10,6 +10,11 @@ interface NavItem {
   label: string;
 }
 
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
 /**
  * The showcase chrome dogfoods `<rhombus-app-shell>`: brand, the component nav,
  * and the theme menu are projected slots; the default slot holds the router
@@ -35,10 +40,13 @@ interface NavItem {
       <a shellBrand routerLink="/" class="showcase-shell__brand">RhombusKit</a>
 
       <nav shellNav class="showcase-shell__nav">
-        @for (item of navItems; track item.path) {
-          <a [routerLink]="item.path" routerLinkActive="is-active">
-            {{ item.label }}
-          </a>
+        @for (group of navGroups; track group.label) {
+          <p class="showcase-shell__nav-group">{{ group.label }}</p>
+          @for (item of group.items; track item.path) {
+            <a [routerLink]="item.path" routerLinkActive="is-active">
+              {{ item.label }}
+            </a>
+          }
         }
       </nav>
 
@@ -50,18 +58,38 @@ interface NavItem {
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  protected readonly navItems: NavItem[] = [
-    { path: '/components/button', label: 'Button' },
-    { path: '/components/badge', label: 'Badge' },
-    { path: '/components/card', label: 'Card' },
-    { path: '/components/chip', label: 'Chip' },
-    { path: '/components/input', label: 'Input' },
-    { path: '/components/textarea', label: 'Textarea' },
-    { path: '/components/select', label: 'Select' },
-    { path: '/components/data-table', label: 'Data Table' },
-    { path: '/components/overflow-menu', label: 'Overflow Menu' },
-    { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
-    { path: '/components/theme-toggle', label: 'Theme Controls' },
-    { path: '/components/app-shell', label: 'App Shell' },
+  protected readonly navGroups: NavGroup[] = [
+    {
+      label: 'Primitives',
+      items: [
+        { path: '/components/button', label: 'Button' },
+        { path: '/components/badge', label: 'Badge' },
+        { path: '/components/card', label: 'Card' },
+        { path: '/components/chip', label: 'Chip' },
+      ],
+    },
+    {
+      label: 'Forms',
+      items: [
+        { path: '/components/input', label: 'Input' },
+        { path: '/components/textarea', label: 'Textarea' },
+        { path: '/components/select', label: 'Select' },
+      ],
+    },
+    {
+      label: 'Data & overlays',
+      items: [
+        { path: '/components/data-table', label: 'Data Table' },
+        { path: '/components/overflow-menu', label: 'Overflow Menu' },
+        { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
+      ],
+    },
+    {
+      label: 'Layout & theming',
+      items: [
+        { path: '/components/app-shell', label: 'App Shell' },
+        { path: '/components/theme-toggle', label: 'Theme Controls' },
+      ],
+    },
   ];
 }

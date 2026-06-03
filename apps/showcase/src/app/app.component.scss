@@ -20,6 +20,20 @@
     color: var(--text-primary);
   }
 
+  &__nav-group {
+    margin: 1.25rem 0.75rem 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
   &__nav {
     display: flex;
     flex-direction: column;
