@@ -49,6 +49,11 @@ export { RhombusErrorDirective } from './lib/form-field/rhombus-error.directive'
 // primitives above (`[control]` for reactive forms, `[(checked)]` otherwise).
 export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.component';
 
+// Radio group. Wraps <mat-radio-group>; options-array API like select,
+// `[control]` / `[(value)]` control model.
+export { RhombusRadioGroupComponent } from './lib/radio/rhombus-radio-group.component';
+export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

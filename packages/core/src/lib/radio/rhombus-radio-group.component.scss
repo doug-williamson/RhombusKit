@@ -1,0 +1,16 @@
+// RhombusKit radio group. Colour flows through the @rhombuskit/material-preset
+// bridge (--mat-sys-* → CONTRACT vars); only layout + typography here.
+.rhombus-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: var(--font-sans);
+}
+
+.rhombus-radio-group__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
