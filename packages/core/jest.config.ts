@@ -13,15 +13,15 @@ module.exports = {
     '!src/lib/**/index.ts',
   ],
   coverageReporters: ['text-summary', 'json-summary', 'html', 'lcov'],
-  // Ratchet: floor sits just under the current measured baseline so it blocks
-  // regressions today. Raise these toward 80% lines as Phase 3 backfills tests.
-  // Baseline at 0.7.x: lines 66.2 / stmts 66.1 / fns 69.6 / branches 87.7.
+  // Ratchet: floor sits just under the current measured coverage so it blocks
+  // regressions. Raise these as later phases backfill tests; target 80%+ lines.
+  // 0.7.x baseline was 66% lines; Phase 1 form-field specs lifted it to ~82%.
   coverageThreshold: {
     global: {
-      lines: 64,
-      statements: 64,
-      functions: 66,
-      branches: 84,
+      lines: 80,
+      statements: 78,
+      functions: 75,
+      branches: 86,
     },
   },
   // Resolve the sibling workspace package to its source (mirrors the

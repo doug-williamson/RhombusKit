@@ -41,6 +41,10 @@ export type {
   FormFieldSize,
 } from './lib/form-field/form-field.types';
 
+// Marker projected as the error subscript of the form primitives above
+// (replaces the pre-1.0 `slot="error"` convention).
+export { RhombusErrorDirective } from './lib/form-field/rhombus-error.directive';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

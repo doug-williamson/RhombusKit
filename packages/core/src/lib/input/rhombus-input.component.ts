@@ -42,7 +42,7 @@ export type InputType =
  * Projected slots (found by Material's descendants:true queries):
  *   <mat-icon matIconPrefix>…</mat-icon>   leading affordance
  *   <button matIconSuffix>…</button>       trailing affordance
- *   <span slot="error">…</span>            error subscript text
+ *   <span rhombusError>…</span>            error subscript text
  */
 @Component({
   selector: 'rhombus-input',
@@ -91,7 +91,7 @@ export type InputType =
       }
 
       <mat-error>
-        <ng-content select="[slot=error]" />
+        <ng-content select="[rhombusError]" />
       </mat-error>
     </mat-form-field>
   `,

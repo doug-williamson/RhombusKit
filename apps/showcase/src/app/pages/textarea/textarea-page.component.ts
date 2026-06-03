@@ -5,12 +5,12 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { RhombusTextareaComponent } from '@rhombuskit/core';
+import { RhombusErrorDirective, RhombusTextareaComponent } from '@rhombuskit/core';
 
 @Component({
   selector: 'app-textarea-page',
   standalone: true,
-  imports: [RhombusTextareaComponent],
+  imports: [RhombusTextareaComponent, RhombusErrorDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -81,7 +81,7 @@ import { RhombusTextareaComponent } from '@rhombuskit/core';
             [control]="bio"
             [hint]="charCountLabel()"
           >
-            <span slot="error">
+            <span rhombusError>
               @if (bio.hasError('required')) {
                 A short bio is required.
               } @else if (bio.hasError('maxlength')) {
