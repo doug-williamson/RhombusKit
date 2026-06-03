@@ -71,3 +71,12 @@ export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
 // items so any preference is one click away.
 export { RhombusThemeToggleComponent } from './lib/theme-toggle/rhombus-theme-toggle.component';
 export { RhombusThemeMenuComponent } from './lib/theme-toggle/rhombus-theme-menu.component';
+
+// 0.x — app shell. A slotted layout primitive (mat-sidenav-container +
+// mat-toolbar): header / collapsible sidenav / content / optional aside, with a
+// responsive overlay↔rail↔side contract. Structure only — consumers project
+// brand, nav, header actions, auth, and aside content via the marker directives.
+export { RhombusAppShellComponent } from './lib/app-shell/rhombus-app-shell.component';
+export { RhombusShellNavFooterDirective } from './lib/app-shell/rhombus-shell-nav-footer.directive';
+export { RhombusShellAuthDirective } from './lib/app-shell/rhombus-shell-auth.directive';
+export { RhombusShellAsideDirective } from './lib/app-shell/rhombus-shell-aside.directive';
