@@ -10,6 +10,43 @@
   // Sort header arrow colour (component-scoped; bridge sets the global default).
   --mat-sort-arrow-color: var(--text-accent);
 
+  // Sort arrow motion + spacing. Material 21's arrow is pure CSS: descending is
+  // `transform: rotate(180deg)` on a 225ms transition, which sweeps the arrowhead
+  // through the horizontal plane — a wide "hop" that reads cramped in narrow
+  // mobile columns. Rebind descending to a vertical flip so the same transition
+  // squash-flips in place (the arrowhead is left-right symmetric, so scaleY(-1)
+  // lands point-down identically to rotate(180deg)), and widen the gap from the
+  // label (Material's 6px feels snug). No token covers either; scoped under
+  // .rhombus-data-table to out-specify Material without !important — targets
+  // .mat-sort-* structural classes (not .mat-mdc-*, no ::ng-deep).
+  .mat-sort-header-arrow {
+    margin-inline-start: 10px;
+  }
+
+  .mat-sort-header-descending .mat-sort-header-arrow {
+    transform: scaleY(-1);
+  }
+
+  // Sort-clear motion. Material's "recently cleared" keyframes fade the arrow out
+  // while translating it, and the descending one holds `rotate(180deg)` — which,
+  // against our scaleY(-1) descending state, makes the arrow flip/rotate
+  // horizontally as it clears and on the next re-sort (visible while the arrow is
+  // hover-revealed). Cancel both keyframes and just fade the arrow out in place:
+  // the descending arrow keeps scaleY(-1) so it never rotates, the ascending one
+  // keeps identity. Uniform, compact, no horizontal motion. Re-sorting is
+  // unaffected — the recently-cleared classes are render-state driven, not
+  // animationend-driven, so dropping the animation doesn't strand them.
+  .mat-sort-header-recently-cleared-ascending .mat-sort-header-arrow,
+  .mat-sort-header-recently-cleared-descending .mat-sort-header-arrow {
+    animation: none;
+    opacity: 0;
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mat-sort-header-recently-cleared-descending .mat-sort-header-arrow {
+    transform: scaleY(-1);
+  }
+
   &__scroll {
     overflow-x: auto;
     width: 100%;
