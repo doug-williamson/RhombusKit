@@ -5,6 +5,7 @@
 //
 // Phase 2 coverage: button, badge, card, chip.
 // Form field, dialog, table, snackbar tokens land in Phase 3.
+// App-shell surfaces (sidenav, toolbar) are bridged alongside the shell.
 
 @use '@angular/material' as mat;
 
@@ -200,5 +201,21 @@
     container-shape:       12px,
     subhead-color:         var(--text-primary),
     supporting-text-color: var(--text-secondary),
+  ));
+
+  // Sidenav (app-shell drawer). Width / borders are structural and live in
+  // packages/core's rhombus-app-shell.component.scss; only surface colours are
+  // bridged here so theme switching reaches the drawer + content surfaces.
+  @include mat.sidenav-overrides((
+    container-background-color: var(--surface-1),
+    container-text-color:       var(--text-secondary),
+    content-background-color:   var(--bg),
+    content-text-color:         var(--text-primary),
+  ));
+
+  // Toolbar (app-shell header).
+  @include mat.toolbar-overrides((
+    container-background-color: var(--surface-1),
+    container-text-color:       var(--text-primary),
   ));
 }
