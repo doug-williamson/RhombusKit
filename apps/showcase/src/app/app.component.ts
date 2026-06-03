@@ -84,6 +84,7 @@ export class AppComponent {
       items: [
         { path: '/components/data-table', label: 'Data Table' },
         { path: '/components/overflow-menu', label: 'Overflow Menu' },
+        { path: '/components/tooltip', label: 'Tooltip' },
         { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
       ],
     },

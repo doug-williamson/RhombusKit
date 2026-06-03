@@ -55,6 +55,10 @@ export const appRoutes: Route[] = [
           import('./pages/overflow-menu/overflow-menu-page.component'),
       },
       {
+        path: 'tooltip',
+        loadComponent: () => import('./pages/tooltip/tooltip-page.component'),
+      },
+      {
         path: 'confirm-dialog',
         loadComponent: () =>
           import('./pages/confirm-dialog/confirm-dialog-page.component'),

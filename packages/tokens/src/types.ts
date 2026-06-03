@@ -46,6 +46,10 @@ export const CONTRACT = [
   '--switch-track-off',
   '--switch-track-on',
 
+  // Tooltip (inverse overlay surface — dark on light themes, light on dark)
+  '--tooltip-bg',
+  '--tooltip-text',
+
   // Shadows
   '--shadow-sm',
   '--shadow-md',
