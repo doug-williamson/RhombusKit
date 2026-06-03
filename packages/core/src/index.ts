@@ -54,6 +54,10 @@ export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.compon
 export { RhombusRadioGroupComponent } from './lib/radio/rhombus-radio-group.component';
 export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
 
+// Switch. Wraps <mat-slide-toggle>; same control model as checkbox. Track colour
+// is driven by the --switch-track-on/off contract tokens.
+export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

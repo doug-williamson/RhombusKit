@@ -41,6 +41,11 @@ export const CONTRACT = [
   '--nav-active-bg',
   '--nav-active-text',
 
+  // Switch / slide-toggle track (independent of button colours so a toggle
+  // reads as a toggle, not a button)
+  '--switch-track-off',
+  '--switch-track-on',
+
   // Shadows
   '--shadow-sm',
   '--shadow-md',

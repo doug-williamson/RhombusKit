@@ -29,6 +29,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/radio/radio-page.component'),
       },
       {
+        path: 'switch',
+        loadComponent: () => import('./pages/switch/switch-page.component'),
+      },
+      {
         path: 'input',
         loadComponent: () => import('./pages/input/input-page.component'),
       },

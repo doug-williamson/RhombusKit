@@ -35,6 +35,9 @@ export const rhombusDark: Record<SemanticTokenName, string> = {
   '--nav-active-bg':   'rgb(167 139 250 / 0.14)',
   '--nav-active-text': slate[50],
 
+  '--switch-track-off': slate[600],
+  '--switch-track-on':  violet[500],
+
   '--shadow-sm':           '0 1px 2px 0 rgb(0 0 0 / 0.3)',
   '--shadow-md':           '0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4)',
   '--shadow-lg':           '0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4)',

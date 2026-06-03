@@ -1,0 +1,16 @@
+@use '@angular/material' as mat;
+
+// Unlike most RhombusKit components (which only read CSS-var tokens), the switch
+// uses Material's documented slide-toggle-overrides mixin: the track colour is a
+// component-level Material token with no clean --mat-sys-* analog, so the mixin is
+// the stable, version-safe way to point it at our --switch-track-* tokens.
+.rhombus-switch {
+  font-family: var(--font-sans);
+
+  @include mat.slide-toggle-overrides(
+    (
+      selected-track-color: var(--switch-track-on),
+      unselected-track-color: var(--switch-track-off),
+    )
+  );
+}
