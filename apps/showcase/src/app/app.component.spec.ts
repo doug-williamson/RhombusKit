@@ -1,27 +1,37 @@
 import { TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
-import { RouterModule } from '@angular/router';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, NxWelcomeComponent, RouterModule.forRoot([])],
+      imports: [AppComponent],
+      providers: [provideNoopAnimations(), provideRouter([])],
     }).compileComponents();
   });
 
-  it('should render title', () => {
+  it('renders the dogfooded rhombus-app-shell chrome', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome showcase'
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('rhombus-app-shell')).toBeTruthy();
+    expect(el.querySelector('.showcase-shell__brand')?.textContent).toContain(
+      'RhombusKit',
     );
   });
 
-  it(`should have as title 'showcase'`, () => {
+  it('projects one nav link per component page, including App Shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('showcase');
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+
+    const links = Array.from(
+      el.querySelectorAll('.showcase-shell__nav a'),
+    ).map((a) => a.textContent?.trim());
+
+    expect(links).toContain('Button');
+    expect(links).toContain('App Shell');
   });
 });

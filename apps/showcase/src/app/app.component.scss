@@ -1,37 +1,17 @@
-// App shell — mobile-first. A fixed top toolbar (hamburger + brand +
-// theme toggle) sits above a Material sidenav container. The sidenav holds
-// the component nav and switches between an overlay drawer (mobile) and a
-// persistent side drawer (>= 960px); see AppComponent for the mode logic.
-// Sidenav surface / divider colours come for free from the
-// material-preset bridge (--mat-sys-surface / --mat-sys-outline).
+// The showcase chrome is now @rhombuskit/core's <rhombus-app-shell>. This file
+// styles only the *projected* slot content the consumer owns — the brand link
+// and the nav items — which is exactly the shell's "consumers style their own
+// nav" contract. The frame, sidenav surface, toolbar, and responsive collapse
+// all live inside the shell (sidenav/toolbar colours via the material-preset
+// bridge). The host just gives the shell a full-viewport box to fill.
 
 :host {
-  display: flex;
-  flex-direction: column;
+  display: block;
   height: 100vh;
   height: 100dvh;
 }
 
 .showcase-shell {
-  &__toolbar {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background-color: var(--surface-1);
-    border-bottom: 1px solid var(--border);
-    color: var(--text-primary);
-  }
-
-  &__menu-btn.mat-mdc-icon-button {
-    color: var(--text-primary);
-
-    &:hover {
-      color: var(--text-accent);
-    }
-  }
-
   &__brand {
     font-family: var(--font-sans);
     font-weight: 700;
@@ -40,17 +20,18 @@
     color: var(--text-primary);
   }
 
-  &__spacer {
-    flex: 1 1 auto;
-  }
+  &__nav-group {
+    margin: 1.25rem 0.75rem 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 
-  &__container {
-    flex: 1 1 auto;
-    background-color: var(--bg);
-  }
-
-  &__sidenav {
-    width: 15rem;
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   &__nav {
@@ -81,18 +62,5 @@
         font-weight: 500;
       }
     }
-  }
-
-  &__content {
-    background-color: var(--bg);
-  }
-}
-
-// Desktop refinements: roomier toolbar gutter once the sidenav is
-// persistent and there is more horizontal space to spend.
-@media (min-width: 960px) {
-  .showcase-shell__toolbar {
-    gap: 1rem;
-    padding: 0.75rem 1.5rem;
   }
 }

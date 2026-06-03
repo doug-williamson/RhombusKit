@@ -52,6 +52,11 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),
       },
+      {
+        path: 'app-shell',
+        loadComponent: () =>
+          import('./pages/app-shell/app-shell-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
