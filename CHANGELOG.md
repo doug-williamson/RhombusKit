@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0](https://github.com/doug-williamson/RhombusKit/compare/v0.4.2...v0.5.0) (2026-06-03)
+
+
+### Features
+
+* **core:** add rhombus-app-shell slotted layout primitive ([cc28cb5](https://github.com/doug-williamson/RhombusKit/commit/cc28cb5405c073fa2ebc6ad85db07a76c27b6ffe))
+* **core:** discriminate ColumnDef into DataColumn | DisplayColumn ([5a0b607](https://github.com/doug-williamson/RhombusKit/commit/5a0b6078a967dfec44b1ffb3019f00e9d9c01ece))
+* **core:** discriminate ColumnDef into DataColumn | DisplayColumn ([23e0b33](https://github.com/doug-williamson/RhombusKit/commit/23e0b33582e66ff5f291522760f9d3eb1e12ad87))
+* **core:** rhombus-app-shell slotted layout primitive ([76581a5](https://github.com/doug-williamson/RhombusKit/commit/76581a54d68f1676b082efa944dc84ecd9fdaf7f))
+
 ## [0.4.2](https://github.com/doug-williamson/RhombusKit/compare/v0.4.1...v0.4.2) (2026-06-02)
 
 
