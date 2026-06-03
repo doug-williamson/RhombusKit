@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/doug-williamson/RhombusKit/compare/v0.7.0...v0.8.0) (2026-06-03)
+
+
+### Features
+
+* **core:** add app-shell hasNav input and themeable sidenav width ([aa9f228](https://github.com/doug-williamson/RhombusKit/commit/aa9f228411691c2f508cd21f6c82d41db5149f65))
+* **core:** app-shell hasNav input + themeable sidenav width ([1fe3def](https://github.com/doug-williamson/RhombusKit/commit/1fe3defe13d5298137bac917d7901098cc58bdfe))
+
 ## [0.7.0](https://github.com/doug-williamson/RhombusKit/compare/v0.6.0...v0.7.0) (2026-06-03)
 
 
