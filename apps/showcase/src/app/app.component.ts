@@ -91,5 +91,12 @@ export class AppComponent {
         { path: '/components/theme-toggle', label: 'Theme Controls' },
       ],
     },
+    {
+      label: 'Content',
+      items: [
+        { path: '/components/page-header', label: 'Page Header' },
+        { path: '/components/empty-state', label: 'Empty State' },
+      ],
+    },
   ];
 }

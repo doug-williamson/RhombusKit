@@ -57,6 +57,16 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/app-shell/app-shell-page.component'),
       },
+      {
+        path: 'page-header',
+        loadComponent: () =>
+          import('./pages/page-header/page-header-page.component'),
+      },
+      {
+        path: 'empty-state',
+        loadComponent: () =>
+          import('./pages/empty-state/empty-state-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
