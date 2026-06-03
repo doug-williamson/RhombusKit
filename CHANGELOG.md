@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0](https://github.com/doug-williamson/RhombusKit/compare/v0.6.0...v0.7.0) (2026-06-03)
+
+
+### Features
+
+* **core:** add page-header, code-block, and empty-state composites ([2b7fa2e](https://github.com/doug-williamson/RhombusKit/commit/2b7fa2e1dc4a3b2e0b45d32d746513a100fa3daf))
+* **core:** page-header, code-block & empty-state composites + sort/icon fixes ([34b39f9](https://github.com/doug-williamson/RhombusKit/commit/34b39f99e58336adf75ce14a27c2bf7473b06c07))
+
+
+### Bug Fixes
+
+* **core:** center matIconButton icon content ([97d306a](https://github.com/doug-williamson/RhombusKit/commit/97d306ab0bc2fd9571f21983ccf695e69485ba88))
+* **core:** flip data-table sort arrow vertically and fade it on clear ([85f722f](https://github.com/doug-williamson/RhombusKit/commit/85f722f26856205218cf07518841a2239f1eb68a))
+
 ## [0.6.0](https://github.com/doug-williamson/RhombusKit/compare/v0.5.0...v0.6.0) (2026-06-03)
 
 
