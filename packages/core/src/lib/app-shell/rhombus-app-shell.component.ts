@@ -25,16 +25,17 @@ const DEFAULT_MOBILE_BREAKPOINT = 767;
 const DESKTOP_MIN_PX = 1024;
 
 /**
- * `<rhombus-app-shell>` — a slotted application layout primitive wrapping
- * Material's `mat-sidenav-container` + `mat-toolbar`. It owns *structure* only:
- * a header region, a collapsible sidenav, a content area, an optional right-rail
- * aside, and the responsive collapse between them. It renders no nav items, no
- * brand, no theme control, and references no route — every product concern is a
- * projected slot or consumer composition.
+ * `<rhombus-app-shell>` — a slotted application layout primitive. A full-width
+ * top app bar (`mat-toolbar`) sits above a `mat-sidenav-container`: the toolbar
+ * carries brand + header actions, the sidenav holds navigation, and the content
+ * area holds the routed view plus an optional right-rail aside. It owns
+ * *structure* only — it renders no nav items, no brand, no theme control, and
+ * references no route; every product concern is a projected slot.
  *
- * Slots: `[shellBrand]`, `[shellNav]`, `[shellNavFooter]` (presence-gated),
- * `[shellHeaderActions]`, `[shellAuthSlot]` (presence-gated), `[shellAside]`
- * (presence-gated; toggles the 2-/3-column layout), and the default content slot.
+ * Slots: `[shellBrand]`, `[shellHeaderActions]`, `[shellAuthSlot]` (presence-
+ * gated) in the top bar; `[shellNav]`, `[shellNavFooter]` (presence-gated) in
+ * the sidenav; `[shellAside]` (presence-gated) and the default content slot in
+ * the content area.
  *
  * Responsive contract, driven by {@link mobileBreakpoint} and {@link iconRail}:
  * - viewport ≤ `mobileBreakpoint` → overlay drawer (`mode="over"`), closed by
@@ -53,6 +54,41 @@ const DESKTOP_MIN_PX = 1024;
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-app-shell.component.scss',
   template: `
+    <mat-toolbar class="rhombus-app-shell__toolbar">
+      @if (isMobile()) {
+        <button
+          type="button"
+          class="rhombus-app-shell__nav-toggle"
+          aria-label="Toggle navigation"
+          (click)="toggleSidenav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M3 6h18M3 12h18M3 18h18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      }
+      <div class="rhombus-app-shell__brand">
+        <ng-content select="[shellBrand]" />
+      </div>
+      <span class="rhombus-app-shell__spacer"></span>
+      <ng-content select="[shellHeaderActions]" />
+      @if (hasAuth()) {
+        <ng-content select="[shellAuthSlot]" />
+      }
+    </mat-toolbar>
+
     <mat-sidenav-container class="rhombus-app-shell__container">
       <mat-sidenav
         class="rhombus-app-shell__sidenav"
@@ -76,41 +112,6 @@ const DESKTOP_MIN_PX = 1024;
       </mat-sidenav>
 
       <mat-sidenav-content class="rhombus-app-shell__content">
-        <mat-toolbar class="rhombus-app-shell__toolbar">
-          @if (isMobile()) {
-            <button
-              type="button"
-              class="rhombus-app-shell__nav-toggle"
-              aria-label="Toggle navigation"
-              (click)="toggleSidenav()"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M3 6h18M3 12h18M3 18h18"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </button>
-          }
-          <div class="rhombus-app-shell__brand">
-            <ng-content select="[shellBrand]" />
-          </div>
-          <span class="rhombus-app-shell__spacer"></span>
-          <ng-content select="[shellHeaderActions]" />
-          @if (hasAuth()) {
-            <ng-content select="[shellAuthSlot]" />
-          }
-        </mat-toolbar>
-
         <div
           class="rhombus-app-shell__body"
           [class.rhombus-app-shell__body--with-aside]="hasAside()"
