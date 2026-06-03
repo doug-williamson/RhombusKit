@@ -103,6 +103,7 @@ export class FakeRouter {
       [mobileBreakpoint]="mobileBreakpoint()"
       [iconRail]="iconRail()"
       [closeOnNavigate]="closeOnNavigate()"
+      [hasNav]="hasNav()"
     >
       <div shellBrand class="host-brand">Acme</div>
       <nav shellNav class="host-nav">Nav items</nav>
@@ -124,6 +125,7 @@ export class AppShellHostComponent {
   readonly mobileBreakpoint = signal(767);
   readonly iconRail = signal(false);
   readonly closeOnNavigate = signal(true);
+  readonly hasNav = signal(true);
   readonly showNavFooter = signal(true);
   readonly showAuth = signal(false);
   readonly showAside = signal(false);

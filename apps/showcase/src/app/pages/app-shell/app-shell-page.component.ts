@@ -38,8 +38,8 @@ import {
           <code>[shellNavFooter]</code>, <code>[shellHeaderActions]</code>,
           <code>[shellAuthSlot]</code>, <code>[shellAside]</code>, and the
           default slot. Structural inputs are <code>mobileBreakpoint</code>,
-          <code>iconRail</code>, and <code>closeOnNavigate</code> — no product
-          flags. <strong>The showcase chrome around you is itself a
+          <code>iconRail</code>, <code>closeOnNavigate</code>, and
+          <code>hasNav</code> — no product flags. <strong>The showcase chrome around you is itself a
           <code>rhombus-app-shell</code></strong>; resize the window to watch it
           collapse to an overlay drawer at 960px.
         </p>
@@ -72,12 +72,19 @@ import {
           >
             Force overlay
           </rhombus-button>
+          <rhombus-button
+            [variant]="!hasNav() ? 'primary' : 'secondary'"
+            (click)="hasNav.set(!hasNav())"
+          >
+            Bare route (no nav)
+          </rhombus-button>
         </div>
 
         <div class="app-shell-demo">
           <rhombus-app-shell
             [closeOnNavigate]="false"
             [mobileBreakpoint]="forceOverlay() ? 9999 : 0"
+            [hasNav]="hasNav()"
           >
             <span shellBrand class="app-shell-demo__brand">AcmeDocs</span>
 
@@ -115,9 +122,10 @@ import {
               <p>
                 This is the default content slot. Toggle <em>Aside</em> to move
                 between the 2-column and 3-column layout, <em>Auth slot</em> /
-                <em>Nav footer</em> to see the presence-gated regions appear, and
+                <em>Nav footer</em> to see the presence-gated regions appear,
                 <em>Force overlay</em> to collapse the sidenav into an overlay
-                drawer with the toolbar hamburger.
+                drawer with the toolbar hamburger, and <em>Bare route</em> to drop
+                the nav drawer entirely.
               </p>
             </div>
           </rhombus-app-shell>
@@ -237,4 +245,5 @@ export default class AppShellPageComponent {
   protected readonly showAuth = signal(true);
   protected readonly showNavFooter = signal(true);
   protected readonly forceOverlay = signal(false);
+  protected readonly hasNav = signal(true);
 }

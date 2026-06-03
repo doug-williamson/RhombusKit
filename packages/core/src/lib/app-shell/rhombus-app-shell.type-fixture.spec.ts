@@ -1,7 +1,7 @@
 import { RhombusAppShellComponent } from './rhombus-app-shell.component';
 
 /**
- * Type-only fixture: proves the shell exposes exactly the three structural inputs
+ * Type-only fixture: proves the shell exposes exactly the four structural inputs
  * and that every evicted FolioKit product flag is gone from the type. The
  * `@ts-expect-error` lines are validated by the dedicated type-check pass
  * (`tsc --noEmit -p packages/core/tsconfig.spec.json`) — Jest transpiles specs in
@@ -16,6 +16,7 @@ describe('rhombus-app-shell input surface (type fixture)', () => {
     void c.mobileBreakpoint;
     void c.iconRail;
     void c.closeOnNavigate;
+    void c.hasNav;
 
     // @ts-expect-error showAuth was a FolioKit product flag, now slot-presence gated
     void c.showAuth;

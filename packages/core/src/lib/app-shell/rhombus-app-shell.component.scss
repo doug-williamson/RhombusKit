@@ -30,8 +30,14 @@ rhombus-app-shell {
 
 // ─── Sidenav (drawer) ───────────────────────────────────────────────────────
 
-.rhombus-app-shell__sidenav {
-  width: 220px;
+// Host-scoped (specificity 0,1,1) so the shell's drawer widths win over Angular
+// Material's own `.mat-drawer { width: var(--mat-sidenav-container-width, 360px) }`,
+// which has equal class specificity (0,1,0) and would otherwise win on source
+// order — leaving the drawer at Material's 360px default. Scoping under the host
+// keeps the 220px default, the 52px rail, and the consumer-overridable
+// `--rhombus-app-shell-sidenav-width` authoritative.
+rhombus-app-shell .rhombus-app-shell__sidenav {
+  width: var(--rhombus-app-shell-sidenav-width, 220px);
   border-right: 1px solid var(--border);
 
   // Persistent narrow icon rail (tablet band, when iconRail is enabled). The

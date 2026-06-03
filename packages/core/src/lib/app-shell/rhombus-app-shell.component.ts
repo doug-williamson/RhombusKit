@@ -45,6 +45,13 @@ const DESKTOP_MIN_PX = 1024;
  *   `rhombus-app-shell__sidenav--icon-rail` modifier. The shell sets the rail
  *   width only; hiding nav labels in the rail is the consumer's responsibility.
  * - viewport ≥ 1024 → full side nav (`mode="side"`, open).
+ *
+ * Set `hasNav` to false for bare routes (sign-up, 404, marketing): the drawer is
+ * omitted and the content spans full width, while the toolbar chrome is retained.
+ *
+ * Consumer-overridable CSS custom properties (with their defaults):
+ * `--rhombus-app-shell-sidenav-width` (220px), `--rhombus-app-shell-aside-width`
+ * (240px).
  */
 @Component({
   selector: 'rhombus-app-shell',
@@ -55,7 +62,7 @@ const DESKTOP_MIN_PX = 1024;
   styleUrl: './rhombus-app-shell.component.scss',
   template: `
     <mat-toolbar class="rhombus-app-shell__toolbar">
-      @if (isMobile()) {
+      @if (hasNav() && isMobile()) {
         <button
           type="button"
           class="rhombus-app-shell__nav-toggle"
@@ -90,26 +97,28 @@ const DESKTOP_MIN_PX = 1024;
     </mat-toolbar>
 
     <mat-sidenav-container class="rhombus-app-shell__container">
-      <mat-sidenav
-        class="rhombus-app-shell__sidenav"
-        [class.rhombus-app-shell__sidenav--icon-rail]="isIconRailActive()"
-        [mode]="sidenavMode()"
-        [attr.data-mode]="sidenavMode()"
-        [opened]="sidenavOpen()"
-        [attr.data-open]="sidenavOpen()"
-        (openedChange)="sidenavOpen.set($event)"
-      >
-        <div class="rhombus-app-shell__nav">
-          <div class="rhombus-app-shell__nav-body">
-            <ng-content select="[shellNav]" />
-          </div>
-          @if (hasNavFooter()) {
-            <div class="rhombus-app-shell__nav-footer">
-              <ng-content select="[shellNavFooter]" />
+      @if (hasNav()) {
+        <mat-sidenav
+          class="rhombus-app-shell__sidenav"
+          [class.rhombus-app-shell__sidenav--icon-rail]="isIconRailActive()"
+          [mode]="sidenavMode()"
+          [attr.data-mode]="sidenavMode()"
+          [opened]="sidenavOpen()"
+          [attr.data-open]="sidenavOpen()"
+          (openedChange)="sidenavOpen.set($event)"
+        >
+          <div class="rhombus-app-shell__nav">
+            <div class="rhombus-app-shell__nav-body">
+              <ng-content select="[shellNav]" />
             </div>
-          }
-        </div>
-      </mat-sidenav>
+            @if (hasNavFooter()) {
+              <div class="rhombus-app-shell__nav-footer">
+                <ng-content select="[shellNavFooter]" />
+              </div>
+            }
+          </div>
+        </mat-sidenav>
+      }
 
       <mat-sidenav-content class="rhombus-app-shell__content">
         <div
@@ -136,6 +145,12 @@ export class RhombusAppShellComponent {
   readonly iconRail = input<boolean>(false);
   /** Close the overlay drawer on each in-app navigation. */
   readonly closeOnNavigate = input<boolean>(true);
+  /**
+   * When false, the nav drawer is omitted entirely (bare-route layout) and the
+   * content spans full width; the toolbar chrome (brand, header actions, auth)
+   * still renders. Bind from route data in the consumer.
+   */
+  readonly hasNav = input<boolean>(true);
 
   protected readonly isMobile = signal(false);
   protected readonly isIconRailActive = signal(false);
