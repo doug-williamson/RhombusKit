@@ -45,6 +45,10 @@ export type {
 // (replaces the pre-1.0 `slot="error"` convention).
 export { RhombusErrorDirective } from './lib/form-field/rhombus-error.directive';
 
+// Selection control. Wraps <mat-checkbox>; same control model as the form
+// primitives above (`[control]` for reactive forms, `[(checked)]` otherwise).
+export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.component';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

@@ -21,6 +21,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/chip/chip-page.component'),
       },
       {
+        path: 'checkbox',
+        loadComponent: () => import('./pages/checkbox/checkbox-page.component'),
+      },
+      {
         path: 'input',
         loadComponent: () => import('./pages/input/input-page.component'),
       },

@@ -1,0 +1,6 @@
+// RhombusKit checkbox. Colour flows through the @rhombuskit/material-preset
+// bridge (--mat-sys-* → CONTRACT vars), so only typography is set here. No
+// hard-coded colour literals.
+.rhombus-checkbox {
+  font-family: var(--font-sans);
+}
