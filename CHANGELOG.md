@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/doug-williamson/RhombusKit/compare/v0.5.0...v0.6.0) (2026-06-03)
+
+
+### Features
+
+* app-shell top-bar layout + showcase dogfood & demo page ([472ea78](https://github.com/doug-williamson/RhombusKit/commit/472ea78c94441a4a44a9f40f5fed5f787ef8fd55))
+
+
+### Bug Fixes
+
+* **core:** render app-shell header as a full-width top bar ([02fb305](https://github.com/doug-williamson/RhombusKit/commit/02fb3055aa482cd5f7287afa88cfc10c7f0983bb))
+* **core:** vertically center rhombus-icon when inline with text ([1a34ce5](https://github.com/doug-williamson/RhombusKit/commit/1a34ce5bb743a52689406e571a595969c739b1ab))
+
 ## [0.5.0](https://github.com/doug-williamson/RhombusKit/compare/v0.4.2...v0.5.0) (2026-06-03)
 
 
