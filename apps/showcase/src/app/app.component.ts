@@ -1,20 +1,24 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatSidenavModule, MatDrawerMode } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { RhombusThemeMenuComponent } from '@rhombuskit/core';
+import {
+  RhombusAppShellComponent,
+  RhombusThemeMenuComponent,
+} from '@rhombuskit/core';
 
 interface NavItem {
   path: string;
   label: string;
 }
 
-/** Viewport below which the sidenav switches to an overlay drawer. */
-const MOBILE_QUERY = '(max-width: 959.98px)';
-
+/**
+ * The showcase chrome dogfoods `<rhombus-app-shell>`: brand, the component nav,
+ * and the theme menu are projected slots; the default slot holds the router
+ * outlet. The shell owns the frame, the collapsible sidenav, and the responsive
+ * overlay collapse — `[mobileBreakpoint]="959"` reproduces the previous 960px
+ * breakpoint, and `closeOnNavigate` (default) dismisses the overlay drawer after
+ * a mobile navigation. Nav-link styling lives in app.component.scss; the shell
+ * never styles projected content.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,57 +26,30 @@ const MOBILE_QUERY = '(max-width: 959.98px)';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
-    MatSidenavModule,
-    MatButtonModule,
-    MatIconModule,
+    RhombusAppShellComponent,
     RhombusThemeMenuComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header class="showcase-shell__toolbar">
-      <button
-        matIconButton
-        class="showcase-shell__menu-btn"
-        (click)="toggle()"
-        aria-label="Toggle navigation menu"
-      >
-        <mat-icon aria-hidden="true">menu</mat-icon>
-      </button>
-      <a routerLink="/" class="showcase-shell__brand">RhombusKit</a>
-      <span class="showcase-shell__spacer"></span>
-      <rhombus-theme-menu />
-    </header>
+    <rhombus-app-shell [mobileBreakpoint]="959">
+      <a shellBrand routerLink="/" class="showcase-shell__brand">RhombusKit</a>
 
-    <mat-sidenav-container class="showcase-shell__container">
-      <mat-sidenav
-        class="showcase-shell__sidenav"
-        [mode]="mode()"
-        [opened]="opened()"
-        (openedChange)="opened.set($event)"
-      >
-        <nav class="showcase-shell__nav">
-          @for (item of navItems; track item.path) {
-            <a
-              [routerLink]="item.path"
-              routerLinkActive="is-active"
-              (click)="closeOnMobile()"
-            >
-              {{ item.label }}
-            </a>
-          }
-        </nav>
-      </mat-sidenav>
+      <nav shellNav class="showcase-shell__nav">
+        @for (item of navItems; track item.path) {
+          <a [routerLink]="item.path" routerLinkActive="is-active">
+            {{ item.label }}
+          </a>
+        }
+      </nav>
 
-      <mat-sidenav-content class="showcase-shell__content">
-        <router-outlet />
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+      <rhombus-theme-menu shellHeaderActions />
+
+      <router-outlet />
+    </rhombus-app-shell>
   `,
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  private readonly breakpointObserver = inject(BreakpointObserver);
-
   protected readonly navItems: NavItem[] = [
     { path: '/components/button', label: 'Button' },
     { path: '/components/badge', label: 'Badge' },
@@ -85,37 +62,6 @@ export class AppComponent {
     { path: '/components/overflow-menu', label: 'Overflow Menu' },
     { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
     { path: '/components/theme-toggle', label: 'Theme Controls' },
+    { path: '/components/app-shell', label: 'App Shell' },
   ];
-
-  protected readonly isMobile = signal(false);
-  protected readonly opened = signal(true);
-
-  protected readonly mode = computed<MatDrawerMode>(() =>
-    this.isMobile() ? 'over' : 'side'
-  );
-
-  constructor() {
-    // Drive both the drawer mode and its default open state off one
-    // breakpoint. Crossing the breakpoint resets `opened` to the natural
-    // state for that viewport (open on desktop, closed on mobile); a
-    // user's manual toggle persists until the next crossing.
-    this.breakpointObserver
-      .observe(MOBILE_QUERY)
-      .pipe(takeUntilDestroyed())
-      .subscribe((result) => {
-        this.isMobile.set(result.matches);
-        this.opened.set(!result.matches);
-      });
-  }
-
-  protected toggle(): void {
-    this.opened.update((v) => !v);
-  }
-
-  /** In overlay mode, tapping a nav link should dismiss the drawer. */
-  protected closeOnMobile(): void {
-    if (this.isMobile()) {
-      this.opened.set(false);
-    }
-  }
 }
