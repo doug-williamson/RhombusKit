@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.9.0](https://github.com/doug-williamson/RhombusKit/compare/v0.8.0...v0.9.0) (2026-06-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** swap <span slot="error"> for <span rhombusError> and import RhombusErrorDirective.
+
+### Features
+
+* **core:** add checkbox component ([4baa839](https://github.com/doug-williamson/RhombusKit/commit/4baa83928a89c290c317fa6f8d9a32263791e633))
+* **core:** add radio group component ([1302e32](https://github.com/doug-williamson/RhombusKit/commit/1302e32f9e62ffa86b68da35a2e980a107089634))
+* **core:** add switch component ([63cc614](https://github.com/doug-williamson/RhombusKit/commit/63cc614f6b6fc826a51f8cc60c27bd9daed615e6))
+* **core:** add tooltip directive ([9988b52](https://github.com/doug-williamson/RhombusKit/commit/9988b52a0b960d8e634b39db0fbae24d92814334))
+* **core:** project form-field errors via [rhombusError] marker ([7f05ce0](https://github.com/doug-williamson/RhombusKit/commit/7f05ce0af010bec7a4b448395b204c637b05cae3))
+
 ## [0.8.0](https://github.com/doug-williamson/RhombusKit/compare/v0.7.0...v0.8.0) (2026-06-03)
 
 
