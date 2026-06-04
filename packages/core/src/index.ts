@@ -121,6 +121,10 @@ export { RhombusTabGroupDirective } from './lib/tabs/rhombus-tab-group.directive
 export { RhombusBreadcrumbsComponent } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
 export type { BreadcrumbItem } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
 
+// Pagination — standalone MatPaginator wrapper; emits the same PageState as the
+// data table (exported above), so consumers never import Material's PageEvent.
+export { RhombusPaginationComponent } from './lib/pagination/rhombus-pagination.component';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete

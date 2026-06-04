@@ -85,6 +85,11 @@ export const appRoutes: Route[] = [
           import('./pages/breadcrumbs/breadcrumbs-page.component'),
       },
       {
+        path: 'pagination',
+        loadComponent: () =>
+          import('./pages/pagination/pagination-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),

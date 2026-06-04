@@ -96,6 +96,7 @@ export class AppComponent {
         { path: '/components/tabs', label: 'Tabs' },
         { path: '/components/menu', label: 'Menu' },
         { path: '/components/breadcrumbs', label: 'Breadcrumbs' },
+        { path: '/components/pagination', label: 'Pagination' },
       ],
     },
     {

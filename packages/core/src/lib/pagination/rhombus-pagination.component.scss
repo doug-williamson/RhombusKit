@@ -1,0 +1,7 @@
+// Standalone paginator. Colour comes from the global mat.paginator-overrides
+// bridge (transparent surface, --text-secondary). Only the host layout here.
+.rhombus-pagination {
+  display: block;
+  --mat-paginator-container-background-color: transparent;
+  --mat-paginator-container-text-color: var(--text-secondary);
+}
