@@ -2,6 +2,19 @@
   "name": "@rhombuskit/core",
   "version": "0.10.0",
   "license": "MIT",
+  "description": "Themeable, accessible Angular 21 component library — standalone, signal-based components over Angular Material, styled through the RhombusKit token contract.",
+  "keywords": [
+    "angular",
+    "angular-material",
+    "components",
+    "ui",
+    "design-system",
+    "accessibility",
+    "wcag",
+    "standalone",
+    "signals",
+    "rhombuskit"
+  ],
   "sideEffects": [
     "*.css",
     "*.scss"

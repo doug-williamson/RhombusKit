@@ -2,6 +2,16 @@
   "name": "@rhombuskit/tokens",
   "version": "0.10.0",
   "license": "MIT",
+  "description": "Framework-agnostic design-token contract for RhombusKit — palette primitives plus light/dark semantic theme packs, emitted as CSS custom properties, SCSS, and TypeScript.",
+  "keywords": [
+    "design-tokens",
+    "css-variables",
+    "design-system",
+    "theming",
+    "scss",
+    "dark-mode",
+    "rhombuskit"
+  ],
   "sideEffects": [
     "*.css",
     "*.scss"
