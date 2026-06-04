@@ -228,10 +228,15 @@
   ));
 
   // Tooltip — renders in the CDK overlay (Material defaults to inverse-surface),
-  // so it is bridged globally here, not in a component SCSS.
+  // so it is bridged globally here, not in a component SCSS. The text size is set
+  // explicitly because the bridge maps Material's colour roles but not the M3
+  // typography system, so the supporting-text size would otherwise fall back to
+  // the inherited 16px root size (too large). Body-small scale = 12px / 16px.
   @include mat.tooltip-overrides((
-    container-color:       var(--tooltip-bg),
-    supporting-text-color: var(--tooltip-text),
+    container-color:             var(--tooltip-bg),
+    supporting-text-color:       var(--tooltip-text),
+    supporting-text-size:        0.75rem,
+    supporting-text-line-height: 1rem,
   ));
 
   // Toast (snackbar) — renders in the CDK overlay. RhombusToastService applies a
