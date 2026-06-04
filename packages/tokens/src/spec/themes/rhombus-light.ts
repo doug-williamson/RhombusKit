@@ -41,6 +41,17 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--tooltip-bg':   slate[900],
   '--tooltip-text': '#ffffff',
 
+  // Toast — tinted bg + readable on-tint text, one pair per severity.
+  // "info" is neutral slate (no blue primitive in the palette).
+  '--toast-info-bg':      slate[100],
+  '--toast-info-text':    slate[700],
+  '--toast-success-bg':   green[50],
+  '--toast-success-text': green[600],
+  '--toast-warning-bg':   amber[50],
+  '--toast-warning-text': amber[600],
+  '--toast-error-bg':     red[50],
+  '--toast-error-text':   red[600],
+
   '--shadow-sm':           '0 1px 2px 0 rgb(0 0 0 / 0.05)',
   '--shadow-md':           '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
   '--shadow-lg':           '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',

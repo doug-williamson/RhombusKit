@@ -62,6 +62,15 @@ export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
 // surface themed via --tooltip-bg/text.
 export { RhombusTooltipDirective } from './lib/tooltip/rhombus-tooltip.directive';
 
+// Toast. Service wrapping MatSnackBar + the CDK LiveAnnouncer (mirrors the
+// confirm service). Severity colours come from the --toast-<variant>-* tokens.
+export { RhombusToastService } from './lib/toast/rhombus-toast.service';
+export type {
+  ToastConfig,
+  ToastVariant,
+  RhombusToastRef,
+} from './lib/toast/toast.types';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

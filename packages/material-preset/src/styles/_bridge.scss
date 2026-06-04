@@ -4,7 +4,7 @@
 // reach every Material component.
 //
 // Phase 2 coverage: button, badge, card, chip.
-// Form field, dialog, table, snackbar tokens land in Phase 3.
+// Form field, dialog, table tokens land in Phase 3.
 // App-shell surfaces (sidenav, toolbar) are bridged alongside the shell.
 
 @use '@angular/material' as mat;
@@ -209,6 +209,19 @@
     container-color:       var(--tooltip-bg),
     supporting-text-color: var(--tooltip-text),
   ));
+
+  // Toast (snackbar) — renders in the CDK overlay. RhombusToastService applies a
+  // `rhombus-toast rhombus-toast--<variant>` panelClass; each variant maps to its
+  // own --toast-*-bg/text pair (a single global override can't carry 4 severities).
+  @each $variant in (info, success, warning, error) {
+    .rhombus-toast--#{$variant} {
+      @include mat.snack-bar-overrides((
+        container-color:       var(--toast-#{$variant}-bg),
+        supporting-text-color: var(--toast-#{$variant}-text),
+        button-color:          var(--toast-#{$variant}-text),
+      ));
+    }
+  }
 
   // Sidenav (app-shell drawer). Width / borders are structural and live in
   // packages/core's rhombus-app-shell.component.scss; only surface colours are
