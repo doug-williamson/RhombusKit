@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.10.0](https://github.com/doug-williamson/RhombusKit/compare/v0.9.0...v0.10.0) (2026-06-04)
+
+
+### Features
+
+* **core:** add alert component ([defa95a](https://github.com/doug-williamson/RhombusKit/commit/defa95a130a0dc360d041ee32d524bd023f318a4))
+* **core:** add avatar component ([21b337b](https://github.com/doug-williamson/RhombusKit/commit/21b337b377e0d9c0fc6b07c591f60b09c40318f1))
+* **core:** add breadcrumbs component ([056c06d](https://github.com/doug-williamson/RhombusKit/commit/056c06da33fc85054a05d31a84d3bf6c3e0b3740))
+* **core:** add dialog component and service ([ae22ffa](https://github.com/doug-williamson/RhombusKit/commit/ae22ffabc679e2f257cd3996f4ed6de66dac301c))
+* **core:** add generic menu and refactor overflow-menu onto it ([2be10cb](https://github.com/doug-williamson/RhombusKit/commit/2be10cb7bc246a6f07d7fa88632ce7e2a2dc68f8))
+* **core:** add pagination component ([1c6a915](https://github.com/doug-williamson/RhombusKit/commit/1c6a9156823b8b1f34e22fee516cd01351eba377))
+* **core:** add spinner and progress bar ([ec9b8d9](https://github.com/doug-williamson/RhombusKit/commit/ec9b8d93f78fea24698d35c568ea9db475ce673f))
+* **core:** add tabs directive ([fcf931f](https://github.com/doug-williamson/RhombusKit/commit/fcf931fad6e51fd268f9d31033c21cacdbc4844d))
+* **core:** add toast service ([120268a](https://github.com/doug-williamson/RhombusKit/commit/120268aa8d994b8caddd94f1c089e432837740ef))
+
+
+### Bug Fixes
+
+* **material-preset:** center the indeterminate progress spinner ([fe11b29](https://github.com/doug-williamson/RhombusKit/commit/fe11b292713dc520e309b588891e5b8df7027e4f))
+* **material-preset:** size Material surface text to the intended scale ([16b76a7](https://github.com/doug-williamson/RhombusKit/commit/16b76a7f15907995eeaca435c6fe37b5e7b5e57b))
+* **material-preset:** size the tooltip text (was inheriting 16px) ([ce9b0ab](https://github.com/doug-williamson/RhombusKit/commit/ce9b0ab81def6bafac803560cd3817e38aa876e5))
+
 ## [0.9.0](https://github.com/doug-williamson/RhombusKit/compare/v0.8.0...v0.9.0) (2026-06-04)
 
 
