@@ -16,12 +16,14 @@ module.exports = {
   // Ratchet: floor sits just under the current measured coverage so it blocks
   // regressions. Raise these as later phases backfill tests; target 80%+ lines.
   // 0.7.x baseline was 66% lines; Phase 1 form-field specs lifted it to ~82%.
+  // Phase 3 backfilled the older untested components (button/card/badge/chip/
+  // icon/form-field/input/textarea/select), measured ~98% lines / 89% branches.
   coverageThreshold: {
     global: {
-      lines: 80,
-      statements: 78,
-      functions: 75,
-      branches: 86,
+      lines: 95,
+      statements: 95,
+      functions: 90,
+      branches: 88,
     },
   },
   // Resolve the sibling workspace package to its source (mirrors the
