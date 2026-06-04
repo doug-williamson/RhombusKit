@@ -136,6 +136,12 @@ export { RhombusProgressBarComponent } from './lib/progress-bar/rhombus-progress
 export { RhombusAvatarComponent } from './lib/avatar/rhombus-avatar.component';
 export type { AvatarSize } from './lib/avatar/rhombus-avatar.component';
 
+// Alert — bespoke persistent severity banner (distinct from the transient toast).
+// Reuses the shared --toast-<variant>-* tokens; severity is conveyed by colour +
+// a visually-hidden prefix (not colour-only). Optional title + dismiss.
+export { RhombusAlertComponent } from './lib/alert/rhombus-alert.component';
+export type { AlertVariant } from './lib/alert/rhombus-alert.component';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete

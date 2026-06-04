@@ -98,6 +98,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/avatar/avatar-page.component'),
       },
       {
+        path: 'alert',
+        loadComponent: () => import('./pages/alert/alert-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),

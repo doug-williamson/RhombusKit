@@ -104,6 +104,7 @@ export class AppComponent {
       items: [
         { path: '/components/progress', label: 'Progress' },
         { path: '/components/avatar', label: 'Avatar' },
+        { path: '/components/alert', label: 'Alert' },
       ],
     },
     {
