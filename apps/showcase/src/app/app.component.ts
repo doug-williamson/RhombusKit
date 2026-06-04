@@ -119,6 +119,7 @@ export class AppComponent {
       items: [
         { path: '/components/page-header', label: 'Page Header' },
         { path: '/components/empty-state', label: 'Empty State' },
+        { path: '/components/code-block', label: 'Code Block' },
       ],
     },
   ];

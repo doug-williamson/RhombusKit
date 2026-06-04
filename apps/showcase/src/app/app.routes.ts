@@ -121,6 +121,11 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/empty-state/empty-state-page.component'),
       },
+      {
+        path: 'code-block',
+        loadComponent: () =>
+          import('./pages/code-block/code-block-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
