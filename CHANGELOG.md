@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.11.0](https://github.com/doug-williamson/RhombusKit/compare/v0.10.0...v0.11.0) (2026-06-04)
+
+
+### Features
+
+* **a11y:** WCAG 2.1 AA color-contrast gate + default-theme fixes (Phase 4) ([d366797](https://github.com/doug-williamson/RhombusKit/commit/d3667979e055d61b425513d9a05c255c89338331))
+
+
+### Bug Fixes
+
+* **tokens:** meet WCAG 2.1 AA contrast in the default themes ([ee64d10](https://github.com/doug-williamson/RhombusKit/commit/ee64d10e6c4d624a7a9d8163c31190b044e2c5b6))
+
 ## [0.10.0](https://github.com/doug-williamson/RhombusKit/compare/v0.9.0...v0.10.0) (2026-06-04)
 
 
