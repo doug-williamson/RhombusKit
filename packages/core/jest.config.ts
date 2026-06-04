@@ -3,6 +3,27 @@ module.exports = {
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/packages/core',
+  // Count EVERY shippable source file, not just the ones a test happens to
+  // import — otherwise untested components are silently absent and coverage
+  // reads far higher than it is. This makes the ratchet honest.
+  collectCoverageFrom: [
+    'src/lib/**/*.ts',
+    '!src/lib/**/*.spec.ts',
+    '!src/lib/**/*.spec-helpers.ts',
+    '!src/lib/**/index.ts',
+  ],
+  coverageReporters: ['text-summary', 'json-summary', 'html', 'lcov'],
+  // Ratchet: floor sits just under the current measured coverage so it blocks
+  // regressions. Raise these as later phases backfill tests; target 80%+ lines.
+  // 0.7.x baseline was 66% lines; Phase 1 form-field specs lifted it to ~82%.
+  coverageThreshold: {
+    global: {
+      lines: 80,
+      statements: 78,
+      functions: 75,
+      branches: 86,
+    },
+  },
   // Resolve the sibling workspace package to its source (mirrors the
   // tsconfig.base.json path mapping) so tests don't need a prebuilt dist.
   moduleNameMapper: {

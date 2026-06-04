@@ -74,6 +74,10 @@
   --btn-primary-hover: #6d28d9;
   --nav-active-bg: #f5f3ff;
   --nav-active-text: #6d28d9;
+  --switch-track-off: #cbd5e1;
+  --switch-track-on: #7c3aed;
+  --tooltip-bg: #0f172a;
+  --tooltip-text: #ffffff;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -117,6 +121,10 @@
   --btn-primary-hover: #a78bfa;
   --nav-active-bg: rgb(167 139 250 / 0.14);
   --nav-active-text: #f8fafc;
+  --switch-track-off: #475569;
+  --switch-track-on: #8b5cf6;
+  --tooltip-bg: #334155;
+  --tooltip-text: #ffffff;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);

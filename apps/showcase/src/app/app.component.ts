@@ -71,6 +71,9 @@ export class AppComponent {
     {
       label: 'Forms',
       items: [
+        { path: '/components/checkbox', label: 'Checkbox' },
+        { path: '/components/radio', label: 'Radio Group' },
+        { path: '/components/switch', label: 'Switch' },
         { path: '/components/input', label: 'Input' },
         { path: '/components/textarea', label: 'Textarea' },
         { path: '/components/select', label: 'Select' },
@@ -81,6 +84,7 @@ export class AppComponent {
       items: [
         { path: '/components/data-table', label: 'Data Table' },
         { path: '/components/overflow-menu', label: 'Overflow Menu' },
+        { path: '/components/tooltip', label: 'Tooltip' },
         { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
       ],
     },

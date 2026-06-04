@@ -41,6 +41,27 @@ export type {
   FormFieldSize,
 } from './lib/form-field/form-field.types';
 
+// Marker projected as the error subscript of the form primitives above
+// (replaces the pre-1.0 `slot="error"` convention).
+export { RhombusErrorDirective } from './lib/form-field/rhombus-error.directive';
+
+// Selection control. Wraps <mat-checkbox>; same control model as the form
+// primitives above (`[control]` for reactive forms, `[(checked)]` otherwise).
+export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.component';
+
+// Radio group. Wraps <mat-radio-group>; options-array API like select,
+// `[control]` / `[(value)]` control model.
+export { RhombusRadioGroupComponent } from './lib/radio/rhombus-radio-group.component';
+export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
+
+// Switch. Wraps <mat-slide-toggle>; same control model as checkbox. Track colour
+// is driven by the --switch-track-on/off contract tokens.
+export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
+
+// Tooltip. Directive composing MatTooltip via hostDirectives (badge pattern);
+// surface themed via --tooltip-bg/text.
+export { RhombusTooltipDirective } from './lib/tooltip/rhombus-tooltip.directive';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.

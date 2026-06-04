@@ -1,0 +1,91 @@
+name: ci
+
+# PR-level safety net. Until this existed, nothing ran on a pull request —
+# lint/test/build only fired at release time. Every job below must be green
+# before merge (configure as required checks in branch protection).
+#
+# Later phases add two more required jobs here:
+#   - api-surface : API Extractor verify + token CONTRACT snapshot (Phase 5)
+#   - a11y        : jest-axe + Playwright contrast pass (Phase 4)
+# They are intentionally absent now because their tooling/config does not exist
+# yet; adding empty jobs would only make CI red.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+# A new push to a PR cancels the superseded run.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec nx run-many --target=lint --all
+
+  typecheck:
+    # nx test/build do NOT type-check spec files (isolatedModules + the lib
+    # tsconfig excludes specs), so the @ts-expect-error type-fixture specs are
+    # only validated by a raw tsc pass. Without this job a broken fixture is
+    # green. strictTemplates is currently off, so this guards type fixtures, not
+    # templates.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsc --noEmit -p packages/core/tsconfig.spec.json
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      # The `ci` configuration enables codeCoverage; core enforces a ratcheting
+      # coverageThreshold in its jest.config.ts.
+      - run: pnpm exec nx run-many --target=test --all --configuration=ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      # Full build (not affected): the api-surface + smoke jobs added in later
+      # phases consume every package's dist output.
+      - run: pnpm exec nx run-many --target=build --all
+      - name: Verify tokens
+        run: node tools/verify-tokens.mjs

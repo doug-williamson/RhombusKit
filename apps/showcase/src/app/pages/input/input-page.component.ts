@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RhombusInputComponent } from '@rhombuskit/core';
+import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
 
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, RhombusInputComponent],
+  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -69,7 +69,7 @@ import { RhombusInputComponent } from '@rhombuskit/core';
             hint="We never share this."
             [control]="email"
           >
-            <span slot="error">
+            <span rhombusError>
               @if (email.hasError('required')) {
                 Email is required.
               } @else if (email.hasError('email')) {

@@ -203,6 +203,13 @@
     supporting-text-color: var(--text-secondary),
   ));
 
+  // Tooltip — renders in the CDK overlay (Material defaults to inverse-surface),
+  // so it is bridged globally here, not in a component SCSS.
+  @include mat.tooltip-overrides((
+    container-color:       var(--tooltip-bg),
+    supporting-text-color: var(--tooltip-text),
+  ));
+
   // Sidenav (app-shell drawer). Width / borders are structural and live in
   // packages/core's rhombus-app-shell.component.scss; only surface colours are
   // bridged here so theme switching reaches the drawer + content surfaces.

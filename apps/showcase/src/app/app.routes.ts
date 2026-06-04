@@ -21,6 +21,18 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/chip/chip-page.component'),
       },
       {
+        path: 'checkbox',
+        loadComponent: () => import('./pages/checkbox/checkbox-page.component'),
+      },
+      {
+        path: 'radio',
+        loadComponent: () => import('./pages/radio/radio-page.component'),
+      },
+      {
+        path: 'switch',
+        loadComponent: () => import('./pages/switch/switch-page.component'),
+      },
+      {
         path: 'input',
         loadComponent: () => import('./pages/input/input-page.component'),
       },
@@ -41,6 +53,10 @@ export const appRoutes: Route[] = [
         path: 'overflow-menu',
         loadComponent: () =>
           import('./pages/overflow-menu/overflow-menu-page.component'),
+      },
+      {
+        path: 'tooltip',
+        loadComponent: () => import('./pages/tooltip/tooltip-page.component'),
       },
       {
         path: 'confirm-dialog',

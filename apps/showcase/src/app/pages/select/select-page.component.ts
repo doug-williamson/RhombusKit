@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  RhombusErrorDirective,
   RhombusSelectComponent,
   SelectOption,
   SelectOptionGroup,
@@ -10,7 +11,7 @@ import {
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [MatButtonModule, RhombusSelectComponent],
+  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page">
@@ -85,7 +86,7 @@ import {
             [options]="priorities"
             [control]="priority"
           >
-            <span slot="error">
+            <span rhombusError>
               @if (priority.hasError('required')) {
                 Pick a priority before submitting.
               }

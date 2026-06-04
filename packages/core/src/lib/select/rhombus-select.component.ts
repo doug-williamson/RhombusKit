@@ -110,7 +110,7 @@ export interface SelectOptionGroup<T = string> {
       }
 
       <mat-error>
-        <ng-content select="[slot=error]" />
+        <ng-content select="[rhombusError]" />
       </mat-error>
     </mat-form-field>
   `,

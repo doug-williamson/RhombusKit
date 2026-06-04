@@ -30,6 +30,10 @@
   --btn-primary-hover: map.get($values, 'btn-primary-hover');
   --nav-active-bg: map.get($values, 'nav-active-bg');
   --nav-active-text: map.get($values, 'nav-active-text');
+  --switch-track-off: map.get($values, 'switch-track-off');
+  --switch-track-on: map.get($values, 'switch-track-on');
+  --tooltip-bg: map.get($values, 'tooltip-bg');
+  --tooltip-text: map.get($values, 'tooltip-text');
   --shadow-sm: map.get($values, 'shadow-sm');
   --shadow-md: map.get($values, 'shadow-md');
   --shadow-lg: map.get($values, 'shadow-lg');
