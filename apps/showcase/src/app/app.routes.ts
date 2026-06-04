@@ -76,6 +76,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/tabs/tabs-page.component'),
       },
       {
+        path: 'menu',
+        loadComponent: () => import('./pages/menu/menu-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),

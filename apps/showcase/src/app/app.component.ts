@@ -92,7 +92,10 @@ export class AppComponent {
     },
     {
       label: 'Navigation',
-      items: [{ path: '/components/tabs', label: 'Tabs' }],
+      items: [
+        { path: '/components/tabs', label: 'Tabs' },
+        { path: '/components/menu', label: 'Menu' },
+      ],
     },
     {
       label: 'Layout & theming',
