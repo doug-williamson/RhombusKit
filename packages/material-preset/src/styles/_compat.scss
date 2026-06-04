@@ -1,0 +1,20 @@
+// @rhombuskit/material-preset — reset compatibility shims.
+//
+// @rhombuskit/tokens' base reset includes `img, svg, video { max-width: 100% }`
+// (sensible for responsive content media). A few Material components size their
+// internal SVGs intrinsically and deliberately overflow their box; the clamp
+// then mis-sizes them. Opt those SVGs out of the clamp here.
+//
+// This partial is forwarded AFTER the bridge — and therefore after the tokens
+// reset in the documented load order (tokens → material-preset) — so these
+// rules win on source order; the selectors are also more specific than the
+// bare `svg` element selector in the reset.
+
+// Circular progress (<mat-progress-spinner>): in indeterminate mode each half
+// of the ring is an SVG sized to 200% of its half-width clipper (so the two
+// halves overlap into a full circle). `max-width: 100%` clamps those SVGs to
+// the clipper width, halving the ring and pushing its centre off the box — the
+// rotation then reads as asymmetric. Restore intrinsic sizing.
+.mat-mdc-progress-spinner svg {
+  max-width: none;
+}

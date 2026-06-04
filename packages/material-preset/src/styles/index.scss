@@ -5,3 +5,7 @@
 // reference CONTRACT variables that the tokens package has already declared.
 
 @forward 'bridge';
+
+// Reset compatibility shims for Material components (loaded after the bridge,
+// and after @rhombuskit/tokens' reset). See _compat.scss.
+@forward 'compat';
