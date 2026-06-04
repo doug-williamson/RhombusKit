@@ -100,6 +100,10 @@ export class AppComponent {
       ],
     },
     {
+      label: 'Status & layout',
+      items: [{ path: '/components/progress', label: 'Progress' }],
+    },
+    {
       label: 'Layout & theming',
       items: [
         { path: '/components/app-shell', label: 'App Shell' },

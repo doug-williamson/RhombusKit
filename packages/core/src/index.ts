@@ -125,6 +125,12 @@ export type { BreadcrumbItem } from './lib/breadcrumbs/rhombus-breadcrumbs.compo
 // data table (exported above), so consumers never import Material's PageEvent.
 export { RhombusPaginationComponent } from './lib/pagination/rhombus-pagination.component';
 
+// Status & layout group.
+// Progress indicators — thin MatProgressSpinner / MatProgressBar wrappers; the
+// active arc/bar use --text-accent (bridged).
+export { RhombusSpinnerComponent } from './lib/spinner/rhombus-spinner.component';
+export { RhombusProgressBarComponent } from './lib/progress-bar/rhombus-progress-bar.component';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete

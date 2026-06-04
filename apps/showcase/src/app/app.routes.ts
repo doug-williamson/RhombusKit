@@ -90,6 +90,10 @@ export const appRoutes: Route[] = [
           import('./pages/pagination/pagination-page.component'),
       },
       {
+        path: 'progress',
+        loadComponent: () => import('./pages/progress/progress-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),

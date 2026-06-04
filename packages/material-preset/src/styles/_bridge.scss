@@ -186,6 +186,16 @@
     arrow-color: var(--text-accent),
   ));
 
+  // Progress indicators — the active arc / bar use the accent role; the bar
+  // track reads as a subtle surface. Drive via <rhombus-spinner> / <rhombus-progress-bar>.
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: var(--text-accent),
+  ));
+  @include mat.progress-bar-overrides((
+    active-indicator-color: var(--text-accent),
+    track-color:            var(--surface-2),
+  ));
+
   // Tabs — active label + ink bar use the accent role; inactive labels read as
   // secondary text. Driven by [rhombusTabGroup] on <mat-tab-group>.
   @include mat.tabs-overrides((
