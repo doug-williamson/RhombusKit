@@ -4,7 +4,7 @@
 // reach every Material component.
 //
 // Phase 2 coverage: button, badge, card, chip.
-// Form field, dialog, table, snackbar tokens land in Phase 3.
+// Form field, dialog, table tokens land in Phase 3.
 // App-shell surfaces (sidenav, toolbar) are bridged alongside the shell.
 
 @use '@angular/material' as mat;
@@ -158,6 +158,10 @@
     outlined-focus-label-text-color: var(--text-accent),
     outlined-container-shape:        8px,
     filled-container-shape:          8px,
+    // Subscript (hint/error) size — the bridge supplies Material's colour roles
+    // but not the M3 typography tokens, so this would otherwise inherit the 16px
+    // root size. Body-small = 12px.
+    subscript-text-size:             0.75rem,
   ));
 
   // Select — arrow colours. Panel + option colours are overridden in
@@ -180,10 +184,40 @@
   @include mat.paginator-overrides((
     container-background-color: transparent,
     container-text-color:       var(--text-secondary),
+    // Text sizes — without the M3 type tokens these inherit the 16px root size
+    // (too large for a paginator). Body-small = 12px.
+    container-text-size:        0.75rem,
+    select-trigger-text-size:   0.75rem,
   ));
 
   @include mat.sort-overrides((
     arrow-color: var(--text-accent),
+  ));
+
+  // Progress indicators — the active arc / bar use the accent role; the bar
+  // track reads as a subtle surface. Drive via <rhombus-spinner> / <rhombus-progress-bar>.
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: var(--text-accent),
+  ));
+  @include mat.progress-bar-overrides((
+    active-indicator-color: var(--text-accent),
+    track-color:            var(--surface-2),
+  ));
+
+  // Tabs — active label + ink bar use the accent role; inactive labels read as
+  // secondary text. Driven by [rhombusTabGroup] on <mat-tab-group>.
+  @include mat.tabs-overrides((
+    active-label-text-color:       var(--text-accent),
+    active-focus-label-text-color: var(--text-accent),
+    active-hover-label-text-color: var(--text-accent),
+    active-indicator-color:        var(--text-accent),
+    active-focus-indicator-color:  var(--text-accent),
+    active-hover-indicator-color:  var(--text-accent),
+    active-ripple-color:           var(--text-accent),
+    inactive-label-text-color:     var(--text-secondary),
+    inactive-ripple-color:         var(--text-secondary),
+    // Label size — without the M3 type tokens this inherits 16px. Title-small = 14px.
+    label-text-size:               0.875rem,
   ));
 
   // Menu (Phase 3b) — global defaults. The overflow-menu panel renders in the
@@ -200,15 +234,37 @@
     container-color:       var(--surface-0),
     container-shape:       12px,
     subhead-color:         var(--text-primary),
+    // Title size/weight — without the M3 type tokens the headline falls back to
+    // its 1rem (16px) hard default. RhombusKit dialog title = 1.125rem / 600.
+    subhead-size:          1.125rem,
+    subhead-weight:        600,
     supporting-text-color: var(--text-secondary),
   ));
 
   // Tooltip — renders in the CDK overlay (Material defaults to inverse-surface),
-  // so it is bridged globally here, not in a component SCSS.
+  // so it is bridged globally here, not in a component SCSS. The text size is set
+  // explicitly because the bridge maps Material's colour roles but not the M3
+  // typography system, so the supporting-text size would otherwise fall back to
+  // the inherited 16px root size (too large). Body-small scale = 12px / 16px.
   @include mat.tooltip-overrides((
-    container-color:       var(--tooltip-bg),
-    supporting-text-color: var(--tooltip-text),
+    container-color:             var(--tooltip-bg),
+    supporting-text-color:       var(--tooltip-text),
+    supporting-text-size:        0.75rem,
+    supporting-text-line-height: 1rem,
   ));
+
+  // Toast (snackbar) — renders in the CDK overlay. RhombusToastService applies a
+  // `rhombus-toast rhombus-toast--<variant>` panelClass; each variant maps to its
+  // own --toast-*-bg/text pair (a single global override can't carry 4 severities).
+  @each $variant in (info, success, warning, error) {
+    .rhombus-toast--#{$variant} {
+      @include mat.snack-bar-overrides((
+        container-color:       var(--toast-#{$variant}-bg),
+        supporting-text-color: var(--toast-#{$variant}-text),
+        button-color:          var(--toast-#{$variant}-text),
+      ));
+    }
+  }
 
   // Sidenav (app-shell drawer). Width / borders are structural and live in
   // packages/core's rhombus-app-shell.component.scss; only surface colours are

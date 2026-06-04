@@ -10,7 +10,7 @@ const root = resolve(__dirname, '../packages/material-preset');
 
 mkdirSync(resolve(root, 'dist/scss'), { recursive: true });
 
-const files = ['_bridge.scss', 'index.scss'];
+const files = ['_bridge.scss', '_compat.scss', 'index.scss'];
 for (const file of files) {
   cpSync(
     resolve(root, 'src/styles', file),

@@ -1,8 +1,7 @@
-export interface OverflowMenuItem {
-  label: string;
-  icon?: string;
-  action: () => void;
-  variant?: 'default' | 'danger';
-  disabled?: boolean;
-  dividerBefore?: boolean;
-}
+import type { MenuItem } from '../menu/menu.types';
+
+/**
+ * An overflow-menu entry. Structurally identical to (and an alias of)
+ * {@link MenuItem} — overflow-menu is the icon-button preset of `<rhombus-menu>`.
+ */
+export type OverflowMenuItem = MenuItem;

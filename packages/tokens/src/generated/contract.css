@@ -32,6 +32,14 @@
   --switch-track-on: initial;
   --tooltip-bg: initial;
   --tooltip-text: initial;
+  --toast-info-bg: initial;
+  --toast-info-text: initial;
+  --toast-success-bg: initial;
+  --toast-success-text: initial;
+  --toast-warning-bg: initial;
+  --toast-warning-text: initial;
+  --toast-error-bg: initial;
+  --toast-error-text: initial;
   --shadow-sm: initial;
   --shadow-md: initial;
   --shadow-lg: initial;

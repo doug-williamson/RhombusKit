@@ -1,0 +1,38 @@
+// The dialog panel surface (background, radius) comes from the global
+// mat.dialog-overrides bridge in @rhombuskit/material-preset. This file only
+// styles the chrome's inner layout/typography.
+rhombus-dialog {
+  display: block;
+  padding: 1.5rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+}
+
+// `mat-dialog-title` adds Material's own margin + edge padding; the `h2.`
+// selector out-specifies `.mat-mdc-dialog-title` so the title sits flush inside
+// the chrome's 1.5rem padding. (Title font size/weight/colour come from the
+// dialog `subhead-*` token overrides in @rhombuskit/material-preset, because
+// Material's font-size rule `.mat-mdc-dialog-container .mat-mdc-dialog-title` is
+// more specific than this selector — fight that with the token, not specificity.)
+h2.rhombus-dialog__title {
+  margin: 0 0 0.75rem;
+  padding: 0;
+}
+
+.rhombus-dialog__content {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.rhombus-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+
+  // Collapse the footer when no actions are projected.
+  &:empty {
+    display: none;
+  }
+}

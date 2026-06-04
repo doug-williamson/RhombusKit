@@ -1,0 +1,5 @@
+// Indicator + track colours come from the global mat.progress-bar-overrides
+// bridge (--text-accent / --surface-2). Only host layout here.
+.rhombus-progress-bar {
+  display: block;
+}

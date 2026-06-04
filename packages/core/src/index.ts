@@ -62,6 +62,15 @@ export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
 // surface themed via --tooltip-bg/text.
 export { RhombusTooltipDirective } from './lib/tooltip/rhombus-tooltip.directive';
 
+// Toast. Service wrapping MatSnackBar + the CDK LiveAnnouncer (mirrors the
+// confirm service). Severity colours come from the --toast-<variant>-* tokens.
+export { RhombusToastService } from './lib/toast/rhombus-toast.service';
+export type {
+  ToastConfig,
+  ToastVariant,
+  RhombusToastRef,
+} from './lib/toast/toast.types';
+
 // Phase 3b — data table. Hybrid column API (config + cellTemplate escape
 // hatch), array = client-side / DataSource = server-side, distinct loading and
 // empty paths. Row selection deferred.
@@ -75,16 +84,63 @@ export type {
   PageState,
 } from './lib/data-table/data-table.types';
 
-// Phase 3b — overflow menu + confirm dialog. The overflow menu is a MatMenu
-// wrapper driven by a config array with callback-per-item dispatch. The confirm
-// service wraps MatDialog and returns Observable<boolean>; its rendered dialog
-// component (RhombusConfirmDialogComponent) is intentionally NOT exported —
-// consumers only ever use the service.
+// Menu — a MatMenu wrapper driven by a config array with callback-per-item
+// dispatch; the trigger is whatever you project (pass [iconButton] for the round
+// preset). overflow-menu is the icon-button preset of this component.
+export { RhombusMenuComponent } from './lib/menu/rhombus-menu.component';
+export type { MenuItem } from './lib/menu/menu.types';
 export { RhombusOverflowMenuComponent } from './lib/overflow-menu/rhombus-overflow-menu.component';
 export type { OverflowMenuItem } from './lib/overflow-menu/overflow-menu.types';
 
+// Dialog. Generic <rhombus-dialog> chrome (title + body + [rhombusDialogActions]
+// footer) plus RhombusDialogService — a MatDialog wrapper applying the library's
+// defaults and returning a leak-free RhombusDialogRef. The confirm service rides
+// this service.
+export { RhombusDialogComponent } from './lib/dialog/rhombus-dialog.component';
+export { RhombusDialogActionsDirective } from './lib/dialog/rhombus-dialog-actions.directive';
+export { RhombusDialogService } from './lib/dialog/rhombus-dialog.service';
+export type {
+  RhombusDialogConfig,
+  RhombusDialogRef,
+} from './lib/dialog/dialog.types';
+
+// Confirm service — a danger/default confirmation preset over RhombusDialogService,
+// returning Observable<boolean> (backdrop/Escape → false). Its rendered dialog
+// component (RhombusConfirmDialogComponent) is intentionally NOT exported.
 export { RhombusConfirmService } from './lib/confirm-dialog/rhombus-confirm.service';
 export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
+
+// Navigation group.
+// Tabs — decoration directive on <mat-tab-group> (chip-group pattern); keeps
+// Material's @ContentChildren(MatTab) query intact, themes the ink bar via
+// --text-accent, and re-emits selection as (tabChange).
+export { RhombusTabGroupDirective } from './lib/tabs/rhombus-tab-group.directive';
+
+// Breadcrumbs — bespoke accessible trail (<nav aria-label><ol>); linked entries
+// are routerLink anchors, the last is the current page (aria-current="page").
+export { RhombusBreadcrumbsComponent } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
+export type { BreadcrumbItem } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
+
+// Pagination — standalone MatPaginator wrapper; emits the same PageState as the
+// data table (exported above), so consumers never import Material's PageEvent.
+export { RhombusPaginationComponent } from './lib/pagination/rhombus-pagination.component';
+
+// Status & layout group.
+// Progress indicators — thin MatProgressSpinner / MatProgressBar wrappers; the
+// active arc/bar use --text-accent (bridged).
+export { RhombusSpinnerComponent } from './lib/spinner/rhombus-spinner.component';
+export { RhombusProgressBarComponent } from './lib/progress-bar/rhombus-progress-bar.component';
+
+// Avatar — bespoke; renders the src image (alt = name) or initials derived from
+// name (role="img", aria-label = name). Size sm/md/lg.
+export { RhombusAvatarComponent } from './lib/avatar/rhombus-avatar.component';
+export type { AvatarSize } from './lib/avatar/rhombus-avatar.component';
+
+// Alert — bespoke persistent severity banner (distinct from the transient toast).
+// Reuses the shared --toast-<variant>-* tokens; severity is conveyed by colour +
+// a visually-hidden prefix (not colour-only). Optional title + dismiss.
+export { RhombusAlertComponent } from './lib/alert/rhombus-alert.component';
+export type { AlertVariant } from './lib/alert/rhombus-alert.component';
 
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button

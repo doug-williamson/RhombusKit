@@ -1,0 +1,48 @@
+// RhombusKit breadcrumbs — bespoke. Colour/typography only, all via CONTRACT vars.
+.rhombus-breadcrumbs {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+}
+
+.rhombus-breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rhombus-breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rhombus-breadcrumbs__link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--text-accent);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-border);
+    outline-offset: 2px;
+  }
+}
+
+.rhombus-breadcrumbs__current {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.rhombus-breadcrumbs__separator {
+  color: var(--text-muted);
+  user-select: none;
+}

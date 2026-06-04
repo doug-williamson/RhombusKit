@@ -50,6 +50,17 @@ export const CONTRACT = [
   '--tooltip-bg',
   '--tooltip-text',
 
+  // Toast (transient snackbar; one tinted bg/text pair per severity, selected
+  // by the panelClass the toast service applies)
+  '--toast-info-bg',
+  '--toast-info-text',
+  '--toast-success-bg',
+  '--toast-success-text',
+  '--toast-warning-bg',
+  '--toast-warning-text',
+  '--toast-error-bg',
+  '--toast-error-text',
+
   // Shadows
   '--shadow-sm',
   '--shadow-md',

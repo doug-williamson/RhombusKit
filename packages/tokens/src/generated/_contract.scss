@@ -34,6 +34,14 @@
   --switch-track-on: map.get($values, 'switch-track-on');
   --tooltip-bg: map.get($values, 'tooltip-bg');
   --tooltip-text: map.get($values, 'tooltip-text');
+  --toast-info-bg: map.get($values, 'toast-info-bg');
+  --toast-info-text: map.get($values, 'toast-info-text');
+  --toast-success-bg: map.get($values, 'toast-success-bg');
+  --toast-success-text: map.get($values, 'toast-success-text');
+  --toast-warning-bg: map.get($values, 'toast-warning-bg');
+  --toast-warning-text: map.get($values, 'toast-warning-text');
+  --toast-error-bg: map.get($values, 'toast-error-bg');
+  --toast-error-text: map.get($values, 'toast-error-text');
   --shadow-sm: map.get($values, 'shadow-sm');
   --shadow-md: map.get($values, 'shadow-md');
   --shadow-lg: map.get($values, 'shadow-lg');

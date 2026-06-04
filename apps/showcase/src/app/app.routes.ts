@@ -59,9 +59,47 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/tooltip/tooltip-page.component'),
       },
       {
+        path: 'toast',
+        loadComponent: () => import('./pages/toast/toast-page.component'),
+      },
+      {
+        path: 'dialog',
+        loadComponent: () => import('./pages/dialog/dialog-page.component'),
+      },
+      {
         path: 'confirm-dialog',
         loadComponent: () =>
           import('./pages/confirm-dialog/confirm-dialog-page.component'),
+      },
+      {
+        path: 'tabs',
+        loadComponent: () => import('./pages/tabs/tabs-page.component'),
+      },
+      {
+        path: 'menu',
+        loadComponent: () => import('./pages/menu/menu-page.component'),
+      },
+      {
+        path: 'breadcrumbs',
+        loadComponent: () =>
+          import('./pages/breadcrumbs/breadcrumbs-page.component'),
+      },
+      {
+        path: 'pagination',
+        loadComponent: () =>
+          import('./pages/pagination/pagination-page.component'),
+      },
+      {
+        path: 'progress',
+        loadComponent: () => import('./pages/progress/progress-page.component'),
+      },
+      {
+        path: 'avatar',
+        loadComponent: () => import('./pages/avatar/avatar-page.component'),
+      },
+      {
+        path: 'alert',
+        loadComponent: () => import('./pages/alert/alert-page.component'),
       },
       {
         path: 'theme-toggle',

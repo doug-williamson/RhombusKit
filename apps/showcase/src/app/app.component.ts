@@ -85,7 +85,26 @@ export class AppComponent {
         { path: '/components/data-table', label: 'Data Table' },
         { path: '/components/overflow-menu', label: 'Overflow Menu' },
         { path: '/components/tooltip', label: 'Tooltip' },
+        { path: '/components/toast', label: 'Toast' },
+        { path: '/components/dialog', label: 'Dialog' },
         { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
+      ],
+    },
+    {
+      label: 'Navigation',
+      items: [
+        { path: '/components/tabs', label: 'Tabs' },
+        { path: '/components/menu', label: 'Menu' },
+        { path: '/components/breadcrumbs', label: 'Breadcrumbs' },
+        { path: '/components/pagination', label: 'Pagination' },
+      ],
+    },
+    {
+      label: 'Status & layout',
+      items: [
+        { path: '/components/progress', label: 'Progress' },
+        { path: '/components/avatar', label: 'Avatar' },
+        { path: '/components/alert', label: 'Alert' },
       ],
     },
     {
