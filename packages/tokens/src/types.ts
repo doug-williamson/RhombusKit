@@ -1,6 +1,17 @@
 // Hand-authored — do not generate this file.
 // When adding a new semantic token: add to CONTRACT, add values to every theme pack,
 // rerun the generator. The build will type-fail if a pack is missing the name.
+//
+// STABILITY (frozen at 1.0): the token NAMES below are part of the public API.
+// They are APPEND-ONLY within a major version — renaming or removing a name is a
+// breaking change requiring a major bump. The generated CSS *values* are NOT
+// covered by semver (only the names are). This is enforced by
+// `tools/verify-tokens.mjs` against the committed `contract.snapshot.json`;
+// an intentional change is recorded with `--update-snapshot`.
+//
+// Consumers extend the system with their OWN tokens/themes via ThemeRegistry
+// augmentation + provideRhombusTheme({ light, dark }) — that is the sanctioned
+// extensibility path, not a change to this CONTRACT.
 
 export const CONTRACT = [
   // Backgrounds
