@@ -72,6 +72,10 @@ export const appRoutes: Route[] = [
           import('./pages/confirm-dialog/confirm-dialog-page.component'),
       },
       {
+        path: 'tabs',
+        loadComponent: () => import('./pages/tabs/tabs-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),

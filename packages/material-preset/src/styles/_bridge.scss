@@ -186,6 +186,20 @@
     arrow-color: var(--text-accent),
   ));
 
+  // Tabs — active label + ink bar use the accent role; inactive labels read as
+  // secondary text. Driven by [rhombusTabGroup] on <mat-tab-group>.
+  @include mat.tabs-overrides((
+    active-label-text-color:       var(--text-accent),
+    active-focus-label-text-color: var(--text-accent),
+    active-hover-label-text-color: var(--text-accent),
+    active-indicator-color:        var(--text-accent),
+    active-focus-indicator-color:  var(--text-accent),
+    active-hover-indicator-color:  var(--text-accent),
+    active-ripple-color:           var(--text-accent),
+    inactive-label-text-color:     var(--text-secondary),
+    inactive-ripple-color:         var(--text-secondary),
+  ));
+
   // Menu (Phase 3b) — global defaults. The overflow-menu panel renders in the
   // CDK overlay, so rhombus-overflow-menu.component.scss also scopes these.
   @include mat.menu-overrides((

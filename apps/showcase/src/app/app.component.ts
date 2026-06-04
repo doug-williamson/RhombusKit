@@ -91,6 +91,10 @@ export class AppComponent {
       ],
     },
     {
+      label: 'Navigation',
+      items: [{ path: '/components/tabs', label: 'Tabs' }],
+    },
+    {
       label: 'Layout & theming',
       items: [
         { path: '/components/app-shell', label: 'App Shell' },

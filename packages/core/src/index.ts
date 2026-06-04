@@ -110,6 +110,12 @@ export type {
 export { RhombusConfirmService } from './lib/confirm-dialog/rhombus-confirm.service';
 export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
 
+// Navigation group.
+// Tabs — decoration directive on <mat-tab-group> (chip-group pattern); keeps
+// Material's @ContentChildren(MatTab) query intact, themes the ink bar via
+// --text-accent, and re-emits selection as (tabChange).
+export { RhombusTabGroupDirective } from './lib/tabs/rhombus-tab-group.directive';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete
