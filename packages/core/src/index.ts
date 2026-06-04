@@ -116,6 +116,11 @@ export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
 // --text-accent, and re-emits selection as (tabChange).
 export { RhombusTabGroupDirective } from './lib/tabs/rhombus-tab-group.directive';
 
+// Breadcrumbs — bespoke accessible trail (<nav aria-label><ol>); linked entries
+// are routerLink anchors, the last is the current page (aria-current="page").
+export { RhombusBreadcrumbsComponent } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
+export type { BreadcrumbItem } from './lib/breadcrumbs/rhombus-breadcrumbs.component';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete
