@@ -4,11 +4,10 @@ name: ci
 # lint/test/build only fired at release time. Every job below must be green
 # before merge (configure as required checks in branch protection).
 #
-# Later phases add two more required jobs here:
-#   - api-surface : API Extractor verify + token CONTRACT snapshot (Phase 5)
-#   - a11y        : jest-axe + Playwright contrast pass (Phase 4)
-# They are intentionally absent now because their tooling/config does not exist
-# yet; adding empty jobs would only make CI red.
+# API-surface enforcement (Phase 5) lives in the `build` job, which already
+# builds every package's dist: token CONTRACT snapshot via verify-tokens, and
+# the public-export snapshot via api-snapshot. Still pending: the Playwright
+# color-contrast pass (Phase 4 secondary).
 
 on:
   pull_request:
@@ -87,5 +86,7 @@ jobs:
       # Full build (not affected): the api-surface + smoke jobs added in later
       # phases consume every package's dist output.
       - run: pnpm exec nx run-many --target=build --all
-      - name: Verify tokens
+      - name: Verify token CONTRACT (names + snapshot)
         run: node tools/verify-tokens.mjs
+      - name: Verify public API surface (export snapshots)
+        run: node tools/api-snapshot.mjs
