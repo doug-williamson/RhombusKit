@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RhombusDialogService } from '../dialog/rhombus-dialog.service';
 import { RhombusConfirmDialogComponent } from './rhombus-confirm-dialog.component';
 import type { ConfirmConfig } from './confirm-dialog.types';
 
 @Injectable({ providedIn: 'root' })
 export class RhombusConfirmService {
-  private dialog = inject(MatDialog);
+  private dialog = inject(RhombusDialogService);
 
   /**
    * Opens a confirmation dialog. Returns an Observable that emits `true` if the
@@ -26,16 +26,18 @@ export class RhombusConfirmService {
    * Consumers who want async/await: await firstValueFrom(this.confirm.confirm({...}))
    */
   confirm(config: ConfirmConfig): Observable<boolean> {
-    const ref = this.dialog.open(RhombusConfirmDialogComponent, {
-      data: config,
-      width: '400px',
-      maxWidth: '90vw',
-      autoFocus: 'dialog',
-      restoreFocus: true,
-      panelClass: 'rhombus-confirm-dialog-panel',
-    });
+    // Routes through RhombusDialogService so confirm shares the library's
+    // dialog defaults (autoFocus/restoreFocus/maxWidth/panel class) and theming.
+    const ref = this.dialog.open<boolean, ConfirmConfig>(
+      RhombusConfirmDialogComponent,
+      {
+        data: config,
+        width: '400px',
+        panelClass: 'rhombus-confirm-dialog-panel',
+      }
+    );
 
-    // afterClosed() emits the dialogRef.close() value, or undefined on
+    // afterClosed() emits the dialog close value, or undefined on
     // backdrop/escape dismissal. Map undefined → false so the contract is
     // strictly boolean.
     return ref.afterClosed().pipe(map((result) => result === true));

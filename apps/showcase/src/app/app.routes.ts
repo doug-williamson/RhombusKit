@@ -63,6 +63,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/toast/toast-page.component'),
       },
       {
+        path: 'dialog',
+        loadComponent: () => import('./pages/dialog/dialog-page.component'),
+      },
+      {
         path: 'confirm-dialog',
         loadComponent: () =>
           import('./pages/confirm-dialog/confirm-dialog-page.component'),

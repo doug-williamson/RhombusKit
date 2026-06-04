@@ -86,6 +86,7 @@ export class AppComponent {
         { path: '/components/overflow-menu', label: 'Overflow Menu' },
         { path: '/components/tooltip', label: 'Tooltip' },
         { path: '/components/toast', label: 'Toast' },
+        { path: '/components/dialog', label: 'Dialog' },
         { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
       ],
     },

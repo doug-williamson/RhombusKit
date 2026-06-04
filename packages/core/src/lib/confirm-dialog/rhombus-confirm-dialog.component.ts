@@ -4,26 +4,27 @@ import {
   ViewEncapsulation,
   inject,
 } from '@angular/core';
-import {
-  MatDialogModule,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RhombusButtonComponent } from '../button/rhombus-button.component';
+import { RhombusDialogComponent } from '../dialog/rhombus-dialog.component';
+import { RhombusDialogActionsDirective } from '../dialog/rhombus-dialog-actions.directive';
 import type { ConfirmConfig } from './confirm-dialog.types';
 
 @Component({
   selector: 'rhombus-confirm-dialog',
   standalone: true,
-  imports: [MatDialogModule, RhombusButtonComponent],
+  imports: [
+    RhombusDialogComponent,
+    RhombusDialogActionsDirective,
+    RhombusButtonComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-confirm-dialog.component.scss',
   template: `
-    <div class="rhombus-confirm-dialog">
-      <h2 class="rhombus-confirm-dialog__title">{{ data.title }}</h2>
+    <rhombus-dialog [title]="data.title">
       <p class="rhombus-confirm-dialog__message">{{ data.message }}</p>
-      <div class="rhombus-confirm-dialog__actions">
+      <div rhombusDialogActions>
         <rhombus-button
           variant="secondary"
           appearance="text"
@@ -39,7 +40,7 @@ import type { ConfirmConfig } from './confirm-dialog.types';
           {{ data.confirmLabel ?? 'Confirm' }}
         </rhombus-button>
       </div>
-    </div>
+    </rhombus-dialog>
   `,
 })
 export class RhombusConfirmDialogComponent {

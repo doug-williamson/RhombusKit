@@ -92,6 +92,21 @@ export type {
 export { RhombusOverflowMenuComponent } from './lib/overflow-menu/rhombus-overflow-menu.component';
 export type { OverflowMenuItem } from './lib/overflow-menu/overflow-menu.types';
 
+// Dialog. Generic <rhombus-dialog> chrome (title + body + [rhombusDialogActions]
+// footer) plus RhombusDialogService — a MatDialog wrapper applying the library's
+// defaults and returning a leak-free RhombusDialogRef. The confirm service rides
+// this service.
+export { RhombusDialogComponent } from './lib/dialog/rhombus-dialog.component';
+export { RhombusDialogActionsDirective } from './lib/dialog/rhombus-dialog-actions.directive';
+export { RhombusDialogService } from './lib/dialog/rhombus-dialog.service';
+export type {
+  RhombusDialogConfig,
+  RhombusDialogRef,
+} from './lib/dialog/dialog.types';
+
+// Confirm service — a danger/default confirmation preset over RhombusDialogService,
+// returning Observable<boolean> (backdrop/Escape → false). Its rendered dialog
+// component (RhombusConfirmDialogComponent) is intentionally NOT exported.
 export { RhombusConfirmService } from './lib/confirm-dialog/rhombus-confirm.service';
 export type { ConfirmConfig } from './lib/confirm-dialog/confirm-dialog.types';
 
