@@ -43,6 +43,7 @@ export const amber = {
   100: '#fef3c7',
   500: '#f59e0b',
   600: '#d97706',
+  700: '#b45309',
 } as const;
 
 export const red = {
@@ -50,6 +51,7 @@ export const red = {
   100: '#fee2e2',
   500: '#ef4444',
   600: '#dc2626',
+  700: '#b91c1c',
 } as const;
 
 export const fontFamily = {

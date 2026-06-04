@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "outDir": "../../dist/out-tsc/showcase-e2e"
+  },
+  "include": ["tests/**/*.ts", "playwright.config.ts"]
+}

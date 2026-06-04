@@ -11,7 +11,9 @@ export const rhombusDark: Record<SemanticTokenName, string> = {
 
   '--text-primary':   slate[50],
   '--text-secondary': slate[300],
-  '--text-muted':     slate[500],
+  // slate[400] clears WCAG AA (4.5:1) on the dark surfaces; slate[500] failed
+  // (~3.1:1) while staying distinct from secondary (slate[300]).
+  '--text-muted':     slate[400],
   '--text-disabled':  slate[600],
   '--text-accent':    violet[400],
   '--text-on-accent': '#ffffff',
@@ -28,9 +30,13 @@ export const rhombusDark: Record<SemanticTokenName, string> = {
   '--error':    red[500],
   '--error-bg': '#2a0a0a',
 
-  '--btn-primary-bg':    violet[500],
+  // violet[600] as the filled-button fill: white label clears AA (5.7:1);
+  // violet[500] failed (4.23:1). Hover deepens to violet[700] (still AA) rather
+  // than lightening, which would drop white below AA. On-surface accent text
+  // (text/outlined buttons, links) uses --text-accent (violet[400]) instead.
+  '--btn-primary-bg':    violet[600],
   '--btn-primary-text':  '#ffffff',
-  '--btn-primary-hover': violet[400],
+  '--btn-primary-hover': violet[700],
 
   '--nav-active-bg':   'rgb(167 139 250 / 0.14)',
   '--nav-active-text': slate[50],

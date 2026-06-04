@@ -11,7 +11,9 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
 
   '--text-primary':   slate[900],
   '--text-secondary': slate[600],
-  '--text-muted':     slate[400],
+  // slate[500] keeps muted distinct from secondary while clearing WCAG AA
+  // (4.5:1) on --bg / --surface-0; slate[400] failed (~2.4:1).
+  '--text-muted':     slate[500],
   '--text-disabled':  slate[300],
   '--text-accent':    violet[600],
   '--text-on-accent': '#ffffff',
@@ -45,12 +47,14 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   // "info" is neutral slate (no blue primitive in the palette).
   '--toast-info-bg':      slate[100],
   '--toast-info-text':    slate[700],
+  // Status/toast text sits on its own tinted 50-step bg; the 600 steps missed
+  // AA (~3.1:1), the 700 steps clear it (≥4.5:1).
   '--toast-success-bg':   green[50],
-  '--toast-success-text': green[600],
+  '--toast-success-text': green[700],
   '--toast-warning-bg':   amber[50],
-  '--toast-warning-text': amber[600],
+  '--toast-warning-text': amber[700],
   '--toast-error-bg':     red[50],
-  '--toast-error-text':   red[600],
+  '--toast-error-text':   red[700],
 
   '--shadow-sm':           '0 1px 2px 0 rgb(0 0 0 / 0.05)',
   '--shadow-md':           '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
@@ -65,9 +69,9 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--font-prose': 'var(--font-family-prose)',
 
   '--status-draft-bg':        amber[50],
-  '--status-draft-text':      amber[600],
+  '--status-draft-text':      amber[700],
   '--status-published-bg':    green[50],
-  '--status-published-text':  green[600],
+  '--status-published-text':  green[700],
   '--status-scheduled-bg':    violet[50],
   '--status-scheduled-text':  violet[600],
   '--status-archived-bg':     slate[100],
