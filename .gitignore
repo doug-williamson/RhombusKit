@@ -14,6 +14,10 @@ tmp/
 /.playwright-mcp/
 /*.png
 
+# Playwright e2e (contrast) run artifacts
+/test-results/
+/playwright-report/
+
 # Firebase emulator state + scratch prompt files (never commit)
 .firebase/emulator-data/
 prompt.md
