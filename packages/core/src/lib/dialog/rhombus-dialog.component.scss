@@ -8,11 +8,15 @@ rhombus-dialog {
   color: var(--text-primary);
 }
 
-.rhombus-dialog__title {
-  font-size: 1.125rem;
-  font-weight: 600;
+// `mat-dialog-title` adds Material's own margin + edge padding; the `h2.`
+// selector out-specifies `.mat-mdc-dialog-title` so the title sits flush inside
+// the chrome's 1.5rem padding. (Title font size/weight/colour come from the
+// dialog `subhead-*` token overrides in @rhombuskit/material-preset, because
+// Material's font-size rule `.mat-mdc-dialog-container .mat-mdc-dialog-title` is
+// more specific than this selector — fight that with the token, not specificity.)
+h2.rhombus-dialog__title {
   margin: 0 0 0.75rem;
-  color: var(--text-primary);
+  padding: 0;
 }
 
 .rhombus-dialog__content {

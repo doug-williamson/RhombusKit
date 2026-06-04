@@ -158,6 +158,10 @@
     outlined-focus-label-text-color: var(--text-accent),
     outlined-container-shape:        8px,
     filled-container-shape:          8px,
+    // Subscript (hint/error) size — the bridge supplies Material's colour roles
+    // but not the M3 typography tokens, so this would otherwise inherit the 16px
+    // root size. Body-small = 12px.
+    subscript-text-size:             0.75rem,
   ));
 
   // Select — arrow colours. Panel + option colours are overridden in
@@ -180,6 +184,10 @@
   @include mat.paginator-overrides((
     container-background-color: transparent,
     container-text-color:       var(--text-secondary),
+    // Text sizes — without the M3 type tokens these inherit the 16px root size
+    // (too large for a paginator). Body-small = 12px.
+    container-text-size:        0.75rem,
+    select-trigger-text-size:   0.75rem,
   ));
 
   @include mat.sort-overrides((
@@ -208,6 +216,8 @@
     active-ripple-color:           var(--text-accent),
     inactive-label-text-color:     var(--text-secondary),
     inactive-ripple-color:         var(--text-secondary),
+    // Label size — without the M3 type tokens this inherits 16px. Title-small = 14px.
+    label-text-size:               0.875rem,
   ));
 
   // Menu (Phase 3b) — global defaults. The overflow-menu panel renders in the
@@ -224,6 +234,10 @@
     container-color:       var(--surface-0),
     container-shape:       12px,
     subhead-color:         var(--text-primary),
+    // Title size/weight — without the M3 type tokens the headline falls back to
+    // its 1rem (16px) hard default. RhombusKit dialog title = 1.125rem / 600.
+    subhead-size:          1.125rem,
+    subhead-weight:        600,
     supporting-text-color: var(--text-secondary),
   ));
 
