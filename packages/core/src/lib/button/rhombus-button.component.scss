@@ -16,6 +16,17 @@
   // at paint time, so the button picks up our colours without us touching
   // .mat-mdc-* selectors.
 
+  // Filled primary draws its label (white) on the --btn-primary-bg fill, which
+  // is tuned for white-on-fill AA. The text/outlined appearances instead render
+  // the label from --mat-sys-primary as on-surface text, where that fill colour
+  // misses AA on dark surfaces. Repoint --mat-sys-primary at the AA-tuned accent
+  // for those two appearances only (scoped via RhombusKit's own classes, never
+  // .mat-mdc-*); the filled appearance keeps its fill colour untouched.
+  &--primary.rhombus-button--text,
+  &--primary.rhombus-button--outlined {
+    --mat-sys-primary: var(--text-accent);
+  }
+
   &--secondary {
     --mat-sys-primary:    var(--surface-2);
     --mat-sys-on-primary: var(--text-primary);

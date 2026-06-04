@@ -42,7 +42,7 @@ import { RhombusButtonComponent, RhombusTooltipDirective } from '@rhombuskit/cor
       <section class="showcase-section">
         <h2>On any element</h2>
         <div class="showcase-row">
-          <button mat-stroked-button [rhombusTooltip]="'Works on a plain Material button too'">
+          <button mat-flat-button [rhombusTooltip]="'Works on a plain Material button too'">
             Material button
           </button>
           <span

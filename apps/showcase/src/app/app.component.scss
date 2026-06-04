@@ -27,7 +27,9 @@
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    // Section heading on the surface-1 sidenav: --text-secondary clears AA here
+    // where the lighter --text-muted (small 11px text) would not.
+    color: var(--text-secondary);
 
     &:first-child {
       margin-top: 0;
