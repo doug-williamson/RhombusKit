@@ -22,10 +22,11 @@
       }
     },
     "test": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "command": "vitest run",
-        "cwd": "packages/tokens"
+        "jestConfig": "packages/tokens/jest.config.ts",
+        "tsConfig": "packages/tokens/tsconfig.spec.json"
       }
     },
     "lint": {
