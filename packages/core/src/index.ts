@@ -131,6 +131,11 @@ export { RhombusPaginationComponent } from './lib/pagination/rhombus-pagination.
 export { RhombusSpinnerComponent } from './lib/spinner/rhombus-spinner.component';
 export { RhombusProgressBarComponent } from './lib/progress-bar/rhombus-progress-bar.component';
 
+// Avatar — bespoke; renders the src image (alt = name) or initials derived from
+// name (role="img", aria-label = name). Size sm/md/lg.
+export { RhombusAvatarComponent } from './lib/avatar/rhombus-avatar.component';
+export type { AvatarSize } from './lib/avatar/rhombus-avatar.component';
+
 // 0.2.0 — theme controls. Both driven by RhombusThemeService from
 // @rhombuskit/theme-engine. The toggle is a three-state cycle icon button
 // (light → dark → system); the menu exposes the same three options as discrete

@@ -101,7 +101,10 @@ export class AppComponent {
     },
     {
       label: 'Status & layout',
-      items: [{ path: '/components/progress', label: 'Progress' }],
+      items: [
+        { path: '/components/progress', label: 'Progress' },
+        { path: '/components/avatar', label: 'Avatar' },
+      ],
     },
     {
       label: 'Layout & theming',

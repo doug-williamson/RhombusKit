@@ -1,0 +1,41 @@
+// RhombusKit avatar — bespoke. Colour/sizing only, all via CONTRACT vars.
+.rhombus-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: var(--surface-2);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+  vertical-align: middle;
+
+  &--sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.625rem;
+  }
+
+  &--md {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  &--lg {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.25rem;
+  }
+}
+
+.rhombus-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

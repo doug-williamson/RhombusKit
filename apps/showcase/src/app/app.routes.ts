@@ -94,6 +94,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/progress/progress-page.component'),
       },
       {
+        path: 'avatar',
+        loadComponent: () => import('./pages/avatar/avatar-page.component'),
+      },
+      {
         path: 'theme-toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),
