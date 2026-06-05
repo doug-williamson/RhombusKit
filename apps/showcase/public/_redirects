@@ -1,0 +1,5 @@
+# Cloudflare Pages SPA fallback.
+# The showcase is a client-side-routed Angular SPA: any path that isn't a
+# real file (e.g. /theming, /components/button) must serve index.html so the
+# router can resolve it, instead of returning a 404 on direct load / refresh.
+/*    /index.html    200
