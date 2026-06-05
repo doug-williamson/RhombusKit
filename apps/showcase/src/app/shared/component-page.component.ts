@@ -9,6 +9,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RhombusTabGroupDirective } from '@rhombuskit/core';
+import { ApiTableComponent } from './api-table.component';
 
 const TABS = ['overview', 'examples', 'api'] as const;
 type TabId = (typeof TABS)[number];
@@ -28,7 +29,7 @@ type TabId = (typeof TABS)[number];
 @Component({
   selector: 'app-component-page',
   standalone: true,
-  imports: [MatTabsModule, RhombusTabGroupDirective],
+  imports: [MatTabsModule, RhombusTabGroupDirective, ApiTableComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page component-page">
@@ -53,10 +54,7 @@ type TabId = (typeof TABS)[number];
         </mat-tab>
         <mat-tab label="API">
           <div class="component-page__tab">
-            <!-- Phase 2 replaces this with <app-api-table [apiKey]="apiKey()" />. -->
-            <p class="component-page__api-note">
-              The API reference is generated from the public type surface.
-            </p>
+            <app-api-table [apiKey]="apiKey()" />
           </div>
         </mat-tab>
       </mat-tab-group>
