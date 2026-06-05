@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RhombusEmptyStateComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-empty-state-page',
   standalone: true,
-  imports: [RhombusEmptyStateComponent],
+  imports: [RhombusEmptyStateComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Empty State</h1>
+    <app-component-page title="Empty State" apiKey="RhombusEmptyStateComponent">
+      <div overview>
         <p>
           A centered icon, heading, optional body, and optional CTA for
           "nothing here yet" surfaces. The icon is a Material
@@ -18,8 +18,9 @@ import { RhombusEmptyStateComponent } from '@rhombuskit/core';
           <code>rhombus-empty-state</code> is distinct from the data-table's
           <code>[rhombusEmptyState]</code> directive and nests cleanly inside it.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Default</h2>
         <div class="demo-surface">
@@ -54,7 +55,8 @@ import { RhombusEmptyStateComponent } from '@rhombuskit/core';
           time{{ ctaCount() === 1 ? '' : 's' }}.
         </p>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .demo-surface {

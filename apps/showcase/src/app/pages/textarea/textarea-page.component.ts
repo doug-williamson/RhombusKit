@@ -6,16 +6,16 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RhombusErrorDirective, RhombusTextareaComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-textarea-page',
   standalone: true,
-  imports: [RhombusTextareaComponent, RhombusErrorDirective],
+  imports: [RhombusTextareaComponent, RhombusErrorDirective, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Textarea</h1>
+    <app-component-page title="Textarea" apiKey="RhombusTextareaComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-textarea&gt;</code> wraps
           <code>&lt;textarea matInput&gt;</code>. In addition to the
@@ -26,8 +26,8 @@ import { RhombusErrorDirective, RhombusTextareaComponent } from '@rhombuskit/cor
           control; reactive-forms consumers pass a <code>FormControl</code>
           via <code>[control]</code>.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Appearance</h2>
         <div class="textarea-grid">
@@ -103,7 +103,8 @@ import { RhombusErrorDirective, RhombusTextareaComponent } from '@rhombuskit/cor
           />
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .textarea-grid {

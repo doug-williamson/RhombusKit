@@ -6,6 +6,7 @@ import {
   RhombusShellAuthDirective,
   RhombusShellNavFooterDirective,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 /**
  * Demo page for `<rhombus-app-shell>`. The live shell runs inside a bounded
@@ -23,12 +24,12 @@ import {
     RhombusShellNavFooterDirective,
     RhombusShellAuthDirective,
     RhombusShellAsideDirective,
+    ComponentPageComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>App Shell</h1>
+    <app-component-page title="App Shell" apiKey="RhombusAppShellComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-app-shell&gt;</code> is a structure-only layout
           primitive wrapping <code>mat-sidenav-container</code> +
@@ -43,8 +44,9 @@ import {
           <code>rhombus-app-shell</code></strong>; resize the window to watch it
           collapse to an overlay drawer at 960px.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Live shell</h2>
         <div class="showcase-row app-shell-demo__controls">
@@ -131,7 +133,8 @@ import {
           </rhombus-app-shell>
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .app-shell-demo__controls {

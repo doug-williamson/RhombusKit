@@ -116,19 +116,32 @@ export interface SelectOptionGroup<T = string> {
   `,
 })
 export class RhombusSelectComponent<T = string> {
+  /** Floating `<mat-label>` text; empty (default) for no label. */
   readonly label = input<string>('');
+  /** Placeholder shown when no option is selected. */
   readonly placeholder = input<string>('');
+  /** Form-field appearance, mapped to Material's `outline` (default) or `fill`. */
   readonly appearance = input<FormFieldAppearance>('outline');
+  /** Density scale applied via host classes; defaults to `md`. */
   readonly size = input<FormFieldSize>('md');
+  /** Disables the select in lightweight mode; ignored when `control` is set. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Marks the select required for validation/ARIA. Defaults to `false`. */
   readonly required = input<boolean>(false);
+  /** Allows selecting multiple options when `true`. Defaults to `false`. */
   readonly multiple = input<boolean>(false);
+  /** Subscript hint text shown below the field; `null` (default) hides the hint. */
   readonly hint = input<string | null>(null);
+  /** Flat list of options to render; ignored when `groups` is non-empty. Defaults to `[]`. */
   readonly options = input<SelectOption<T>[]>([]);
+  /** Grouped options (`{ groupLabel, options }`); takes precedence over `options`. Defaults to `[]`. */
   readonly groups = input<SelectOptionGroup<T>[]>([]);
+  /** Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default). */
   readonly subscriptSizing = input<'fixed' | 'dynamic'>('dynamic');
+  /** Reactive-forms `FormControl`; when set, the standalone `disabled` input is ignored. */
   readonly control = input<FormControl | null>(null);
 
+  /** Emits the selected value (or array of values when `multiple`) whenever the user changes selection. */
   readonly selectionChange = output<T | T[]>();
 
   protected readonly hostClasses = computed(() =>

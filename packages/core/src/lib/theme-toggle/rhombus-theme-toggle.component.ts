@@ -45,11 +45,15 @@ export class RhombusThemeToggleComponent {
   private readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
+  /** Icon shown when the light theme is active; defaults to `'light_mode'`. */
   readonly lightIcon = input<string>('light_mode');
+  /** Icon shown when the dark theme is active; defaults to `'dark_mode'`. */
   readonly darkIcon = input<string>('dark_mode');
+  /** Icon shown when the system preference is active; defaults to `'contrast'`. */
   readonly systemIcon = input<string>('contrast');
 
   // Tooltip + a11y override.
+  /** Whether to show the hover tooltip describing the current/next theme. */
   readonly showTooltip = input<boolean>(true);
 
   protected readonly currentIcon = computed(() => {

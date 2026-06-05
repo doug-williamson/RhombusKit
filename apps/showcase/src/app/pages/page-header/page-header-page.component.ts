@@ -3,16 +3,16 @@ import {
   RhombusButtonComponent,
   RhombusPageHeaderComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-page-header-page',
   standalone: true,
-  imports: [RhombusPageHeaderComponent, RhombusButtonComponent],
+  imports: [RhombusPageHeaderComponent, RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Page Header</h1>
+    <app-component-page title="Page Header" apiKey="RhombusPageHeaderComponent">
+      <div overview>
         <p>
           A leaf composite for the top of a page: a required
           <code>title</code> with an optional <code>badge</code> and
@@ -21,8 +21,9 @@ import {
           sourced from the token contract, so it tracks the theme &mdash; toggle
           the theme above to see it.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Title only</h2>
         <rhombus-page-header title="Dashboard" />
@@ -57,7 +58,8 @@ import {
           </rhombus-button>
         </rhombus-page-header>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class PageHeaderPageComponent {}

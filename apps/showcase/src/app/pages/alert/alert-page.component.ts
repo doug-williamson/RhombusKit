@@ -3,16 +3,16 @@ import {
   RhombusAlertComponent,
   RhombusButtonComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-alert-page',
   standalone: true,
-  imports: [RhombusAlertComponent, RhombusButtonComponent],
+  imports: [RhombusAlertComponent, RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Alert</h1>
+    <app-component-page title="Alert" apiKey="RhombusAlertComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-alert&gt;</code> is a persistent, inline severity
           banner — distinct from the transient toast. It reuses the shared
@@ -21,8 +21,9 @@ import {
           it is never colour-only). Project the message as content; pass a
           <code>title</code> and <code>dismissible</code> as needed.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Severities</h2>
         <div style="display: grid; gap: 0.75rem; max-width: 560px;">
@@ -62,7 +63,8 @@ import {
           }
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

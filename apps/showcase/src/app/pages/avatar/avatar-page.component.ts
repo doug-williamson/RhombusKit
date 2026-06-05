@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusAvatarComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-avatar-page',
   standalone: true,
-  imports: [RhombusAvatarComponent],
+  imports: [RhombusAvatarComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Avatar</h1>
+    <app-component-page title="Avatar" apiKey="RhombusAvatarComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-avatar&gt;</code> renders a circular avatar from an
           image (<code>src</code>, with <code>name</code> as its
@@ -17,8 +17,9 @@ import { RhombusAvatarComponent } from '@rhombuskit/core';
           <code>name</code> — exposing the name as the accessible label
           (<code>role="img"</code>). Bespoke; no new tokens.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Initials fallback</h2>
         <p class="showcase-section__lead">Sizes <code>sm</code> / <code>md</code> / <code>lg</code>.</p>
@@ -49,7 +50,8 @@ import { RhombusAvatarComponent } from '@rhombuskit/core';
           />
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

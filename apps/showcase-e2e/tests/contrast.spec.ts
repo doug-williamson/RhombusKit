@@ -17,9 +17,9 @@ const THEMES = [
   { name: 'dark', preference: 'rhombus-dark' },
 ] as const;
 
-// One entry per route in apps/showcase/src/app/app.routes.ts. Keep in sync when
-// a component page is added — a missing entry means that page is never scanned.
-const ROUTES = [
+// One entry per component route in apps/showcase/src/app/app.routes.ts. Keep in
+// sync when a component page is added — a missing entry means it is never scanned.
+const COMPONENTS = [
   '/components/button',
   '/components/badge',
   '/components/card',
@@ -50,6 +50,16 @@ const ROUTES = [
   '/components/code-block',
 ] as const;
 
+// Each component page splits content across Overview / Examples / API tabs; the
+// inactive tabs are hidden (so a single scan misses them). Scan all three via the
+// deep-linkable ?tab= param, plus the standalone homepage and theming guide.
+const TABS = ['overview', 'examples', 'api'] as const;
+const ROUTES = [
+  '/',
+  '/theming',
+  ...COMPONENTS.flatMap((c) => TABS.map((t) => `${c}?tab=${t}`)),
+];
+
 for (const theme of THEMES) {
   test.describe(`color-contrast — ${theme.name} theme`, () => {
     test.beforeEach(async ({ page }) => {
@@ -70,8 +80,9 @@ for (const theme of THEMES) {
           'data-theme',
           theme.preference
         );
+        // Component/theming pages use .showcase-page; the homepage uses .home.
         await page
-          .locator('.showcase-page')
+          .locator('.showcase-page, .home')
           .first()
           .waitFor({ state: 'visible' });
 

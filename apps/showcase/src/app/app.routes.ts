@@ -129,5 +129,13 @@ export const appRoutes: Route[] = [
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
-  { path: '', redirectTo: '/components/button', pathMatch: 'full' },
+  {
+    path: 'theming',
+    loadComponent: () => import('./pages/theming/theming-page.component'),
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./pages/home/home-page.component'),
+  },
 ];

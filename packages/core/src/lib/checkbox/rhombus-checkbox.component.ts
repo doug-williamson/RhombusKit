@@ -53,12 +53,19 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   `,
 })
 export class RhombusCheckboxComponent {
+  /** Text rendered beside the checkbox; empty (default) for no label. */
   readonly label = input<string>('');
+  /** Checked state in lightweight (`[(checked)]`) mode; ignored when `control` is set. Defaults to `false`. */
   readonly checked = input<boolean>(false);
+  /** Disables the checkbox in lightweight mode; ignored when `control` is set. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Marks the checkbox required for validation/ARIA. Defaults to `false`. */
   readonly required = input<boolean>(false);
+  /** Whether the label sits `before` or `after` (default) the checkbox. */
   readonly labelPosition = input<'before' | 'after'>('after');
+  /** Reactive-forms `FormControl<boolean>`; when set, the standalone `checked`/`disabled` inputs are ignored. */
   readonly control = input<FormControl<boolean> | null>(null);
 
+  /** Emits the new checked state when the user toggles the checkbox (lightweight mode only). */
   readonly checkedChange = output<boolean>();
 }

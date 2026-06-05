@@ -1,16 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RhombusButtonComponent, RhombusTooltipDirective } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-tooltip-page',
   standalone: true,
-  imports: [MatButtonModule, RhombusButtonComponent, RhombusTooltipDirective],
+  imports: [
+    MatButtonModule,
+    RhombusButtonComponent,
+    RhombusTooltipDirective,
+    ComponentPageComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Tooltip</h1>
+    <app-component-page title="Tooltip" apiKey="RhombusTooltipDirective">
+      <div overview>
         <p>
           <code>[rhombusTooltip]</code> composes Material's
           <code>[matTooltip]</code> via <code>hostDirectives</code>, so you
@@ -19,8 +24,9 @@ import { RhombusButtonComponent, RhombusTooltipDirective } from '@rhombuskit/cor
           overlay and is themed by the <code>--tooltip-bg</code> /
           <code>--tooltip-text</code> tokens &mdash; toggle the theme to see it.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Positions</h2>
         <div class="showcase-row">
@@ -54,7 +60,8 @@ import { RhombusButtonComponent, RhombusTooltipDirective } from '@rhombuskit/cor
           </span>
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class TooltipPageComponent {}

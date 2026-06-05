@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RhombusTabGroupDirective } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-tabs-page',
   standalone: true,
-  imports: [MatTabsModule, RhombusTabGroupDirective],
+  imports: [MatTabsModule, RhombusTabGroupDirective, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Tabs</h1>
+    <app-component-page title="Tabs" apiKey="RhombusTabGroupDirective">
+      <div overview>
         <p>
           <code>[rhombusTabGroup]</code> decorates Material's
           <code>&lt;mat-tab-group&gt;</code> (the same directive approach as
@@ -19,8 +19,9 @@ import { RhombusTabGroupDirective } from '@rhombuskit/core';
           <code>--text-accent</code> — toggle the theme to see it — and the
           group re-emits selection as <code>(tabChange)</code> with the index.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Tabbed panels</h2>
         <p class="showcase-section__lead">
@@ -54,7 +55,8 @@ import { RhombusTabGroupDirective } from '@rhombuskit/core';
       <div class="event-log">
         <p>Active tab index: <strong>{{ activeIndex() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

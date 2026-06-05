@@ -3,16 +3,16 @@ import {
   OverflowMenuItem,
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-overflow-menu-page',
   standalone: true,
-  imports: [RhombusOverflowMenuComponent],
+  imports: [RhombusOverflowMenuComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Overflow Menu</h1>
+    <app-component-page title="Overflow Menu" apiKey="RhombusOverflowMenuComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-overflow-menu&gt;</code> wraps
           <code>&lt;mat-menu&gt;</code> behind an icon-button trigger. It is
@@ -25,8 +25,9 @@ import {
           The panel renders in the CDK overlay, so its colours are bound under
           <code>.cdk-overlay-container</code>.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Basic menu</h2>
         <p class="showcase-section__lead">
@@ -64,7 +65,8 @@ import {
       <div class="event-log">
         <p>Last action: <strong>{{ lastAction() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

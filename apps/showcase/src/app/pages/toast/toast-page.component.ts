@@ -9,16 +9,16 @@ import {
   RhombusToastService,
   type RhombusToastRef,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-toast-page',
   standalone: true,
-  imports: [RhombusButtonComponent],
+  imports: [RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Toast</h1>
+    <app-component-page title="Toast" apiKey="RhombusToastService">
+      <div overview>
         <p>
           <code>RhombusToastService</code> wraps <code>MatSnackBar</code> for the
           surface and the CDK <code>LiveAnnouncer</code> for the announcement —
@@ -27,8 +27,9 @@ import {
           <code>-text</code> tokens (toggle the theme to see both), and every
           call returns a leak-free <code>RhombusToastRef</code>.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Severities</h2>
         <p class="showcase-section__lead">
@@ -83,7 +84,8 @@ import {
       <div class="event-log">
         <p>Last event: <strong>{{ lastEvent() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

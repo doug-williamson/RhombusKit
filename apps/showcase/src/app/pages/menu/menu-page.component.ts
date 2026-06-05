@@ -4,16 +4,20 @@ import {
   RhombusMenuComponent,
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-menu-page',
   standalone: true,
-  imports: [RhombusMenuComponent, RhombusOverflowMenuComponent],
+  imports: [
+    RhombusMenuComponent,
+    RhombusOverflowMenuComponent,
+    ComponentPageComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Menu</h1>
+    <app-component-page title="Menu" apiKey="RhombusMenuComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-menu&gt;</code> wraps <code>&lt;mat-menu&gt;</code>
           behind a trigger you project — pass <code>[iconButton]="true"</code>
@@ -25,8 +29,9 @@ import {
           <code>&lt;rhombus-overflow-menu&gt;</code> is the icon-button preset of
           this component.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Labeled trigger</h2>
         <p class="showcase-section__lead">
@@ -52,7 +57,8 @@ import {
       <div class="event-log">
         <p>Last action: <strong>{{ lastAction() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

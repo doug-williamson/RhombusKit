@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RadioOption, RhombusRadioGroupComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-radio-page',
   standalone: true,
-  imports: [RhombusRadioGroupComponent],
+  imports: [RhombusRadioGroupComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Radio Group</h1>
+    <app-component-page title="Radio Group" apiKey="RhombusRadioGroupComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-radio-group&gt;</code> wraps Material's
           <code>&lt;mat-radio-group&gt;</code> and is driven by an
@@ -20,8 +20,8 @@ import { RadioOption, RhombusRadioGroupComponent } from '@rhombuskit/core';
           visible <code>label</code> is wired to the group via
           <code>aria-labelledby</code>.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Lightweight binding</h2>
         <p class="showcase-section__lead">
@@ -45,7 +45,8 @@ import { RadioOption, RhombusRadioGroupComponent } from '@rhombuskit/core';
           Form is <strong>{{ plan.valid ? 'valid' : 'invalid' }}</strong>.
         </p>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class RadioPageComponent {

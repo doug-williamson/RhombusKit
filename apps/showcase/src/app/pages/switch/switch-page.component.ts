@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { RhombusSwitchComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-switch-page',
   standalone: true,
-  imports: [RhombusSwitchComponent],
+  imports: [RhombusSwitchComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Switch</h1>
+    <app-component-page title="Switch" apiKey="RhombusSwitchComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-switch&gt;</code> wraps Material's
           <code>&lt;mat-slide-toggle&gt;</code>. Same control model as the
@@ -20,8 +20,8 @@ import { RhombusSwitchComponent } from '@rhombuskit/core';
           <code>--switch-track-off</code> contract tokens &mdash; toggle the
           theme to see them react.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>States</h2>
         <div class="showcase-row">
@@ -47,7 +47,8 @@ import { RhombusSwitchComponent } from '@rhombuskit/core';
           Control value: <strong>{{ beta.value }}</strong>
         </p>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class SwitchPageComponent {

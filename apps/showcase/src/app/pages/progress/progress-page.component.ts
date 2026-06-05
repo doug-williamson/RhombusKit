@@ -4,6 +4,7 @@ import {
   RhombusProgressBarComponent,
   RhombusSpinnerComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-progress-page',
@@ -12,12 +13,12 @@ import {
     RhombusSpinnerComponent,
     RhombusProgressBarComponent,
     RhombusButtonComponent,
+    ComponentPageComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Progress</h1>
+    <app-component-page title="Progress" apiKey="RhombusProgressBarComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-spinner&gt;</code> and
           <code>&lt;rhombus-progress-bar&gt;</code> wrap Material's
@@ -25,8 +26,9 @@ import {
           active arc and bar are themed via <code>--text-accent</code> (toggle
           the theme to see it). Both default to an accessible label.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Spinner</h2>
         <p class="showcase-section__lead">Indeterminate and determinate.</p>
@@ -54,7 +56,8 @@ import {
       <div class="event-log">
         <p>Value: <strong>{{ percent() }}%</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

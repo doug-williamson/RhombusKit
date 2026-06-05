@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusCodeBlockComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-code-block-page',
   standalone: true,
-  imports: [RhombusCodeBlockComponent],
+  imports: [RhombusCodeBlockComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Code Block</h1>
+    <app-component-page title="Code Block" apiKey="RhombusCodeBlockComponent">
+      <div overview>
         <p>
           A read-only code viewer with a language label and a copy-to-clipboard button.
           It's the one core component that wraps no Material primitive of its own.
@@ -19,8 +19,9 @@ import { RhombusCodeBlockComponent } from '@rhombuskit/core';
           toolbar, label, and surface all draw from the token contract &mdash; toggle the
           theme above to see it track.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>TypeScript (default)</h2>
         <rhombus-code-block [code]="tsSample" />
@@ -40,7 +41,8 @@ import { RhombusCodeBlockComponent } from '@rhombuskit/core';
         <h2>Shell</h2>
         <rhombus-code-block language="bash" [code]="bashSample" />
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class CodeBlockPageComponent {

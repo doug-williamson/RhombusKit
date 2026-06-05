@@ -154,8 +154,11 @@ const INTERACTIVE_ELEMENT_SELECTOR =
 })
 export class RhombusDataTableComponent<T> {
   // --- Data ---
+  /** Row data: a plain array runs client-side; a `DataSource` runs server-side. */
   readonly data = input<T[] | DataSource<T>>([]);
+  /** Column definitions describing key, header, and per-column behaviour (required). */
   readonly columns = input.required<ColumnDef<T>[]>();
+  /** When true, shows a spinner and suppresses the empty-state block. */
   readonly loading = input<boolean>(false);
 
   // --- Sort ---
@@ -169,19 +172,27 @@ export class RhombusDataTableComponent<T> {
   readonly sortStart = input<'asc' | 'desc'>('asc');
 
   // --- Pagination ---
+  /** Whether to render the paginator. Defaults to `true`. */
   readonly paginated = input<boolean>(true);
+  /** Rows per page. Defaults to `10`. */
   readonly pageSize = input<number>(10);
+  /** Selectable page-size options. Defaults to `[5, 10, 25, 50]`. */
   readonly pageSizeOptions = input<number[]>([5, 10, 25, 50]);
   /** Server-side total row count. Supplied by the consumer in server mode. */
   readonly totalCount = input<number | null>(null);
 
   // --- Empty state ---
+  /** Heading for the default empty state. Defaults to `'No data'`. */
   readonly emptyTitle = input<string>('No data');
+  /** Body text for the default empty state. */
   readonly emptyMessage = input<string>('There are no items to display.');
 
   // --- Outputs ---
+  /** Emits the new sort state whenever the active column or direction changes. */
   readonly sortChange = output<SortState>();
+  /** Emits the new page state whenever the page index or size changes. */
   readonly pageChange = output<PageState>();
+  /** Emits the row whose non-interactive area was clicked. */
   readonly rowClick = output<T>();
 
   // --- Queries ---

@@ -5,6 +5,7 @@ import {
   RhombusChipDirective,
   RhombusChipGroupDirective,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-chip-page',
@@ -14,12 +15,12 @@ import {
     MatIconModule,
     RhombusChipDirective,
     RhombusChipGroupDirective,
+    ComponentPageComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Chip</h1>
+    <app-component-page title="Chip" apiKey="RhombusChipDirective">
+      <div overview>
         <p>
           <code>[rhombusChip]</code> + <code>[rhombusChipGroup]</code> are
           decoration directives applied to Material's
@@ -32,8 +33,8 @@ import {
           | <code>warning</code> | <code>danger</code>) via a
           <code>data-variant</code> host attribute.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Variants (decorative — selection="none")</h2>
         <mat-chip-listbox rhombusChipGroup selection="none">
@@ -131,7 +132,8 @@ import {
           </mat-chip-option>
         </mat-chip-listbox>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__note {

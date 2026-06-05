@@ -3,16 +3,16 @@ import {
   BreadcrumbItem,
   RhombusBreadcrumbsComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-breadcrumbs-page',
   standalone: true,
-  imports: [RhombusBreadcrumbsComponent],
+  imports: [RhombusBreadcrumbsComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Breadcrumbs</h1>
+    <app-component-page title="Breadcrumbs" apiKey="RhombusBreadcrumbsComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-breadcrumbs&gt;</code> is a bespoke, accessible trail
           (<code>&lt;nav aria-label="Breadcrumb"&gt;&lt;ol&gt;</code>). Each
@@ -21,8 +21,9 @@ import {
           (<code>aria-current="page"</code>, never a link). Separators are
           decorative (<code>aria-hidden</code>).
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Trail</h2>
         <p class="showcase-section__lead">
@@ -43,7 +44,8 @@ import {
           <rhombus-breadcrumbs [items]="trail" separator="›" />
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {
