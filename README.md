@@ -1,6 +1,22 @@
 # RhombusKit
 Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system and Angular component library. Ships @rhombuskit/tokens, @rhombuskit/theme-engine, @rhombuskit/material-preset, and @rhombuskit/core.
 
+## Packages
+
+| Package | What it is |
+|---|---|
+| [@rhombuskit/core](./packages/core) | Standalone, signal-based Angular 21 component library (WCAG 2.1 AA) |
+| [@rhombuskit/tokens](./packages/tokens) | Framework-agnostic design-token contract (CSS / SCSS / TS) |
+| [@rhombuskit/theme-engine](./packages/theme-engine) | Light / dark / system theming runtime for Angular |
+| [@rhombuskit/material-preset](./packages/material-preset) | Bridges Angular Material's M3 tokens onto the contract |
+
+## Documentation
+
+- **Component reference** — the live showcase at **[rhombuskit.online](https://rhombuskit.online)**: a page per component with variants, states, and accessibility notes.
+- **Theming guide** — [docs/theming.md](./docs/theming.md): setup, runtime switching, custom themes, and the Material bridge.
+- **Per-package guides** — install + quick start live in each package's README (linked in the table above).
+- **Public-surface contract** — the [`etc/*.api.md`](./etc) reports are the CI-guarded snapshot of every package's public exports. They're the machine-readable *surface contract*, not a tutorial — a diff there is a deliberate API-change review signal (see [How the surface is guarded](#how-the-surface-is-guarded)).
+
 ## Versioning & stability
 
 RhombusKit is currently **pre-1.0 (`0.x`)**: until `1.0.0`, minor releases may

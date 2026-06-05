@@ -47,6 +47,7 @@ const ROUTES = [
   '/components/app-shell',
   '/components/page-header',
   '/components/empty-state',
+  '/components/code-block',
 ] as const;
 
 for (const theme of THEMES) {
