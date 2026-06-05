@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-badge-page',
   standalone: true,
-  imports: [RhombusBadgeDirective, RhombusButtonComponent, MatIconModule],
+  imports: [RhombusBadgeDirective, RhombusButtonComponent, MatIconModule, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Badge</h1>
+    <app-component-page title="Badge" apiKey="RhombusBadgeDirective">
+      <div overview>
         <p>
           <code>[rhombusBadge]</code> is an attribute directive that
           composes Angular Material's <code>[matBadge]</code> via
@@ -21,8 +21,8 @@ import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core'
           <code>rhombusBadge*</code> to avoid colliding with host
           components' own variant / size inputs.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Variants on a button</h2>
         <div class="showcase-row">
@@ -120,7 +120,8 @@ import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core'
         </div>
       </section>
 
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .badge-inline-host {

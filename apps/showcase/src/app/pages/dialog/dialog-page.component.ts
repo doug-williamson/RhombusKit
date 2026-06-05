@@ -13,6 +13,7 @@ import {
   RhombusDialogComponent,
   RhombusDialogService,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-demo-dialog',
@@ -62,12 +63,11 @@ export class DemoDialogComponent {
 @Component({
   selector: 'app-dialog-page',
   standalone: true,
-  imports: [RhombusButtonComponent],
+  imports: [RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Dialog</h1>
+    <app-component-page title="Dialog" apiKey="RhombusDialogService">
+      <div overview>
         <p>
           <code>&lt;rhombus-dialog&gt;</code> is the standard dialog chrome — a
           heading, body, and an <code>[rhombusDialogActions]</code> footer with
@@ -77,8 +77,9 @@ export class DemoDialogComponent {
           returns a leak-free <code>RhombusDialogRef</code>.
           <code>RhombusConfirmService</code> is built on this same service.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Open a custom dialog</h2>
         <p class="showcase-section__lead">
@@ -96,7 +97,8 @@ export class DemoDialogComponent {
       <div class="event-log">
         <p>Last result: <strong>{{ lastResult() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

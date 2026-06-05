@@ -9,16 +9,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, of, switchMap } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-confirm-dialog-page',
   standalone: true,
-  imports: [RhombusButtonComponent],
+  imports: [RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Confirm Dialog</h1>
+    <app-component-page title="Confirm Dialog" apiKey="RhombusConfirmService">
+      <div overview>
         <p>
           <code>RhombusConfirmService</code> wraps
           <code>MatDialog</code> and returns
@@ -29,8 +29,9 @@ import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core'
           The dialog surface renders in the CDK overlay, so its colours are
           bound under <code>.cdk-overlay-container</code>.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Default confirm</h2>
         <p class="showcase-section__lead">
@@ -79,7 +80,8 @@ import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core'
         <p>Last result: <strong>{{ lastResult() }}</strong></p>
         <p>Action status: <strong>{{ actionStatus() }}</strong></p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

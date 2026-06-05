@@ -7,16 +7,16 @@ import {
   SelectOption,
   SelectOptionGroup,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective],
+  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Select</h1>
+    <app-component-page title="Select" apiKey="RhombusSelectComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-select&gt;</code> wraps
           <code>&lt;mat-select&gt;</code> inside the same form-field shell
@@ -32,8 +32,8 @@ import {
           host. The colour walk below validates that the workaround reaches
           the panel.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Flat options</h2>
         <div class="select-grid">
@@ -114,7 +114,8 @@ import {
           />
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .select-grid {

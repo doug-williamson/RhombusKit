@@ -5,6 +5,7 @@ import {
   RhombusThemeToggleComponent,
 } from '@rhombuskit/core';
 import { RhombusThemeService } from '@rhombuskit/theme-engine';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-theme-toggle-page',
@@ -13,12 +14,12 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
     RhombusThemeToggleComponent,
     RhombusThemeMenuComponent,
     RhombusButtonComponent,
+    ComponentPageComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Theme Controls</h1>
+    <app-component-page title="Theme Controls" apiKey="RhombusThemeToggleComponent">
+      <div overview>
         <p>
           Two UI primitives drive the same <code>RhombusThemeService</code> from
           <code>&#64;rhombuskit/theme-engine</code>.
@@ -29,8 +30,9 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
           each other and with the shell header &mdash; click any of them and the
           live state below updates.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>When to use which</h2>
         <p>
@@ -123,7 +125,8 @@ import { RhombusThemeService } from '@rhombuskit/theme-engine';
           </rhombus-button>
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class ThemeTogglePageComponent {

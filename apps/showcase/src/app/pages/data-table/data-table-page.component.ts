@@ -23,6 +23,7 @@ import {
   SortState,
   type BadgeVariant,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 type PostStatus = 'draft' | 'published' | 'scheduled' | 'archived';
 
@@ -63,6 +64,7 @@ const POSTS: Post[] = [
     RhombusBadgeDirective,
     RhombusButtonComponent,
     RhombusOverflowMenuComponent,
+    ComponentPageComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -84,9 +86,8 @@ const POSTS: Post[] = [
       </div>
     </ng-template>
 
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Data Table</h1>
+    <app-component-page title="Data Table" apiKey="RhombusDataTableComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-data-table&gt;</code> is config-driven via a
           <code>columns</code> array with a <code>cellTemplate</code> escape
@@ -96,8 +97,9 @@ const POSTS: Post[] = [
           <code>sortChange</code>/<code>pageChange</code> and refetch). Loading
           and empty are distinct rendering paths.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Client-side table</h2>
         <p class="showcase-section__lead">
@@ -235,7 +237,8 @@ const POSTS: Post[] = [
           </div>
         </rhombus-data-table>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {

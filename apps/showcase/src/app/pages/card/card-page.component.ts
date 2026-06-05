@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-card-page',
   standalone: true,
-  imports: [RhombusCardComponent, RhombusButtonComponent],
+  imports: [RhombusCardComponent, RhombusButtonComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Card</h1>
+    <app-component-page title="Card" apiKey="RhombusCardComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-card&gt;</code> wraps Material's
           <code>&lt;mat-card&gt;</code>. Public API:
@@ -21,8 +21,8 @@ import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
           <code>[slot=subtitle]</code>, and <code>[slot=actions]</code> —
           with the default slot rendering the body.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Variants</h2>
         <div class="card-grid">
@@ -109,7 +109,8 @@ import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
           </rhombus-card>
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .card-grid {

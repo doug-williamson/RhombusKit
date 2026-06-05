@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RhombusCheckboxComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-checkbox-page',
   standalone: true,
-  imports: [RhombusCheckboxComponent],
+  imports: [RhombusCheckboxComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Checkbox</h1>
+    <app-component-page title="Checkbox" apiKey="RhombusCheckboxComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-checkbox&gt;</code> wraps Material's
           <code>&lt;mat-checkbox&gt;</code> with the RhombusKit token contract.
@@ -20,8 +20,8 @@ import { RhombusCheckboxComponent } from '@rhombuskit/core';
           Colour flows through the <code>--mat-sys-*</code> &rarr; CONTRACT
           bridge &mdash; toggle the theme to see it react.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>States</h2>
         <div class="showcase-row">
@@ -60,7 +60,8 @@ import { RhombusCheckboxComponent } from '@rhombuskit/core';
           Form is <strong>{{ accept.valid ? 'valid' : 'invalid' }}</strong>.
         </p>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
 })
 export default class CheckboxPageComponent {

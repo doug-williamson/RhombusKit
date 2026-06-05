@@ -3,16 +3,16 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective],
+  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Input</h1>
+    <app-component-page title="Input" apiKey="RhombusInputComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-input&gt;</code> wraps Material's
           <code>&lt;mat-form-field&gt;</code> + <code>matInput</code>.
@@ -26,8 +26,8 @@ import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
           <code>FormControl</code> via <code>[control]</code> rather than
           binding <code>[formControl]</code> directly.
         </p>
-      </header>
-
+      </div>
+      <div examples>
       <section class="showcase-section">
         <h2>Appearance</h2>
         <div class="input-grid">
@@ -137,7 +137,8 @@ import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
           />
         </div>
       </section>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .input-grid {

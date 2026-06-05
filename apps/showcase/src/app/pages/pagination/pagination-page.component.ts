@@ -3,16 +3,16 @@ import {
   PageState,
   RhombusPaginationComponent,
 } from '@rhombuskit/core';
+import { ComponentPageComponent } from '../../shared/component-page.component';
 
 @Component({
   selector: 'app-pagination-page',
   standalone: true,
-  imports: [RhombusPaginationComponent],
+  imports: [RhombusPaginationComponent, ComponentPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="showcase-page">
-      <header class="showcase-page__header">
-        <h1>Pagination</h1>
+    <app-component-page title="Pagination" apiKey="RhombusPaginationComponent">
+      <div overview>
         <p>
           <code>&lt;rhombus-pagination&gt;</code> wraps Material's
           <code>&lt;mat-paginator&gt;</code> for paginating any collection — not
@@ -22,8 +22,9 @@ import {
           a controlled component: update <code>pageIndex</code> from
           <code>(pageChange)</code>.
         </p>
-      </header>
+      </div>
 
+      <div examples>
       <section class="showcase-section">
         <h2>Controlled paginator</h2>
         <p class="showcase-section__lead">
@@ -50,7 +51,8 @@ import {
           <strong>{{ page().pageSize }}</strong> · {{ total }} total
         </p>
       </div>
-    </div>
+      </div>
+    </app-component-page>
   `,
   styles: `
     .showcase-section__lead {
