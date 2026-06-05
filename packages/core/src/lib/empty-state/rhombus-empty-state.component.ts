@@ -41,9 +41,14 @@ import { RhombusButtonComponent } from '../button/rhombus-button.component';
   `,
 })
 export class RhombusEmptyStateComponent {
+  /** Material icon ligature name shown above the heading; defaults to `'inbox'`. */
   readonly icon = input<string>('inbox');
+  /** Primary heading text (required). */
   readonly heading = input.required<string>();
+  /** Optional supporting body text shown below the heading. */
   readonly body = input<string>('');
+  /** Label for the optional CTA button; when empty, no button is rendered. */
   readonly ctaLabel = input<string>('');
+  /** Emits when the CTA button is clicked. */
   readonly ctaClick = output<void>();
 }

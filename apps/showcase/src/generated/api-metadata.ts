@@ -119,27 +119,27 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "BadgeVariant",
-        "description": ""
+        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`."
       },
       {
         "name": "position",
         "type": "MatBadgePosition",
-        "description": ""
+        "description": "Where the badge sits relative to its host; defaults to `'above after'`."
       },
       {
         "name": "size",
         "type": "MatBadgeSize",
-        "description": ""
+        "description": "Badge size: `small` | `medium` (default) | `large`."
       },
       {
         "name": "hidden",
         "type": "boolean",
-        "description": ""
+        "description": "Hides the badge without removing it from the DOM. Defaults to `false`."
       },
       {
         "name": "overlap",
         "type": "boolean",
-        "description": ""
+        "description": "Whether the badge overlaps its host element. Defaults to `true`."
       }
     ],
     "outputs": [],
@@ -179,32 +179,32 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "ButtonVariant",
-        "description": ""
+        "description": "Colour role: `primary` (default) | `secondary` | `ghost` | `danger`."
       },
       {
         "name": "size",
         "type": "ButtonSize",
-        "description": ""
+        "description": "Padding scale: `sm` | `md` (default) | `lg`."
       },
       {
         "name": "appearance",
         "type": "ButtonAppearance",
-        "description": ""
+        "description": "MatButton appearance: `filled` (default) | `outlined` | `text`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the button when `true`. Defaults to `false`."
       },
       {
         "name": "leadingIcon",
         "type": "string",
-        "description": ""
+        "description": "Material icon name rendered before the projected label; `null` (default) hides it."
       },
       {
         "name": "trailingIcon",
         "type": "string",
-        "description": ""
+        "description": "Material icon name rendered after the projected label; `null` (default) hides it."
       }
     ],
     "outputs": [],
@@ -219,17 +219,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "CardVariant",
-        "description": ""
+        "description": "Visual variant: `elevated` (default) | `outlined` | `filled`."
       },
       {
         "name": "hasHeader",
         "type": "boolean",
-        "description": ""
+        "description": "Whether to render the title/subtitle header region. Defaults to `true`."
       },
       {
         "name": "padding",
         "type": "CardPadding",
-        "description": ""
+        "description": "Inner padding scale for the card body: `none` | `sm` | `md` (default) | `lg`."
       }
     ],
     "outputs": [],
@@ -244,39 +244,39 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Text rendered beside the checkbox; empty (default) for no label."
       },
       {
         "name": "checked",
         "type": "boolean",
-        "description": ""
+        "description": "Checked state in lightweight (`[(checked)]`) mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the checkbox in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the checkbox required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "labelPosition",
         "type": "\"before\" | \"after\"",
-        "description": ""
+        "description": "Whether the label sits `before` or `after` (default) the checkbox."
       },
       {
         "name": "control",
         "type": "FormControl<boolean>",
-        "description": ""
+        "description": "Reactive-forms `FormControl<boolean>`; when set, the standalone `checked`/`disabled` inputs are ignored."
       }
     ],
     "outputs": [
       {
         "name": "checkedChange",
         "type": "boolean",
-        "description": ""
+        "description": "Emits the new checked state when the user toggles the checkbox (lightweight mode only)."
       }
     ],
     "methods": []
@@ -290,7 +290,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "ChipVariant",
-        "description": ""
+        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`."
       }
     ],
     "outputs": [],
@@ -305,14 +305,14 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "selection",
         "type": "ChipGroupSelection",
-        "description": ""
+        "description": "Selection mode: `none` (default, decorative) | `single` | `multiple`; drives the listbox's `selectable`/`multiple`."
       }
     ],
     "outputs": [
       {
         "name": "selectionChange",
         "type": "unknown",
-        "description": ""
+        "description": "Emits the listbox's selected value(s) when the user changes selection; suppressed while `selection` is `none`."
       }
     ],
     "methods": []
@@ -326,12 +326,12 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "code",
         "type": "string",
-        "description": ""
+        "description": "Source code to display verbatim (required)."
       },
       {
         "name": "language",
         "type": "string",
-        "description": ""
+        "description": "Language grammar / label; defaults to `'typescript'`."
       }
     ],
     "outputs": [],
@@ -367,17 +367,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "data",
         "type": "DataSource<T> | T[]",
-        "description": ""
+        "description": "Row data: a plain array runs client-side; a `DataSource` runs server-side."
       },
       {
         "name": "columns",
         "type": "ColumnDef<T>[]",
-        "description": ""
+        "description": "Column definitions describing key, header, and per-column behaviour (required)."
       },
       {
         "name": "loading",
         "type": "boolean",
-        "description": ""
+        "description": "When true, shows a spinner and suppresses the empty-state block."
       },
       {
         "name": "sortMode",
@@ -397,17 +397,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "paginated",
         "type": "boolean",
-        "description": ""
+        "description": "Whether to render the paginator. Defaults to `true`."
       },
       {
         "name": "pageSize",
         "type": "number",
-        "description": ""
+        "description": "Rows per page. Defaults to `10`."
       },
       {
         "name": "pageSizeOptions",
         "type": "number[]",
-        "description": ""
+        "description": "Selectable page-size options. Defaults to `[5, 10, 25, 50]`."
       },
       {
         "name": "totalCount",
@@ -417,29 +417,29 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "emptyTitle",
         "type": "string",
-        "description": ""
+        "description": "Heading for the default empty state. Defaults to `'No data'`."
       },
       {
         "name": "emptyMessage",
         "type": "string",
-        "description": ""
+        "description": "Body text for the default empty state."
       }
     ],
     "outputs": [
       {
         "name": "sortChange",
         "type": "SortState",
-        "description": ""
+        "description": "Emits the new sort state whenever the active column or direction changes."
       },
       {
         "name": "pageChange",
         "type": "PageState",
-        "description": ""
+        "description": "Emits the new page state whenever the page index or size changes."
       },
       {
         "name": "rowClick",
         "type": "T",
-        "description": ""
+        "description": "Emits the row whose non-interactive area was clicked."
       }
     ],
     "methods": []
@@ -492,29 +492,29 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "icon",
         "type": "string",
-        "description": ""
+        "description": "Material icon ligature name shown above the heading; defaults to `'inbox'`."
       },
       {
         "name": "heading",
         "type": "string",
-        "description": ""
+        "description": "Primary heading text (required)."
       },
       {
         "name": "body",
         "type": "string",
-        "description": ""
+        "description": "Optional supporting body text shown below the heading."
       },
       {
         "name": "ctaLabel",
         "type": "string",
-        "description": ""
+        "description": "Label for the optional CTA button; when empty, no button is rendered."
       }
     ],
     "outputs": [
       {
         "name": "ctaClick",
         "type": "void",
-        "description": ""
+        "description": "Emits when the CTA button is clicked."
       }
     ],
     "methods": []
@@ -546,57 +546,57 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
       },
       {
         "name": "type",
         "type": "InputType",
-        "description": ""
+        "description": "Native input `type`: `text` (default), `email`, `password`, `number`, `search`, `tel`, `url`, `date`, `time`."
       },
       {
         "name": "placeholder",
         "type": "string",
-        "description": ""
+        "description": "Placeholder shown when the field is empty."
       },
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": ""
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": ""
+        "description": "Density scale applied via host classes; defaults to `md`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the input in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the input required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "hint",
         "type": "string",
-        "description": ""
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
       },
       {
         "name": "autocomplete",
         "type": "string",
-        "description": ""
+        "description": "Native `autocomplete` attribute; defaults to `'off'`."
       },
       {
         "name": "subscriptSizing",
         "type": "\"fixed\" | \"dynamic\"",
-        "description": ""
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
       },
       {
         "name": "control",
         "type": "FormControl<any>",
-        "description": ""
+        "description": "Reactive-forms `FormControl`; when set, the standalone `disabled` input is ignored."
       }
     ],
     "outputs": [],
@@ -661,17 +661,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "title",
         "type": "string",
-        "description": ""
+        "description": "Page title rendered as the `<h1>` heading (required)."
       },
       {
         "name": "badge",
         "type": "string",
-        "description": ""
+        "description": "Optional badge text shown beside the title as a non-interactive chip."
       },
       {
         "name": "description",
         "type": "string",
-        "description": ""
+        "description": "Optional descriptive text shown below the title."
       }
     ],
     "outputs": [],
@@ -767,44 +767,44 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Visible group label, linked via `aria-labelledby`; empty (default) for no visible label."
       },
       {
         "name": "ariaLabel",
         "type": "string",
-        "description": ""
+        "description": "Accessible name used when no visible `label` is provided."
       },
       {
         "name": "options",
         "type": "RadioOption<T>[]",
-        "description": ""
+        "description": "Radio options to render: `{ value, label, disabled? }`. Defaults to `[]`."
       },
       {
         "name": "value",
         "type": "T",
-        "description": ""
+        "description": "Selected value in lightweight (`[(value)]`) mode; ignored when `control` is set. Defaults to `null`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the whole group in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the group required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "control",
         "type": "FormControl<T>",
-        "description": ""
+        "description": "Reactive-forms `FormControl<T | null>`; when set, the standalone `value`/`disabled` inputs are ignored."
       }
     ],
     "outputs": [
       {
         "name": "valueChange",
         "type": "T",
-        "description": ""
+        "description": "Emits the newly selected option value when the user picks a radio (lightweight mode only)."
       }
     ],
     "methods": []
@@ -818,69 +818,69 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
       },
       {
         "name": "placeholder",
         "type": "string",
-        "description": ""
+        "description": "Placeholder shown when no option is selected."
       },
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": ""
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": ""
+        "description": "Density scale applied via host classes; defaults to `md`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the select in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the select required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "multiple",
         "type": "boolean",
-        "description": ""
+        "description": "Allows selecting multiple options when `true`. Defaults to `false`."
       },
       {
         "name": "hint",
         "type": "string",
-        "description": ""
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
       },
       {
         "name": "options",
         "type": "SelectOption<T>[]",
-        "description": ""
+        "description": "Flat list of options to render; ignored when `groups` is non-empty. Defaults to `[]`."
       },
       {
         "name": "groups",
         "type": "SelectOptionGroup<T>[]",
-        "description": ""
+        "description": "Grouped options (`{ groupLabel, options }`); takes precedence over `options`. Defaults to `[]`."
       },
       {
         "name": "subscriptSizing",
         "type": "\"fixed\" | \"dynamic\"",
-        "description": ""
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
       },
       {
         "name": "control",
         "type": "FormControl<any>",
-        "description": ""
+        "description": "Reactive-forms `FormControl`; when set, the standalone `disabled` input is ignored."
       }
     ],
     "outputs": [
       {
         "name": "selectionChange",
         "type": "T | T[]",
-        "description": ""
+        "description": "Emits the selected value (or array of values when `multiple`) whenever the user changes selection."
       }
     ],
     "methods": []
@@ -956,39 +956,39 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Text rendered beside the toggle; empty (default) for no label."
       },
       {
         "name": "checked",
         "type": "boolean",
-        "description": ""
+        "description": "On/off state in lightweight (`[(checked)]`) mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the toggle in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the toggle required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "labelPosition",
         "type": "\"before\" | \"after\"",
-        "description": ""
+        "description": "Whether the label sits `before` or `after` (default) the toggle."
       },
       {
         "name": "control",
         "type": "FormControl<boolean>",
-        "description": ""
+        "description": "Reactive-forms `FormControl<boolean>`; when set, the standalone `checked`/`disabled` inputs are ignored."
       }
     ],
     "outputs": [
       {
         "name": "checkedChange",
         "type": "boolean",
-        "description": ""
+        "description": "Emits the new on/off state when the user toggles the switch (lightweight mode only)."
       }
     ],
     "methods": []
@@ -1017,67 +1017,67 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": ""
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
       },
       {
         "name": "placeholder",
         "type": "string",
-        "description": ""
+        "description": "Placeholder shown when the field is empty."
       },
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": ""
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": ""
+        "description": "Density scale applied via host classes; defaults to `md`."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the textarea in lightweight mode; ignored when `control` is set. Defaults to `false`."
       },
       {
         "name": "required",
         "type": "boolean",
-        "description": ""
+        "description": "Marks the textarea required for validation/ARIA. Defaults to `false`."
       },
       {
         "name": "hint",
         "type": "string",
-        "description": ""
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
       },
       {
         "name": "rows",
         "type": "number",
-        "description": ""
+        "description": "Initial visible row count for the textarea; defaults to `3`."
       },
       {
         "name": "autosize",
         "type": "boolean",
-        "description": ""
+        "description": "Enables CDK autosize so the textarea grows/shrinks with content. Defaults to `false`."
       },
       {
         "name": "minRows",
         "type": "number",
-        "description": ""
+        "description": "Minimum rows when `autosize` is on; defaults to `2`."
       },
       {
         "name": "maxRows",
         "type": "number",
-        "description": ""
+        "description": "Maximum rows when `autosize` is on before scrolling; defaults to `10`."
       },
       {
         "name": "subscriptSizing",
         "type": "\"fixed\" | \"dynamic\"",
-        "description": ""
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
       },
       {
         "name": "control",
         "type": "FormControl<any>",
-        "description": ""
+        "description": "Reactive-forms `FormControl`; when set, the standalone `disabled` input is ignored."
       }
     ],
     "outputs": [],
@@ -1092,17 +1092,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "lightIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon for the Light menu item; defaults to `'light_mode'`."
       },
       {
         "name": "darkIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon for the Dark menu item; defaults to `'dark_mode'`."
       },
       {
         "name": "systemIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon for the System menu item; defaults to `'contrast'`."
       }
     ],
     "outputs": [],
@@ -1117,22 +1117,22 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "lightIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon shown when the light theme is active; defaults to `'light_mode'`."
       },
       {
         "name": "darkIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon shown when the dark theme is active; defaults to `'dark_mode'`."
       },
       {
         "name": "systemIcon",
         "type": "string",
-        "description": ""
+        "description": "Icon shown when the system preference is active; defaults to `'contrast'`."
       },
       {
         "name": "showTooltip",
         "type": "boolean",
-        "description": ""
+        "description": "Whether to show the hover tooltip describing the current/next theme."
       }
     ],
     "outputs": [],
@@ -1182,27 +1182,27 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "message",
         "type": "string",
-        "description": ""
+        "description": "Tooltip text. Aliased `rhombusTooltip` for one-shot binding."
       },
       {
         "name": "position",
         "type": "TooltipPosition",
-        "description": ""
+        "description": "Position relative to the host: `above` | `below` | `left` | `right` | `before` | `after` (default `below`)."
       },
       {
         "name": "disabled",
         "type": "boolean",
-        "description": ""
+        "description": "Disables the tooltip when `true` (default `false`)."
       },
       {
         "name": "showDelay",
         "type": "number",
-        "description": ""
+        "description": "Delay in ms before the tooltip shows on hover/focus (default `0`)."
       },
       {
         "name": "hideDelay",
         "type": "number",
-        "description": ""
+        "description": "Delay in ms before the tooltip hides after the trigger ends (default `0`)."
       }
     ],
     "outputs": [],

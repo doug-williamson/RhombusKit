@@ -75,13 +75,21 @@ let nextId = 0;
 export class RhombusRadioGroupComponent<T = string> {
   protected readonly labelId = `rhombus-radio-group-${nextId++}`;
 
+  /** Visible group label, linked via `aria-labelledby`; empty (default) for no visible label. */
   readonly label = input<string>('');
+  /** Accessible name used when no visible `label` is provided. */
   readonly ariaLabel = input<string>('');
+  /** Radio options to render: `{ value, label, disabled? }`. Defaults to `[]`. */
   readonly options = input<RadioOption<T>[]>([]);
+  /** Selected value in lightweight (`[(value)]`) mode; ignored when `control` is set. Defaults to `null`. */
   readonly value = input<T | null>(null);
+  /** Disables the whole group in lightweight mode; ignored when `control` is set. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Marks the group required for validation/ARIA. Defaults to `false`. */
   readonly required = input<boolean>(false);
+  /** Reactive-forms `FormControl<T | null>`; when set, the standalone `value`/`disabled` inputs are ignored. */
   readonly control = input<FormControl<T | null> | null>(null);
 
+  /** Emits the newly selected option value when the user picks a radio (lightweight mode only). */
   readonly valueChange = output<T>();
 }

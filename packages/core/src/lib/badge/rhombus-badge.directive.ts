@@ -59,16 +59,21 @@ export class RhombusBadgeDirective {
     alias: 'rhombusBadge',
   });
 
+  /** Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`. */
   readonly variant = input<BadgeVariant>('default', {
     alias: 'rhombusBadgeVariant',
   });
+  /** Where the badge sits relative to its host; defaults to `'above after'`. */
   readonly position = input<MatBadgePosition>('above after', {
     alias: 'rhombusBadgePosition',
   });
+  /** Badge size: `small` | `medium` (default) | `large`. */
   readonly size = input<MatBadgeSize>('medium', {
     alias: 'rhombusBadgeSize',
   });
+  /** Hides the badge without removing it from the DOM. Defaults to `false`. */
   readonly hidden = input<boolean>(false, { alias: 'rhombusBadgeHidden' });
+  /** Whether the badge overlaps its host element. Defaults to `true`. */
   readonly overlap = input<boolean>(true, { alias: 'rhombusBadgeOverlap' });
 
   /**

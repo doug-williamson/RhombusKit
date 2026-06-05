@@ -78,8 +78,11 @@ export class RhombusThemeMenuComponent {
   protected readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
+  /** Icon for the Light menu item; defaults to `'light_mode'`. */
   readonly lightIcon = input<string>('light_mode');
+  /** Icon for the Dark menu item; defaults to `'dark_mode'`. */
   readonly darkIcon = input<string>('dark_mode');
+  /** Icon for the System menu item; defaults to `'contrast'`. */
   readonly systemIcon = input<string>('contrast');
 
   protected readonly currentIcon = computed(() => {

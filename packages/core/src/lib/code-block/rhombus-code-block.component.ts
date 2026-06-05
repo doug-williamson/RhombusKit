@@ -52,7 +52,9 @@ import { MatIconModule } from '@angular/material/icon';
   `,
 })
 export class RhombusCodeBlockComponent implements AfterViewInit {
+  /** Source code to display verbatim (required). */
   readonly code = input.required<string>();
+  /** Language grammar / label; defaults to `'typescript'`. */
   readonly language = input<string>('typescript');
 
   protected readonly copied = signal(false);

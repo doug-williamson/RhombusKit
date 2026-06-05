@@ -41,8 +41,10 @@ export type ChipGroupSelection = 'none' | 'single' | 'multiple';
 export class RhombusChipGroupDirective {
   private readonly host = inject(MatChipListbox, { self: true });
 
+  /** Selection mode: `none` (default, decorative) | `single` | `multiple`; drives the listbox's `selectable`/`multiple`. */
   readonly selection = input<ChipGroupSelection>('none');
 
+  /** Emits the listbox's selected value(s) when the user changes selection; suppressed while `selection` is `none`. */
   readonly selectionChange = output<unknown>();
 
   private readonly isMultiple = computed(() => this.selection() === 'multiple');

@@ -51,12 +51,19 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   `,
 })
 export class RhombusSwitchComponent {
+  /** Text rendered beside the toggle; empty (default) for no label. */
   readonly label = input<string>('');
+  /** On/off state in lightweight (`[(checked)]`) mode; ignored when `control` is set. Defaults to `false`. */
   readonly checked = input<boolean>(false);
+  /** Disables the toggle in lightweight mode; ignored when `control` is set. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Marks the toggle required for validation/ARIA. Defaults to `false`. */
   readonly required = input<boolean>(false);
+  /** Whether the label sits `before` or `after` (default) the toggle. */
   readonly labelPosition = input<'before' | 'after'>('after');
+  /** Reactive-forms `FormControl<boolean>`; when set, the standalone `checked`/`disabled` inputs are ignored. */
   readonly control = input<FormControl<boolean> | null>(null);
 
+  /** Emits the new on/off state when the user toggles the switch (lightweight mode only). */
   readonly checkedChange = output<boolean>();
 }

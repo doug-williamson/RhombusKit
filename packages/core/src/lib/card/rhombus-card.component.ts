@@ -58,8 +58,11 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
   `,
 })
 export class RhombusCardComponent {
+  /** Visual variant: `elevated` (default) | `outlined` | `filled`. */
   readonly variant = input<CardVariant>('elevated');
+  /** Whether to render the title/subtitle header region. Defaults to `true`. */
   readonly hasHeader = input<boolean>(true);
+  /** Inner padding scale for the card body: `none` | `sm` | `md` (default) | `lg`. */
   readonly padding = input<CardPadding>('md');
 
   /**

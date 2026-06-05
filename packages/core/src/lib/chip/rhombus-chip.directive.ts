@@ -43,6 +43,7 @@ export type ChipVariant =
   },
 })
 export class RhombusChipDirective {
+  /** Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`. */
   readonly variant = input<ChipVariant>('default');
 
   /**

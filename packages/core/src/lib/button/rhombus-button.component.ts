@@ -49,11 +49,17 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
   `,
 })
 export class RhombusButtonComponent {
+  /** Colour role: `primary` (default) | `secondary` | `ghost` | `danger`. */
   readonly variant = input<ButtonVariant>('primary');
+  /** Padding scale: `sm` | `md` (default) | `lg`. */
   readonly size = input<ButtonSize>('md');
+  /** MatButton appearance: `filled` (default) | `outlined` | `text`. */
   readonly appearance = input<ButtonAppearance>('filled');
+  /** Disables the button when `true`. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Material icon name rendered before the projected label; `null` (default) hides it. */
   readonly leadingIcon = input<string | null>(null);
+  /** Material icon name rendered after the projected label; `null` (default) hides it. */
   readonly trailingIcon = input<string | null>(null);
 
   protected readonly hostClasses = computed(() =>

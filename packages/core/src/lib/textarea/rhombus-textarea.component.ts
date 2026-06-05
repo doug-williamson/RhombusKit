@@ -74,18 +74,31 @@ import {
   `,
 })
 export class RhombusTextareaComponent {
+  /** Floating `<mat-label>` text; empty (default) for no label. */
   readonly label = input<string>('');
+  /** Placeholder shown when the field is empty. */
   readonly placeholder = input<string>('');
+  /** Form-field appearance, mapped to Material's `outline` (default) or `fill`. */
   readonly appearance = input<FormFieldAppearance>('outline');
+  /** Density scale applied via host classes; defaults to `md`. */
   readonly size = input<FormFieldSize>('md');
+  /** Disables the textarea in lightweight mode; ignored when `control` is set. Defaults to `false`. */
   readonly disabled = input<boolean>(false);
+  /** Marks the textarea required for validation/ARIA. Defaults to `false`. */
   readonly required = input<boolean>(false);
+  /** Subscript hint text shown below the field; `null` (default) hides the hint. */
   readonly hint = input<string | null>(null);
+  /** Initial visible row count for the textarea; defaults to `3`. */
   readonly rows = input<number>(3);
+  /** Enables CDK autosize so the textarea grows/shrinks with content. Defaults to `false`. */
   readonly autosize = input<boolean>(false);
+  /** Minimum rows when `autosize` is on; defaults to `2`. */
   readonly minRows = input<number>(2);
+  /** Maximum rows when `autosize` is on before scrolling; defaults to `10`. */
   readonly maxRows = input<number>(10);
+  /** Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default). */
   readonly subscriptSizing = input<'fixed' | 'dynamic'>('dynamic');
+  /** Reactive-forms `FormControl`; when set, the standalone `disabled` input is ignored. */
   readonly control = input<FormControl | null>(null);
 
   protected readonly hostClasses = computed(() =>

@@ -51,7 +51,10 @@ import { RhombusChipDirective } from '../chip/rhombus-chip.directive';
   `,
 })
 export class RhombusPageHeaderComponent {
+  /** Page title rendered as the `<h1>` heading (required). */
   readonly title = input.required<string>();
+  /** Optional badge text shown beside the title as a non-interactive chip. */
   readonly badge = input<string>();
+  /** Optional descriptive text shown below the title. */
   readonly description = input<string>();
 }
