@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.0](https://github.com/doug-williamson/RhombusKit/compare/v0.11.0...v1.0.0) (2026-06-05)
+
+
+### Features
+
+* **showcase:** add a homepage at / ([9e7b6d3](https://github.com/doug-williamson/RhombusKit/commit/9e7b6d3ffb7375ffb10c0db4ca6177fce7ba46de))
+* **showcase:** add an interactive theming guide at /theming ([288678c](https://github.com/doug-williamson/RhombusKit/commit/288678c13d844ea43f6e5df22aacb2896ec68cca))
+* **showcase:** add deep-linkable component-page tab shell ([d0091c3](https://github.com/doug-williamson/RhombusKit/commit/d0091c396050684d583d2f403b5f42f4d33e5bec))
+* **showcase:** generate API metadata from the type surface ([f6a6c63](https://github.com/doug-williamson/RhombusKit/commit/f6a6c63008f29690fba52c8daeac9f2aee545c61))
+* **showcase:** homepage, deep-linkable Overview/API/Examples tabs, generated API reference + theming guide ([0bf3523](https://github.com/doug-williamson/RhombusKit/commit/0bf3523f74c972f2999b2637ee51fe6d4fb73631))
+* **showcase:** refactor all component pages into the tab shell ([510fe68](https://github.com/doug-williamson/RhombusKit/commit/510fe68eb245b10ec9d62760bdb8902af028f637))
+* **showcase:** render the API tab from generated metadata ([2a48543](https://github.com/doug-williamson/RhombusKit/commit/2a48543accf843cecd6f79367ee96a091a59ff12))
+
+
+### Bug Fixes
+
+* **showcase:** add highlight.js so the code-block page works in dev ([e44cc92](https://github.com/doug-williamson/RhombusKit/commit/e44cc92042e7d3330bf1bd2791b7dd645bf10c0e))
+
+
+### Miscellaneous Chores
+
+* release RhombusKit 1.0.0 ([959528e](https://github.com/doug-williamson/RhombusKit/commit/959528ea5018353bb487b87137a3694e11a28f3b))
+* release RhombusKit 1.0.0 ([#50](https://github.com/doug-williamson/RhombusKit/issues/50)) ([3c98a36](https://github.com/doug-williamson/RhombusKit/commit/3c98a361a41f07137a1ba7675c55031b7566c028))
+
 ## [0.11.0](https://github.com/doug-williamson/RhombusKit/compare/v0.10.0...v0.11.0) (2026-06-04)
 
 
