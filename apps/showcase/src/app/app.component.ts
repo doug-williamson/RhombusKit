@@ -43,7 +43,11 @@ interface NavGroup {
         @for (group of navGroups; track group.label) {
           <p class="showcase-shell__nav-group">{{ group.label }}</p>
           @for (item of group.items; track item.path) {
-            <a [routerLink]="item.path" routerLinkActive="is-active">
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+            >
               {{ item.label }}
             </a>
           }
@@ -59,6 +63,13 @@ interface NavGroup {
 })
 export class AppComponent {
   protected readonly navGroups: NavGroup[] = [
+    {
+      label: 'Get started',
+      items: [
+        { path: '/', label: 'Home' },
+        { path: '/theming', label: 'Theming' },
+      ],
+    },
     {
       label: 'Primitives',
       items: [
