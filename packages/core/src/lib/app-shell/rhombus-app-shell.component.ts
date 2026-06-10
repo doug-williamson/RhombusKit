@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   ViewEncapsulation,
   computed,
   contentChild,
@@ -8,6 +9,7 @@ import {
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,6 +50,11 @@ const DESKTOP_MIN_PX = 1024;
  *
  * Set `hasNav` to false for bare routes (sign-up, 404, marketing): the drawer is
  * omitted and the content spans full width, while the toolbar chrome is retained.
+ *
+ * On navigation to a new path the content region scrolls back to the top — the
+ * shell's internal scroll container sits outside the router's window-based
+ * `scrollPositionRestoration`, so it resets the offset itself; a query-only
+ * change (e.g. a `?tab=` switch) preserves the scroll position.
  *
  * Consumer-overridable CSS custom properties (with their defaults):
  * `--rhombus-app-shell-sidenav-width` (220px), `--rhombus-app-shell-aside-width`
@@ -120,7 +127,7 @@ const DESKTOP_MIN_PX = 1024;
         </mat-sidenav>
       }
 
-      <mat-sidenav-content class="rhombus-app-shell__content">
+      <mat-sidenav-content #scrollRegion class="rhombus-app-shell__content">
         <div
           class="rhombus-app-shell__body"
           [class.rhombus-app-shell__body--with-aside]="hasAside()"
@@ -170,6 +177,9 @@ export class RhombusAppShellComponent {
   private readonly authRef = contentChild(RhombusShellAuthDirective);
   private readonly asideRef = contentChild(RhombusShellAsideDirective);
 
+  /** The internal scroll container (`mat-sidenav-content`); reset to top on nav. */
+  private readonly scrollRegion = viewChild('scrollRegion', { read: ElementRef });
+
   protected readonly hasNavFooter = computed(() => !!this.navFooterRef());
   protected readonly hasAuth = computed(() => !!this.authRef());
   protected readonly hasAside = computed(() => !!this.asideRef());
@@ -207,15 +217,40 @@ export class RhombusAppShellComponent {
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
-      .subscribe(() => {
+      .subscribe((event) => {
         // The rail is persistent, so only the overlay drawer closes on navigate.
         if (this.closeOnNavigate() && this.isMobile()) {
           this.sidenavOpen.set(false);
         }
+        this.resetScrollOnPathChange(event.urlAfterRedirects);
       });
   }
 
   protected toggleSidenav(): void {
     this.sidenavOpen.update((v) => !v);
+  }
+
+  /** Last navigated path (sans query / fragment); seeds the scroll-reset compare. */
+  private previousPath = '';
+
+  /**
+   * The shell scrolls an *internal* container (`mat-sidenav-content`), so the
+   * router's window-based `scrollPositionRestoration` can't reach it — without
+   * this, the previous page's scroll offset carries into the next route. Reset
+   * the content region to the top whenever the path changes; a query-only change
+   * (e.g. a `?tab=` switch) keeps the position so in-page tabs don't jump.
+   */
+  private resetScrollOnPathChange(url: string): void {
+    const path = url.split(/[?#]/)[0];
+    if (path === this.previousPath) return;
+    this.previousPath = path;
+    const el = this.scrollRegion()?.nativeElement as HTMLElement | undefined;
+    if (!el) return;
+    if (typeof el.scrollTo === 'function') {
+      el.scrollTo({ top: 0, left: 0 });
+    } else {
+      el.scrollTop = 0;
+      el.scrollLeft = 0;
+    }
   }
 }

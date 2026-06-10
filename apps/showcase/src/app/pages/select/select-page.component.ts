@@ -8,30 +8,64 @@ import {
   SelectOptionGroup,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective, ComponentPageComponent],
+  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Select" apiKey="RhombusSelectComponent">
-      <div overview>
-        <p>
-          <code>&lt;rhombus-select&gt;</code> wraps
-          <code>&lt;mat-select&gt;</code> inside the same form-field shell
-          as input and textarea. Pass <code>options</code> (flat) or
-          <code>groups</code> (grouped). <code>multiple</code> toggles
-          multi-select. The component is generic — option <code>value</code>
-          can be any type — and owns the control, so reactive-forms
-          consumers pass a <code>FormControl</code> via <code>[control]</code>.
-          Because the option panel renders inside the CDK overlay (outside
-          the host), <code>--mat-select-*</code> and
-          <code>--mat-option-*</code> tokens are bound under
-          <code>.cdk-overlay-container</code> rather than the component
-          host. The colour walk below validates that the workaround reaches
-          the panel.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A select lets the user pick from a list of options in a compact
+          dropdown. RhombusKit's <code>&lt;rhombus-select&gt;</code> wraps
+          Material's <code>&lt;mat-select&gt;</code> in the same form-field
+          shell as input and textarea, and routes its colour through the token
+          contract so it re-skins with the active theme.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Reach for a select when there are <strong>more options than fit
+              comfortably as radios</strong> (roughly five or more), or when
+              vertical space is tight. For a short, always-visible set use
+              <strong>Radio</strong>.
+            </li>
+            <li>
+              Pass <code>options</code> (flat) or <code>groups</code> (grouped),
+              and set <code>[multiple]="true"</code> for multi-select. The
+              component owns the control, so reactive-forms consumers pass a
+              <code>FormControl</code> via <code>[control]</code>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-select
+              label="Status"
+              placeholder="Choose one"
+              [options]="statuses"
+            />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Built on Material's <code>&lt;mat-select&gt;</code>, so the trigger
+            is focusable with <kbd>Tab</kbd>, opens on
+            <kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>Arrow</kbd>, and the open
+            panel exposes the options as an ARIA listbox navigable with the
+            arrow keys. The <code>label</code> becomes the field's accessible
+            name.
+          </p>
+        </section>
       </div>
       <div examples>
       <section class="showcase-section">
@@ -143,6 +177,28 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
   `,
 })
 export default class SelectPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusSelectComponent, SelectOption } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-status-picker',
+  imports: [RhombusSelectComponent],
+  template: \`
+    <rhombus-select
+      label="Status"
+      placeholder="Choose one"
+      [options]="statuses"
+    />
+  \`,
+})
+export class StatusPickerComponent {
+  readonly statuses: SelectOption[] = [
+    { value: 'draft', label: 'Draft' },
+    { value: 'scheduled', label: 'Scheduled' },
+    { value: 'published', label: 'Published' },
+  ];
+}`;
+
   protected readonly statuses: SelectOption[] = [
     { value: 'draft', label: 'Draft' },
     { value: 'scheduled', label: 'Scheduled' },

@@ -5,6 +5,7 @@ import {
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-menu-page',
@@ -13,22 +14,58 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     RhombusMenuComponent,
     RhombusOverflowMenuComponent,
     ComponentPageComponent,
+    ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Menu" apiKey="RhombusMenuComponent">
-      <div overview>
-        <p>
-          <code>&lt;rhombus-menu&gt;</code> wraps <code>&lt;mat-menu&gt;</code>
-          behind a trigger you project — pass <code>[iconButton]="true"</code>
-          for the round preset. It is driven by an <code>items</code> array where
-          each <code>MenuItem</code> carries its own <code>action</code> callback,
-          so dispatch is co-located with the item. <code>dividerBefore</code>
-          expresses grouping, <code>variant: 'danger'</code> marks a destructive
-          item, and <code>disabled</code> renders it inert.
-          <code>&lt;rhombus-overflow-menu&gt;</code> is the icon-button preset of
-          this component.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A menu presents a list of actions on a surface that opens from a
+          trigger you project. RhombusKit wraps Material's
+          <code>&lt;mat-menu&gt;</code> with the token contract and a declarative
+          <code>items</code> API — each <code>MenuItem</code> carries its own
+          <code>action</code> callback, so dispatch is co-located with the item.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a menu to collect <strong>secondary or overflow actions</strong>
+              behind one trigger (row actions, a &ldquo;more&rdquo; button) rather
+              than crowding them all onscreen.
+            </li>
+            <li>
+              <code>dividerBefore</code> groups related items,
+              <code>variant: 'danger'</code> marks a destructive one, and
+              <code>disabled</code> renders an item inert. For the round
+              icon-button trigger, use <code>&lt;rhombus-overflow-menu&gt;</code>
+              (or pass <code>[iconButton]="true"</code>).
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-menu [items]="items" ariaLabel="Document actions">
+              Actions
+            </rhombus-menu>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Inherits Material's menu semantics: the trigger exposes
+            <code>aria-haspopup</code> and opens the panel on <kbd>Enter</kbd> /
+            <kbd>Space</kbd>; the open menu is a <code>menu</code> of
+            <code>menuitem</code>s navigable with the arrow keys and dismissed
+            with <kbd>Esc</kbd>. Give an icon-only trigger an
+            <code>ariaLabel</code> so its purpose is announced.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -82,6 +119,32 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
   `,
 })
 export default class MenuPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { MenuItem, RhombusMenuComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-doc-toolbar',
+  imports: [RhombusMenuComponent],
+  template: \`
+    <rhombus-menu [items]="items" ariaLabel="Document actions">
+      Actions
+    </rhombus-menu>
+  \`,
+})
+export class DocToolbarComponent {
+  readonly items: MenuItem[] = [
+    { label: 'Rename', icon: 'edit', action: () => this.rename() },
+    { label: 'Duplicate', icon: 'content_copy', action: () => this.duplicate() },
+    {
+      label: 'Delete',
+      icon: 'delete',
+      variant: 'danger',
+      dividerBefore: true,
+      action: () => this.delete(),
+    },
+  ];
+}`;
+
   protected readonly lastAction = signal('—');
 
   private log(label: string): void {

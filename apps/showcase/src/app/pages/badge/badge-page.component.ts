@@ -2,25 +2,67 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-badge-page',
   standalone: true,
-  imports: [RhombusBadgeDirective, RhombusButtonComponent, MatIconModule, ComponentPageComponent],
+  imports: [
+    RhombusBadgeDirective,
+    RhombusButtonComponent,
+    MatIconModule,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Badge" apiKey="RhombusBadgeDirective">
-      <div overview>
-        <p>
-          <code>[rhombusBadge]</code> is an attribute directive that
-          composes Angular Material's <code>[matBadge]</code> via
-          <code>hostDirectives</code> and rebinds
-          <code>--mat-badge-background-color</code> /
-          <code>--mat-badge-text-color</code> per variant. Apply it to
-          any host &mdash; button, icon, span. Inputs are prefixed with
-          <code>rhombusBadge*</code> to avoid colliding with host
-          components' own variant / size inputs.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A badge is a small count or status marker pinned to the corner of
+          another element. <code>[rhombusBadge]</code> is an attribute directive
+          that composes Angular Material's <code>[matBadge]</code> via
+          <code>hostDirectives</code> and routes its colours through the token
+          contract per variant &mdash; toggle the theme above and the badges
+          re-skin without touching markup.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a badge to draw attention to a <strong>count or short
+              status</strong> on its host &mdash; an unread tally on an inbox
+              button, a "NEW" flag on an icon. For standalone labels, prefer a
+              chip.
+            </li>
+            <li>
+              Apply it to any host (button, <code>mat-icon</code>, span); its
+              inputs are prefixed <code>rhombusBadge*</code> so they never
+              collide with the host's own <code>variant</code> /
+              <code>size</code> inputs.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-button [rhombusBadge]="7" rhombusBadgeVariant="primary">
+              Inbox
+            </rhombus-button>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            The badge is decorative by default. Pass
+            <code>rhombusBadgeDescription</code> to give it an accessible label
+            (Material applies it via <code>aria-describedby</code>), so the count
+            or status is announced rather than left as a silent visual marker.
+          </p>
+        </section>
       </div>
       <div examples>
       <section class="showcase-section">
@@ -157,4 +199,20 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     }
   `,
 })
-export default class BadgePageComponent {}
+export default class BadgePageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusBadgeDirective, RhombusButtonComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-inbox-button',
+  imports: [RhombusBadgeDirective, RhombusButtonComponent],
+  template: \`
+    <rhombus-button [rhombusBadge]="unread()" rhombusBadgeVariant="primary">
+      Inbox
+    </rhombus-button>
+  \`,
+})
+export class InboxButtonComponent {
+  readonly unread = signal(7);
+}`;
+}

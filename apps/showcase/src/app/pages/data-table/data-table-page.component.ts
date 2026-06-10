@@ -24,6 +24,7 @@ import {
   type BadgeVariant,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 type PostStatus = 'draft' | 'published' | 'scheduled' | 'archived';
 
@@ -65,6 +66,7 @@ const POSTS: Post[] = [
     RhombusButtonComponent,
     RhombusOverflowMenuComponent,
     ComponentPageComponent,
+    ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -87,16 +89,54 @@ const POSTS: Post[] = [
     </ng-template>
 
     <app-component-page title="Data Table" apiKey="RhombusDataTableComponent">
-      <div overview>
-        <p>
-          <code>&lt;rhombus-data-table&gt;</code> is config-driven via a
-          <code>columns</code> array with a <code>cellTemplate</code> escape
-          hatch. It auto-detects its mode from the <code>data</code> input: a
-          plain array runs client-side (Material handles sort + pagination); a
-          <code>DataSource</code> runs server-side (you react to
-          <code>sortChange</code>/<code>pageChange</code> and refetch). Loading
-          and empty are distinct rendering paths.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A data table renders records from a <code>columns</code> config with
+          sensible defaults for sorting and pagination, plus a
+          <code>cellTemplate</code> escape hatch for custom cells. It auto-detects
+          its mode from <code>data</code>: a plain array runs client-side; a
+          <code>DataSource</code> runs server-side.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Reach for a data table to present a set of
+              <strong>records with column headers</strong> &mdash; sortable,
+              paginated, with custom cell rendering. For short, non-tabular lists
+              a plain list or cards are lighter.
+            </li>
+            <li>
+              Pass a <strong>plain array</strong> for client-side sort and
+              pagination; pass a <code>DataSource</code> and react to
+              <code>sortChange</code> / <code>pageChange</code> when the server
+              owns the data.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-data-table
+              [data]="heroPosts()"
+              [columns]="controlledColumns"
+              [paginated]="false"
+            />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Built on Angular Material's table and sort: sortable headers are
+            keyboard-operable and expose <code>aria-sort</code> reflecting the
+            current direction. Loading and empty are distinct rendering paths, so
+            assistive tech is never shown a misleading empty table while data is
+            still loading.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -294,6 +334,36 @@ export default class DataTablePageComponent {
 
   protected readonly posts = signal<Post[]>(POSTS);
   protected readonly loading = signal(false);
+
+  // --- Overview hero: a compact, sortable client-side table. ---
+  protected readonly heroPosts = signal<Post[]>(POSTS.slice(0, 4));
+
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { Component } from '@angular/core';
+import { ColumnDef, RhombusDataTableComponent } from '@rhombuskit/core';
+
+interface Post {
+  title: string;
+  author: string;
+  viewCount: number;
+}
+
+@Component({
+  selector: 'app-posts-table',
+  imports: [RhombusDataTableComponent],
+  template: \`<rhombus-data-table [data]="posts" [columns]="columns" />\`,
+})
+export class PostsTableComponent {
+  readonly columns: ColumnDef<Post>[] = [
+    { key: 'title', header: 'Title', sortable: true },
+    { key: 'author', header: 'Author', sortable: true },
+    { key: 'viewCount', header: 'Views', align: 'end', sortable: true },
+  ];
+  readonly posts: Post[] = [
+    { title: 'Designing a token-first library', author: 'Ada Lovelace', viewCount: 12840 },
+    { title: 'Signals vs. observables', author: 'Grace Hopper', viewCount: 9532 },
+  ];
+}`;
 
   // --- Controlled-sort demo: the PAGE owns order + sort state. ---
   protected readonly controlledPosts = signal<Post[]>(POSTS.slice(0, 6));

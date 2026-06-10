@@ -10,25 +10,68 @@ import { filter, of, switchMap } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-confirm-dialog-page',
   standalone: true,
-  imports: [RhombusButtonComponent, ComponentPageComponent],
+  imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Confirm Dialog" apiKey="RhombusConfirmService">
-      <div overview>
-        <p>
-          <code>RhombusConfirmService</code> wraps
-          <code>MatDialog</code> and returns
-          <code>Observable&lt;boolean&gt;</code> — never a
-          <code>Promise</code>, never <code>boolean | undefined</code>. Backdrop
-          click and Escape both resolve to <code>false</code>. The rendered
-          dialog component is internal; consumers only ever call the service.
-          The dialog surface renders in the CDK overlay, so its colours are
-          bound under <code>.cdk-overlay-container</code>.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A confirm dialog asks the user to approve or cancel a single action
+          before it proceeds. <code>RhombusConfirmService</code> wraps
+          <code>MatDialog</code> and returns a strict
+          <code>Observable&lt;boolean&gt;</code> &mdash; never a
+          <code>Promise</code>, never <code>boolean | undefined</code> &mdash; so
+          a backdrop click or <kbd>Escape</kbd> both resolve to
+          <code>false</code>. The dialog component is internal; consumers only
+          ever call the service.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a confirm dialog for a <strong>quick, reversible yes/no
+              decision</strong>, especially before a destructive action
+              (&ldquo;Delete post?&rdquo;). For a multi-field task use a full
+              <strong>Dialog</strong>; for passive feedback use a
+              <strong>Toast</strong>.
+            </li>
+            <li>
+              Configure copy via <code>title</code> / <code>message</code> /
+              <code>confirmLabel</code>, and set <code>variant: 'danger'</code>
+              to style the confirm button destructively. The canonical pattern is
+              <code>filter(Boolean)</code> &rarr; <code>switchMap</code> &rarr;
+              <code>takeUntilDestroyed</code> so a late result never fires a dead
+              handler.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-button variant="primary" (click)="defaultConfirm()">
+              Publish post
+            </rhombus-button>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Built on <code>RhombusDialogService</code>, so it inherits the same
+            modal behaviour: focus is <strong>trapped</strong> inside the dialog
+            on open and <strong>restored</strong> to the trigger on close.
+            <kbd>Escape</kbd> and a backdrop click both dismiss it, resolving to
+            <code>false</code> &mdash; equivalent to cancelling &mdash; so no
+            action runs unless the user explicitly confirms.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -125,6 +168,41 @@ export default class ConfirmDialogPageComponent {
 
   protected readonly lastResult = signal('—');
   protected readonly actionStatus = signal('—');
+
+  /** Minimal inject + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, switchMap } from 'rxjs';
+import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-post-actions',
+  imports: [RhombusButtonComponent],
+  template: \`
+    <rhombus-button variant="primary" (click)="publish()">
+      Publish post
+    </rhombus-button>
+  \`,
+})
+export class PostActionsComponent {
+  private readonly confirm = inject(RhombusConfirmService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  publish(): void {
+    this.confirm
+      .confirm({
+        title: 'Publish this post?',
+        message: 'It will become visible to all readers immediately.',
+        confirmLabel: 'Publish',
+      })
+      .pipe(
+        filter(Boolean),
+        switchMap(() => this.store.publish()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+}`;
 
   protected readonly chainSample = `this.confirm.confirm({
   title: 'Delete post?',

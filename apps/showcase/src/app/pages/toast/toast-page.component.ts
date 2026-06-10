@@ -10,23 +10,71 @@ import {
   type RhombusToastRef,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-toast-page',
   standalone: true,
-  imports: [RhombusButtonComponent, ComponentPageComponent],
+  imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Toast" apiKey="RhombusToastService">
-      <div overview>
-        <p>
-          <code>RhombusToastService</code> wraps <code>MatSnackBar</code> for the
-          surface and the CDK <code>LiveAnnouncer</code> for the announcement —
-          the same shape as <code>RhombusConfirmService</code>. Each severity is
-          coloured by the <code>--toast-&lt;variant&gt;-bg</code> /
-          <code>-text</code> tokens (toggle the theme to see both), and every
-          call returns a leak-free <code>RhombusToastRef</code>.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A toast is a brief, self-dismissing message that confirms an action or
+          flags a problem without interrupting the user. Inject
+          <code>RhombusToastService</code> &mdash; it wraps
+          <code>MatSnackBar</code> for the surface and the CDK
+          <code>LiveAnnouncer</code> for the announcement, colours each severity
+          through the <code>--toast-&lt;variant&gt;-bg</code> / <code>-text</code>
+          tokens, and returns a leak-free <code>RhombusToastRef</code>.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a toast for <strong>transient, low-stakes feedback</strong>
+              (&ldquo;Post published&rdquo;, &ldquo;Could not save&rdquo;). When
+              the user must make a decision before continuing, reach for
+              <strong>Confirm Dialog</strong> or <strong>Dialog</strong> instead.
+            </li>
+            <li>
+              Call <code>info()</code> / <code>success()</code> /
+              <code>warning()</code> / <code>error()</code> for the four
+              severities, or <code>show()</code> for full control. Pass
+              <code>{{ '{' }} action {{ '}' }}</code> for an inline button and
+              <code>{{ '{' }} duration: 0 {{ '}' }}</code> to keep it open until
+              you <code>dismiss()</code> it via the returned ref.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-button
+              variant="primary"
+              (click)="toast.success('Post published')"
+            >
+              Publish post
+            </rhombus-button>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Every toast is announced to screen readers through the CDK
+            <code>LiveAnnouncer</code>: <code>info</code> and
+            <code>success</code> announce <strong>politely</strong> while
+            <code>warning</code> and <code>error</code> announce
+            <strong>assertively</strong> (override with the
+            <code>politeness</code> option). Because a toast can auto-dismiss,
+            keep messages short and never hide an essential action behind a
+            time-limited toast.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -112,6 +160,28 @@ export default class ToastPageComponent {
   protected readonly toast = inject(RhombusToastService);
   protected readonly lastEvent = signal('—');
   protected readonly sticky = signal<RhombusToastRef | null>(null);
+
+  /** Minimal inject + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { Component, inject } from '@angular/core';
+import { RhombusButtonComponent, RhombusToastService } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-publish-bar',
+  imports: [RhombusButtonComponent],
+  template: \`
+    <rhombus-button variant="primary" (click)="publish()">
+      Publish post
+    </rhombus-button>
+  \`,
+})
+export class PublishBarComponent {
+  private readonly toast = inject(RhombusToastService);
+
+  publish(): void {
+    /* persist… */
+    this.toast.success('Post published');
+  }
+}`;
 
   protected undoToast(): void {
     const ref = this.toast.warning('Item deleted', { action: 'Undo' });

@@ -6,123 +6,151 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: 'button',
+        title: 'Button',
         loadComponent: () => import('./pages/button/button-page.component'),
       },
       {
         path: 'badge',
+        title: 'Badge',
         loadComponent: () => import('./pages/badge/badge-page.component'),
       },
       {
         path: 'card',
+        title: 'Card',
         loadComponent: () => import('./pages/card/card-page.component'),
       },
       {
         path: 'chip',
+        title: 'Chip',
         loadComponent: () => import('./pages/chip/chip-page.component'),
       },
       {
         path: 'checkbox',
+        title: 'Checkbox',
         loadComponent: () => import('./pages/checkbox/checkbox-page.component'),
       },
       {
         path: 'radio',
+        title: 'Radio',
         loadComponent: () => import('./pages/radio/radio-page.component'),
       },
       {
         path: 'switch',
+        title: 'Switch',
         loadComponent: () => import('./pages/switch/switch-page.component'),
       },
       {
         path: 'input',
+        title: 'Input',
         loadComponent: () => import('./pages/input/input-page.component'),
       },
       {
         path: 'textarea',
+        title: 'Textarea',
         loadComponent: () => import('./pages/textarea/textarea-page.component'),
       },
       {
         path: 'select',
+        title: 'Select',
         loadComponent: () => import('./pages/select/select-page.component'),
       },
       {
         path: 'data-table',
+        title: 'Data Table',
         loadComponent: () =>
           import('./pages/data-table/data-table-page.component'),
       },
       {
         path: 'overflow-menu',
+        title: 'Overflow Menu',
         loadComponent: () =>
           import('./pages/overflow-menu/overflow-menu-page.component'),
       },
       {
         path: 'tooltip',
+        title: 'Tooltip',
         loadComponent: () => import('./pages/tooltip/tooltip-page.component'),
       },
       {
         path: 'toast',
+        title: 'Toast',
         loadComponent: () => import('./pages/toast/toast-page.component'),
       },
       {
         path: 'dialog',
+        title: 'Dialog',
         loadComponent: () => import('./pages/dialog/dialog-page.component'),
       },
       {
         path: 'confirm-dialog',
+        title: 'Confirm Dialog',
         loadComponent: () =>
           import('./pages/confirm-dialog/confirm-dialog-page.component'),
       },
       {
         path: 'tabs',
+        title: 'Tabs',
         loadComponent: () => import('./pages/tabs/tabs-page.component'),
       },
       {
         path: 'menu',
+        title: 'Menu',
         loadComponent: () => import('./pages/menu/menu-page.component'),
       },
       {
         path: 'breadcrumbs',
+        title: 'Breadcrumbs',
         loadComponent: () =>
           import('./pages/breadcrumbs/breadcrumbs-page.component'),
       },
       {
         path: 'pagination',
+        title: 'Pagination',
         loadComponent: () =>
           import('./pages/pagination/pagination-page.component'),
       },
       {
         path: 'progress',
+        title: 'Progress',
         loadComponent: () => import('./pages/progress/progress-page.component'),
       },
       {
         path: 'avatar',
+        title: 'Avatar',
         loadComponent: () => import('./pages/avatar/avatar-page.component'),
       },
       {
         path: 'alert',
+        title: 'Alert',
         loadComponent: () => import('./pages/alert/alert-page.component'),
       },
       {
         path: 'theme-toggle',
+        title: 'Theme Toggle',
         loadComponent: () =>
           import('./pages/theme-toggle/theme-toggle-page.component'),
       },
       {
         path: 'app-shell',
+        title: 'App Shell',
         loadComponent: () =>
           import('./pages/app-shell/app-shell-page.component'),
       },
       {
         path: 'page-header',
+        title: 'Page Header',
         loadComponent: () =>
           import('./pages/page-header/page-header-page.component'),
       },
       {
         path: 'empty-state',
+        title: 'Empty State',
         loadComponent: () =>
           import('./pages/empty-state/empty-state-page.component'),
       },
       {
         path: 'code-block',
+        title: 'Code Block',
         loadComponent: () =>
           import('./pages/code-block/code-block-page.component'),
       },
@@ -131,6 +159,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'theming',
+    title: 'Theming',
     loadComponent: () => import('./pages/theming/theming-page.component'),
   },
   {

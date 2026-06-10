@@ -1,24 +1,64 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusCodeBlockComponent } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-code-block-page',
   standalone: true,
-  imports: [RhombusCodeBlockComponent, ComponentPageComponent],
+  imports: [
+    RhombusCodeBlockComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Code Block" apiKey="RhombusCodeBlockComponent">
-      <div overview>
-        <p>
-          A read-only code viewer with a language label and a copy-to-clipboard button.
-          It's the one core component that wraps no Material primitive of its own.
-          Syntax highlighting via <code>highlight.js</code> is an <strong>optional</strong>,
-          browser-only progressive enhancement: install it as a peer to enable it; without
-          it (or during server rendering) the block degrades to plain, readable code. The
-          toolbar, label, and surface all draw from the token contract &mdash; toggle the
-          theme above to see it track.
+      <div overview class="overview">
+        <p class="overview__lead">
+          A read-only code viewer that shows a snippet verbatim with a language
+          label and a copy-to-clipboard button. It is the one core component that
+          wraps no Material primitive of its own, yet its toolbar, label, and
+          surface all draw from the token contract — toggle the theme above to see
+          it track.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use it to <strong>display code for reading and copying</strong> —
+              docs, usage examples, command snippets. It is not an editor; pass the
+              source in via <code>[code]</code>.
+            </li>
+            <li>
+              Set <code>language</code> for the label and grammar. Syntax
+              highlighting via <code>highlight.js</code> is an
+              <strong>optional</strong>, browser-only enhancement: install it as a
+              peer to enable it; without it (or during server rendering) the block
+              degrades to plain, readable code.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-code-block [code]="tsSample" />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Renders semantic <code>&lt;pre&gt;&lt;code&gt;</code> so the snippet is
+            exposed verbatim to assistive tech and screen readers preserve its
+            structure. The copy control is a real <code>matIconButton</code> —
+            reachable with <kbd>Tab</kbd>, activated on <kbd>Enter</kbd> /
+            <kbd>Space</kbd> — whose <code>title</code> announces &ldquo;Copy
+            code&rdquo; and confirms with &ldquo;Copied!&rdquo;.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -46,6 +86,20 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
   `,
 })
 export default class CodeBlockPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusCodeBlockComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-snippet',
+  imports: [RhombusCodeBlockComponent],
+  template: \`
+    <rhombus-code-block language="typescript" [code]="snippet" />
+  \`,
+})
+export class SnippetComponent {
+  readonly snippet = 'const total = sum(items);';
+}`;
+
   protected readonly tsSample = `import { RhombusButtonComponent } from '@rhombuskit/core';
 
 @Component({

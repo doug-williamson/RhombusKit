@@ -6,6 +6,7 @@ import {
 } from '@rhombuskit/core';
 import { RhombusThemeService } from '@rhombuskit/theme-engine';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-theme-toggle-page',
@@ -15,21 +16,56 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     RhombusThemeMenuComponent,
     RhombusButtonComponent,
     ComponentPageComponent,
+    ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Theme Controls" apiKey="RhombusThemeToggleComponent">
-      <div overview>
-        <p>
+      <div overview class="overview">
+        <p class="overview__lead">
           Two UI primitives drive the same <code>RhombusThemeService</code> from
-          <code>&#64;rhombuskit/theme-engine</code>.
-          <code>&lt;rhombus-theme-menu&gt;</code> opens a dropdown with explicit
-          Light / Dark / System items;
+          <code>&#64;rhombuskit/theme-engine</code>:
           <code>&lt;rhombus-theme-toggle&gt;</code> is a three-state icon button
-          that cycles light &rarr; dark &rarr; system. Both stay in sync with
-          each other and with the shell header &mdash; click any of them and the
-          live state below updates.
+          that cycles light &rarr; dark &rarr; system, and
+          <code>&lt;rhombus-theme-menu&gt;</code> opens a dropdown with explicit
+          Light / Dark / System items. Both stay in sync with each other and the
+          shell header.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Reach for the <strong>toggle</strong> in compact contexts (a tight
+              icon row) where a single tappable target beats a dropdown, at the
+              cost of up to three taps to reach a given theme.
+            </li>
+            <li>
+              Reach for the <strong>menu</strong> in headers and toolbars with
+              room for a dropdown &mdash; every preference is one click away and
+              the active one is marked.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-theme-toggle />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Renders a native icon <code>&lt;button&gt;</code>, so it is focusable
+            and activates on <kbd>Enter</kbd> / <kbd>Space</kbd>. Its
+            <code>aria-label</code> announces the current preference (e.g.
+            &ldquo;Switch theme &mdash; current: dark&rdquo;), and a hover
+            tooltip names the theme the next click selects (suppress it with
+            <code>[showTooltip]="false"</code>).
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -131,6 +167,18 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
 })
 export default class ThemeTogglePageComponent {
   protected readonly theme = inject(RhombusThemeService);
+
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusThemeToggleComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-app-bar',
+  imports: [RhombusThemeToggleComponent],
+  template: \`
+    <rhombus-theme-toggle />
+  \`,
+})
+export class AppBarComponent {}`;
 
   protected setLight(): void {
     this.theme.setTheme('rhombus-light');

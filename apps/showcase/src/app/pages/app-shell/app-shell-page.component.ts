@@ -7,6 +7,7 @@ import {
   RhombusShellNavFooterDirective,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 /**
  * Demo page for `<rhombus-app-shell>`. The live shell runs inside a bounded
@@ -25,25 +26,78 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     RhombusShellAuthDirective,
     RhombusShellAsideDirective,
     ComponentPageComponent,
+    ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="App Shell" apiKey="RhombusAppShellComponent">
-      <div overview>
-        <p>
+      <div overview class="overview">
+        <p class="overview__lead">
           <code>&lt;rhombus-app-shell&gt;</code> is a structure-only layout
           primitive wrapping <code>mat-sidenav-container</code> +
           <code>mat-toolbar</code>: a header, a collapsible sidenav, a content
-          area, and an optional right-rail aside. Content projects into
-          <code>[shellBrand]</code>, <code>[shellNav]</code>,
-          <code>[shellNavFooter]</code>, <code>[shellHeaderActions]</code>,
-          <code>[shellAuthSlot]</code>, <code>[shellAside]</code>, and the
-          default slot. Structural inputs are <code>mobileBreakpoint</code>,
-          <code>iconRail</code>, <code>closeOnNavigate</code>, and
-          <code>hasNav</code> — no product flags. <strong>The showcase chrome around you is itself a
-          <code>rhombus-app-shell</code></strong>; resize the window to watch it
-          collapse to an overlay drawer at 960px.
+          area, and an optional right-rail aside. It renders no nav items, brand,
+          or theme control &mdash; every product concern is a projected slot, and
+          it sources its chrome from the token contract.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use it once as the application frame around your routed views; for
+              the heading <em>inside</em> a single page, reach for
+              <strong>Page Header</strong> instead.
+            </li>
+            <li>
+              Project into <code>[shellBrand]</code>, <code>[shellNav]</code>,
+              <code>[shellNavFooter]</code>, <code>[shellHeaderActions]</code>,
+              <code>[shellAuthSlot]</code>, <code>[shellAside]</code>, and the
+              default content slot. Structural inputs are
+              <code>mobileBreakpoint</code>, <code>iconRail</code>,
+              <code>closeOnNavigate</code>, and <code>hasNav</code> &mdash; no
+              product flags. <strong>The showcase chrome around you is itself a
+              <code>rhombus-app-shell</code></strong>; resize the window to watch
+              the sidenav collapse to an overlay drawer.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <div class="app-shell-hero">
+              <rhombus-app-shell [closeOnNavigate]="false">
+                <span shellBrand class="app-shell-demo__brand">AcmeDocs</span>
+                <nav shellNav class="app-shell-demo__nav">
+                  <a href="#" (click)="$event.preventDefault()" class="is-active">Dashboard</a>
+                  <a href="#" (click)="$event.preventDefault()">Posts</a>
+                  <a href="#" (click)="$event.preventDefault()">Settings</a>
+                </nav>
+                <rhombus-button shellHeaderActions appearance="text">Docs</rhombus-button>
+                <div class="app-shell-demo__content">
+                  <h2>Getting started</h2>
+                  <p>
+                    The default content slot holds your routed view. The brand,
+                    nav, and header actions are all projected.
+                  </p>
+                </div>
+              </rhombus-app-shell>
+            </div>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            The shell lays out semantic regions &mdash; a <code>&lt;main&gt;</code>
+            landmark for the content and an <code>&lt;aside&gt;</code> for the
+            right rail &mdash; and the overlay drawer's toolbar trigger carries an
+            <code>aria-label</code> of &ldquo;Toggle navigation&rdquo;. Labelling
+            the projected brand, nav links, and header actions is the consumer's
+            responsibility.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -149,6 +203,14 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
       overflow: hidden;
     }
 
+    .app-shell-hero {
+      position: relative;
+      height: 360px;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
     .app-shell-demo__brand {
       font-family: var(--font-sans);
       font-weight: 700;
@@ -243,6 +305,30 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
 })
 export default class AppShellPageComponent {
   protected readonly demoNav = ['Dashboard', 'Posts', 'Media', 'Settings'];
+
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusAppShellComponent, RhombusButtonComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-root',
+  imports: [RhombusAppShellComponent, RhombusButtonComponent, RouterOutlet],
+  template: \`
+    <rhombus-app-shell>
+      <span shellBrand>AcmeDocs</span>
+
+      <nav shellNav>
+        <a routerLink="/dashboard">Dashboard</a>
+        <a routerLink="/posts">Posts</a>
+        <a routerLink="/settings">Settings</a>
+      </nav>
+
+      <rhombus-button shellHeaderActions appearance="text">Docs</rhombus-button>
+
+      <router-outlet />
+    </rhombus-app-shell>
+  \`,
+})
+export class AppComponent {}`;
 
   protected readonly showAside = signal(true);
   protected readonly showAuth = signal(true);

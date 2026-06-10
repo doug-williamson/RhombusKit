@@ -4,27 +4,68 @@ import {
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-overflow-menu-page',
   standalone: true,
-  imports: [RhombusOverflowMenuComponent, ComponentPageComponent],
+  imports: [
+    RhombusOverflowMenuComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Overflow Menu" apiKey="RhombusOverflowMenuComponent">
-      <div overview>
-        <p>
+      <div overview class="overview">
+        <p class="overview__lead">
+          An overflow menu tucks a set of secondary actions behind a
+          &ldquo;&middot;&middot;&middot;&rdquo; icon-button trigger &mdash; the
+          familiar pattern for per-row or per-card actions.
           <code>&lt;rhombus-overflow-menu&gt;</code> wraps
-          <code>&lt;mat-menu&gt;</code> behind an icon-button trigger. It is
-          driven by a homogeneous <code>items</code> array — each
-          <code>OverflowMenuItem</code> carries its own
-          <code>action</code> callback, so dispatch is co-located with the item
-          (no <code>(itemClick)</code> output). <code>dividerBefore</code>
-          expresses grouping without sentinel objects, <code>variant</code>
-          marks a destructive item, and <code>disabled</code> renders it inert.
-          The panel renders in the CDK overlay, so its colours are bound under
-          <code>.cdk-overlay-container</code>.
+          <code>&lt;mat-menu&gt;</code> and is driven entirely by an
+          <code>items</code> array, with the panel themed through the token
+          contract.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use an overflow menu to <strong>collapse secondary actions</strong>
+              that would clutter a row or toolbar. Keep a view's primary action
+              as a visible <strong>Button</strong>; only the supporting actions
+              belong in the menu.
+            </li>
+            <li>
+              Each <code>OverflowMenuItem</code> carries its own
+              <code>action</code> callback, so dispatch is co-located with the
+              item (no <code>(itemClick)</code> output). Use
+              <code>dividerBefore</code> to group items,
+              <code>variant: 'danger'</code> to mark a destructive one, and
+              <code>disabled</code> to render an item inert.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-overflow-menu [items]="basicItems" />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            The trigger is a real icon button with an accessible name
+            (<code>ariaLabel</code>, default &ldquo;More actions&rdquo;) since it
+            has no visible text. Opening it moves focus into the menu, and items
+            are navigable with the <kbd>Arrow</kbd> keys, activated with
+            <kbd>Enter</kbd>, and dismissed with <kbd>Escape</kbd> &mdash;
+            standard menu semantics inherited from <code>&lt;mat-menu&gt;</code>.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -98,6 +139,25 @@ export default class OverflowMenuPageComponent {
   private log(label: string): void {
     this.lastAction.set(label);
   }
+
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { Component } from '@angular/core';
+import { OverflowMenuItem, RhombusOverflowMenuComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-row-actions',
+  imports: [RhombusOverflowMenuComponent],
+  template: \`
+    <rhombus-overflow-menu [items]="items" ariaLabel="Row actions" />
+  \`,
+})
+export class RowActionsComponent {
+  protected readonly items: OverflowMenuItem[] = [
+    { label: 'Edit', icon: 'edit', action: () => this.edit() },
+    { label: 'Archive', icon: 'archive', action: () => this.archive() },
+    { label: 'Delete', icon: 'delete', variant: 'danger', action: () => this.delete() },
+  ];
+}`;
 
   protected readonly basicItems: OverflowMenuItem[] = [
     { label: 'Edit', icon: 'edit', action: () => this.log('Edit') },
