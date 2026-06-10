@@ -1,0 +1,59 @@
+// `<app-example>` — result-first demo card with collapsible source.
+// ViewEncapsulation.None: every rule is nested under `.example` so nothing
+// leaks. The nested `<rhombus-code-block>` (itself None-encapsulated) is
+// flattened so the preview + source read as one connected card.
+
+.example {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--surface-0);
+
+  &__preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+
+    // Block demos (e.g. a data table) span the full preview width; inline
+    // demos (buttons, checkboxes) sit in a wrapping row.
+    > rhombus-data-table {
+      flex: 1 1 100%;
+    }
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.4rem 0.75rem;
+    border: none;
+    border-top: 1px solid var(--border);
+    background-color: var(--surface-1);
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    mat-icon {
+      font-size: 1.05rem;
+      width: 1.05rem;
+      height: 1.05rem;
+    }
+  }
+
+  // Flatten the nested code block into the card (drop its own frame).
+  .rhombus-code-block {
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--border);
+  }
+}

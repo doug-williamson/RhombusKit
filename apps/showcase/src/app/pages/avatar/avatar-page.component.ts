@@ -1,22 +1,59 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusAvatarComponent } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-avatar-page',
   standalone: true,
-  imports: [RhombusAvatarComponent, ComponentPageComponent],
+  imports: [RhombusAvatarComponent, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Avatar" apiKey="RhombusAvatarComponent">
-      <div overview>
-        <p>
-          <code>&lt;rhombus-avatar&gt;</code> renders a circular avatar from an
-          image (<code>src</code>, with <code>name</code> as its
-          <code>alt</code>) or, when no image is given, initials derived from
-          <code>name</code> — exposing the name as the accessible label
-          (<code>role="img"</code>). Bespoke; no new tokens.
+      <div overview class="overview">
+        <p class="overview__lead">
+          An avatar is a compact, circular representation of a person or entity.
+          <code>&lt;rhombus-avatar&gt;</code> renders the <code>src</code> image
+          when given (with <code>name</code> as its <code>alt</code>) and
+          otherwise falls back to initials derived from <code>name</code>. It is
+          bespoke &mdash; no Material primitive &mdash; and adds no new tokens.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use an avatar to <strong>identify a user or entity</strong> beside
+              their name &mdash; in a comment, a list row, a header. It is
+              decorative shorthand, not a control.
+            </li>
+            <li>
+              Provide a <code>name</code> in every case; pass <code>src</code>
+              when you have a photo and let the initials fallback cover the rest.
+              Pick a <code>size</code> (<code>sm</code> / <code>md</code> /
+              <code>lg</code>) to match its context.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-avatar name="Ada Lovelace" />
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            With a <code>src</code>, the avatar is an <code>&lt;img&gt;</code>
+            whose <code>alt</code> is the <code>name</code>. Without one, the host
+            takes <code>role="img"</code> with the <code>name</code> as its
+            <code>aria-label</code> and the initials are hidden from assistive
+            tech &mdash; so the person is announced by name, never as stray
+            letters. Always supply a meaningful <code>name</code>.
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -61,4 +98,16 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     }
   `,
 })
-export default class AvatarPageComponent {}
+export default class AvatarPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusAvatarComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-comment-author',
+  imports: [RhombusAvatarComponent],
+  template: \`
+    <rhombus-avatar name="Ada Lovelace" />
+  \`,
+})
+export class CommentAuthorComponent {}`;
+}

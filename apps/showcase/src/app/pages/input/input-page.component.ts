@@ -4,28 +4,74 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective, ComponentPageComponent],
+  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Input" apiKey="RhombusInputComponent">
-      <div overview>
-        <p>
+      <div overview class="overview">
+        <p class="overview__lead">
+          A text input collects a single line of free-form text. RhombusKit's
           <code>&lt;rhombus-input&gt;</code> wraps Material's
-          <code>&lt;mat-form-field&gt;</code> + <code>matInput</code>.
-          Public API: <code>label</code>, <code>type</code>,
-          <code>placeholder</code>, <code>appearance</code>
-          (<code>outline</code> | <code>fill</code>), <code>size</code>
-          (<code>sm</code> | <code>md</code> | <code>lg</code>),
-          <code>hint</code>, <code>disabled</code>, <code>required</code>.
-          The component owns the native input — Material's form field can't
-          see a projected control — so reactive-forms consumers pass a
-          <code>FormControl</code> via <code>[control]</code> rather than
-          binding <code>[formControl]</code> directly.
+          <code>&lt;mat-form-field&gt;</code> + <code>matInput</code> with a
+          curated appearance / size API and routes its colour through the token
+          contract so it re-skins with the active theme.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use an input for <strong>short, single-line text</strong> (a name,
+              an email, a search term). For longer multi-line entry reach for
+              <strong>Textarea</strong>; to choose from a fixed list use
+              <strong>Select</strong>.
+            </li>
+            <li>
+              The component owns the native input, so reactive-forms consumers
+              pass a <code>FormControl</code> via <code>[control]</code> rather
+              than binding <code>[formControl]</code> directly. Omit it for a
+              plain uncontrolled field.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-input
+              label="Email"
+              type="email"
+              placeholder="you@example.com"
+              hint="We never share this."
+              [control]="email"
+            >
+              <span rhombusError>
+                @if (email.hasError('required')) {
+                  Email is required.
+                } @else if (email.hasError('email')) {
+                  That doesn't look like a valid email address.
+                }
+              </span>
+            </rhombus-input>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Renders a native <code>&lt;input&gt;</code>, so it is focusable with
+            <kbd>Tab</kbd> and the <code>label</code> floats into a
+            <code>&lt;mat-label&gt;</code> wired as its accessible name. Set
+            <code>required</code> to expose the required state, and any
+            <code>hint</code> or projected <code>rhombusError</code> text is
+            linked to the field via <code>aria-describedby</code>.
+          </p>
+        </section>
       </div>
       <div examples>
       <section class="showcase-section">
@@ -171,6 +217,37 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
   `,
 })
 export default class InputPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-sign-in',
+  imports: [RhombusInputComponent, RhombusErrorDirective],
+  template: \`
+    <rhombus-input
+      label="Email"
+      type="email"
+      placeholder="you@example.com"
+      hint="We never share this."
+      [control]="email"
+    >
+      <span rhombusError>
+        @if (email.hasError('required')) {
+          Email is required.
+        } @else if (email.hasError('email')) {
+          That doesn't look like a valid email address.
+        }
+      </span>
+    </rhombus-input>
+  \`,
+})
+export class SignInComponent {
+  readonly email = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.email],
+  });
+}`;
+
   protected readonly email = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required, Validators.email],

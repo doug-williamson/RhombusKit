@@ -1,26 +1,72 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-card-page',
   standalone: true,
-  imports: [RhombusCardComponent, RhombusButtonComponent, ComponentPageComponent],
+  imports: [
+    RhombusCardComponent,
+    RhombusButtonComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Card" apiKey="RhombusCardComponent">
-      <div overview>
-        <p>
+      <div overview class="overview">
+        <p class="overview__lead">
+          A card groups related content and actions into a single surface.
           <code>&lt;rhombus-card&gt;</code> wraps Material's
-          <code>&lt;mat-card&gt;</code>. Public API:
-          <code>variant</code>
-          (<code>elevated</code> | <code>outlined</code> | <code>filled</code>),
-          <code>padding</code> (<code>none</code> | <code>sm</code> |
-          <code>md</code> | <code>lg</code>), and <code>hasHeader</code>.
-          Content projects into named slots — <code>[slot=title]</code>,
-          <code>[slot=subtitle]</code>, and <code>[slot=actions]</code> —
-          with the default slot rendering the body.
+          <code>&lt;mat-card&gt;</code> with a curated
+          <code>variant</code> / <code>padding</code> API and routes its surface,
+          border, and shadow through the token contract &mdash; toggle the theme
+          above and the card re-skins without touching markup.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Reach for a card to present a <strong>self-contained unit</strong>
+              &mdash; a summary, a setting, a list item with its own actions.
+              Avoid nesting cards deeply; prefer a <code>filled</code> variant
+              for grouped panels.
+            </li>
+            <li>
+              Pick a <code>variant</code> by emphasis:
+              <code>elevated</code> for a raised surface, <code>outlined</code>
+              for a flat bordered one, <code>filled</code> for a tonal panel.
+              Project content into <code>[slot=title]</code>,
+              <code>[slot=subtitle]</code>, and <code>[slot=actions]</code>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <rhombus-card variant="elevated">
+              <span slot="title">Monthly report</span>
+              <span slot="subtitle">Updated 2 hours ago</span>
+              <p>Revenue is up 12% over last month across all regions.</p>
+              <rhombus-button slot="actions" appearance="text">View</rhombus-button>
+            </rhombus-card>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            A card is a styled container, not an interactive control, so it adds
+            no roles or keyboard handling of its own. Any focusable elements you
+            project &mdash; buttons in <code>[slot=actions]</code>, links in the
+            body &mdash; keep their native semantics and tab order. When the whole
+            card represents one item, give its <code>[slot=title]</code> a real
+            heading so assistive tech can navigate by structure.
+          </p>
+        </section>
       </div>
       <div examples>
       <section class="showcase-section">
@@ -120,4 +166,21 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     }
   `,
 })
-export default class CardPageComponent {}
+export default class CardPageComponent {
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-report-card',
+  imports: [RhombusCardComponent, RhombusButtonComponent],
+  template: \`
+    <rhombus-card variant="elevated">
+      <span slot="title">Monthly report</span>
+      <span slot="subtitle">Updated 2 hours ago</span>
+      <p>Revenue is up 12% over last month across all regions.</p>
+      <rhombus-button slot="actions" appearance="text">View</rhombus-button>
+    </rhombus-card>
+  \`,
+})
+export class ReportCardComponent {}`;
+}

@@ -5,6 +5,7 @@ import {
   RhombusSpinnerComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
+import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-progress-page',
@@ -14,18 +15,55 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
     RhombusProgressBarComponent,
     RhombusButtonComponent,
     ComponentPageComponent,
+    ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page title="Progress" apiKey="RhombusProgressBarComponent">
-      <div overview>
-        <p>
-          <code>&lt;rhombus-spinner&gt;</code> and
-          <code>&lt;rhombus-progress-bar&gt;</code> wrap Material's
-          <code>MatProgressSpinner</code> / <code>MatProgressBar</code>. The
-          active arc and bar are themed via <code>--text-accent</code> (toggle
-          the theme to see it). Both default to an accessible label.
+      <div overview class="overview">
+        <p class="overview__lead">
+          <code>&lt;rhombus-progress-bar&gt;</code> and
+          <code>&lt;rhombus-spinner&gt;</code> are activity indicators wrapping
+          Material's <code>&lt;mat-progress-bar&gt;</code> /
+          <code>&lt;mat-progress-spinner&gt;</code>, routing the indicator
+          through the token contract so the arc and bar re-skin with the theme.
         </p>
+
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use the <strong>bar</strong> for a long page-level or upload task,
+              and the <strong>spinner</strong> for a compact, inline wait (a
+              button or a card placeholder).
+            </li>
+            <li>
+              Pass <code>mode="determinate"</code> with a <code>[value]</code>
+              (0&ndash;100) when you know the percentage; leave the default
+              <code>indeterminate</code> mode when you don't.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Usage</h2>
+          <app-example [code]="usage">
+            <div style="width: 100%; max-width: 420px; display: grid;">
+              <rhombus-progress-bar [value]="percent()" ariaLabel="Upload progress" />
+            </div>
+          </app-example>
+        </section>
+
+        <section class="overview__a11y">
+          <h2>Accessibility</h2>
+          <p>
+            Each indicator exposes the native <code>progressbar</code> role, and
+            in determinate mode reports <code>aria-valuenow</code> from
+            <code>[value]</code> so assistive tech announces the percentage. Give
+            it a meaningful <code>ariaLabel</code> describing the task (it
+            defaults to <code>"Progress"</code> / <code>"Loading"</code>).
+          </p>
+        </section>
       </div>
 
       <div examples>
@@ -82,6 +120,23 @@ import { ComponentPageComponent } from '../../shared/component-page.component';
 })
 export default class ProgressPageComponent {
   protected readonly percent = signal(40);
+
+  /** Minimal import + usage snippet shown in the Overview tab. */
+  protected readonly usage = `import { RhombusProgressBarComponent } from '@rhombuskit/core';
+
+@Component({
+  selector: 'app-upload-status',
+  imports: [RhombusProgressBarComponent],
+  template: \`
+    <rhombus-progress-bar
+      [value]="uploadPercent()"
+      ariaLabel="Upload progress"
+    />
+  \`,
+})
+export class UploadStatusComponent {
+  readonly uploadPercent = signal(40);
+}`;
 
   protected step(delta: number): void {
     this.percent.update((v) => Math.max(0, Math.min(100, v + delta)));
