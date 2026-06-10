@@ -6,10 +6,16 @@
   cursor: pointer;
   transition: box-shadow 150ms ease, opacity 150ms ease;
 
-  // --- Size variants (padding + font scale only) ---
-  &--sm { font-size: 0.75rem;  padding: 0.25rem 0.75rem; }
-  &--md { font-size: 0.875rem; padding: 0.5rem  1rem;     }
-  &--lg { font-size: 1rem;     padding: 0.75rem 1.5rem;   }
+  // --- Size variants (height + padding + font scale) ---
+  // Material's .mdc-button pins the container to a fixed height (40px), zeroes
+  // vertical padding, and sets horizontal padding + label font-size — all at
+  // single-class specificity, so a plain .rhombus-button--<size> rule loses on
+  // source order and every size renders identically. Anchor each size on
+  // .mdc-button (specificity 0,2,0 beats Material's 0,1,0) and release the fixed
+  // height so the scale actually lands.
+  &--sm.mdc-button { height: auto; min-height: 2rem;   font-size: 0.8125rem; padding: 0.25rem  0.75rem; }
+  &--md.mdc-button { height: auto; min-height: 2.5rem; font-size: 0.875rem;  padding: 0.5rem   1rem;    }
+  &--lg.mdc-button { height: auto; min-height: 3rem;   font-size: 1rem;      padding: 0.625rem 1.5rem;  }
 
   // --- Colour variants ---
   // Each variant locally rebinds the --mat-sys-* roles that Material reads
