@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/doug-williamson/RhombusKit/compare/v1.0.0...v1.1.0) (2026-06-10)
+
+
+### Features
+
+* **showcase:** orientation Overviews, branded tab title + favicon ([2a413c2](https://github.com/doug-williamson/RhombusKit/commit/2a413c26fae4edc36b55fcfddbad99acb3c568d2))
+
+
+### Bug Fixes
+
+* **app-shell:** reset content scroll to top on route change ([5f44610](https://github.com/doug-williamson/RhombusKit/commit/5f446103258d7452f3ebdab8f9c59a01f28e4e84))
+* **button:** make sm/md/lg size variants render distinctly ([fa7e8bc](https://github.com/doug-williamson/RhombusKit/commit/fa7e8bc5430d83124c2aa07584b7bb6906ccae5f))
+
 ## [1.0.0](https://github.com/doug-williamson/RhombusKit/compare/v0.11.0...v1.0.0) (2026-06-05)
 
 
