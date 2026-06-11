@@ -1,6 +1,6 @@
 {
   "name": "@rhombuskit/theme-engine",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "description": "Angular theming runtime for RhombusKit — light/dark/system preference with localStorage persistence, a flash-free init script, and type-safe custom-theme registration.",
   "keywords": [
