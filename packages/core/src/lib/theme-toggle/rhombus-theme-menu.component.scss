@@ -15,6 +15,9 @@
 
   &__item--active {
     --mat-menu-item-label-text-color: var(--text-accent);
+    // Colour the leading icon with the label: the panel routes icon colour
+    // through this token for both the inline SVG and the mat-icon fallback.
+    --mat-menu-item-icon-color: var(--text-accent);
   }
 }
 
