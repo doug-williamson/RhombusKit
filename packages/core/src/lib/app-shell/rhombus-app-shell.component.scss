@@ -40,6 +40,17 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
   width: var(--rhombus-app-shell-sidenav-width, 220px);
   border-right: 1px solid var(--border);
 
+  // Square the drawer: Material M3 rounds the content-facing corners
+  // (border-*-right-radius: corner-large on .mat-drawer), which reads as a
+  // floating sheet rather than the shell's fixed frame. The RTL variant is
+  // needed because Material's `[dir=rtl] .mat-drawer` (0,2,0) would otherwise
+  // out-specify this host-scoped rule (0,1,1).
+  border-radius: 0;
+
+  [dir='rtl'] & {
+    border-radius: 0;
+  }
+
   // Persistent narrow icon rail (tablet band, when iconRail is enabled). The
   // shell sets the rail width only; hiding nav labels is the consumer's job.
   &--icon-rail {

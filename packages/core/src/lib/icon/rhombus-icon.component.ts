@@ -73,8 +73,10 @@ const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
     rhombus-icon {
       display: inline-flex;
       line-height: 0;
-      // Centre the icon against adjacent text when it sits inline (e.g. a
-      // menu-item label). Inert in icon-only flex contexts like matIconButton.
+      /* Centre the icon against adjacent text when it sits inline (e.g. a
+         menu-item label). Inert in icon-only flex contexts like matIconButton.
+         Must be a CSS block comment: inline styles are emitted as raw CSS, and
+         a Sass-style line comment here swallows the next declaration. */
       vertical-align: middle;
     }
     .rhombus-icon {

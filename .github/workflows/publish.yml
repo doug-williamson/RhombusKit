@@ -60,6 +60,8 @@ jobs:
         run: pnpm exec nx run-many --target=build --all --parallel=1
       - name: Verify tokens
         run: node tools/verify-tokens.mjs
+      - name: Verify emitted component styles (no Sass `//` leaks)
+        run: node tools/verify-component-styles.mjs
       - name: Smoke-test packed artifacts
         run: node tools/smoke-test-pack.mjs
       - name: Publish @rhombuskit/tokens

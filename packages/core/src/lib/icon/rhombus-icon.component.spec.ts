@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -76,5 +78,20 @@ describe('rhombus-icon', () => {
     const { fixture, el } = setup();
     fixture.detectChanges();
     expect(await axe(el)).toHaveNoViolations();
+  });
+
+  it('ships valid plain CSS in its inline styles (no Sass `//` comments)', () => {
+    // Inline `styles:` are emitted as raw CSS — never Sass-preprocessed — so a
+    // `//` comment leaks into the bundle and the browser swallows everything up
+    // to the next `}`, killing the declarations after it (vertical-align).
+    // jest-preset-angular strips styles from the compiled component def, so
+    // assert on the authored source instead.
+    const source = readFileSync(
+      join(__dirname, 'rhombus-icon.component.ts'),
+      'utf8'
+    );
+    const styles = /styles: `([^`]*)`/.exec(source)?.[1] ?? '';
+    expect(styles).toContain('vertical-align: middle');
+    expect(styles).not.toContain('//');
   });
 });
