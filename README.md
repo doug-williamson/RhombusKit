@@ -14,15 +14,17 @@ Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system a
 
 - **Component reference** — the live showcase at **[rhombuskit.online](https://rhombuskit.online)**: a page per component with variants, states, and accessibility notes.
 - **Theming guide** — [docs/theming.md](./docs/theming.md): setup, runtime switching, custom themes, and the Material bridge.
+- **Release history** — [docs/release-history.md](./docs/release-history.md): a curated, human-readable narrative of every release (the machine-generated [CHANGELOG.md](./CHANGELOG.md) is the exhaustive commit-level record).
 - **Per-package guides** — install + quick start live in each package's README (linked in the table above).
 - **Public-surface contract** — the [`etc/*.api.md`](./etc) reports are the CI-guarded snapshot of every package's public exports. They're the machine-readable *surface contract*, not a tutorial — a diff there is a deliberate API-change review signal (see [How the surface is guarded](#how-the-surface-is-guarded)).
 
 ## Versioning & stability
 
-RhombusKit is currently **pre-1.0 (`0.x`)**: until `1.0.0`, minor releases may
-include breaking changes (documented in [CHANGELOG.md](./CHANGELOG.md) and the
-GitHub release notes). Pin to an exact `0.x.y` and review the changelog before
-upgrading. From **`1.0.0`**, the policy below takes effect.
+RhombusKit is **stable (`1.x`)**. As of `1.0.0` the semver contract below is in
+force: breaking changes to the covered surface require a major bump, minor
+releases add features backward-compatibly, and patches are fixes only. Review
+[CHANGELOG.md](./CHANGELOG.md) (or the curated [release history](./docs/release-history.md))
+and the GitHub release notes before upgrading.
 
 ### Semver contract
 
