@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.1](https://github.com/doug-williamson/RhombusKit/compare/v1.1.0...v1.1.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **app-shell:** square the sidenav drawer corners ([a5d8add](https://github.com/doug-williamson/RhombusKit/commit/a5d8add274e730b93ab33d3606001f401ce9790f))
+* **icon:** use a CSS block comment so vertical-align is not swallowed ([afced35](https://github.com/doug-williamson/RhombusKit/commit/afced35c1b8b54c2d0bf8695f03ef9041821e07d))
+* **icon:** valid CSS for rhombus-icon vertical-align + CI guard for Sass comment leaks ([66cc700](https://github.com/doug-williamson/RhombusKit/commit/66cc700ba0cea5818cfb3b42d925d4cb9c265b36))
+* **theme-menu:** colorize the active item icon to match its label ([ebbaf7c](https://github.com/doug-williamson/RhombusKit/commit/ebbaf7ce62e394b44f10b62ada6219225a134aff))
+
 ## [1.1.0](https://github.com/doug-williamson/RhombusKit/compare/v1.0.0...v1.1.0) (2026-06-10)
 
 
