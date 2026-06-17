@@ -279,10 +279,7 @@
   // (no public members)
 
 ### RhombusPopoverComponent (class)
-  attachTrigger: (trigger: RhombusPopoverTriggerHandle) => void
   close: () => void
-  connectedPositions: () => ConnectedPosition[]
-  createPortal: () => TemplatePortal
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly closed: _angular_core.OutputEmitterRef<void>
   readonly offset: _angular_core.InputSignal<number>

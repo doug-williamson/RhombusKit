@@ -22,7 +22,15 @@ export type RhombusPopoverPosition =
   | 'above-end'
   | 'auto';
 
-/** @internal Handle a trigger registers so projected content can close the panel. */
+/**
+ * Handle a trigger registers so projected content can close the panel.
+ *
+ * Not re-exported from the package barrel — an internal cross-file contract
+ * between the popover panel and its trigger directive. Deliberately left
+ * un-tagged so `stripInternal` keeps its declaration in the emitted `.d.ts`
+ * (the trigger directive's declaration imports it); it never reaches the
+ * public surface, since the barrel does not export it.
+ */
 export interface RhombusPopoverTriggerHandle {
   close(): void;
 }

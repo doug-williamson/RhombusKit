@@ -829,21 +829,6 @@ export const API_METADATA: Record<string, ApiEntry> = {
     ],
     "methods": [
       {
-        "name": "attachTrigger",
-        "type": "(trigger: RhombusPopoverTriggerHandle) => void",
-        "description": ""
-      },
-      {
-        "name": "createPortal",
-        "type": "() => TemplatePortal",
-        "description": ""
-      },
-      {
-        "name": "connectedPositions",
-        "type": "() => ConnectedPosition[]",
-        "description": ""
-      },
-      {
         "name": "close",
         "type": "() => void",
         "description": "Close the popover from projected content (e.g. after a selection)."
