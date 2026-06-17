@@ -54,7 +54,8 @@ export type BottomNavIndicator = 'color' | 'pill';
               <a
                 class="rhombus-bottom-nav__item"
                 [class.rhombus-bottom-nav__item--disabled]="item.disabled"
-                [routerLink]="item.routerLink"
+                [routerLink]="item.disabled ? null : item.routerLink"
+                [attr.tabindex]="item.disabled ? -1 : null"
                 routerLinkActive="rhombus-bottom-nav__item--active"
                 #rla="routerLinkActive"
                 [attr.aria-current]="rla.isActive ? 'page' : null"
