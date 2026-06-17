@@ -1,0 +1,8 @@
+// packages/core/src/lib/popover/rhombus-popover.component.scss
+// Panel renders in the CDK overlay container (outside this component's DOM),
+// so it is styled globally — scoped under .cdk-overlay-container. Full theming
+// lands in Task A4.
+.cdk-overlay-container .rhombus-popover__panel {
+  background: var(--surface-0);
+  color: var(--text-primary);
+}
