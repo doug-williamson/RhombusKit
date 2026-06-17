@@ -113,7 +113,7 @@
   readonly hasNav: _angular_core.InputSignal<boolean>
   readonly iconRail: _angular_core.InputSignal<boolean>
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
-  readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
+  readonly navMode: _angular_core.InputSignal<"bottom" | "sidenav">
   readonly phoneMaxWidth: _angular_core.InputSignal<number>
 
 ### RhombusAvatarComponent (class)

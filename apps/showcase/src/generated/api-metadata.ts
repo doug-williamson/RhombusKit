@@ -78,7 +78,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       },
       {
         "name": "navMode",
-        "type": "\"sidenav\" | \"bottom\"",
+        "type": "\"bottom\" | \"sidenav\"",
         "description": "`'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar.\nThe drawer-scoped inputs (mobileBreakpoint, iconRail, closeOnNavigate) apply only to 'sidenav' mode."
       },
       {
