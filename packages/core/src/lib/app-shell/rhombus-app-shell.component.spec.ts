@@ -34,9 +34,7 @@ describe('rhombus-app-shell bottom-nav mode', () => {
     const { fixture, host } = setupAppShell();
     host.frame.set('phone');
     fixture.detectChanges();
-    expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.rhombus-app-shell--phone') ??
-        fixture.nativeElement.classList.contains('rhombus-app-shell--phone'),
-    ).toBeTruthy();
+    const shellEl = (fixture.nativeElement as HTMLElement).querySelector('rhombus-app-shell')!;
+    expect(shellEl.classList.contains('rhombus-app-shell--phone')).toBe(true);
   });
 });

@@ -68,6 +68,7 @@ const DESKTOP_MIN_PX = 1024;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-app-shell.component.scss',
+  // `rhombus-app-shell--bottom` is an intentional styling hook exposed for consumers; no internal SCSS rule targets it.
   host: {
     '[class.rhombus-app-shell--phone]': "frame() === 'phone'",
     '[class.rhombus-app-shell--bottom]': 'isBottomMode()',
@@ -170,7 +171,10 @@ export class RhombusAppShellComponent {
    * still renders. Bind from route data in the consumer.
    */
   readonly hasNav = input<boolean>(true);
-  /** `'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar. */
+  /**
+   * `'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar.
+   * The drawer-scoped inputs (mobileBreakpoint, iconRail, closeOnNavigate) apply only to 'sidenav' mode.
+   */
   readonly navMode = input<'sidenav' | 'bottom'>('sidenav');
   /** `'fill'` (default) spans the viewport; `'phone'` centers content at a phone width. */
   readonly frame = input<'fill' | 'phone'>('fill');
@@ -212,6 +216,7 @@ export class RhombusAppShellComponent {
   );
 
   constructor() {
+    // Note: the drawer/breakpoint state maintained here is unused when navMode='bottom' (sidenav + hamburger are gated off).
     effect((onCleanup) => {
       const maxPx = this.mobileBreakpoint();
       const overlayBp = `(max-width: ${maxPx}.98px)`;
