@@ -6,18 +6,32 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { axe } from '../../testing/axe';
 import { RhombusPopoverComponent } from './rhombus-popover.component';
 import { RhombusPopoverTriggerDirective } from './rhombus-popover-trigger.directive';
+import { RhombusPopoverCloseDirective } from './rhombus-popover-close.directive';
 
 @Component({
   standalone: true,
-  imports: [RhombusPopoverComponent, RhombusPopoverTriggerDirective],
+  imports: [
+    RhombusPopoverComponent,
+    RhombusPopoverTriggerDirective,
+    RhombusPopoverCloseDirective,
+  ],
   template: `
     <button [rhombusPopoverTriggerFor]="pop" aria-label="Open">Open</button>
-    <rhombus-popover #pop ariaLabel="Calendar">
+    <rhombus-popover
+      #pop
+      ariaLabel="Calendar"
+      (opened)="openedCount = openedCount + 1"
+      (closed)="closedCount = closedCount + 1"
+    >
       <p>Panel body</p>
+      <button rhombusPopoverClose>Done</button>
     </rhombus-popover>
   `,
 })
-class HostComponent {}
+class HostComponent {
+  openedCount = 0;
+  closedCount = 0;
+}
 
 function setup() {
   TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
@@ -105,5 +119,48 @@ describe('rhombus-popover', () => {
     fixture.detectChanges();
     const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
     expect(pane).not.toBeNull();
+  });
+
+  it('emits (opened) and (closed) and restores focus to the trigger on close', () => {
+    const { fixture, trigger, overlay } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    trigger.focus();
+    trigger.click();
+    fixture.detectChanges();
+    expect(host.openedCount).toBe(1);
+    trigger.click(); // close
+    fixture.detectChanges();
+    expect(host.closedCount).toBe(1);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('closes on Escape', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const panel = overlay().querySelector('.rhombus-popover__panel')!;
+    panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('closes on transparent backdrop click', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const backdrop = overlay().querySelector('.cdk-overlay-backdrop') as HTMLElement;
+    backdrop.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('closes when projected content uses [rhombusPopoverClose]', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const done = overlay().querySelector('button') as HTMLButtonElement; // the "Done" button
+    done.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
   });
 });
