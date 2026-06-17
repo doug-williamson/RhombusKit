@@ -13,6 +13,9 @@
 ### BadgeVariant (type)
   type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger'
 
+### BottomNavIndicator (type)
+  type BottomNavIndicator = 'color' | 'pill'
+
 ### BreadcrumbItem (interface)
   label: string
   link?: string | unknown[]
@@ -106,9 +109,12 @@
 
 ### RhombusAppShellComponent (class)
   readonly closeOnNavigate: _angular_core.InputSignal<boolean>
+  readonly frame: _angular_core.InputSignal<"fill" | "phone">
   readonly hasNav: _angular_core.InputSignal<boolean>
   readonly iconRail: _angular_core.InputSignal<boolean>
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
+  readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
+  readonly phoneMaxWidth: _angular_core.InputSignal<number>
 
 ### RhombusAvatarComponent (class)
   readonly name: _angular_core.InputSignal<string>
@@ -122,6 +128,21 @@
   readonly position: _angular_core.InputSignal<i1.MatBadgePosition>
   readonly size: _angular_core.InputSignal<i1.MatBadgeSize>
   readonly variant: _angular_core.InputSignal<BadgeVariant>
+
+### RhombusBottomNavComponent (class)
+  readonly activeChange: _angular_core.OutputEmitterRef<string>
+  readonly activeId: _angular_core.InputSignal<string>
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly indicator: _angular_core.InputSignal<BottomNavIndicator>
+  readonly items: _angular_core.InputSignal<RhombusBottomNavItem[]>
+
+### RhombusBottomNavItem (interface)
+  badge?: number | "dot"
+  disabled?: boolean
+  icon: string
+  id: string
+  label: string
+  routerLink?: string | unknown[]
 
 ### RhombusBreadcrumbsComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
@@ -254,6 +275,31 @@
   readonly pageSizeOptions: _angular_core.InputSignal<number[]>
   readonly showFirstLastButtons: _angular_core.InputSignal<boolean>
 
+### RhombusPopoverCloseDirective (class)
+  // (no public members)
+
+### RhombusPopoverComponent (class)
+  attachTrigger: (trigger: RhombusPopoverTriggerHandle) => void
+  close: () => void
+  connectedPositions: () => ConnectedPosition[]
+  createPortal: () => TemplatePortal
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly closed: _angular_core.OutputEmitterRef<void>
+  readonly offset: _angular_core.InputSignal<number>
+  readonly opened: _angular_core.OutputEmitterRef<void>
+  readonly panelWidth: _angular_core.InputSignal<number | "auto" | "trigger">
+  readonly position: _angular_core.InputSignal<RhombusPopoverPosition>
+
+### RhombusPopoverPosition (type)
+  type RhombusPopoverPosition = 'below-start' | 'below-end' | 'above-start' | 'above-end' | 'auto'
+
+### RhombusPopoverTriggerDirective (class)
+  close: () => void
+  open: () => void
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly panel: _angular_core.InputSignal<RhombusPopoverComponent>
+  toggle: () => void
+
 ### RhombusProgressBarComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly bufferValue: _angular_core.InputSignal<number>
@@ -289,6 +335,9 @@
   // (no public members)
 
 ### RhombusShellAuthDirective (class)
+  // (no public members)
+
+### RhombusShellBottomNavDirective (class)
   // (no public members)
 
 ### RhombusShellNavFooterDirective (class)
