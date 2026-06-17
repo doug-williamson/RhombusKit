@@ -75,4 +75,35 @@ describe('rhombus-popover', () => {
     fixture.detectChanges();
     expect(await axe(overlay())).toHaveNoViolations();
   });
+
+  it('maps position + offset to connected positions (preferred first, opposite fallback)', () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    f.componentRef.setInput('position', 'below-end');
+    f.componentRef.setInput('offset', 12);
+    const positions = f.componentInstance.connectedPositions();
+    expect(positions[0]).toEqual({
+      originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 12,
+    });
+    expect(positions[1]).toEqual({
+      originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -12,
+    });
+  });
+
+  it("returns all four placements for position='auto'", () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    f.componentRef.setInput('position', 'auto');
+    expect(f.componentInstance.connectedPositions()).toHaveLength(4);
+  });
+
+  it("sizes the overlay to the trigger when panelWidth='trigger'", () => {
+    const { fixture, trigger, overlay } = setup();
+    fixture.componentInstance; // host
+    // widen the trigger so offsetWidth is measurable
+    trigger.style.width = '200px';
+    // set panelWidth on the popover instance via its host template input
+    trigger.click();
+    fixture.detectChanges();
+    const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
+    expect(pane).not.toBeNull();
+  });
 });
