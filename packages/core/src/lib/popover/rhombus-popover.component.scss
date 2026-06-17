@@ -1,8 +1,18 @@
 // packages/core/src/lib/popover/rhombus-popover.component.scss
-// Panel renders in the CDK overlay container (outside this component's DOM),
-// so it is styled globally — scoped under .cdk-overlay-container. Full theming
-// lands in Task A4.
+// The panel renders in the CDK overlay container, so its styles are global and
+// scoped under .cdk-overlay-container (mirrors how RhombusMenu styles its panel).
+// Colours/shadows/radii come only from @rhombuskit/tokens contract vars.
 .cdk-overlay-container .rhombus-popover__panel {
   background: var(--surface-0);
   color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  min-width: 180px;
+  font-family: var(--font-sans);
+
+  &:focus {
+    outline: none; // focus is trapped to the first focusable child via cdkTrapFocus
+  }
 }
