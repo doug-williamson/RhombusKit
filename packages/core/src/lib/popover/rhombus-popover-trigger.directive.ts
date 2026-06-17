@@ -42,7 +42,11 @@ export class RhombusPopoverTriggerDirective implements RhombusPopoverTriggerHand
 
   toggle(): void {
     if (this.disabled()) return;
-    this.isOpen() ? this.close() : this.open();
+    if (this.isOpen()) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   open(): void {
