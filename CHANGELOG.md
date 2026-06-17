@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.2.0](https://github.com/doug-williamson/RhombusKit/compare/v1.1.1...v1.2.0) (2026-06-17)
+
+
+### Features
+
+* **core:** add additive navMode/frame/phoneMaxWidth inputs to app-shell ([2ce68e4](https://github.com/doug-williamson/RhombusKit/commit/2ce68e458a9c1c6ef6cc25a7aff2f013377d44b9))
+* **core:** add RhombusBottomNav (router + controlled items, selection) ([44cd203](https://github.com/doug-williamson/RhombusKit/commit/44cd203bb4fb91864165b3365d84b398ac0eb554))
+* **core:** add RhombusPopover panel + trigger directive (open/close, aria) ([5618ef0](https://github.com/doug-williamson/RhombusKit/commit/5618ef021faa75195614a27a14a8d738cb45d37b))
+* **core:** app-shell bottom + phone frame styles ([9eb51ad](https://github.com/doug-williamson/RhombusKit/commit/9eb51adb87ca9a4d4591747fc948231c8f946105))
+* **core:** app-shell bottom-nav slot + navMode=bottom template wiring ([b473358](https://github.com/doug-williamson/RhombusKit/commit/b47335859cc96b6a555233e9f7138f841d057318))
+* **core:** export RhombusBottomNav public surface + type-fixture ([0b2e060](https://github.com/doug-williamson/RhombusKit/commit/0b2e06011cffc89f6ff60366224bad6c1f682318))
+* **core:** export RhombusPopover public surface + type-fixture ([1d887f8](https://github.com/doug-williamson/RhombusKit/commit/1d887f869bd91e4cfdda6336f89c16fae3aba759))
+* **core:** export RhombusShellBottomNavDirective ([1629cee](https://github.com/doug-williamson/RhombusKit/commit/1629cee29947280e2f3e892f59dd77849792b267))
+* **core:** mobile-first navigation (bottom nav, popover, app-shell bottom mode) ([169bad3](https://github.com/doug-williamson/RhombusKit/commit/169bad3350aad9a31eb7b4551cd42c7454c2ccab))
+* **core:** rhombusPopover dismissal, focus restore, outputs, close directive ([4865511](https://github.com/doug-williamson/RhombusKit/commit/4865511f686b957fc5ec35d11c894255506d2254))
+* **core:** style RhombusBottomNav (active, pill, safe-area, focus) ([b6cf392](https://github.com/doug-williamson/RhombusKit/commit/b6cf39247a2864ddc678f779febd76eebb21aa75))
+* **core:** theme rhombusPopover panel via contract tokens ([7b490d6](https://github.com/doug-williamson/RhombusKit/commit/7b490d679b97ae49e26fc1c3542b67ef00d5c91d))
+
+
+### Bug Fixes
+
+* **core:** dispose popover overlay when trigger is destroyed ([7f65329](https://github.com/doug-williamson/RhombusKit/commit/7f6532996b54641aee5961d8535de67a0c81f425))
+* **core:** use if/else in popover toggle (lint) and resync api snapshot from clean build ([d1fb5a3](https://github.com/doug-williamson/RhombusKit/commit/d1fb5a331bab255c4e91ffbb11d9a5d0a605d8d9))
+
 ## [1.1.1](https://github.com/doug-williamson/RhombusKit/compare/v1.1.0...v1.1.1) (2026-06-11)
 
 
