@@ -157,6 +157,7 @@ export { RhombusAppShellComponent } from './lib/app-shell/rhombus-app-shell.comp
 export { RhombusShellNavFooterDirective } from './lib/app-shell/rhombus-shell-nav-footer.directive';
 export { RhombusShellAuthDirective } from './lib/app-shell/rhombus-shell-auth.directive';
 export { RhombusShellAsideDirective } from './lib/app-shell/rhombus-shell-aside.directive';
+export { RhombusShellBottomNavDirective } from './lib/app-shell/rhombus-shell-bottom-nav.directive';
 
 // Popover — a CDK-Overlay panel hosting arbitrary projected content, attached to
 // any element via [rhombusPopoverTriggerFor]. Use [rhombusPopoverClose] on inner
