@@ -173,11 +173,29 @@ Additive and non-breaking. New, all-optional surface:
 - `navMode = input<'sidenav' | 'bottom'>('sidenav')` — `'sidenav'` preserves today's
   behaviour exactly.
 - `frame = input<'fill' | 'phone'>('fill')` — `'phone'` centers content at a phone-width
-  column on wide screens.
+  column on wide screens, capped at `phoneMaxWidth`.
+- `phoneMaxWidth = input<number>(430)` — the phone-frame column width (px) when `frame='phone'`.
 - A presence-gated `[shellBottomNav]` projection slot (marker directive, matching the
   existing `[shellNavFooter]` / `[shellAuthSlot]` / `[shellAside]` pattern).
 - In `navMode='bottom'`: suppress the hamburger and sidenav, render the projected bottom nav
   fixed to the bottom of the content column, and reserve `env(safe-area-inset-bottom)`.
+
+### Toolbar / header (already supported + one additive tweak)
+
+The existing toolbar already covers the RP header in the screenshots with no API change:
+
+- **Multiple header actions:** `[shellHeaderActions]` is `<ng-content select="[shellHeaderActions]">`,
+  which projects any number of elements — e.g. a `RhombusPopover` calendar trigger *and* a
+  `RhombusOverflowMenu` kebab side by side.
+- **Multi-line brand:** `[shellBrand]` projects arbitrary content, so a two-line title
+  (e.g. "Week 4 · Day 2" over "Tuesday · Mass Builder") works within the 56px bar.
+- **Additive tweak (Track C):** replace the toolbar's fixed `height: 56px` with `min-height`
+  driven by a consumer-overridable `--rhombus-app-shell-toolbar-height` (default 56px), so a
+  taller brand grows instead of clipping. Non-breaking; default visuals unchanged.
+
+Out of scope (noted for later): grey *section headings* inside the kebab menu
+("Mesocycle" / "Workout") would be a small `MenuItem` `heading` enhancement to `RhombusMenu`,
+not part of this work.
 
 Existing consumers that set none of these see no change.
 
