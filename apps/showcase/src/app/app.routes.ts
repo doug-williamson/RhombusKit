@@ -98,6 +98,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/menu/menu-page.component'),
       },
       {
+        path: 'popover',
+        title: 'Popover',
+        loadComponent: () => import('./pages/popover/popover-page.component'),
+      },
+      {
         path: 'breadcrumbs',
         title: 'Breadcrumbs',
         loadComponent: () =>

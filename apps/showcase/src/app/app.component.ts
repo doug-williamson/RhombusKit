@@ -106,6 +106,7 @@ export class AppComponent {
       items: [
         { path: '/components/tabs', label: 'Tabs' },
         { path: '/components/menu', label: 'Menu' },
+        { path: '/components/popover', label: 'Popover' },
         { path: '/components/breadcrumbs', label: 'Breadcrumbs' },
         { path: '/components/pagination', label: 'Pagination' },
       ],
