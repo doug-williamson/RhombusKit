@@ -33,8 +33,14 @@ import { ExampleComponent } from '../../shared/example.component';
 
         <section class="showcase-section">
           <h2>Usage</h2>
+          <p class="showcase-section__lead">
+            The bar spans the full width of its container; here it's framed at a phone
+            width since it's a mobile-first component.
+          </p>
           <app-example [code]="usage">
-            <rhombus-bottom-nav [items]="items" [activeId]="active()" (activeChange)="active.set($event)" />
+            <div class="bottom-nav-frame">
+              <rhombus-bottom-nav [items]="items" [activeId]="active()" (activeChange)="active.set($event)" />
+            </div>
           </app-example>
         </section>
 
@@ -52,11 +58,27 @@ import { ExampleComponent } from '../../shared/example.component';
         <section class="showcase-section">
           <h2>Pill indicator</h2>
           <div class="showcase-row">
-            <rhombus-bottom-nav [items]="items" [activeId]="active()" indicator="pill" (activeChange)="active.set($event)" />
+            <div class="bottom-nav-frame">
+              <rhombus-bottom-nav [items]="items" [activeId]="active()" indicator="pill" (activeChange)="active.set($event)" />
+            </div>
           </div>
         </section>
       </div>
     </app-component-page>
+  `,
+  styles: `
+    .showcase-section__lead {
+      color: var(--text-secondary);
+      margin: 0 0 1rem 0;
+      max-width: 70ch;
+    }
+    .bottom-nav-frame {
+      width: 100%;
+      max-width: 390px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
   `,
 })
 export default class BottomNavPageComponent {
