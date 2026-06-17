@@ -20,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RhombusShellNavFooterDirective } from './rhombus-shell-nav-footer.directive';
 import { RhombusShellAuthDirective } from './rhombus-shell-auth.directive';
 import { RhombusShellAsideDirective } from './rhombus-shell-aside.directive';
+import { RhombusShellBottomNavDirective } from './rhombus-shell-bottom-nav.directive';
 
 /** Viewport width (px) at/below which the nav drawer becomes an overlay. */
 const DEFAULT_MOBILE_BREAKPOINT = 767;
@@ -74,7 +75,7 @@ const DESKTOP_MIN_PX = 1024;
   },
   template: `
     <mat-toolbar class="rhombus-app-shell__toolbar">
-      @if (hasNav() && isMobile()) {
+      @if (hasNav() && isMobile() && !isBottomMode()) {
         <button
           type="button"
           class="rhombus-app-shell__nav-toggle"
@@ -109,7 +110,7 @@ const DESKTOP_MIN_PX = 1024;
     </mat-toolbar>
 
     <mat-sidenav-container class="rhombus-app-shell__container">
-      @if (hasNav()) {
+      @if (hasNav() && !isBottomMode()) {
         <mat-sidenav
           class="rhombus-app-shell__sidenav"
           [class.rhombus-app-shell__sidenav--icon-rail]="isIconRailActive()"
@@ -148,6 +149,12 @@ const DESKTOP_MIN_PX = 1024;
         </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
+
+    @if (isBottomMode() && hasBottomNav()) {
+      <div class="rhombus-app-shell__bottom-nav">
+        <ng-content select="[shellBottomNav]" />
+      </div>
+    }
   `,
 })
 export class RhombusAppShellComponent {
@@ -189,6 +196,7 @@ export class RhombusAppShellComponent {
   private readonly navFooterRef = contentChild(RhombusShellNavFooterDirective);
   private readonly authRef = contentChild(RhombusShellAuthDirective);
   private readonly asideRef = contentChild(RhombusShellAsideDirective);
+  private readonly bottomNavRef = contentChild(RhombusShellBottomNavDirective);
 
   /** The internal scroll container (`mat-sidenav-content`); reset to top on nav. */
   private readonly scrollRegion = viewChild('scrollRegion', { read: ElementRef });
@@ -196,6 +204,7 @@ export class RhombusAppShellComponent {
   protected readonly hasNavFooter = computed(() => !!this.navFooterRef());
   protected readonly hasAuth = computed(() => !!this.authRef());
   protected readonly hasAside = computed(() => !!this.asideRef());
+  protected readonly hasBottomNav = computed(() => !!this.bottomNavRef());
 
   /** The rail is a persistent side drawer; only the overlay (mobile) uses 'over'. */
   protected readonly sidenavMode = computed<'over' | 'side'>(() =>
