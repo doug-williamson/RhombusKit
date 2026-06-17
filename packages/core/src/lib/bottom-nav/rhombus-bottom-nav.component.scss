@@ -1,0 +1,72 @@
+// packages/core/src/lib/bottom-nav/rhombus-bottom-nav.component.scss
+// Bottom navigation bar. Colours via @rhombuskit/tokens contract vars only.
+// Safe-area inset keeps the bar clear of the iOS home indicator.
+.rhombus-bottom-nav {
+  display: block;
+  background: var(--surface-1);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  font-family: var(--font-sans);
+}
+
+.rhombus-bottom-nav__list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rhombus-bottom-nav__cell {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.rhombus-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+
+  &:focus-visible {
+    outline: var(--focus-border);
+    box-shadow: var(--focus-ring);
+  }
+
+  &--active {
+    color: var(--nav-active-text);
+  }
+
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.rhombus-bottom-nav__icon {
+  display: inline-flex;
+}
+
+.rhombus-bottom-nav__label {
+  font-size: 0.6875rem; // 11px
+  line-height: 1;
+}
+
+// Material-3 pill: wrap the active icon in a filled pill.
+.rhombus-bottom-nav[data-indicator='pill'] {
+  .rhombus-bottom-nav__item--active .rhombus-bottom-nav__icon {
+    background: var(--nav-active-bg);
+    border-radius: 999px;
+    padding: 2px 14px;
+  }
+}

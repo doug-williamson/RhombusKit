@@ -9,6 +9,7 @@ import { RhombusAppShellComponent } from './rhombus-app-shell.component';
 import { RhombusShellNavFooterDirective } from './rhombus-shell-nav-footer.directive';
 import { RhombusShellAuthDirective } from './rhombus-shell-auth.directive';
 import { RhombusShellAsideDirective } from './rhombus-shell-aside.directive';
+import { RhombusShellBottomNavDirective } from './rhombus-shell-bottom-nav.directive';
 
 /**
  * Shared fixtures for the `<rhombus-app-shell>` contract specs.
@@ -96,6 +97,7 @@ export class FakeRouter {
     RhombusShellNavFooterDirective,
     RhombusShellAuthDirective,
     RhombusShellAsideDirective,
+    RhombusShellBottomNavDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -104,6 +106,8 @@ export class FakeRouter {
       [iconRail]="iconRail()"
       [closeOnNavigate]="closeOnNavigate()"
       [hasNav]="hasNav()"
+      [navMode]="navMode()"
+      [frame]="frame()"
     >
       <div shellBrand class="host-brand">Acme</div>
       <nav shellNav class="host-nav">Nav items</nav>
@@ -117,6 +121,9 @@ export class FakeRouter {
       @if (showAside()) {
         <aside shellAside class="host-aside">On this page</aside>
       }
+      @if (showBottomNav()) {
+        <div shellBottomNav class="host-bottom-nav">Bottom nav</div>
+      }
       <p class="host-main">Main content</p>
     </rhombus-app-shell>
   `,
@@ -129,6 +136,9 @@ export class AppShellHostComponent {
   readonly showNavFooter = signal(true);
   readonly showAuth = signal(false);
   readonly showAside = signal(false);
+  readonly navMode = signal<'sidenav' | 'bottom'>('sidenav');
+  readonly frame = signal<'fill' | 'phone'>('fill');
+  readonly showBottomNav = signal(false);
 }
 
 export interface AppShellSetup {

@@ -1,0 +1,238 @@
+// packages/core/src/lib/popover/rhombus-popover.component.spec.ts
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { axe } from '../../testing/axe';
+import { RhombusPopoverComponent } from './rhombus-popover.component';
+import { RhombusPopoverTriggerDirective } from './rhombus-popover-trigger.directive';
+import { RhombusPopoverCloseDirective } from './rhombus-popover-close.directive';
+
+@Component({
+  standalone: true,
+  imports: [
+    RhombusPopoverComponent,
+    RhombusPopoverTriggerDirective,
+    RhombusPopoverCloseDirective,
+  ],
+  template: `
+    <button [rhombusPopoverTriggerFor]="pop" aria-label="Open">Open</button>
+    <rhombus-popover
+      #pop
+      ariaLabel="Calendar"
+      [panelWidth]="panelWidth"
+      (opened)="openedCount = openedCount + 1"
+      (closed)="closedCount = closedCount + 1"
+    >
+      <p>Panel body</p>
+      <button rhombusPopoverClose>Done</button>
+    </rhombus-popover>
+  `,
+})
+class HostComponent {
+  openedCount = 0;
+  closedCount = 0;
+  panelWidth: number | 'trigger' | 'auto' = 'auto';
+}
+
+// A NON-button trigger so the click still fires while the directive is
+// `[disabled]` (a native disabled <button> never emits click). This exercises
+// the `if (this.disabled()) return;` guard in toggle().
+@Component({
+  standalone: true,
+  imports: [RhombusPopoverComponent, RhombusPopoverTriggerDirective],
+  template: `
+    <span [rhombusPopoverTriggerFor]="pop" [disabled]="true" aria-label="DisabledTrigger" tabindex="0">Open</span>
+    <rhombus-popover #pop ariaLabel="X"><p>Body</p></rhombus-popover>
+  `,
+})
+class DisabledTriggerHostComponent {}
+
+function setup() {
+  TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+  const fixture = TestBed.createComponent(HostComponent);
+  fixture.detectChanges();
+  const el = fixture.nativeElement as HTMLElement;
+  const trigger = el.querySelector('button[aria-label="Open"]') as HTMLButtonElement;
+  const overlay = () => TestBed.inject(OverlayContainer).getContainerElement();
+  return { fixture, el, trigger, overlay };
+}
+
+describe('rhombus-popover', () => {
+  it('advertises a dialog popup and starts collapsed', () => {
+    const { trigger } = setup();
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('opens on click, renders projected content in the overlay as a labelled dialog', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const panel = overlay().querySelector('.rhombus-popover__panel');
+    expect(panel).not.toBeNull();
+    expect(panel?.getAttribute('role')).toBe('dialog');
+    expect(panel?.getAttribute('aria-label')).toBe('Calendar');
+    expect(panel?.textContent).toContain('Panel body');
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('toggles closed on a second click', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    trigger.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('disposes the overlay when the trigger is destroyed while open', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).not.toBeNull();
+    fixture.destroy();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+    expect(overlay().querySelector('.cdk-overlay-backdrop')).toBeNull();
+  });
+
+  it('has no accessibility violations on the trigger or the open panel', async () => {
+    const { fixture, el, trigger, overlay } = setup();
+    expect(await axe(el)).toHaveNoViolations();
+    trigger.click();
+    fixture.detectChanges();
+    expect(await axe(overlay())).toHaveNoViolations();
+  });
+
+  it('maps position + offset to connected positions (preferred first, opposite fallback)', () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    f.componentRef.setInput('position', 'below-end');
+    f.componentRef.setInput('offset', 12);
+    const positions = f.componentInstance.connectedPositions();
+    expect(positions[0]).toEqual({
+      originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 12,
+    });
+    expect(positions[1]).toEqual({
+      originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -12,
+    });
+  });
+
+  it("returns all four placements for position='auto'", () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    f.componentRef.setInput('position', 'auto');
+    expect(f.componentInstance.connectedPositions()).toHaveLength(4);
+  });
+
+  it('applies a numeric panelWidth to the overlay pane', () => {
+    const { fixture, overlay } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    host.panelWidth = 320;
+    fixture.detectChanges();
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector('button[aria-label="Open"]') as HTMLButtonElement;
+    trigger.click();
+    fixture.detectChanges();
+    const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
+    expect(pane.style.width).toBe('320px');
+  });
+
+  it('emits (opened) and (closed) and restores focus to the trigger on close', () => {
+    const { fixture, trigger } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    trigger.focus();
+    trigger.click();
+    fixture.detectChanges();
+    expect(host.openedCount).toBe(1);
+    trigger.click(); // close
+    fixture.detectChanges();
+    expect(host.closedCount).toBe(1);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('closes on Escape', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const panel = overlay().querySelector('.rhombus-popover__panel')!;
+    panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('closes on transparent backdrop click', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const backdrop = overlay().querySelector('.cdk-overlay-backdrop') as HTMLElement;
+    backdrop.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('closes when projected content uses [rhombusPopoverClose]', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const done = overlay().querySelector('button') as HTMLButtonElement; // the "Done" button
+    done.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('does not open when the trigger is disabled', () => {
+    TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+    const fixture = TestBed.createComponent(DisabledTriggerHostComponent);
+    fixture.detectChanges();
+    const span = (fixture.nativeElement as HTMLElement).querySelector(
+      'span[aria-label="DisabledTrigger"]',
+    ) as HTMLElement;
+    span.click();
+    fixture.detectChanges();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    expect(overlay.querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it("applies panelWidth='trigger' to the overlay pane", () => {
+    const { fixture, overlay } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    host.panelWidth = 'trigger';
+    fixture.detectChanges();
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector(
+      'button[aria-label="Open"]',
+    ) as HTMLButtonElement;
+    trigger.click();
+    fixture.detectChanges();
+    const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
+    // In jsdom offsetWidth is 0; this still exercises the 'trigger' branch.
+    // The real trigger-matching width is covered by the Playwright showcase pass.
+    expect(pane.style.width).toBe('0px');
+  });
+
+  it('does not close on a non-Escape keydown', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const panel = overlay().querySelector('.rhombus-popover__panel')!;
+    panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).not.toBeNull();
+  });
+
+  it('open() is idempotent while already open', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const directive = fixture.debugElement
+      .query(By.directive(RhombusPopoverTriggerDirective))
+      .injector.get(RhombusPopoverTriggerDirective);
+    directive.open();
+    fixture.detectChanges();
+    expect(overlay().querySelectorAll('.rhombus-popover__panel')).toHaveLength(1);
+  });
+
+  it('close() does not throw when no trigger is attached', () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    expect(() => f.componentInstance.close()).not.toThrow();
+  });
+});

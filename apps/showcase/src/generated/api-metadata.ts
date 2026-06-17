@@ -75,6 +75,21 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "hasNav",
         "type": "boolean",
         "description": "When false, the nav drawer is omitted entirely (bare-route layout) and the\ncontent spans full width; the toolbar chrome (brand, header actions, auth)\nstill renders. Bind from route data in the consumer."
+      },
+      {
+        "name": "navMode",
+        "type": "\"sidenav\" | \"bottom\"",
+        "description": "`'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar.\nThe drawer-scoped inputs (mobileBreakpoint, iconRail, closeOnNavigate) apply only to 'sidenav' mode."
+      },
+      {
+        "name": "frame",
+        "type": "\"fill\" | \"phone\"",
+        "description": "`'fill'` (default) spans the viewport; `'phone'` centers content at a phone width."
+      },
+      {
+        "name": "phoneMaxWidth",
+        "type": "number",
+        "description": "Phone-frame column width (px) when `frame='phone'`."
       }
     ],
     "outputs": [],
@@ -143,6 +158,42 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
+    "methods": []
+  },
+  "RhombusBottomNavComponent": {
+    "name": "RhombusBottomNavComponent",
+    "kind": "class",
+    "selector": "rhombus-bottom-nav",
+    "description": "`<rhombus-bottom-nav>` — a Material-style bottom navigation bar. Router items\n(with `routerLink`) self-highlight via `routerLinkActive`; controlled items\nhighlight when `activeId` matches. Bespoke markup; colours via contract tokens.",
+    "inputs": [
+      {
+        "name": "items",
+        "type": "RhombusBottomNavItem[]",
+        "description": "Destinations, left to right."
+      },
+      {
+        "name": "activeId",
+        "type": "string",
+        "description": "Controlled active id (used when items have no `routerLink`)."
+      },
+      {
+        "name": "indicator",
+        "type": "BottomNavIndicator",
+        "description": "Active-indicator treatment. Defaults to `'color'`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible label for the nav landmark. Defaults to `'Primary'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "activeChange",
+        "type": "string",
+        "description": "Emits the selected item id."
+      }
+    ],
     "methods": []
   },
   "RhombusBreadcrumbsComponent": {
@@ -728,6 +779,98 @@ export const API_METADATA: Record<string, ApiEntry> = {
     ],
     "methods": []
   },
+  "RhombusPopoverCloseDirective": {
+    "name": "RhombusPopoverCloseDirective",
+    "kind": "class",
+    "selector": "[rhombusPopoverClose]",
+    "description": "Closes the enclosing `<rhombus-popover>` when the host element is clicked.\nWorks on projected content because the panel content keeps the popover in its\ninjector hierarchy. Usage: `<button rhombusPopoverClose>Done</button>`.\nMust be placed inside a <rhombus-popover>; injecting the popover throws if it is absent.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusPopoverComponent": {
+    "name": "RhombusPopoverComponent",
+    "kind": "class",
+    "selector": "rhombus-popover",
+    "description": "`<rhombus-popover>` — a CDK-Overlay panel that hosts arbitrary projected\ncontent, attached to a trigger via `[rhombusPopoverTriggerFor]`. Focus-trapped,\ndismissed on `Escape` / outside click, themed through the contract tokens.",
+    "inputs": [
+      {
+        "name": "position",
+        "type": "RhombusPopoverPosition",
+        "description": "Preferred placement; flips to the opposite side when there is no room."
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Gap (px) between the trigger and the panel."
+      },
+      {
+        "name": "panelWidth",
+        "type": "number | \"auto\" | \"trigger\"",
+        "description": "Panel width: a px number, `'trigger'` (match the trigger), or `'auto'`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name for the dialog panel."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "opened",
+        "type": "void",
+        "description": "Emitted after the panel opens."
+      },
+      {
+        "name": "closed",
+        "type": "void",
+        "description": "Emitted after the panel closes."
+      }
+    ],
+    "methods": [
+      {
+        "name": "close",
+        "type": "() => void",
+        "description": "Close the popover from projected content (e.g. after a selection)."
+      }
+    ]
+  },
+  "RhombusPopoverTriggerDirective": {
+    "name": "RhombusPopoverTriggerDirective",
+    "kind": "class",
+    "selector": "[rhombusPopoverTriggerFor]",
+    "description": "Attaches a `<rhombus-popover>` to any element. Mirrors `matMenuTriggerFor`:\n`<button [rhombusPopoverTriggerFor]=\"panel\">`. Manages the CDK overlay,\nreflects `aria-haspopup`/`aria-expanded`, and restores focus on close.",
+    "inputs": [
+      {
+        "name": "panel",
+        "type": "RhombusPopoverComponent",
+        "description": "The `<rhombus-popover>` panel this trigger controls."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "When `true`, clicks do nothing."
+      }
+    ],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "toggle",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "open",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "close",
+        "type": "() => void",
+        "description": ""
+      }
+    ]
+  },
   "RhombusProgressBarComponent": {
     "name": "RhombusProgressBarComponent",
     "kind": "class",
@@ -899,6 +1042,15 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "kind": "class",
     "selector": "[shellAuthSlot]",
     "description": "Marker for the header auth slot. Apply it to the element you project, e.g.\n\n```html\n<rhombus-app-shell>\n  <div shellAuthSlot>…avatar menu / sign-in button…</div>\n</rhombus-app-shell>\n```\n\nThe shell both selects this content (`ng-content select=\"[shellAuthSlot]\"`)\nand detects its presence (`contentChild`) so the auth region only renders\nwhen something is projected — replacing FolioKit's `config().showAuth` flag.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusShellBottomNavDirective": {
+    "name": "RhombusShellBottomNavDirective",
+    "kind": "class",
+    "selector": "[shellBottomNav]",
+    "description": "Marker for the bottom-navigation slot, used when the shell runs in\n`navMode=\"bottom\"`. Apply it to the projected bar:\n\n```html\n<rhombus-app-shell navMode=\"bottom\" frame=\"phone\">\n  <rhombus-bottom-nav shellBottomNav [items]=\"navItems\" />\n</rhombus-app-shell>\n```\n\nThe shell selects this content (`ng-content select=\"[shellBottomNav]\"`) and\ndetects its presence (`contentChild`) to render the fixed bottom region.",
     "inputs": [],
     "outputs": [],
     "methods": []
