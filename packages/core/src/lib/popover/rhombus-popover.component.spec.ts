@@ -1,6 +1,7 @@
 // packages/core/src/lib/popover/rhombus-popover.component.spec.ts
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { axe } from '../../testing/axe';
@@ -34,6 +35,19 @@ class HostComponent {
   closedCount = 0;
   panelWidth: number | 'trigger' | 'auto' = 'auto';
 }
+
+// A NON-button trigger so the click still fires while the directive is
+// `[disabled]` (a native disabled <button> never emits click). This exercises
+// the `if (this.disabled()) return;` guard in toggle().
+@Component({
+  standalone: true,
+  imports: [RhombusPopoverComponent, RhombusPopoverTriggerDirective],
+  template: `
+    <span [rhombusPopoverTriggerFor]="pop" [disabled]="true" aria-label="DisabledTrigger" tabindex="0">Open</span>
+    <rhombus-popover #pop ariaLabel="X"><p>Body</p></rhombus-popover>
+  `,
+})
+class DisabledTriggerHostComponent {}
 
 function setup() {
   TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
@@ -164,5 +178,61 @@ describe('rhombus-popover', () => {
     done.click();
     fixture.detectChanges();
     expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it('does not open when the trigger is disabled', () => {
+    TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+    const fixture = TestBed.createComponent(DisabledTriggerHostComponent);
+    fixture.detectChanges();
+    const span = (fixture.nativeElement as HTMLElement).querySelector(
+      'span[aria-label="DisabledTrigger"]',
+    ) as HTMLElement;
+    span.click();
+    fixture.detectChanges();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    expect(overlay.querySelector('.rhombus-popover__panel')).toBeNull();
+  });
+
+  it("applies panelWidth='trigger' to the overlay pane", () => {
+    const { fixture, overlay } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    host.panelWidth = 'trigger';
+    fixture.detectChanges();
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector(
+      'button[aria-label="Open"]',
+    ) as HTMLButtonElement;
+    trigger.click();
+    fixture.detectChanges();
+    const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
+    // In jsdom offsetWidth is 0; this still exercises the 'trigger' branch.
+    // The real trigger-matching width is covered by the Playwright showcase pass.
+    expect(pane.style.width).toBe('0px');
+  });
+
+  it('does not close on a non-Escape keydown', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const panel = overlay().querySelector('.rhombus-popover__panel')!;
+    panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).not.toBeNull();
+  });
+
+  it('open() is idempotent while already open', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    const directive = fixture.debugElement
+      .query(By.directive(RhombusPopoverTriggerDirective))
+      .injector.get(RhombusPopoverTriggerDirective);
+    directive.open();
+    fixture.detectChanges();
+    expect(overlay().querySelectorAll('.rhombus-popover__panel')).toHaveLength(1);
+  });
+
+  it('close() does not throw when no trigger is attached', () => {
+    const f = TestBed.createComponent(RhombusPopoverComponent);
+    expect(() => f.componentInstance.close()).not.toThrow();
   });
 });
