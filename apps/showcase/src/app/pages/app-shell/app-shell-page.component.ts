@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import {
   RhombusAppShellComponent,
+  RhombusBottomNavComponent,
+  RhombusBottomNavItem,
   RhombusButtonComponent,
   RhombusShellAsideDirective,
   RhombusShellAuthDirective,
+  RhombusShellBottomNavDirective,
   RhombusShellNavFooterDirective,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
@@ -21,6 +24,8 @@ import { ExampleComponent } from '../../shared/example.component';
   standalone: true,
   imports: [
     RhombusAppShellComponent,
+    RhombusBottomNavComponent,
+    RhombusShellBottomNavDirective,
     RhombusButtonComponent,
     RhombusShellNavFooterDirective,
     RhombusShellAuthDirective,
@@ -187,6 +192,22 @@ import { ExampleComponent } from '../../shared/example.component';
           </rhombus-app-shell>
         </div>
       </section>
+
+        <section class="showcase-section">
+          <h2>Mobile-first bottom navigation</h2>
+          <p class="showcase-section__lead">
+            <code>navMode="bottom"</code> drops the sidenav/hamburger and hosts a
+            <code>[shellBottomNav]</code> bar; <code>frame="phone"</code> centers the app at
+            a phone width on desktop.
+          </p>
+          <div class="showcase-row">
+            <rhombus-app-shell navMode="bottom" frame="phone" style="height: 420px;">
+              <span shellBrand>RP Hypertrophy</span>
+              <rhombus-bottom-nav shellBottomNav [items]="bottomNavItems" [activeId]="'workout'" />
+              <p>Workout content&hellip;</p>
+            </rhombus-app-shell>
+          </div>
+        </section>
       </div>
     </app-component-page>
   `,
@@ -335,4 +356,10 @@ export class AppComponent {}`;
   protected readonly showNavFooter = signal(true);
   protected readonly forceOverlay = signal(false);
   protected readonly hasNav = signal(true);
+
+  protected readonly bottomNavItems: RhombusBottomNavItem[] = [
+    { id: 'workout', label: 'Workout', icon: 'fitness_center' },
+    { id: 'mesos', label: 'Mesos', icon: 'folder' },
+    { id: 'more', label: 'More', icon: 'more_horiz' },
+  ];
 }
