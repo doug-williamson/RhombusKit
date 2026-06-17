@@ -67,6 +67,11 @@ const DESKTOP_MIN_PX = 1024;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-app-shell.component.scss',
+  host: {
+    '[class.rhombus-app-shell--phone]': "frame() === 'phone'",
+    '[class.rhombus-app-shell--bottom]': 'isBottomMode()',
+    '[style.--rhombus-app-shell-phone-max.px]': 'phoneMaxWidth()',
+  },
   template: `
     <mat-toolbar class="rhombus-app-shell__toolbar">
       @if (hasNav() && isMobile()) {
@@ -158,6 +163,14 @@ export class RhombusAppShellComponent {
    * still renders. Bind from route data in the consumer.
    */
   readonly hasNav = input<boolean>(true);
+  /** `'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar. */
+  readonly navMode = input<'sidenav' | 'bottom'>('sidenav');
+  /** `'fill'` (default) spans the viewport; `'phone'` centers content at a phone width. */
+  readonly frame = input<'fill' | 'phone'>('fill');
+  /** Phone-frame column width (px) when `frame='phone'`. */
+  readonly phoneMaxWidth = input<number>(430);
+
+  protected readonly isBottomMode = computed(() => this.navMode() === 'bottom');
 
   protected readonly isMobile = signal(false);
   protected readonly isIconRailActive = signal(false);

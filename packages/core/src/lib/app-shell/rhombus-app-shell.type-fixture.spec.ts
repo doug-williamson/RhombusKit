@@ -18,6 +18,11 @@ describe('rhombus-app-shell input surface (type fixture)', () => {
     void c.closeOnNavigate;
     void c.hasNav;
 
+    // New additive bottom-nav inputs.
+    void c.navMode;
+    void c.frame;
+    void c.phoneMaxWidth;
+
     // @ts-expect-error showAuth was a FolioKit product flag, now slot-presence gated
     void c.showAuth;
     // @ts-expect-error showNewPostButton was evicted to a projected header action
