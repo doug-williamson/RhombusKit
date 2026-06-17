@@ -1,5 +1,6 @@
 // packages/core/src/lib/popover/rhombus-popover-trigger.directive.ts
-import { Directive, ElementRef, inject, input, signal } from '@angular/core';
+import { DestroyRef, Directive, ElementRef, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import {
   RhombusPopoverComponent,
@@ -31,8 +32,13 @@ export class RhombusPopoverTriggerDirective implements RhombusPopoverTriggerHand
 
   private readonly overlay = inject(Overlay);
   private readonly host = inject(ElementRef) as ElementRef<HTMLElement>;
+  private readonly destroyRef = inject(DestroyRef);
   private overlayRef?: OverlayRef;
   protected readonly isOpen = signal(false);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.close());
+  }
 
   toggle(): void {
     if (this.disabled()) return;
@@ -62,13 +68,19 @@ export class RhombusPopoverTriggerDirective implements RhombusPopoverTriggerHand
     });
     panel.attachTrigger(this);
     this.overlayRef.attach(panel.createPortal());
-    this.overlayRef.backdropClick().subscribe(() => this.close());
-    this.overlayRef.keydownEvents().subscribe((e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        this.close();
-      }
-    });
+    this.overlayRef
+      .backdropClick()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.close());
+    this.overlayRef
+      .keydownEvents()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.close();
+        }
+      });
     this.isOpen.set(true);
     panel.opened.emit();
   }

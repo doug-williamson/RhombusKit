@@ -58,6 +58,16 @@ describe('rhombus-popover', () => {
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
   });
 
+  it('disposes the overlay when the trigger is destroyed while open', () => {
+    const { fixture, trigger, overlay } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    expect(overlay().querySelector('.rhombus-popover__panel')).not.toBeNull();
+    fixture.destroy();
+    expect(overlay().querySelector('.rhombus-popover__panel')).toBeNull();
+    expect(overlay().querySelector('.cdk-overlay-backdrop')).toBeNull();
+  });
+
   it('has no accessibility violations on the trigger or the open panel', async () => {
     const { fixture, el, trigger, overlay } = setup();
     expect(await axe(el)).toHaveNoViolations();
