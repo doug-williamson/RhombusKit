@@ -76,4 +76,19 @@ describe('rhombus-bottom-nav', () => {
     const { el } = setup();
     expect(await axe(el)).toHaveNoViolations();
   });
+
+  it('reflects the indicator on the nav as a data attribute', () => {
+    const { fixture, host, el } = setup();
+    expect(el.querySelector('.rhombus-bottom-nav')?.getAttribute('data-indicator')).toBe('color');
+    host.indicator = 'pill';
+    fixture.detectChanges();
+    expect(el.querySelector('.rhombus-bottom-nav')?.getAttribute('data-indicator')).toBe('pill');
+  });
+
+  it('renders a badge for items that declare one', async () => {
+    const { fixture, el } = setup();
+    await fixture.whenStable();
+    const badge = el.querySelector('.mat-badge-content');
+    expect(badge?.textContent).toContain('3');
+  });
 });
