@@ -158,6 +158,14 @@ export { RhombusShellNavFooterDirective } from './lib/app-shell/rhombus-shell-na
 export { RhombusShellAuthDirective } from './lib/app-shell/rhombus-shell-auth.directive';
 export { RhombusShellAsideDirective } from './lib/app-shell/rhombus-shell-aside.directive';
 
+// Popover — a CDK-Overlay panel hosting arbitrary projected content, attached to
+// any element via [rhombusPopoverTriggerFor]. Use [rhombusPopoverClose] on inner
+// controls to dismiss. Fills the gap RhombusMenu (menu-items only) leaves.
+export { RhombusPopoverComponent } from './lib/popover/rhombus-popover.component';
+export type { RhombusPopoverPosition } from './lib/popover/rhombus-popover.component';
+export { RhombusPopoverTriggerDirective } from './lib/popover/rhombus-popover-trigger.directive';
+export { RhombusPopoverCloseDirective } from './lib/popover/rhombus-popover-close.directive';
+
 // 1.0 — content composites. Leaf components ported from FolioKit. page-header
 // composes [rhombusChip] for its badge; code-block lazily + optionally loads
 // highlight.js (degrades to plain code); empty-state composes rhombus-button for
