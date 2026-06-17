@@ -20,6 +20,7 @@ import { RhombusPopoverCloseDirective } from './rhombus-popover-close.directive'
     <rhombus-popover
       #pop
       ariaLabel="Calendar"
+      [panelWidth]="panelWidth"
       (opened)="openedCount = openedCount + 1"
       (closed)="closedCount = closedCount + 1"
     >
@@ -31,6 +32,7 @@ import { RhombusPopoverCloseDirective } from './rhombus-popover-close.directive'
 class HostComponent {
   openedCount = 0;
   closedCount = 0;
+  panelWidth: number | 'trigger' | 'auto' = 'auto';
 }
 
 function setup() {
@@ -109,20 +111,20 @@ describe('rhombus-popover', () => {
     expect(f.componentInstance.connectedPositions()).toHaveLength(4);
   });
 
-  it("sizes the overlay to the trigger when panelWidth='trigger'", () => {
-    const { fixture, trigger, overlay } = setup();
-    fixture.componentInstance; // host
-    // widen the trigger so offsetWidth is measurable
-    trigger.style.width = '200px';
-    // set panelWidth on the popover instance via its host template input
+  it('applies a numeric panelWidth to the overlay pane', () => {
+    const { fixture, overlay } = setup();
+    const host = fixture.componentInstance as HostComponent;
+    host.panelWidth = 320;
+    fixture.detectChanges();
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector('button[aria-label="Open"]') as HTMLButtonElement;
     trigger.click();
     fixture.detectChanges();
     const pane = overlay().querySelector('.cdk-overlay-pane') as HTMLElement;
-    expect(pane).not.toBeNull();
+    expect(pane.style.width).toBe('320px');
   });
 
   it('emits (opened) and (closed) and restores focus to the trigger on close', () => {
-    const { fixture, trigger, overlay } = setup();
+    const { fixture, trigger } = setup();
     const host = fixture.componentInstance as HostComponent;
     trigger.focus();
     trigger.click();

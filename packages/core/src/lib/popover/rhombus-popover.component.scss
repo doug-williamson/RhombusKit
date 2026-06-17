@@ -1,7 +1,7 @@
 // packages/core/src/lib/popover/rhombus-popover.component.scss
 // The panel renders in the CDK overlay container, so its styles are global and
 // scoped under .cdk-overlay-container (mirrors how RhombusMenu styles its panel).
-// Colours/shadows/radii come only from @rhombuskit/tokens contract vars.
+// Colours/shadows via contract tokens; radius via the radius primitive (--radius-lg).
 .cdk-overlay-container .rhombus-popover__panel {
   background: var(--surface-0);
   color: var(--text-primary);
