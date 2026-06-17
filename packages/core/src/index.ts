@@ -166,6 +166,15 @@ export type { RhombusPopoverPosition } from './lib/popover/rhombus-popover.compo
 export { RhombusPopoverTriggerDirective } from './lib/popover/rhombus-popover-trigger.directive';
 export { RhombusPopoverCloseDirective } from './lib/popover/rhombus-popover-close.directive';
 
+// Bottom navigation — a Material-style bottom tab bar for mobile-first shells.
+// Router-driven by default (routerLinkActive); pass activeId/activeChange for
+// controlled, non-router usage.
+export { RhombusBottomNavComponent } from './lib/bottom-nav/rhombus-bottom-nav.component';
+export type {
+  RhombusBottomNavItem,
+  BottomNavIndicator,
+} from './lib/bottom-nav/rhombus-bottom-nav.component';
+
 // 1.0 — content composites. Leaf components ported from FolioKit. page-header
 // composes [rhombusChip] for its badge; code-block lazily + optionally loads
 // highlight.js (degrades to plain code); empty-state composes rhombus-button for
