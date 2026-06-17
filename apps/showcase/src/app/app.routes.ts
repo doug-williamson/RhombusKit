@@ -103,6 +103,12 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/popover/popover-page.component'),
       },
       {
+        path: 'bottom-nav',
+        title: 'Bottom nav',
+        loadComponent: () =>
+          import('./pages/bottom-nav/bottom-nav-page.component'),
+      },
+      {
         path: 'breadcrumbs',
         title: 'Breadcrumbs',
         loadComponent: () =>
