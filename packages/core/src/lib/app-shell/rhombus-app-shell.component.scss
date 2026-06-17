@@ -148,3 +148,18 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
     display: none;
   }
 }
+
+// ─── Bottom-nav frame (navMode="bottom") ────────────────────────────────────
+// A flex-0-0-auto sibling below the sidenav container, so the content region
+// keeps scrolling. Background/border come from the projected <rhombus-bottom-nav>.
+.rhombus-app-shell__bottom-nav {
+  flex: 0 0 auto;
+}
+
+// ─── Phone frame (frame="phone") ─────────────────────────────────────────────
+// Centers the whole shell column at a phone width on wide screens.
+.rhombus-app-shell--phone {
+  max-width: var(--rhombus-app-shell-phone-max, 430px);
+  margin-inline: auto;
+  border-inline: 1px solid var(--border);
+}
