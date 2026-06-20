@@ -94,12 +94,13 @@ html, body {
   }
 }
 
-// --- Overview tab (orientation layout) ---
-// Scoped to `[overview].overview` so it never touches the Examples tab. Pages
-// reuse `.showcase-section` for the When-to-use / Usage blocks; these rules add
-// the lead paragraph, list, inline-code, and accessibility-callout styling that
-// `.showcase-page__header` (header-scoped) doesn't reach.
-.overview {
+// --- Overview / Usage tab (orientation + how-to layout) ---
+// Pages reuse `.showcase-section` for the When-to-use / Usage blocks; these rules
+// add the lead paragraph, list, inline-code, and accessibility-callout styling
+// that `.showcase-page__header` (header-scoped) doesn't reach. Shared by the
+// Overview and Usage tabs so prose reads identically across both.
+.overview,
+.usage {
   &__lead {
     color: var(--text-secondary);
     font-size: 1.0625rem;
