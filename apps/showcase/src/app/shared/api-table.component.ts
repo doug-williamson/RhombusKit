@@ -9,8 +9,8 @@ import { API_METADATA, type ApiEntry } from '../../generated/api-metadata';
 
 /**
  * Renders the generated public-API metadata as selector + Inputs / Outputs /
- * Methods tables. The data is produced by `tools/api-snapshot.mjs` from the built
- * type surface, so it can't drift from the real API.
+ * Methods / Slots / Types tables. The data is produced by `tools/api-snapshot.mjs`
+ * from the built type surface, so it can't drift from the real API.
  *
  * `apiKey` accepts a single export name or an array — a feature that ships more
  * than one public symbol (a panel + its trigger directive, a service + its
@@ -51,8 +51,22 @@ import { API_METADATA, type ApiEntry } from '../../generated/api-metadata';
               <tbody>
                 @for (m of e.inputs; track m.name) {
                   <tr>
-                    <td class="api-table__name"><code>{{ m.name }}</code></td>
-                    <td><code>{{ m.type }}</code></td>
+                    <td class="api-table__name">
+                      <code>{{ m.name }}</code>
+                      @if (m.required) {
+                        <span class="api-table__req" title="Required">required</span>
+                      }
+                    </td>
+                    <td>
+                      <code>{{ m.type }}</code>
+                      @if (m.enumValues?.length) {
+                        <span class="api-table__values">
+                          @for (v of m.enumValues; track v) {
+                            <code class="api-table__value">'{{ v }}'</code>
+                          }
+                        </span>
+                      }
+                    </td>
                     <td>{{ m.description || '—' }}</td>
                   </tr>
                 }
@@ -96,7 +110,63 @@ import { API_METADATA, type ApiEntry } from '../../generated/api-metadata';
             </table>
           }
 
-          @if (!e.inputs.length && !e.outputs.length && !e.methods.length) {
+          @if (e.slots?.length) {
+            <h3 class="api-table__heading">Slots</h3>
+            <table class="api-table">
+              <thead>
+                <tr><th>Selector</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                @for (s of e.slots; track s) {
+                  <tr>
+                    <td class="api-table__name">
+                      <code>{{ s === '*' ? '(default)' : s }}</code>
+                    </td>
+                    <td>
+                      {{
+                        s === '*'
+                          ? 'Default content projection slot.'
+                          : 'Named content projection slot.'
+                      }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+
+          @if (e.types?.length) {
+            <h3 class="api-table__heading">Types</h3>
+            @for (t of e.types; track t.name) {
+              <p class="api-table__type-name"><code>{{ t.name }}</code></p>
+              <table class="api-table">
+                <thead>
+                  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                  @for (f of t.members; track f.name) {
+                    <tr>
+                      <td class="api-table__name">
+                        <code>{{ f.name }}</code>
+                        @if (f.required) {
+                          <span class="api-table__req" title="Required">required</span>
+                        }
+                      </td>
+                      <td><code>{{ f.type }}</code></td>
+                      <td>{{ f.description || '—' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          }
+
+          @if (
+            !e.inputs.length &&
+            !e.outputs.length &&
+            !e.methods.length &&
+            !e.slots?.length
+          ) {
             <p class="api-table__empty">
               This export has no public inputs, outputs, or methods — see its usage
               on the Examples tab.
@@ -178,6 +248,20 @@ import { API_METADATA, type ApiEntry } from '../../generated/api-metadata';
       margin: 1.5rem 0 0.5rem;
     }
 
+    .api-table__type-name {
+      margin: 1.5rem 0 0.25rem;
+
+      code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        font-weight: 600;
+        color: var(--text-accent);
+        background-color: var(--surface-1);
+        padding: 0.15em 0.45em;
+        border-radius: 0.25em;
+      }
+    }
+
     .api-table__selector {
       display: flex;
       align-items: center;
@@ -199,6 +283,33 @@ import { API_METADATA, type ApiEntry } from '../../generated/api-metadata';
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--text-secondary);
+    }
+
+    .api-table__req {
+      display: inline-block;
+      margin-left: 0.5em;
+      font-family: var(--font-sans);
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-accent);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-sm);
+      padding: 0.05em 0.4em;
+      vertical-align: middle;
+    }
+
+    .api-table__values {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.3em;
+      margin-left: 0.4em;
+
+      code {
+        background-color: var(--surface-2);
+        color: var(--text-secondary);
+      }
     }
 
     .api-table__empty {
