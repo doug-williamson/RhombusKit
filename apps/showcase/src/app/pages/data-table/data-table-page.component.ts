@@ -9,13 +9,17 @@ import {
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, type Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { DataSource } from '@angular/cdk/collections';
+import { RouterLink } from '@angular/router';
 import {
   ColumnDef,
   OverflowMenuItem,
   PageState,
   RhombusBadgeDirective,
   RhombusButtonComponent,
+  RhombusCodeBlockComponent,
   RhombusConfirmService,
   RhombusDataTableComponent,
   RhombusEmptyStateDirective,
@@ -56,14 +60,33 @@ const POSTS: Post[] = [
   { id: 14, title: 'Stop fighting the change detector',        status: 'published', author: 'Sophie Wilson',  date: 'Mar 9, 2026',  viewCount: 8210 },
 ];
 
+/**
+ * A minimal CDK `DataSource` backed by a `BehaviorSubject` — the shape a real
+ * server-side table uses. The page pushes each freshly-fetched page of rows into
+ * it; the table just renders whatever `connect()` emits.
+ */
+class PostDataSource extends DataSource<Post> {
+  constructor(private readonly rows$: Observable<Post[]>) {
+    super();
+  }
+  override connect(): Observable<Post[]> {
+    return this.rows$;
+  }
+  override disconnect(): void {
+    /* the page owns the subject's lifecycle */
+  }
+}
+
 @Component({
   selector: 'app-data-table-page',
   standalone: true,
   imports: [
+    RouterLink,
     RhombusDataTableComponent,
     RhombusEmptyStateDirective,
     RhombusBadgeDirective,
     RhombusButtonComponent,
+    RhombusCodeBlockComponent,
     RhombusOverflowMenuComponent,
     ComponentPageComponent,
     ExampleComponent,
@@ -88,7 +111,11 @@ const POSTS: Post[] = [
       </div>
     </ng-template>
 
-    <app-component-page title="Data Table" apiKey="RhombusDataTableComponent">
+    <app-component-page
+      title="Data Table"
+      apiKey="RhombusDataTableComponent"
+      [hasUsage]="true"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           A data table renders records from a <code>columns</code> config with
@@ -99,25 +126,7 @@ const POSTS: Post[] = [
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Reach for a data table to present a set of
-              <strong>records with column headers</strong> &mdash; sortable,
-              paginated, with custom cell rendering. For short, non-tabular lists
-              a plain list or cards are lighter.
-            </li>
-            <li>
-              Pass a <strong>plain array</strong> for client-side sort and
-              pagination; pass a <code>DataSource</code> and react to
-              <code>sortChange</code> / <code>pageChange</code> when the server
-              owns the data.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-data-table
               [data]="heroPosts()"
@@ -127,14 +136,128 @@ const POSTS: Post[] = [
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Present a set of <strong>records with column headers</strong> —
+              sortable, paginated, with custom cell rendering.
+            </li>
+            <li>
+              When you need both client-side convenience and a server-driven path
+              behind <strong>one API</strong> — start with an array, graduate to a
+              <code>DataSource</code> without changing the template shape.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a short, non-tabular list, prefer plain list markup or
+              <a routerLink="/components/card">Cards</a> — a table's chrome is
+              overkill.
+            </li>
+            <li>
+              For the key/value detail of a single record, use a description list,
+              not a one-row table.
+            </li>
+            <li>
+              For choosing one option, use a
+              <a routerLink="/components/select">Select</a> or
+              <a routerLink="/components/radio">Radio Group</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li>
+              <a routerLink="/components/pagination">Pagination</a> — the
+              standalone paginator for non-table lists.
+            </li>
+            <li>
+              <a routerLink="/components/empty-state">Empty State</a> — the empty
+              block this table projects.
+            </li>
+            <li>
+              <a routerLink="/components/overflow-menu">Overflow Menu</a> — per-row
+              actions, as in the examples below.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          Describe columns with a <code>ColumnDef&lt;T&gt;[]</code>, pass
+          <code>data</code>, and the table handles sort + pagination. The same
+          template serves a client-side array and a server-side
+          <code>DataSource</code>.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Columns &amp; modes</h2>
+          <ul>
+            <li>
+              <strong>DataColumn</strong> — backed by a row field via
+              <code>key</code> (<code>keyof T</code>); renders <code>row[key]</code>
+              unless you supply a <code>cellTemplate</code>. Can be
+              <code>sortable</code>.
+            </li>
+            <li>
+              <strong>DisplayColumn</strong> — not backed by a field (e.g. an
+              actions column); <code>key</code> is an arbitrary id and a
+              <code>cellTemplate</code> is required. Never sortable.
+            </li>
+            <li>
+              <strong>Client mode</strong> — pass a plain array; Material sorts and
+              paginates in place.
+            </li>
+            <li>
+              <strong>Server mode</strong> — pass a <code>DataSource</code>, set
+              <code>sortMode="controlled"</code> + <code>totalCount</code>, and
+              react to <code>(sortChange)</code> / <code>(pageChange)</code> to
+              refetch. Internal sort with a <code>DataSource</code> throws in dev —
+              the table can't sort data it doesn't own.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Slots &amp; theming</h2>
+          <ul>
+            <li>
+              <code>[slot=empty-action]</code> projects a button into the default
+              empty block; <code>[rhombusEmptyState]</code> replaces the empty block
+              entirely.
+            </li>
+            <li>
+              Surfaces and borders follow the Material table bridge; the loading
+              spinner uses <code>--text-accent</code>. Re-theme via the contract
+              tokens, not the table internals.
+            </li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            Built on Angular Material's table and sort: sortable headers are
-            keyboard-operable and expose <code>aria-sort</code> reflecting the
-            current direction. Loading and empty are distinct rendering paths, so
-            assistive tech is never shown a misleading empty table while data is
-            still loading.
+            Built on Angular Material's table + sort: sortable headers are
+            keyboard-operable and expose <code>aria-sort</code>. Loading and empty
+            are distinct rendering paths, so assistive tech never sees a misleading
+            empty table mid-fetch. Note that
+            <strong>row click is a pointer convenience, not a keyboard control</strong>
+            — if a row's primary action matters, also expose it as a focusable
+            control in the row (a link or the actions menu); don't rely on
+            <code>rowClick</code> alone.
           </p>
         </section>
       </div>
@@ -201,6 +324,37 @@ const POSTS: Post[] = [
             <strong>{{ controlledSortLabel() }}</strong>
           </p>
           <p>First row title: <strong>{{ controlledPosts()[0]?.title }}</strong></p>
+        </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>Server-side data (DataSource)</h2>
+        <p class="showcase-section__lead">
+          The headline server mode. <code>[data]</code> is a CDK
+          <code>DataSource</code> (not an array), <code>sortMode="controlled"</code>,
+          and <code>[totalCount]</code> drives the paginator. Sorting or paging
+          emits an event; the page simulates a ~400ms fetch, then pushes the new
+          page of rows — the table never sorts or slices itself.
+        </p>
+        <rhombus-data-table
+          [data]="serverDataSource"
+          [columns]="controlledColumns"
+          sortMode="controlled"
+          [sortState]="serverSort()"
+          [totalCount]="totalCount"
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10]"
+          (sortChange)="onServerSort($event)"
+          (pageChange)="onServerPage($event)"
+        />
+        <div class="event-log">
+          <p>
+            Last fetch:
+            <strong>{{
+              serverLoading() ? 'Fetching…' : serverFetchLabel()
+            }}</strong>
+          </p>
+          <p>Server total rows: <strong>{{ totalCount }}</strong></p>
         </div>
       </section>
 
@@ -450,6 +604,56 @@ export class PostsTableComponent {
       cellTemplate: this.actionsTpl(),
     },
   ]);
+
+  // --- Server-side demo: a DataSource fed by simulated fetches. ---
+  protected readonly totalCount = POSTS.length;
+  private readonly serverRows$ = new BehaviorSubject<Post[]>([]);
+  protected readonly serverDataSource = new PostDataSource(this.serverRows$);
+  protected readonly serverSort = signal<SortState | null>(null);
+  protected readonly serverLoading = signal(false);
+  protected readonly serverFetchLabel = signal('—');
+  private serverPageIndex = 0;
+  private serverPageSize = 5;
+
+  constructor() {
+    // Seed the first server page.
+    this.fetchServerPage();
+  }
+
+  protected onServerSort(sort: SortState): void {
+    this.serverSort.set(sort);
+    this.serverPageIndex = 0; // a new sort resets to the first page
+    this.fetchServerPage();
+  }
+
+  protected onServerPage(page: PageState): void {
+    this.serverPageIndex = page.pageIndex;
+    this.serverPageSize = page.pageSize;
+    this.fetchServerPage();
+  }
+
+  /** Simulate a server round-trip: sort + slice POSTS after a short delay. */
+  private fetchServerPage(): void {
+    this.serverLoading.set(true);
+    const sort = this.serverSort();
+    const page = this.serverPageIndex;
+    const size = this.serverPageSize;
+    setTimeout(() => {
+      const rows = [...POSTS];
+      if (sort?.direction) {
+        const key = sort.active as keyof Post;
+        const dir = sort.direction === 'asc' ? 1 : -1;
+        rows.sort((a, b) => (a[key] < b[key] ? -dir : a[key] > b[key] ? dir : 0));
+      }
+      const start = page * size;
+      this.serverRows$.next(rows.slice(start, start + size));
+      this.serverFetchLabel.set(
+        `page ${page} · size ${size}` +
+          (sort?.direction ? ` · ${sort.active} ${sort.direction}` : '')
+      );
+      this.serverLoading.set(false);
+    }, 400);
+  }
 
   protected statusLabel(status: PostStatus): string {
     return status.charAt(0).toUpperCase() + status.slice(1);
