@@ -21,7 +21,14 @@ import { ExampleComponent } from '../../shared/example.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Popover" apiKey="RhombusPopoverComponent">
+    <app-component-page
+      title="Popover"
+      [apiKey]="[
+        'RhombusPopoverComponent',
+        'RhombusPopoverTriggerDirective',
+        'RhombusPopoverCloseDirective'
+      ]"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           <code>&lt;rhombus-popover&gt;</code> hangs arbitrary content off a trigger

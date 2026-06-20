@@ -19,7 +19,10 @@ import { ExampleComponent } from '../../shared/example.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Progress" apiKey="RhombusProgressBarComponent">
+    <app-component-page
+      title="Progress"
+      [apiKey]="['RhombusProgressBarComponent', 'RhombusSpinnerComponent']"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           <code>&lt;rhombus-progress-bar&gt;</code> and

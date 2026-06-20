@@ -67,7 +67,14 @@ export class DemoDialogComponent {
   imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Dialog" apiKey="RhombusDialogService">
+    <app-component-page
+      title="Dialog"
+      [apiKey]="[
+        'RhombusDialogService',
+        'RhombusDialogComponent',
+        'RhombusDialogActionsDirective'
+      ]"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           A dialog is a modal surface that focuses the user on a single,

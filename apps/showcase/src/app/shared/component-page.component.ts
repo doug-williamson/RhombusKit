@@ -64,8 +64,12 @@ type TabId = (typeof TABS)[number];
 export class ComponentPageComponent {
   /** Display name shown as the page heading (e.g. "Button"). */
   readonly title = input.required<string>();
-  /** Public export name used to look up generated API metadata (Phase 2). */
-  readonly apiKey = input<string>('');
+  /**
+   * Public export name(s) used to look up generated API metadata. Accepts an
+   * array so a feature that ships several symbols (a panel + its trigger
+   * directive, a service + its components) documents them all on one page.
+   */
+  readonly apiKey = input<string | readonly string[]>('');
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
