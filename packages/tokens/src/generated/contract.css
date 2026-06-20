@@ -56,4 +56,10 @@
   --status-scheduled-text: initial;
   --status-archived-bg: initial;
   --status-archived-text: initial;
+  --code-keyword: initial;
+  --code-string: initial;
+  --code-function: initial;
+  --code-number: initial;
+  --code-comment: initial;
+  --code-punctuation: initial;
 }

@@ -56,4 +56,66 @@
       padding: 0;
     }
   }
+
+  // Syntax highlighting — highlight.js emits `.hljs-*` token classes; we map them
+  // onto the CONTRACT --code-* tokens so colours re-theme with light/dark and no
+  // third-party hljs stylesheet is needed. Scoped under __pre so the global
+  // (ViewEncapsulation.None) rules can't leak. Unmapped tokens inherit the
+  // default code colour (--text-primary).
+  &__pre {
+    .hljs-keyword,
+    .hljs-built_in,
+    .hljs-type,
+    .hljs-literal,
+    .hljs-selector-tag,
+    .hljs-name,
+    .hljs-tag,
+    .hljs-symbol,
+    .hljs-meta,
+    .hljs-doctag {
+      color: var(--code-keyword);
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-char,
+    .hljs-meta .hljs-string,
+    .hljs-template-tag {
+      color: var(--code-string);
+    }
+
+    .hljs-title,
+    .hljs-title.function_,
+    .hljs-title.class_,
+    .hljs-function .hljs-title,
+    .hljs-section,
+    .hljs-attr,
+    .hljs-attribute,
+    .hljs-selector-class,
+    .hljs-selector-id,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo {
+      color: var(--code-function);
+    }
+
+    .hljs-number,
+    .hljs-deletion {
+      color: var(--code-number);
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+      color: var(--code-comment);
+      font-style: italic;
+    }
+
+    .hljs-punctuation,
+    .hljs-operator,
+    .hljs-property,
+    .hljs-params,
+    .hljs-variable,
+    .hljs-template-variable {
+      color: var(--code-punctuation);
+    }
+  }
 }
