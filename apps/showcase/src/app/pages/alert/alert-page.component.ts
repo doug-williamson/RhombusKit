@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   RhombusAlertComponent,
   RhombusButtonComponent,
+  RhombusCodeBlockComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
@@ -10,14 +12,16 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-alert-page',
   standalone: true,
   imports: [
+    RouterLink,
     RhombusAlertComponent,
     RhombusButtonComponent,
+    RhombusCodeBlockComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Alert" apiKey="RhombusAlertComponent">
+    <app-component-page title="Alert" [hasUsage]="true" apiKey="RhombusAlertComponent">
       <div overview class="overview">
         <p class="overview__lead">
           An alert is a persistent, inline banner that conveys a severity-coded
@@ -28,25 +32,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use an alert for a <strong>message that should stay visible</strong>
-              in context &mdash; a validation summary, a status banner, a warning
-              tied to the surrounding content. For a brief, auto-dismissing
-              confirmation, prefer a toast.
-            </li>
-            <li>
-              Pick the <code>variant</code> by severity (<code>info</code> |
-              <code>success</code> | <code>warning</code> | <code>error</code>),
-              project the message as content, and add a <code>title</code> or
-              <code>dismissible</code> as needed.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-alert variant="info" title="Sync in progress">
               We're refreshing your data in the background.
@@ -54,7 +40,81 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use an alert for a <strong>message that should stay visible</strong>
+              in context &mdash; a validation summary, a status banner, a warning
+              tied to the surrounding content.
+            </li>
+            <li>
+              When severity matters and the message should remain readable as the
+              user works the surrounding page, rather than appearing briefly and
+              vanishing.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>For a brief, auto-dismissing confirmation that doesn't need to stay on screen, use a <a routerLink="/components/toast">Toast</a>.</li>
+            <li>For a decision the user must resolve before continuing, use a <a routerLink="/components/dialog">Dialog</a> (or a <a routerLink="/components/confirm-dialog">Confirm Dialog</a> for a yes/no).</li>
+            <li>For a screen with no data to show rather than a status message, use an <a routerLink="/components/empty-state">Empty State</a>.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/toast">Toast</a> — transient, auto-dismissing notifications.</li>
+            <li><a routerLink="/components/badge">Badge</a> — compact inline status labels.</li>
+            <li><a routerLink="/components/empty-state">Empty State</a> — placeholder for absent content.</li>
+            <li><a routerLink="/components/dialog">Dialog</a> — blocking modal surfaces.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          An alert is driven entirely by inputs: set <code>variant</code> for
+          severity, project the message as content, and add an optional
+          <code>title</code> or <code>dismissible</code>.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>variant</code> — severity selector: <code>info</code> | <code>success</code> | <code>warning</code> | <code>error</code> (defaults to <code>info</code>). It drives both the colour pair and the screen-reader severity prefix.</li>
+            <li><code>title</code> — optional heading rendered above the message; omit it for a single-line banner.</li>
+            <li><code>dismissible</code> — bare attribute that adds a close button; pair it with <code>(dismissed)</code> to react when the user closes the alert.</li>
+            <li><strong>Default content slot</strong> — the projected children become the message body. The alert exposes no named slots.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The alert renders inline (no overlay), so overrides target the host
+            normally. It reads these contract tokens:
+          </p>
+          <ul>
+            <li><code>--toast-info-bg</code> / <code>--toast-info-text</code> — info colour pair.</li>
+            <li><code>--toast-success-bg</code> / <code>--toast-success-text</code> — success colour pair.</li>
+            <li><code>--toast-warning-bg</code> / <code>--toast-warning-text</code> — warning colour pair.</li>
+            <li><code>--toast-error-bg</code> / <code>--toast-error-text</code> — error colour pair.</li>
+            <li><code>--font-sans</code> — banner font family.</li>
+            <li><code>--focus-border</code> — focus ring on the dismiss button.</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             Severity is never conveyed by colour alone: each variant renders a
@@ -62,7 +122,11 @@ import { ExampleComponent } from '../../shared/example.component';
             before the message. The <code>dismissible</code> close button is a
             native <code>&lt;button&gt;</code> with an
             <code>aria-label</code> of "Dismiss alert", so it is focusable and
-            announced.
+            announced. The alert is a static inline banner — it sets no
+            <code>role="alert"</code> or <code>aria-live</code> region, so screen
+            readers encounter it in document order rather than having it announced
+            on insertion. If you inject an alert in response to a user action and
+            need it announced immediately, place it inside your own live region.
           </p>
         </section>
       </div>

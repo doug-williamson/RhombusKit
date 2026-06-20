@@ -6,9 +6,11 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
   RhombusButtonComponent,
+  RhombusCodeBlockComponent,
   RhombusDialogActionsDirective,
   RhombusDialogComponent,
   RhombusDialogService,
@@ -64,11 +66,18 @@ export class DemoDialogComponent {
 @Component({
   selector: 'app-dialog-page',
   standalone: true,
-  imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    RhombusButtonComponent,
+    RhombusCodeBlockComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page
       title="Dialog"
+      [hasUsage]="true"
       [apiKey]="[
         'RhombusDialogService',
         'RhombusDialogComponent',
@@ -88,26 +97,7 @@ export class DemoDialogComponent {
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use a dialog for a <strong>focused, interactive task</strong> that
-              warrants interrupting the flow (rename, move, a short form). For a
-              simple yes/no decision reach for <strong>Confirm Dialog</strong>,
-              and for passive feedback use a <strong>Toast</strong>.
-            </li>
-            <li>
-              Open a component with
-              <code>dialog.open&lt;Result&gt;(MyDialogComponent)</code> and read
-              the typed close value via <code>afterClosed()</code>; the opened
-              component closes itself by calling <code>ref.close(result)</code>.
-              <code>RhombusConfirmService</code> is built on this same service.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-button variant="primary" (click)="openDialog()">
               Move items…
@@ -115,16 +105,134 @@ export class DemoDialogComponent {
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a dialog for a <strong>focused, interactive task</strong> that
+              warrants interrupting the flow &mdash; a rename, a move, a short
+              form &mdash; where the user should resolve it before returning to
+              the page.
+            </li>
+            <li>
+              When the task <strong>must block the rest of the UI</strong> until
+              it is completed or dismissed, and benefits from a captured,
+              trapped focus context.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a simple yes/no decision (delete, discard, confirm), use a
+              <a routerLink="/components/confirm-dialog">Confirm Dialog</a> &mdash;
+              it builds on this service with a ready-made prompt.
+            </li>
+            <li>
+              For passive, non-blocking feedback after an action, use a
+              <a routerLink="/components/toast">Toast</a>.
+            </li>
+            <li>
+              For a rich panel anchored to a trigger that should leave the page
+              visible, use a <a routerLink="/components/popover">Popover</a>; for
+              a flat list of actions, a <a routerLink="/components/menu">Menu</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/confirm-dialog">Confirm Dialog</a> &mdash; prebuilt yes/no prompt on this service.</li>
+            <li><a routerLink="/components/popover">Popover</a> &mdash; non-blocking panels off a trigger.</li>
+            <li><a routerLink="/components/toast">Toast</a> &mdash; transient, non-blocking feedback.</li>
+            <li><a routerLink="/components/button">Button</a> &mdash; the triggers and footer actions.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A dialog is two parts: the <code>RhombusDialogService</code> opens any
+          component with the library's defaults and returns a typed
+          <code>RhombusDialogRef</code>, while
+          <code>&lt;rhombus-dialog&gt;</code> supplies the chrome
+          (heading, body, footer) inside that component.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>RhombusDialogService.open&lt;Result&gt;(MyDialogComponent, config?)</code>
+              &mdash; opens the component as a themed dialog and returns a
+              <code>RhombusDialogRef</code>; read the typed close value via
+              <code>afterClosed()</code>. Config accepts <code>data</code>,
+              <code>width</code>, <code>maxWidth</code>, <code>disableClose</code>,
+              <code>panelClass</code>, and <code>ariaLabel</code>.
+            </li>
+            <li>
+              <code>[title]</code> on <code>&lt;rhombus-dialog&gt;</code> &mdash;
+              renders the heading and wires it as the accessible name; omit it
+              and pass <code>ariaLabel</code> through the service instead.
+            </li>
+            <li>
+              <strong>Default content slot</strong> &mdash; everything you
+              project (other than the actions row) becomes the dialog body.
+            </li>
+            <li>
+              <code>[rhombusDialogActions]</code> &mdash; a semantic slot marker;
+              put it on the footer <code>&lt;div&gt;</code> holding your buttons.
+              The footer collapses when empty.
+            </li>
+            <li>
+              The opened component injects <code>MatDialogRef</code> and closes
+              itself with a typed result via <code>ref.close(result)</code>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The dialog renders inside a CDK overlay. The panel surface
+            (background, radius, elevation) comes from the
+            <code>@rhombuskit/material-preset</code> bridge in the
+            <code>.cdk-overlay-container</code> scope, so panel-level overrides
+            must target that scope rather than the host. The chrome itself
+            (<code>rhombus-dialog</code>) reads these contract tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> &mdash; chrome font family</li>
+            <li><code>--text-primary</code> &mdash; heading / body emphasis colour</li>
+            <li><code>--text-secondary</code> &mdash; body content colour</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            On open, focus moves into the dialog and is <strong>trapped</strong>
-            within it (<code>autoFocus: 'dialog'</code>); on close it is
-            <strong>restored</strong> to the element that opened it. The dialog
-            is announced as a modal, and the <code>[title]</code> on
-            <code>&lt;rhombus-dialog&gt;</code> becomes its accessible name via
-            <code>mat-dialog-title</code> &mdash; when you omit the title, pass an
-            <code>ariaLabel</code> through the service instead.
+            The dialog is opened through Material's <code>MatDialog</code>, which
+            renders the panel as a modal <code>role="dialog"</code> with
+            <code>aria-modal="true"</code> and a backdrop. On open, focus moves
+            into the dialog and is <strong>trapped</strong> within it
+            (<code>autoFocus: 'dialog'</code>); on close it is
+            <strong>restored</strong> to the element that opened it
+            (<code>restoreFocus: true</code>). The <code>[title]</code> on
+            <code>&lt;rhombus-dialog&gt;</code> becomes the dialog's accessible
+            name via <code>mat-dialog-title</code> (<code>aria-labelledby</code>)
+            &mdash; when you omit the title, pass an <code>ariaLabel</code>
+            through the service so the dialog is still named. By default
+            <kbd>Escape</kbd> and a backdrop click dismiss the dialog; set
+            <code>disableClose: true</code> for tasks that must be resolved
+            explicitly.
           </p>
         </section>
       </div>

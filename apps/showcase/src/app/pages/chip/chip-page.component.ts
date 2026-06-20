@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import {
   RhombusChipDirective,
   RhombusChipGroupDirective,
+  RhombusCodeBlockComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
@@ -12,16 +14,18 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-chip-page',
   standalone: true,
   imports: [
+    RouterLink,
     MatChipsModule,
     MatIconModule,
     RhombusChipDirective,
     RhombusChipGroupDirective,
+    RhombusCodeBlockComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Chip" apiKey="RhombusChipDirective">
+    <app-component-page title="Chip" [hasUsage]="true" apiKey="RhombusChipDirective">
       <div overview class="overview">
         <p class="overview__lead">
           Chips are compact elements representing an input, attribute, or
@@ -34,25 +38,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use chips for a <strong>set of selectable options or filters</strong>
-              &mdash; tags, statuses, categories. For a single on/off setting,
-              prefer a checkbox or switch.
-            </li>
-            <li>
-              Set <code>selection</code> on the group: <code>none</code> for
-              decorative labels, <code>single</code> for radio-style choice, or
-              <code>multiple</code> for multi-select. They are directives (not
-              wrapping components) so Material's content queries can still find
-              the chip children.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <mat-chip-listbox rhombusChipGroup selection="single">
               @for (status of statuses; track status) {
@@ -64,16 +50,133 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use chips for a <strong>set of selectable options or filters</strong>
+              &mdash; tags, statuses, categories rendered as a compact, wrapping row.
+            </li>
+            <li>
+              When you want a <strong>radio- or checkbox-style choice that reads as
+              tags</strong> rather than a form control &mdash; status pickers,
+              category toggles, faceted filters.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a single on/off setting, use a
+              <a routerLink="/components/switch">Switch</a> or
+              <a routerLink="/components/checkbox">Checkbox</a>.
+            </li>
+            <li>
+              For a mutually-exclusive choice in a form, use a
+              <a routerLink="/components/radio">Radio</a> group or a
+              <a routerLink="/components/select">Select</a>.
+            </li>
+            <li>
+              For a static, non-interactive status label, use a
+              <a routerLink="/components/badge">Badge</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/badge">Badge</a> &mdash; static status labels.</li>
+            <li><a routerLink="/components/checkbox">Checkbox</a> &mdash; multi-select form control.</li>
+            <li><a routerLink="/components/radio">Radio</a> &mdash; single-select form control.</li>
+            <li><a routerLink="/components/select">Select</a> &mdash; single choice from a long list.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A chip group is two decoration directives: <code>[rhombusChipGroup]</code>
+          on a <code>&lt;mat-chip-listbox&gt;</code> sets the
+          <code>selection</code> mode and re-emits <code>selectionChange</code>,
+          while <code>[rhombusChip]</code> on each
+          <code>&lt;mat-chip-option&gt;</code> applies a colour
+          <code>variant</code>.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>[rhombusChipGroup]</code> &mdash; put on a
+              <code>&lt;mat-chip-listbox&gt;</code>. Drive it with
+              <code>selection</code> (<code>none</code> | <code>single</code> |
+              <code>multiple</code>) and read picks via
+              <code>(selectionChange)</code>, which emits the selected value
+              (single) or array of values (multiple).
+            </li>
+            <li>
+              <code>[rhombusChip]</code> &mdash; put on each
+              <code>&lt;mat-chip-option&gt;</code>. Set <code>variant</code>
+              (<code>default</code> | <code>primary</code> | <code>success</code> |
+              <code>warning</code> | <code>danger</code>) and <code>[value]</code>
+              for selectable chips.
+            </li>
+            <li>
+              These are <strong>directives, not wrappers</strong> &mdash; they decorate
+              Material's elements in place so the listbox's
+              <code>&#64;ContentChildren</code> queries still find the chip options.
+            </li>
+            <li>
+              The chip's <strong>default content slot</strong> is its label text. For
+              decorations, use Material's own directives:
+              <code>matChipAvatar</code> for a leading icon and
+              <code>matChipRemove</code> on a trailing button for removable chips
+              &mdash; <code>[rhombusChip]</code> intentionally leaves those untouched.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            Each <code>variant</code> rebinds Material's
+            <code>--mat-chip-*</code> tokens to RhombusKit contract colours via
+            the directive's <code>data-variant</code> host attribute. Override the
+            contract tokens to re-skin every variant:
+          </p>
+          <ul>
+            <li><code>--nav-active-bg</code> / <code>--nav-active-text</code> &mdash; primary chip (unselected).</li>
+            <li><code>--btn-primary-bg</code> / <code>--btn-primary-text</code> &mdash; primary chip (selected).</li>
+            <li><code>--status-published-bg</code> / <code>--status-published-text</code> &mdash; success variant.</li>
+            <li><code>--status-draft-bg</code> / <code>--status-draft-text</code> &mdash; warning variant.</li>
+            <li><code>--status-archived-bg</code> / <code>--status-archived-text</code> &mdash; danger variant.</li>
+            <li><code>--font-sans</code> &mdash; chip-group font family.</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             When <code>selection</code> is <code>single</code> or
             <code>multiple</code>, the group becomes a Material listbox
             (<code>role="listbox"</code> with <code>option</code> children):
-            chips are reachable with <kbd>Tab</kbd>, navigable with the arrow
-            keys, and toggled with <kbd>Enter</kbd> / <kbd>Space</kbd>, with
-            selection state exposed to assistive tech. Pair leading icons with a
-            visible text label so each option is announced clearly.
+            the listbox takes a single tab stop, chips are navigable with the
+            arrow keys, and toggled with <kbd>Enter</kbd> / <kbd>Space</kbd>,
+            with selection state exposed to assistive tech via
+            <code>aria-selected</code>. With <code>selection="none"</code> the
+            chips are decorative and not selectable. Pair any leading
+            <code>matChipAvatar</code> icon with a visible text label so each
+            option is announced clearly, and give every
+            <code>matChipRemove</code> button an
+            <code>aria-label</code> naming what it removes.
           </p>
         </section>
       </div>

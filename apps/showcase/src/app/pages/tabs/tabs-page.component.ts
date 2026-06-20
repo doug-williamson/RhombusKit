@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { RhombusTabGroupDirective } from '@rhombuskit/core';
+import {
+  RhombusTabGroupDirective,
+  RhombusCodeBlockComponent,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
@@ -8,14 +12,16 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-tabs-page',
   standalone: true,
   imports: [
+    RouterLink,
     MatTabsModule,
     RhombusTabGroupDirective,
+    RhombusCodeBlockComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Tabs" apiKey="RhombusTabGroupDirective">
+    <app-component-page title="Tabs" apiKey="RhombusTabGroupDirective" [hasUsage]="true">
       <div overview class="overview">
         <p class="overview__lead">
           Tabs organise related content into peer panels that share one region,
@@ -27,24 +33,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use tabs to switch between <strong>peer views of one subject</strong>
-              within a page (Overview / Activity / Settings). For navigating to
-              different pages, prefer <strong>Breadcrumbs</strong> or a nav menu.
-            </li>
-            <li>
-              It is a <strong>directive</strong>, not a wrapper component, so
-              Material's <code>@ContentChildren</code> query keeps finding your
-              <code>&lt;mat-tab&gt;</code> children; read the active index from
-              <code>(tabChange)</code>.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <mat-tab-group rhombusTabGroup (tabChange)="activeIndex.set($event)">
               <mat-tab label="Overview">
@@ -66,15 +55,88 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use tabs to switch between <strong>peer views of one subject</strong>
+              within a page (Overview / Activity / Settings) where all sections are
+              equally important and you want to avoid a long scroll.
+            </li>
+            <li>
+              When the panels share a single context and the user is likely to move
+              between them — tabs keep that context in place rather than navigating away.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>To move between distinct destinations or pages, use <a routerLink="/components/breadcrumbs">Breadcrumbs</a> or a navigation surface like the <a routerLink="/components/bottom-nav">Bottom Nav</a> — tabs are for peer views, not site navigation.</li>
+            <li>For a flat list of one-off actions off a trigger, use a <a routerLink="/components/menu">Menu</a> (or an <a routerLink="/components/overflow-menu">Overflow Menu</a> for row actions).</li>
+            <li>For a linear, must-complete-in-order flow, prefer a dedicated stepper pattern rather than free-roaming tabs.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/breadcrumbs">Breadcrumbs</a> — locate the current page within a hierarchy.</li>
+            <li><a routerLink="/components/menu">Menu</a> — action lists off a trigger.</li>
+            <li><a routerLink="/components/card">Card</a> — group the content that lives inside each panel.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          Tabs are driven by the <code>[rhombusTabGroup]</code> directive on a
+          <code>&lt;mat-tab-group&gt;</code>; each view is a child
+          <code>&lt;mat-tab&gt;</code>, and the active index is reported through
+          <code>(tabChange)</code>.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>rhombusTabGroup</code> — apply to <code>&lt;mat-tab-group&gt;</code>. It adds the <code>.rhombus-tab-group</code> host class (themed in <code>@rhombuskit/material-preset</code>) and re-emits the selection as <code>(tabChange)</code>, a <code>number</code> of the new index.</li>
+            <li><code>&lt;mat-tab label="…"&gt;</code> — one per view. Its <strong>default content slot</strong> projects the panel body. It is a directive (not a wrapper) precisely so Material's <code>@ContentChildren(MatTab)</code> query still finds these children.</li>
+            <li><code>label</code> / <code>[disabled]</code> on a <code>&lt;mat-tab&gt;</code> set the tab's text and disable it; richer label markup uses Material's <code>&lt;ng-template mat-tab-label&gt;</code>.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            Tabs render inline (no CDK overlay), and their colours are bridged
+            globally in <code>@rhombuskit/material-preset</code> via
+            <code>mat.tabs-overrides</code>, which read these contract tokens:
+          </p>
+          <ul>
+            <li><code>--text-accent</code> — active label text and the ink-bar / active indicator</li>
+            <li><code>--text-secondary</code> — inactive label text</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             Inherits Material's tab semantics: the labels form a
-            <code>tablist</code> and each panel is a <code>tabpanel</code> wired
-            together with <code>aria-controls</code> /
-            <code>aria-labelledby</code>. The active label is reachable with
-            <kbd>Tab</kbd>, and the <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> arrow
-            keys move between tabs.
+            <code>role="tablist"</code> and each panel is a
+            <code>role="tabpanel"</code>, wired together with
+            <code>aria-controls</code> / <code>aria-labelledby</code> and reflecting
+            <code>aria-selected</code> on the active label. The tab strip is a single
+            <kbd>Tab</kbd> stop, and the <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> arrow
+            keys move the selection between tabs. A tab marked
+            <code>[disabled]</code> is skipped by keyboard navigation. The directive
+            adds no extra ARIA of its own — give each <code>&lt;mat-tab&gt;</code> a
+            clear <code>label</code> so the relationship is announced.
           </p>
         </section>
       </div>

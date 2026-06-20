@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { RhombusButtonComponent, RhombusTooltipDirective } from '@rhombuskit/core';
+import {
+  RhombusButtonComponent,
+  RhombusCodeBlockComponent,
+  RhombusTooltipDirective,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
@@ -8,15 +13,21 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-tooltip-page',
   standalone: true,
   imports: [
+    RouterLink,
     MatButtonModule,
     RhombusButtonComponent,
+    RhombusCodeBlockComponent,
     RhombusTooltipDirective,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Tooltip" apiKey="RhombusTooltipDirective">
+    <app-component-page
+      title="Tooltip"
+      [hasUsage]="true"
+      apiKey="RhombusTooltipDirective"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           A tooltip is a small label that appears on hover or focus to explain a
@@ -29,6 +40,15 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
+          <h2>Example</h2>
+          <app-example [code]="usage">
+            <rhombus-button [rhombusTooltip]="'Archive this item'">
+              Archive
+            </rhombus-button>
+          </app-example>
+        </section>
+
+        <section class="showcase-section">
           <h2>When to use</h2>
           <ul>
             <li>
@@ -38,35 +58,130 @@ import { ExampleComponent } from '../../shared/example.component';
               inside it.
             </li>
             <li>
-              Bind the label with <code>[rhombusTooltip]="'…'"</code> and steer
-              placement with <code>[rhombusTooltipPosition]</code>
-              (<code>above</code> / <code>below</code> / <code>left</code> /
-              <code>right</code>, default <code>below</code>); tune timing with
-              <code>rhombusTooltipShowDelay</code> /
-              <code>rhombusTooltipHideDelay</code>.
+              Reach for it when the host already has its own accessible name and
+              you just want to add a short clarifying label on demand, without
+              taking up persistent space in the layout.
             </li>
           </ul>
         </section>
 
         <section class="showcase-section">
-          <h2>Usage</h2>
-          <app-example [code]="usage">
-            <rhombus-button [rhombusTooltip]="'Archive this item'">
-              Archive
-            </rhombus-button>
-          </app-example>
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For rich, interactive content anchored to a trigger (forms, date
+              grids, multi-control panels), use a
+              <a routerLink="/components/popover">Popover</a>.
+            </li>
+            <li>
+              For a list of actions off a trigger, use a
+              <a routerLink="/components/menu">Menu</a> (or an
+              <a routerLink="/components/overflow-menu">Overflow Menu</a> for row
+              actions).
+            </li>
+            <li>
+              For a persistent, in-flow status message, use an
+              <a routerLink="/components/alert">Alert</a>; for a transient
+              notification, use a <a routerLink="/components/toast">Toast</a>.
+            </li>
+          </ul>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li>
+              <a routerLink="/components/popover">Popover</a> — focus-trapped
+              panels of arbitrary content.
+            </li>
+            <li>
+              <a routerLink="/components/menu">Menu</a> — action lists off a
+              trigger.
+            </li>
+            <li>
+              <a routerLink="/components/button">Button</a> — the most common
+              tooltip host.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A tooltip is driven entirely by attribute inputs on its host element —
+          there is no panel component to place. Bind the label with
+          <code>[rhombusTooltip]</code> and steer the rest with the
+          <code>rhombusTooltip*</code> inputs.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>[rhombusTooltip]="'…'"</code> — the only required input; its
+              string is the tooltip label.
+            </li>
+            <li>
+              <code>[rhombusTooltipPosition]</code> — placement relative to the
+              host: <code>above</code> / <code>below</code> / <code>left</code> /
+              <code>right</code> / <code>before</code> / <code>after</code>
+              (default <code>below</code>).
+            </li>
+            <li>
+              <code>[rhombusTooltipDisabled]</code> — suppresses the tooltip when
+              <code>true</code> (default <code>false</code>).
+            </li>
+            <li>
+              <code>rhombusTooltipShowDelay</code> /
+              <code>rhombusTooltipHideDelay</code> — millisecond delays before
+              the tooltip shows / hides (default <code>0</code>).
+            </li>
+            <li>
+              There are <strong>no content-projection slots</strong>: the
+              directive attaches to its host element rather than wrapping
+              projected content, and the tooltip surface is rendered into the CDK
+              overlay from the string label.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The tooltip surface renders in the CDK overlay, so colour overrides
+            must target the <code>.cdk-overlay-container</code> scope rather than
+            the host. The
+            <a routerLink="/components/theming">material-preset</a> bridge maps
+            these contract tokens onto Material's tooltip:
+          </p>
+          <ul>
+            <li><code>--tooltip-bg</code> — tooltip surface background</li>
+            <li><code>--tooltip-text</code> — tooltip label colour</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             The tooltip shows on both pointer <strong>hover</strong> and keyboard
             <strong>focus</strong>, and dismisses on <kbd>Escape</kbd>, so the
             hint is reachable without a mouse. Apply it to a natively focusable
-            host (a button, or an element with <code>tabindex="0"</code>). A
-            tooltip supplements a control&rsquo;s accessible name &mdash; it does
-            not replace it, so an icon-only button should still carry its own
-            <code>aria-label</code>.
+            host (a button, or an element with <code>tabindex="0"</code>) — a
+            non-focusable host can only be reached by pointer.
+          </p>
+          <p>
+            A tooltip <strong>supplements</strong> a control&rsquo;s accessible
+            name; it does not replace it, so an icon-only button should still
+            carry its own <code>aria-label</code>. Under the hood Material wires
+            the host to the tooltip via <code>aria-describedby</code> while the
+            tooltip is visible, so the label is announced as a description rather
+            than as the element&rsquo;s name. Keep the label short — it is read
+            as supplementary text, not as a live region.
           </p>
         </section>
       </div>

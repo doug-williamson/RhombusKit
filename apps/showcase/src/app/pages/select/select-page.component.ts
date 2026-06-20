@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 import {
+  RhombusCodeBlockComponent,
   RhombusErrorDirective,
   RhombusSelectComponent,
   SelectOption,
@@ -13,10 +15,18 @@ import { ExampleComponent } from '../../shared/example.component';
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [MatButtonModule, RhombusSelectComponent, RhombusErrorDirective, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    MatButtonModule,
+    RhombusCodeBlockComponent,
+    RhombusSelectComponent,
+    RhombusErrorDirective,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Select" apiKey="RhombusSelectComponent">
+    <app-component-page title="Select" [hasUsage]="true" apiKey="RhombusSelectComponent">
       <div overview class="overview">
         <p class="overview__lead">
           A select lets the user pick from a list of options in a compact
@@ -27,25 +37,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Reach for a select when there are <strong>more options than fit
-              comfortably as radios</strong> (roughly five or more), or when
-              vertical space is tight. For a short, always-visible set use
-              <strong>Radio</strong>.
-            </li>
-            <li>
-              Pass <code>options</code> (flat) or <code>groups</code> (grouped),
-              and set <code>[multiple]="true"</code> for multi-select. The
-              component owns the control, so reactive-forms consumers pass a
-              <code>FormControl</code> via <code>[control]</code>.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-select
               label="Status"
@@ -55,15 +47,106 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Reach for a select when there are <strong>more options than fit
+              comfortably as radios</strong> (roughly five or more), or when
+              vertical space is tight.
+            </li>
+            <li>
+              When you need <strong>grouped options</strong> under headings, or
+              <strong>multi-select</strong> from a compact trigger.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a short, always-visible set of mutually exclusive choices
+              (roughly two to five), use a <a routerLink="/components/radio">Radio</a>
+              group — no extra click to reveal the options.
+            </li>
+            <li>
+              For a single on/off choice, use a <a routerLink="/components/switch">Switch</a>
+              or <a routerLink="/components/checkbox">Checkbox</a> rather than a two-option select.
+            </li>
+            <li>
+              For free-form text rather than a fixed list, use an
+              <a routerLink="/components/input">Input</a> or
+              <a routerLink="/components/textarea">Textarea</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/radio">Radio</a> — short, always-visible exclusive choices.</li>
+            <li><a routerLink="/components/checkbox">Checkbox</a> — multi-select from a visible list.</li>
+            <li><a routerLink="/components/input">Input</a> — the sibling form-field for free text.</li>
+            <li><a routerLink="/components/textarea">Textarea</a> — multi-line free text.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The select owns its inner <code>&lt;mat-select&gt;</code>. Feed it
+          <code>options</code> (flat) or <code>groups</code> (grouped), and either
+          let it manage its own value or bind a reactive
+          <code>FormControl</code> via <code>[control]</code>.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>label</code> / <code>placeholder</code> — the floating label and the empty-state trigger text.</li>
+            <li><code>[options]</code> — a flat <code>SelectOption[]</code> (<code>{{ '{' }} value, label, disabled? {{ '}' }}</code>); or <code>[groups]</code> — a <code>SelectOptionGroup[]</code> (<code>{{ '{' }} groupLabel, options {{ '}' }}</code>) that takes precedence when non-empty.</li>
+            <li><code>[multiple]="true"</code> for multi-select; <code>[control]</code> to drive it from reactive forms (the standalone <code>[disabled]</code> input is ignored once a control is bound); <code>[required]</code>, <code>hint</code>, <code>appearance</code>, and <code>size</code> for the field shell.</li>
+            <li><strong>Projected slot</strong> — <code>[rhombusError]</code>: the only content slot. Project a <code>&lt;span rhombusError&gt;</code> here and it renders inside the field's <code>&lt;mat-error&gt;</code>. There is no default slot.</li>
+            <li><code>(selectionChange)</code> emits the selected value (or an array when <code>multiple</code>) on every change.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The dropdown panel renders in a CDK overlay appended to
+            <code>&lt;body&gt;</code>, so option-panel overrides must target the
+            <code>.cdk-overlay-container</code> scope, not the host. The component's
+            stylesheet routes everything through these contract tokens:
+          </p>
+          <ul>
+            <li><code>--text-primary</code> — option label colour.</li>
+            <li><code>--text-accent</code> — selected-option label colour.</li>
+            <li><code>--surface-0</code> — dropdown panel background.</li>
+            <li><code>--surface-1</code> — hover / selected state layer.</li>
+            <li><code>--surface-2</code> — focus state layer.</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            Built on Material's <code>&lt;mat-select&gt;</code>, so the trigger
-            is focusable with <kbd>Tab</kbd>, opens on
-            <kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>Arrow</kbd>, and the open
-            panel exposes the options as an ARIA listbox navigable with the
-            arrow keys. The <code>label</code> becomes the field's accessible
-            name.
+            Built on Material's <code>&lt;mat-select&gt;</code>, so the trigger is
+            focusable with <kbd>Tab</kbd>, opens on <kbd>Enter</kbd> /
+            <kbd>Space</kbd> / <kbd>Arrow</kbd>, and the open panel exposes the
+            options as an ARIA listbox navigable with the arrow keys; type-ahead
+            jumps to matching options. The <code>label</code> becomes the field's
+            accessible name, so always supply one. Setting <code>[required]</code>
+            reflects the required state to assistive tech, and content projected
+            into <code>[rhombusError]</code> is rendered inside Material's
+            <code>&lt;mat-error&gt;</code> and associated with the field for
+            validation announcements.
           </p>
         </section>
       </div>

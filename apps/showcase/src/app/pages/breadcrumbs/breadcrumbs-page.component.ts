@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   BreadcrumbItem,
   RhombusBreadcrumbsComponent,
+  RhombusCodeBlockComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
@@ -10,13 +12,19 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-breadcrumbs-page',
   standalone: true,
   imports: [
+    RouterLink,
     RhombusBreadcrumbsComponent,
+    RhombusCodeBlockComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Breadcrumbs" apiKey="RhombusBreadcrumbsComponent">
+    <app-component-page
+      title="Breadcrumbs"
+      [hasUsage]="true"
+      apiKey="RhombusBreadcrumbsComponent"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           Breadcrumbs show where the current page sits in the site hierarchy and
@@ -27,38 +35,128 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use breadcrumbs for <strong>deep, hierarchical pages</strong> so
-              users can see and jump up the path. For switching between peer
-              views of one page, prefer <strong>Tabs</strong>.
-            </li>
-            <li>
-              Give each ancestor <code>BreadcrumbItem</code> a <code>link</code>
-              (a <code>routerLink</code> target); omit it on the last item, which
-              renders as the current page rather than an anchor. The
-              <code>separator</code> input swaps the default slash.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-breadcrumbs [items]="trail" />
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use breadcrumbs for <strong>deep, hierarchical pages</strong> so
+              users can see and jump up the path.
+            </li>
+            <li>
+              When the trail is short or the destinations are equally important
+              ancestors, breadcrumbs keep the path lightweight and scannable
+              without stealing focus from the page content.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For switching between peer views of one page, use
+              <a routerLink="/components/tabs">Tabs</a> — breadcrumbs imply a
+              parent-child hierarchy, not siblings.
+            </li>
+            <li>
+              For paging through a long list of records, use
+              <a routerLink="/components/pagination">Pagination</a>.
+            </li>
+            <li>
+              For a fixed app-wide navigation rail, use the
+              <a routerLink="/components/app-shell">App Shell</a> or
+              <a routerLink="/components/bottom-nav">Bottom Nav</a> instead.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/tabs">Tabs</a> — switch between peer views of a single page.</li>
+            <li><a routerLink="/components/page-header">Page Header</a> — a common host for a breadcrumb trail.</li>
+            <li><a routerLink="/components/pagination">Pagination</a> — step through sequential pages of data.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A breadcrumb trail is driven entirely by its <code>[items]</code>
+          input — an array of <code>BreadcrumbItem</code> (root first). There is
+          no content projection; the component renders the trail itself.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>[items]</code> (required) — a <code>BreadcrumbItem[]</code>,
+              root first. Each item has a <code>label</code> and an optional
+              <code>link</code> (a <code>routerLink</code> target: a string path
+              or commands array).
+            </li>
+            <li>
+              Give each ancestor a <code>link</code>; <strong>omit it on the last
+              item</strong>, which renders as the current page rather than an
+              anchor.
+            </li>
+            <li>
+              <code>separator</code> — the glyph drawn between entries. Defaults
+              to <code>'/'</code>.
+            </li>
+            <li>
+              <code>ariaLabel</code> — the accessible label for the
+              <code>&lt;nav&gt;</code> landmark. Defaults to
+              <code>'Breadcrumb'</code>.
+            </li>
+            <li>
+              The component renders its own template — it exposes
+              <strong>no content-projection slots</strong>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            Breadcrumbs render in the host (not a CDK overlay) and read only
+            colour and typography from the contract tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> — trail font family</li>
+            <li><code>--text-secondary</code> — ancestor link colour</li>
+            <li><code>--text-accent</code> — link hover colour</li>
+            <li><code>--text-primary</code> — current-page colour</li>
+            <li><code>--text-muted</code> — separator colour</li>
+            <li><code>--focus-border</code> — link focus ring</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            Renders a <code>&lt;nav aria-label="Breadcrumb"&gt;</code> landmark
-            wrapping an ordered list. Ancestor entries are real
-            <code>routerLink</code> anchors, the last entry carries
-            <code>aria-current="page"</code> and is never a link, and the
-            separators are decorative (<code>aria-hidden</code>) so they are not
-            announced.
+            Renders a <code>&lt;nav&gt;</code> landmark labelled by
+            <code>ariaLabel</code> (default <code>"Breadcrumb"</code>) wrapping
+            an ordered list. Ancestor entries are real <code>routerLink</code>
+            anchors with a visible focus ring; the last entry is rendered as a
+            <code>&lt;span&gt;</code> carrying <code>aria-current="page"</code>
+            and is never a link. Separators are decorative
+            (<code>aria-hidden="true"</code>) so they are not announced. Because
+            <code>aria-current</code> is set only on the final item, screen
+            readers announce exactly one current page; keep the last item as the
+            page the user is on.
           </p>
         </section>
       </div>

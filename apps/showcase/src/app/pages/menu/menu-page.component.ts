@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   MenuItem,
+  RhombusCodeBlockComponent,
   RhombusMenuComponent,
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
@@ -11,6 +13,8 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-menu-page',
   standalone: true,
   imports: [
+    RouterLink,
+    RhombusCodeBlockComponent,
     RhombusMenuComponent,
     RhombusOverflowMenuComponent,
     ComponentPageComponent,
@@ -18,7 +22,7 @@ import { ExampleComponent } from '../../shared/example.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Menu" apiKey="RhombusMenuComponent">
+    <app-component-page title="Menu" [hasUsage]="true" apiKey="RhombusMenuComponent">
       <div overview class="overview">
         <p class="overview__lead">
           A menu presents a list of actions on a surface that opens from a
@@ -29,6 +33,15 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
+          <h2>Example</h2>
+          <app-example [code]="usage">
+            <rhombus-menu [items]="items" ariaLabel="Document actions">
+              Actions
+            </rhombus-menu>
+          </app-example>
+        </section>
+
+        <section class="showcase-section">
           <h2>When to use</h2>
           <ul>
             <li>
@@ -37,33 +50,122 @@ import { ExampleComponent } from '../../shared/example.component';
               than crowding them all onscreen.
             </li>
             <li>
-              <code>dividerBefore</code> groups related items,
-              <code>variant: 'danger'</code> marks a destructive one, and
-              <code>disabled</code> renders an item inert. For the round
-              icon-button trigger, use <code>&lt;rhombus-overflow-menu&gt;</code>
-              (or pass <code>[iconButton]="true"</code>).
+              When each entry is a <strong>single, fire-and-forget action</strong>
+              — the homogeneous <code>items</code> list keeps dispatch co-located
+              with each row.
             </li>
           </ul>
         </section>
 
         <section class="showcase-section">
-          <h2>Usage</h2>
-          <app-example [code]="usage">
-            <rhombus-menu [items]="items" ariaLabel="Document actions">
-              Actions
-            </rhombus-menu>
-          </app-example>
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For rich, interactive panels — date grids, filter forms, multi-control
+              pickers — use a <a routerLink="/components/popover">Popover</a>; a flat
+              item list can't express them.
+            </li>
+            <li>
+              For the round icon-button trigger on a table row, reach for the
+              <a routerLink="/components/overflow-menu">Overflow Menu</a> preset
+              instead of wiring <code>[iconButton]="true"</code> by hand.
+            </li>
+            <li>
+              For a short, non-interactive hint, use a
+              <a routerLink="/components/tooltip">Tooltip</a>.
+            </li>
+            <li>
+              For a task that must block the rest of the UI until resolved, use a
+              <a routerLink="/components/dialog">Dialog</a>.
+            </li>
+          </ul>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/overflow-menu">Overflow Menu</a> — the icon-button preset of this menu.</li>
+            <li><a routerLink="/components/popover">Popover</a> — arbitrary interactive content off a trigger.</li>
+            <li><a routerLink="/components/tooltip">Tooltip</a> — lightweight hover/focus hints.</li>
+            <li><a routerLink="/components/dialog">Dialog</a> — blocking modal surfaces.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A menu is driven by one <code>[items]</code> array of
+          <code>MenuItem</code>s; whatever you project as content becomes the
+          trigger. There is no <code>(itemClick)</code> output — each item's own
+          <code>action</code> callback runs when it is activated.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>&lt;rhombus-menu&gt;</code> — the host. Its
+              <strong>default content slot</strong> projects the trigger (a text
+              label, an icon, or any markup); there are no named slots.
+            </li>
+            <li>
+              <code>[items]</code> — the required <code>MenuItem[]</code>. Each item
+              carries <code>label</code>, an optional <code>icon</code> (Material
+              icon name), and a required <code>action</code> callback.
+            </li>
+            <li>
+              Per-item options: <code>variant: 'danger'</code> tints a destructive
+              item with <code>--error</code>, <code>disabled</code> renders it inert,
+              and <code>dividerBefore</code> inserts a divider above it (ignored on
+              the first item).
+            </li>
+            <li>
+              <code>ariaLabel</code> labels the trigger; <code>[iconButton]="true"</code>
+              switches it to the round icon-button treatment (or use
+              <code>&lt;rhombus-overflow-menu&gt;</code>).
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The trigger is styled on the host, but the panel and items render in the
+            CDK overlay — those overrides must target the
+            <code>.cdk-overlay-container</code> scope, not the host. The component
+            reads these contract tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> — trigger font family</li>
+            <li><code>--text-primary</code> — trigger and item label colour</li>
+            <li><code>--text-secondary</code> — icon-button trigger and item icon colour</li>
+            <li><code>--border</code> / <code>--border-strong</code> — trigger border (default + hover)</li>
+            <li><code>--focus-border</code> — trigger focus outline</li>
+            <li><code>--surface-0</code> — panel background</li>
+            <li><code>--surface-1</code> — trigger and item hover state</li>
+            <li><code>--surface-2</code> — item focus state</li>
+            <li><code>--error</code> — <code>variant: 'danger'</code> item label and icon</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            Inherits Material's menu semantics: the trigger exposes
-            <code>aria-haspopup</code> and opens the panel on <kbd>Enter</kbd> /
-            <kbd>Space</kbd>; the open menu is a <code>menu</code> of
-            <code>menuitem</code>s navigable with the arrow keys and dismissed
-            with <kbd>Esc</kbd>. Give an icon-only trigger an
-            <code>ariaLabel</code> so its purpose is announced.
+            The trigger is a real <code>&lt;button&gt;</code> wired with Material's
+            <code>matMenuTriggerFor</code>, so it exposes
+            <code>aria-haspopup</code> / <code>aria-expanded</code> and opens the
+            panel on <kbd>Enter</kbd> / <kbd>Space</kbd>. The open menu is a
+            <code>menu</code> of <code>menuitem</code>s navigable with the arrow
+            keys and dismissed with <kbd>Esc</kbd>; focus returns to the trigger on
+            close. The <code>ariaLabel</code> input is reflected as
+            <code>aria-label</code> on the trigger — always set it for an icon-only
+            trigger so its purpose is announced. Items with <code>disabled</code>
+            are skipped by keyboard navigation.
           </p>
         </section>
       </div>

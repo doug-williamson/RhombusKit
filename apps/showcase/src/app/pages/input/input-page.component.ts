@@ -1,18 +1,32 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RhombusErrorDirective, RhombusInputComponent } from '@rhombuskit/core';
+import {
+  RhombusCodeBlockComponent,
+  RhombusErrorDirective,
+  RhombusInputComponent,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, RhombusInputComponent, RhombusErrorDirective, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    MatIconModule,
+    MatButtonModule,
+    RhombusCodeBlockComponent,
+    RhombusInputComponent,
+    RhombusErrorDirective,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Input" apiKey="RhombusInputComponent">
+    <app-component-page title="Input" [hasUsage]="true" apiKey="RhombusInputComponent">
       <div overview class="overview">
         <p class="overview__lead">
           A text input collects a single line of free-form text. RhombusKit's
@@ -23,25 +37,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use an input for <strong>short, single-line text</strong> (a name,
-              an email, a search term). For longer multi-line entry reach for
-              <strong>Textarea</strong>; to choose from a fixed list use
-              <strong>Select</strong>.
-            </li>
-            <li>
-              The component owns the native input, so reactive-forms consumers
-              pass a <code>FormControl</code> via <code>[control]</code> rather
-              than binding <code>[formControl]</code> directly. Omit it for a
-              plain uncontrolled field.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-input
               label="Email"
@@ -61,18 +57,142 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use an input for <strong>short, single-line text</strong> — a
+              name, an email, a search term, a quantity.
+            </li>
+            <li>
+              When the value benefits from a leading or trailing affordance — a
+              currency symbol, a search glyph, a show/hide password toggle —
+              that the projected prefix/suffix slots can carry.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For longer, multi-line free text use a
+              <a routerLink="/components/textarea">Textarea</a>.
+            </li>
+            <li>
+              To pick one (or several) values from a fixed list use a
+              <a routerLink="/components/select">Select</a>.
+            </li>
+            <li>
+              For a single boolean choice use a
+              <a routerLink="/components/checkbox">Checkbox</a> or a
+              <a routerLink="/components/switch">Switch</a>, not a text field.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li>
+              <a routerLink="/components/textarea">Textarea</a> — multi-line
+              free text with the same form-field contract.
+            </li>
+            <li>
+              <a routerLink="/components/select">Select</a> — choose from a
+              fixed set of options.
+            </li>
+            <li>
+              <a routerLink="/components/data-table">Data Table</a> — inputs
+              often filter or edit rows here.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The component owns the native <code>&lt;input&gt;</code>. Drive it
+          declaratively with inputs (<code>label</code>, <code>type</code>,
+          <code>appearance</code>, <code>size</code>, <code>hint</code>); for
+          reactive forms pass a <code>FormControl</code> via
+          <code>[control]</code> rather than binding <code>[formControl]</code>
+          directly. Omit it for a plain uncontrolled field.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>&lt;rhombus-input&gt;</code> — the host. It renders the
+              <code>&lt;mat-form-field&gt;</code> and the native control
+              internally, so the control is <strong>not</strong> projected; bind
+              data through <code>[control]</code> or read the uncontrolled field.
+            </li>
+            <li>
+              <code>[matIconPrefix]</code> / <code>[matIconPrefix]</code> and
+              <code>[matIconSuffix]</code> — leading / trailing icon
+              affordances (e.g. a search glyph, or a password show/hide button).
+            </li>
+            <li>
+              <code>[matPrefix]</code> / <code>[matSuffix]</code> and
+              <code>[matTextPrefix]</code> / <code>[matTextSuffix]</code> —
+              generic and text-styled prefix/suffix slots for symbols like a
+              currency sign or unit.
+            </li>
+            <li>
+              <code>[rhombusError]</code> — project error message text here; it
+              surfaces through Material's <code>&lt;mat-error&gt;</code> once the
+              bound control is invalid and touched.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The field renders inline (no overlay). Its styling lives in the
+            global <code>&#64;rhombuskit/core/scss</code> form-field layer, which
+            maps Material's form-field variables onto these contract tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> — field font family</li>
+            <li><code>--text-primary</code> — input text colour</li>
+            <li><code>--text-secondary</code> — resting label colour</li>
+            <li><code>--text-accent</code> — focused label colour</li>
+            <li><code>--text-muted</code> — placeholder colour</li>
+            <li><code>--border</code> / <code>--border-strong</code> — outline (resting / hover)</li>
+            <li><code>--focus-border</code> — focused outline colour</li>
+            <li><code>--surface-1</code> — container fill (<code>fill</code> appearance)</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             Renders a native <code>&lt;input&gt;</code>, so it is focusable with
             <kbd>Tab</kbd> and the <code>label</code> floats into a
             <code>&lt;mat-label&gt;</code> wired as its accessible name. Set
-            <code>required</code> to expose the required state, and any
-            <code>hint</code> or projected <code>rhombusError</code> text is
-            linked to the field via <code>aria-describedby</code>.
+            <code>required</code> to mark the native control required for
+            validation and assistive tech.
+          </p>
+          <p>
+            Any <code>hint</code> renders in a <code>&lt;mat-hint&gt;</code> and
+            projected <code>rhombusError</code> text in a
+            <code>&lt;mat-error&gt;</code>; Material links both to the field via
+            <code>aria-describedby</code>, and the error is revealed only once
+            the bound control is invalid <em>and</em> touched. When you project
+            a prefix/suffix icon button (such as the password toggle), give it
+            its own <code>aria-label</code> — the examples below do.
           </p>
         </section>
       </div>
+
       <div examples>
       <section class="showcase-section">
         <h2>Appearance</h2>
