@@ -42,6 +42,7 @@ const SEVERITY_LABELS: Record<AlertVariant, string> = {
     @if (!closed()) {
       <div
         class="rhombus-alert"
+        [attr.role]="role()"
         [class.rhombus-alert--info]="variant() === 'info'"
         [class.rhombus-alert--success]="variant() === 'success'"
         [class.rhombus-alert--warning]="variant() === 'warning'"
@@ -82,6 +83,17 @@ export class RhombusAlertComponent {
   protected readonly closed = signal(false);
   protected readonly severityLabel = computed(
     () => SEVERITY_LABELS[this.variant()]
+  );
+  /**
+   * ARIA live role: `'alert'` (assertive) for error/warning so it interrupts,
+   * `'status'` (polite) for info/success so it's announced without interrupting.
+   * Without this the banner conveyed severity only visually + via the hidden
+   * prefix; assistive tech now announces it when it appears or updates.
+   */
+  protected readonly role = computed<'alert' | 'status'>(() =>
+    this.variant() === 'error' || this.variant() === 'warning'
+      ? 'alert'
+      : 'status'
   );
 
   protected dismiss(): void {

@@ -79,6 +79,28 @@ describe('rhombus-alert', () => {
     expect(el.querySelector('.rhombus-alert')).toBeNull();
   });
 
+  it('exposes an ARIA live role: assertive for error/warning, polite otherwise', () => {
+    const { fixture, host, el } = setup();
+    const roleOf = () =>
+      el.querySelector('.rhombus-alert')?.getAttribute('role');
+
+    host.variant = 'warning';
+    fixture.detectChanges();
+    expect(roleOf()).toBe('alert');
+
+    host.variant = 'error';
+    fixture.detectChanges();
+    expect(roleOf()).toBe('alert');
+
+    host.variant = 'info';
+    fixture.detectChanges();
+    expect(roleOf()).toBe('status');
+
+    host.variant = 'success';
+    fixture.detectChanges();
+    expect(roleOf()).toBe('status');
+  });
+
   it('has no accessibility violations', async () => {
     const { fixture, host, el } = setup();
     host.dismissible = true;

@@ -119,14 +119,14 @@ import { ExampleComponent } from '../../shared/example.component';
           <p>
             Severity is never conveyed by colour alone: each variant renders a
             visually-hidden prefix (e.g. "Warning:") read by screen readers
-            before the message. The <code>dismissible</code> close button is a
-            native <code>&lt;button&gt;</code> with an
-            <code>aria-label</code> of "Dismiss alert", so it is focusable and
-            announced. The alert is a static inline banner — it sets no
-            <code>role="alert"</code> or <code>aria-live</code> region, so screen
-            readers encounter it in document order rather than having it announced
-            on insertion. If you inject an alert in response to a user action and
-            need it announced immediately, place it inside your own live region.
+            before the message. The alert also carries an ARIA live role —
+            <code>role="alert"</code> (assertive) for <code>warning</code> /
+            <code>error</code> and <code>role="status"</code> (polite) for
+            <code>info</code> / <code>success</code> — so assistive tech announces
+            it when it appears or its content changes; error and warning interrupt,
+            info and success do not. The <code>dismissible</code> close button is a
+            native <code>&lt;button&gt;</code> with an <code>aria-label</code> of
+            "Dismiss alert", so it is focusable and announced.
           </p>
         </section>
       </div>
