@@ -1,15 +1,29 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RhombusAvatarComponent } from '@rhombuskit/core';
+import { RouterLink } from '@angular/router';
+import {
+  RhombusAvatarComponent,
+  RhombusCodeBlockComponent,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-avatar-page',
   standalone: true,
-  imports: [RhombusAvatarComponent, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    RhombusAvatarComponent,
+    RhombusCodeBlockComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Avatar" apiKey="RhombusAvatarComponent">
+    <app-component-page
+      title="Avatar"
+      [hasUsage]="true"
+      apiKey="RhombusAvatarComponent"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           An avatar is a compact, circular representation of a person or entity.
@@ -20,6 +34,13 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
+          <h2>Example</h2>
+          <app-example [code]="usage">
+            <rhombus-avatar name="Ada Lovelace" />
+          </app-example>
+        </section>
+
+        <section class="showcase-section">
           <h2>When to use</h2>
           <ul>
             <li>
@@ -28,30 +49,104 @@ import { ExampleComponent } from '../../shared/example.component';
               decorative shorthand, not a control.
             </li>
             <li>
-              Provide a <code>name</code> in every case; pass <code>src</code>
-              when you have a photo and let the initials fallback cover the rest.
-              Pick a <code>size</code> (<code>sm</code> / <code>md</code> /
-              <code>lg</code>) to match its context.
+              When you have a photo, pass <code>src</code>; otherwise let the
+              <strong>initials fallback</strong> carry the identity. Match its
+              <code>size</code> to the surrounding density.
             </li>
           </ul>
         </section>
 
         <section class="showcase-section">
-          <h2>Usage</h2>
-          <app-example [code]="usage">
-            <rhombus-avatar name="Ada Lovelace" />
-          </app-example>
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a small status or count next to a label, use a
+              <a routerLink="/components/badge">Badge</a> &mdash; it is built for
+              counts and statuses, not identity.
+            </li>
+            <li>
+              For a clickable, labelled tag or person token that can be removed,
+              use a <a routerLink="/components/chip">Chip</a>.
+            </li>
+            <li>
+              For a tappable identity entry point in a header or shell, place the
+              avatar inside a <a routerLink="/components/button">Button</a> rather
+              than making the avatar itself the control.
+            </li>
+          </ul>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/badge">Badge</a> &mdash; counts and statuses.</li>
+            <li><a routerLink="/components/chip">Chip</a> &mdash; removable person/tag tokens.</li>
+            <li><a routerLink="/components/card">Card</a> &mdash; profile and entity surfaces.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The avatar is driven entirely by three inputs &mdash;
+          <code>name</code>, optional <code>src</code>, and <code>size</code>
+          &mdash; with no content projection.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>[name]</code> &mdash; the display name. Always supply it: it
+              seeds the initials fallback and the accessible label.
+            </li>
+            <li>
+              <code>[src]</code> &mdash; an image URL. When set, the image
+              replaces the initials and <code>name</code> becomes its
+              <code>alt</code> text.
+            </li>
+            <li>
+              <code>[size]</code> &mdash; <code>'sm'</code> / <code>'md'</code>
+              (default) / <code>'lg'</code>.
+            </li>
+            <li>
+              <strong>No content slots.</strong> The component has no
+              <code>&lt;ng-content&gt;</code>; it renders an internal
+              <code>&lt;img&gt;</code> or an initials <code>&lt;span&gt;</code>
+              and projects nothing.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The avatar renders inline in the normal DOM (no CDK overlay), so it
+            reads these contract tokens directly:
+          </p>
+          <ul>
+            <li><code>--surface-2</code> &mdash; fallback (initials) background</li>
+            <li><code>--text-secondary</code> &mdash; initials colour</li>
+            <li><code>--font-sans</code> &mdash; initials font family</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             With a <code>src</code>, the avatar is an <code>&lt;img&gt;</code>
             whose <code>alt</code> is the <code>name</code>. Without one, the host
             takes <code>role="img"</code> with the <code>name</code> as its
-            <code>aria-label</code> and the initials are hidden from assistive
-            tech &mdash; so the person is announced by name, never as stray
-            letters. Always supply a meaningful <code>name</code>.
+            <code>aria-label</code> and the initials <code>&lt;span&gt;</code> is
+            <code>aria-hidden</code> &mdash; so the person is announced by name,
+            never as stray letters. If <code>name</code> is empty, the host
+            exposes no <code>aria-label</code>, so always supply a meaningful
+            <code>name</code> to keep the avatar announced.
           </p>
         </section>
       </div>

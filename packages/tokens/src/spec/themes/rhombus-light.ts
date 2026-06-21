@@ -76,4 +76,13 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--status-scheduled-text':  violet[600],
   '--status-archived-bg':     slate[100],
   '--status-archived-text':   slate[500],
+
+  // Code / syntax highlighting — one hue per lexical role, each AA (≥4.5:1) on
+  // --surface-0 (#ffffff). Drawn from the brand palette so code reads as native.
+  '--code-keyword':     violet[700],
+  '--code-string':      green[700],
+  '--code-function':    amber[700],
+  '--code-number':      red[700],
+  '--code-comment':     slate[500],
+  '--code-punctuation': slate[600],
 };

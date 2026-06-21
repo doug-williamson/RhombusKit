@@ -104,7 +104,13 @@ export const tokens = {
     "--status-scheduled-bg": "#f5f3ff",
     "--status-scheduled-text": "#7c3aed",
     "--status-archived-bg": "#f1f5f9",
-    "--status-archived-text": "#64748b"
+    "--status-archived-text": "#64748b",
+    "--code-keyword": "#6d28d9",
+    "--code-string": "#15803d",
+    "--code-function": "#b45309",
+    "--code-number": "#b91c1c",
+    "--code-comment": "#64748b",
+    "--code-punctuation": "#475569"
 } as Record<SemanticTokenName, string>,
     'rhombus-dark': {
     "--bg": "#020617",
@@ -158,7 +164,13 @@ export const tokens = {
     "--status-scheduled-bg": "#1a0a3a",
     "--status-scheduled-text": "#a78bfa",
     "--status-archived-bg": "#1e293b",
-    "--status-archived-text": "#94a3b8"
+    "--status-archived-text": "#94a3b8",
+    "--code-keyword": "#c4b5fd",
+    "--code-string": "#22c55e",
+    "--code-function": "#f59e0b",
+    "--code-number": "#ef4444",
+    "--code-comment": "#94a3b8",
+    "--code-punctuation": "#cbd5e1"
 } as Record<SemanticTokenName, string>,
   },
 } as const;

@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   RhombusAppShellComponent,
   RhombusBottomNavComponent,
   RhombusBottomNavItem,
   RhombusButtonComponent,
+  RhombusCodeBlockComponent,
   RhombusShellAsideDirective,
   RhombusShellAuthDirective,
   RhombusShellBottomNavDirective,
@@ -23,10 +25,12 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-app-shell-page',
   standalone: true,
   imports: [
+    RouterLink,
     RhombusAppShellComponent,
     RhombusBottomNavComponent,
     RhombusShellBottomNavDirective,
     RhombusButtonComponent,
+    RhombusCodeBlockComponent,
     RhombusShellNavFooterDirective,
     RhombusShellAuthDirective,
     RhombusShellAsideDirective,
@@ -35,7 +39,7 @@ import { ExampleComponent } from '../../shared/example.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="App Shell" apiKey="RhombusAppShellComponent">
+    <app-component-page title="App Shell" [hasUsage]="true" apiKey="RhombusAppShellComponent">
       <div overview class="overview">
         <p class="overview__lead">
           <code>&lt;rhombus-app-shell&gt;</code> is a structure-only layout
@@ -47,29 +51,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use it once as the application frame around your routed views; for
-              the heading <em>inside</em> a single page, reach for
-              <strong>Page Header</strong> instead.
-            </li>
-            <li>
-              Project into <code>[shellBrand]</code>, <code>[shellNav]</code>,
-              <code>[shellNavFooter]</code>, <code>[shellHeaderActions]</code>,
-              <code>[shellAuthSlot]</code>, <code>[shellAside]</code>, and the
-              default content slot. Structural inputs are
-              <code>mobileBreakpoint</code>, <code>iconRail</code>,
-              <code>closeOnNavigate</code>, and <code>hasNav</code> &mdash; no
-              product flags. <strong>The showcase chrome around you is itself a
-              <code>rhombus-app-shell</code></strong>; resize the window to watch
-              the sidenav collapse to an overlay drawer.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <div class="app-shell-hero">
               <rhombus-app-shell [closeOnNavigate]="false">
@@ -92,14 +74,118 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use it once as the application frame around your routed views, when
+              you need a header, a collapsible sidenav, and a content area in a
+              single responsive primitive. <strong>The showcase chrome around you
+              is itself a <code>rhombus-app-shell</code></strong>; resize the
+              window to watch the sidenav collapse to an overlay drawer.
+            </li>
+            <li>
+              Reach for the bottom-nav mode (<code>navMode="bottom"</code>) on a
+              mobile-first product where a bottom tab bar fits better than a
+              side drawer.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For the heading <em>inside</em> a single routed view, use a
+              <a routerLink="/components/page-header">Page Header</a> — the shell
+              is the outer frame, not the per-page title.
+            </li>
+            <li>
+              For a standalone bottom tab bar without the surrounding shell, use
+              <a routerLink="/components/bottom-nav">Bottom Nav</a> directly.
+            </li>
+            <li>
+              For in-page section navigation rather than app-level routing, use
+              <a routerLink="/components/tabs">Tabs</a> or
+              <a routerLink="/components/breadcrumbs">Breadcrumbs</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/page-header">Page Header</a> — the title block inside a routed view.</li>
+            <li><a routerLink="/components/bottom-nav">Bottom Nav</a> — the bar projected into the shell's bottom mode.</li>
+            <li><a routerLink="/components/breadcrumbs">Breadcrumbs</a> — location trail within the content area.</li>
+            <li><a routerLink="/components/theme-toggle">Theme Toggle</a> — a common header-actions control.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The shell is driven entirely by <strong>content projection</strong>:
+          you slot brand, nav, and actions into named regions, and a handful of
+          structural inputs (<code>hasNav</code>, <code>mobileBreakpoint</code>,
+          <code>iconRail</code>, <code>navMode</code>, <code>frame</code>) tune
+          the responsive behaviour. It renders no product chrome of its own.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>[shellBrand]</code> — the brand/logo, rendered at the start of the top toolbar.</li>
+            <li><code>[shellHeaderActions]</code> — trailing toolbar controls (e.g. a docs link or theme toggle).</li>
+            <li><code>[shellAuthSlot]</code> — presence-gated account/avatar region at the toolbar's end; the slot only renders when projected.</li>
+            <li><code>[shellNav]</code> — the navigation links inside the sidenav drawer.</li>
+            <li><code>[shellNavFooter]</code> — presence-gated footer pinned to the bottom of the sidenav (e.g. a version badge).</li>
+            <li><code>[shellAside]</code> — presence-gated right-rail; when present the content becomes a 3-column grid on desktop and the aside hides below 1024px.</li>
+            <li><code>[shellBottomNav]</code> — the bar shown only when <code>navMode="bottom"</code>; project a <a routerLink="/components/bottom-nav">Bottom Nav</a> here.</li>
+            <li><strong>Default slot</strong> — everything not matched lands in the <code>&lt;main&gt;</code> content region (your routed view / <code>&lt;router-outlet&gt;</code>).</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            Surface colours (toolbar/sidenav background and text) are themed
+            globally via the Material preset; this primitive owns structure and
+            reads these contract tokens for its frame:
+          </p>
+          <ul>
+            <li><code>--border</code> — toolbar, sidenav, aside, and phone-frame dividers</li>
+            <li><code>--text-primary</code> — nav-toggle (hamburger) icon colour</li>
+            <li><code>--surface-2</code> — nav-toggle hover background</li>
+            <li><code>--focus-border</code> — nav-toggle focus ring</li>
+          </ul>
+          <p>
+            Layout dimensions are consumer-overridable custom properties:
+            <code>--rhombus-app-shell-sidenav-width</code> (220px),
+            <code>--rhombus-app-shell-aside-width</code> (240px),
+            <code>--rhombus-app-shell-toolbar-height</code> (56px), and
+            <code>--rhombus-app-shell-phone-max</code> (the phone-frame column
+            width). Set them on the host element.
+          </p>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            The shell lays out semantic regions &mdash; a <code>&lt;main&gt;</code>
-            landmark for the content and an <code>&lt;aside&gt;</code> for the
-            right rail &mdash; and the overlay drawer's toolbar trigger carries an
-            <code>aria-label</code> of &ldquo;Toggle navigation&rdquo;. Labelling
-            the projected brand, nav links, and header actions is the consumer's
+            The shell lays out semantic regions — a <code>&lt;main&gt;</code>
+            landmark for the content and an <code>&lt;aside&gt;</code> element for
+            the right rail. On mobile widths the toolbar renders a single
+            hamburger <code>&lt;button&gt;</code> carrying an
+            <code>aria-label</code> of &ldquo;Toggle navigation&rdquo; that opens
+            and closes the overlay drawer; its inline icon is
+            <code>aria-hidden</code>. Beyond these landmarks and the toggle, the
+            shell adds no roles or live regions — labelling the projected brand,
+            nav links, header actions, auth slot, and aside is the consumer's
             responsibility.
           </p>
         </section>

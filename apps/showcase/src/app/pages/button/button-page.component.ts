@@ -1,15 +1,29 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RhombusButtonComponent } from '@rhombuskit/core';
+import { RouterLink } from '@angular/router';
+import {
+  RhombusButtonComponent,
+  RhombusCodeBlockComponent,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-button-page',
   standalone: true,
-  imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    RhombusButtonComponent,
+    RhombusCodeBlockComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Button" apiKey="RhombusButtonComponent">
+    <app-component-page
+      title="Button"
+      [hasUsage]="true"
+      apiKey="RhombusButtonComponent"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           Buttons trigger an action or a navigation. RhombusKit wraps Angular
@@ -20,37 +34,108 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use a button to <strong>trigger an action</strong> (save, submit,
-              open a dialog). For moving between pages, prefer a link.
-            </li>
-            <li>
-              Give a view exactly one <code>variant="primary"</code> button for
-              its main action; use <code>secondary</code> or <code>ghost</code>
-              for supporting actions and <code>danger</code> for destructive
-              ones.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-button variant="primary">Save changes</rhombus-button>
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a button to <strong>trigger an action</strong> (save, submit,
+              open a dialog).
+            </li>
+            <li>
+              Give a view exactly one <strong>primary</strong> button for its main
+              action; use <strong>secondary</strong> or <strong>ghost</strong> for
+              supporting actions and <strong>danger</strong> for destructive ones.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For moving between pages or to an external URL, use a real link
+              (<code>&lt;a&gt;</code>) — semantically a navigation, not an action.
+            </li>
+            <li>
+              For an on/off setting that takes effect immediately, use a
+              <a routerLink="/components/switch">Switch</a> rather than a button.
+            </li>
+            <li>
+              For row-level actions hidden behind a "more" affordance, use an
+              <a routerLink="/components/overflow-menu">Overflow Menu</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/menu">Menu</a> — action lists off a trigger.</li>
+            <li><a routerLink="/components/chip">Chip</a> — compact, selectable tokens.</li>
+            <li><a routerLink="/components/switch">Switch</a> — immediate on/off settings.</li>
+            <li><a routerLink="/components/dialog">Dialog</a> — modal surfaces buttons often open.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A button is driven entirely by inputs — <code>variant</code>,
+          <code>size</code>, <code>appearance</code>, <code>disabled</code>, and
+          optional <code>leadingIcon</code> / <code>trailingIcon</code> — with its
+          label supplied through the default content slot.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>&lt;rhombus-button&gt;</code> renders a native <code>&lt;button&gt;</code> wrapping Material's <code>matButton</code>; the <code>appearance</code> input picks <code>filled</code> / <code>outlined</code> / <code>text</code>.</li>
+            <li><strong>Default content slot</strong> — whatever you project becomes the visible label (the component exposes no named slots).</li>
+            <li><code>leadingIcon</code> renders a Material icon before the label; <code>trailingIcon</code> renders one after it. Pass a Material icon name string; <code>null</code> (default) hides it.</li>
+            <li>Bind <code>(click)</code> on the host as usual; <code>[disabled]="true"</code> disables the underlying native button.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The button renders inline (no overlay) and routes every colour, shadow,
+            and font through contract tokens. Variants locally rebind Material's
+            <code>--mat-sys-primary</code> / <code>--mat-sys-on-primary</code> roles
+            from these tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> — label font family</li>
+            <li><code>--shadow-sm</code> — hover elevation shadow</li>
+            <li><code>--surface-2</code> / <code>--text-primary</code> — <code>secondary</code> fill and label</li>
+            <li><code>--text-accent</code> / <code>--surface-1</code> — <code>ghost</code> label and hover fill</li>
+            <li><code>--error</code> / <code>--error-bg</code> / <code>--bg</code> — <code>danger</code> fill, hover, and label</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             Renders a native <code>&lt;button&gt;</code>, so it is focusable and
-            activates on <kbd>Enter</kbd> / <kbd>Space</kbd>, and
-            <code>[disabled]</code> is conveyed to assistive tech natively. For an
-            icon-only button (a <code>leadingIcon</code> / <code>trailingIcon</code>
-            with no text label), add an <code>aria-label</code> so its purpose is
-            announced.
+            activates on <kbd>Enter</kbd> / <kbd>Space</kbd> with no extra wiring,
+            and <code>[disabled]</code> is conveyed to assistive tech natively
+            (the native <code>disabled</code> attribute removes it from the tab
+            order). The label comes from the projected text content, which screen
+            readers announce as the accessible name. For an icon-only button (a
+            <code>leadingIcon</code> / <code>trailingIcon</code> with no projected
+            text), add an <code>aria-label</code> so its purpose is announced — the
+            component does not derive a label from the icon name.
           </p>
         </section>
       </div>

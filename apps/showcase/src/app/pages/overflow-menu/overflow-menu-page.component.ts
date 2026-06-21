@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   OverflowMenuItem,
+  RhombusCodeBlockComponent,
   RhombusOverflowMenuComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
@@ -10,13 +12,19 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-overflow-menu-page',
   standalone: true,
   imports: [
+    RouterLink,
+    RhombusCodeBlockComponent,
     RhombusOverflowMenuComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Overflow Menu" apiKey="RhombusOverflowMenuComponent">
+    <app-component-page
+      title="Overflow Menu"
+      [hasUsage]="true"
+      apiKey="RhombusOverflowMenuComponent"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           An overflow menu tucks a set of secondary actions behind a
@@ -29,6 +37,13 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
+          <h2>Example</h2>
+          <app-example [code]="usage">
+            <rhombus-overflow-menu [items]="basicItems" />
+          </app-example>
+        </section>
+
+        <section class="showcase-section">
           <h2>When to use</h2>
           <ul>
             <li>
@@ -38,32 +53,153 @@ import { ExampleComponent } from '../../shared/example.component';
               belong in the menu.
             </li>
             <li>
-              Each <code>OverflowMenuItem</code> carries its own
-              <code>action</code> callback, so dispatch is co-located with the
-              item (no <code>(itemClick)</code> output). Use
-              <code>dividerBefore</code> to group items,
-              <code>variant: 'danger'</code> to mark a destructive one, and
-              <code>disabled</code> to render an item inert.
+              Reach for it on dense surfaces &mdash; data-table rows, list items,
+              cards &mdash; where space is tight and the actions are contextual to
+              one entity.
             </li>
           </ul>
         </section>
 
         <section class="showcase-section">
-          <h2>Usage</h2>
-          <app-example [code]="usage">
-            <rhombus-overflow-menu [items]="basicItems" />
-          </app-example>
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a text-triggered action list (not an icon button), use a
+              <a routerLink="/components/menu">Menu</a> directly &mdash; overflow
+              menu is just its icon-button preset.
+            </li>
+            <li>
+              For rich, interactive panels (date grids, filter forms,
+              multi-control pickers), use a
+              <a routerLink="/components/popover">Popover</a> &mdash; a menu only
+              expresses a flat list of actions.
+            </li>
+            <li>
+              For a single, prominent action, use a
+              <a routerLink="/components/button">Button</a> rather than hiding it
+              behind an overflow trigger.
+            </li>
+          </ul>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li>
+              <a routerLink="/components/menu">Menu</a> &mdash; the text-triggered
+              base this preset is built on.
+            </li>
+            <li>
+              <a routerLink="/components/data-table">Data Table</a> &mdash; the
+              canonical home for per-row overflow actions.
+            </li>
+            <li>
+              <a routerLink="/components/popover">Popover</a> &mdash; for
+              interactive panels a menu can't express.
+            </li>
+            <li>
+              <a routerLink="/components/button">Button</a> &mdash; for primary
+              actions that stay visible.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The component is driven entirely by an <code>items</code> array of
+          <code>OverflowMenuItem</code>; each item carries its own
+          <code>action</code> callback, so dispatch is co-located with the item
+          (there is no <code>(itemClick)</code> output).
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>[items]</code> &mdash; the required array of
+              <code>OverflowMenuItem</code>. Per item:
+              <code>label</code>, optional <code>icon</code> (Material icon name),
+              <code>action</code>, <code>variant: 'danger'</code> to mark a
+              destructive entry, <code>disabled</code> to render it inert, and
+              <code>dividerBefore</code> to group items (ignored on the first).
+            </li>
+            <li>
+              <code>ariaLabel</code> &mdash; accessible name for the icon-only
+              trigger (default &ldquo;More actions&rdquo;).
+            </li>
+            <li>
+              <code>triggerIcon</code> &mdash; the trigger&rsquo;s Material icon
+              name (default <code>more_vert</code>).
+            </li>
+            <li>
+              <strong>Content projection:</strong> the underlying
+              <code>&lt;rhombus-menu&gt;</code> projects a single
+              <strong>default slot</strong> for its trigger content. Overflow menu
+              fills that default slot for you with the trigger icon &mdash; there
+              are no named slots to wire up.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The trigger renders in the host, but the menu <strong>panel and its
+            items render in a CDK overlay</strong>, so panel overrides must target
+            the <code>.cdk-overlay-container .rhombus-menu__panel</code> scope, not
+            the host. The contract tokens it reads:
+          </p>
+          <ul>
+            <li>
+              <code>--surface-0</code> &mdash; panel background
+              (<code>--mat-menu-container-color</code>)
+            </li>
+            <li>
+              <code>--text-primary</code> &mdash; item label colour
+            </li>
+            <li>
+              <code>--text-secondary</code> &mdash; item icon colour and the
+              icon-button trigger colour
+            </li>
+            <li>
+              <code>--surface-1</code> &mdash; item hover layer and trigger hover
+              background
+            </li>
+            <li>
+              <code>--surface-2</code> &mdash; item focus layer
+            </li>
+            <li>
+              <code>--error</code> &mdash; label and icon colour for
+              <code>variant: 'danger'</code> items
+            </li>
+            <li>
+              <code>--font-sans</code>, <code>--border</code>,
+              <code>--border-strong</code>, <code>--focus-border</code> &mdash;
+              trigger typography, border, and focus ring
+            </li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            The trigger is a real icon button with an accessible name
-            (<code>ariaLabel</code>, default &ldquo;More actions&rdquo;) since it
-            has no visible text. Opening it moves focus into the menu, and items
-            are navigable with the <kbd>Arrow</kbd> keys, activated with
-            <kbd>Enter</kbd>, and dismissed with <kbd>Escape</kbd> &mdash;
-            standard menu semantics inherited from <code>&lt;mat-menu&gt;</code>.
+            The trigger is a real <code>&lt;button type="button"&gt;</code> with an
+            accessible name (<code>ariaLabel</code>, default &ldquo;More
+            actions&rdquo;) since it carries no visible text. It is wired with
+            Material&rsquo;s <code>[matMenuTriggerFor]</code>, so it advertises
+            <code>aria-haspopup</code> and toggles <code>aria-expanded</code>
+            automatically. Opening it moves focus into the menu panel; items are a
+            <code>menuitem</code> list navigable with the <kbd>Arrow</kbd> keys,
+            activated with <kbd>Enter</kbd>, and the menu is dismissed with
+            <kbd>Escape</kbd> &mdash; standard menu semantics inherited from
+            <code>&lt;mat-menu&gt;</code>. Always pass an <code>ariaLabel</code>
+            for the icon-only trigger so its purpose is announced.
           </p>
         </section>
       </div>
@@ -100,6 +236,17 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
         <div class="showcase-row">
           <rhombus-overflow-menu [items]="edgeItems" />
+        </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>Custom trigger icon</h2>
+        <p class="showcase-section__lead">
+          <code>triggerIcon</code> swaps the default vertical
+          <code>more_vert</code> dots for a horizontal <code>more_horiz</code>.
+        </p>
+        <div class="showcase-row">
+          <rhombus-overflow-menu [items]="basicItems" triggerIcon="more_horiz" />
         </div>
       </section>
 

@@ -58,4 +58,10 @@
   --status-scheduled-text: map.get($values, 'status-scheduled-text');
   --status-archived-bg: map.get($values, 'status-archived-bg');
   --status-archived-text: map.get($values, 'status-archived-text');
+  --code-keyword: map.get($values, 'code-keyword');
+  --code-string: map.get($values, 'code-string');
+  --code-function: map.get($values, 'code-function');
+  --code-number: map.get($values, 'code-number');
+  --code-comment: map.get($values, 'code-comment');
+  --code-punctuation: map.get($values, 'code-punctuation');
 }

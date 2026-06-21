@@ -6,6 +6,14 @@ export interface ApiMember {
   name: string;
   type: string;
   description: string;
+  required?: boolean;
+  enumValues?: string[];
+}
+
+export interface ApiTypeRef {
+  name: string;
+  kind: string;
+  members: ApiMember[];
 }
 
 export interface ApiEntry {
@@ -16,6 +24,8 @@ export interface ApiEntry {
   inputs: ApiMember[];
   outputs: ApiMember[];
   methods: ApiMember[];
+  slots?: string[];
+  types?: ApiTypeRef[];
 }
 
 export const API_METADATA: Record<string, ApiEntry> = {
@@ -28,7 +38,13 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "AlertVariant",
-        "description": "Severity. Defaults to `'info'`."
+        "description": "Severity. Defaults to `'info'`.",
+        "enumValues": [
+          "info",
+          "success",
+          "warning",
+          "error"
+        ]
       },
       {
         "name": "title",
@@ -48,7 +64,10 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits when the alert is dismissed via its close button."
       }
     ],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "*"
+    ]
   },
   "RhombusAppShellComponent": {
     "name": "RhombusAppShellComponent",
@@ -93,7 +112,17 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "[shellBrand]",
+      "[shellHeaderActions]",
+      "[shellAuthSlot]",
+      "[shellNav]",
+      "[shellNavFooter]",
+      "*",
+      "[shellAside]",
+      "[shellBottomNav]"
+    ]
   },
   "RhombusAvatarComponent": {
     "name": "RhombusAvatarComponent",
@@ -114,7 +143,12 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "AvatarSize",
-        "description": "Size. Defaults to `'md'`."
+        "description": "Size. Defaults to `'md'`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
       }
     ],
     "outputs": [],
@@ -127,32 +161,39 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "description": "`[rhombusBadge]` — RhombusKit's wrapper over Angular Material's `[matBadge]`.\n\nComposes `MatBadge` via `hostDirectives` so consumers don't need to\nimport both directives. All inputs are aliased with the `rhombusBadge*`\nprefix (matching Material's own `matBadge*` convention) so they don't\ncollide with inputs of host components like `<rhombus-button>`, which\nhas its own `variant` and `size` inputs.\n\nThe `variant` value is reflected to a `data-variant` host attribute that\n`@rhombuskit/core/scss/badge` targets — variant styling stays out of TS.\n\nUsage:\n  <button [rhombusBadge]=\"3\" [rhombusBadgeVariant]=\"'primary'\">Inbox</button>\n  <mat-icon [rhombusBadge]=\"'!'\" [rhombusBadgeVariant]=\"'danger'\">notifications</mat-icon>\n  <span [rhombusBadge]=\"'NEW'\" [rhombusBadgeVariant]=\"'success'\">Feature</span>",
     "inputs": [
       {
-        "name": "content",
+        "name": "rhombusBadge",
         "type": "string | number",
         "description": "Badge content. Aliased as `rhombusBadge` so the selector reads like a\none-shot binding: `[rhombusBadge]=\"count\"`."
       },
       {
-        "name": "variant",
+        "name": "rhombusBadgeVariant",
         "type": "BadgeVariant",
-        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`."
+        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`.",
+        "enumValues": [
+          "default",
+          "primary",
+          "success",
+          "warning",
+          "danger"
+        ]
       },
       {
-        "name": "position",
+        "name": "rhombusBadgePosition",
         "type": "MatBadgePosition",
         "description": "Where the badge sits relative to its host; defaults to `'above after'`."
       },
       {
-        "name": "size",
+        "name": "rhombusBadgeSize",
         "type": "MatBadgeSize",
         "description": "Badge size: `small` | `medium` (default) | `large`."
       },
       {
-        "name": "hidden",
+        "name": "rhombusBadgeHidden",
         "type": "boolean",
         "description": "Hides the badge without removing it from the DOM. Defaults to `false`."
       },
       {
-        "name": "overlap",
+        "name": "rhombusBadgeOverlap",
         "type": "boolean",
         "description": "Whether the badge overlaps its host element. Defaults to `true`."
       }
@@ -169,7 +210,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "items",
         "type": "RhombusBottomNavItem[]",
-        "description": "Destinations, left to right."
+        "description": "Destinations, left to right.",
+        "required": true
       },
       {
         "name": "activeId",
@@ -179,7 +221,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "indicator",
         "type": "BottomNavIndicator",
-        "description": "Active-indicator treatment. Defaults to `'color'`."
+        "description": "Active-indicator treatment. Defaults to `'color'`.",
+        "enumValues": [
+          "color",
+          "pill"
+        ]
       },
       {
         "name": "ariaLabel",
@@ -194,7 +240,48 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits the selected item id."
       }
     ],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "RhombusBottomNavItem",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "badge",
+            "type": "number | \"dot\"",
+            "description": "Optional notification badge — a count, or `'dot'` for a marker."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the item inert."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "RhombusIcon glyph name (falls back to a Material icon).",
+            "required": true
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "description": "Stable key; the value emitted by `activeChange` and matched by `activeId`.",
+            "required": true
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Visible text and the item's accessible name.",
+            "required": true
+          },
+          {
+            "name": "routerLink",
+            "type": "string | unknown[]",
+            "description": "`routerLink` target. Omit for controlled (non-router) usage."
+          }
+        ]
+      }
+    ]
   },
   "RhombusBreadcrumbsComponent": {
     "name": "RhombusBreadcrumbsComponent",
@@ -205,7 +292,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "items",
         "type": "BreadcrumbItem[]",
-        "description": "The breadcrumb trail, root first."
+        "description": "The breadcrumb trail, root first.",
+        "required": true
       },
       {
         "name": "separator",
@@ -219,7 +307,26 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "BreadcrumbItem",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Display text.",
+            "required": true
+          },
+          {
+            "name": "link",
+            "type": "string | unknown[]",
+            "description": "`routerLink` target (string path or commands array). Omit for the current page."
+          }
+        ]
+      }
+    ]
   },
   "RhombusButtonComponent": {
     "name": "RhombusButtonComponent",
@@ -230,17 +337,33 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "ButtonVariant",
-        "description": "Colour role: `primary` (default) | `secondary` | `ghost` | `danger`."
+        "description": "Colour role: `primary` (default) | `secondary` | `ghost` | `danger`.",
+        "enumValues": [
+          "primary",
+          "secondary",
+          "ghost",
+          "danger"
+        ]
       },
       {
         "name": "size",
         "type": "ButtonSize",
-        "description": "Padding scale: `sm` | `md` (default) | `lg`."
+        "description": "Padding scale: `sm` | `md` (default) | `lg`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
       },
       {
         "name": "appearance",
         "type": "ButtonAppearance",
-        "description": "MatButton appearance: `filled` (default) | `outlined` | `text`."
+        "description": "MatButton appearance: `filled` (default) | `outlined` | `text`.",
+        "enumValues": [
+          "filled",
+          "outlined",
+          "text"
+        ]
       },
       {
         "name": "disabled",
@@ -259,7 +382,10 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "*"
+    ]
   },
   "RhombusCardComponent": {
     "name": "RhombusCardComponent",
@@ -270,7 +396,12 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "variant",
         "type": "CardVariant",
-        "description": "Visual variant: `elevated` (default) | `outlined` | `filled`."
+        "description": "Visual variant: `elevated` (default) | `outlined` | `filled`.",
+        "enumValues": [
+          "elevated",
+          "outlined",
+          "filled"
+        ]
       },
       {
         "name": "hasHeader",
@@ -280,11 +411,23 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "padding",
         "type": "CardPadding",
-        "description": "Inner padding scale for the card body: `none` | `sm` | `md` (default) | `lg`."
+        "description": "Inner padding scale for the card body: `none` | `sm` | `md` (default) | `lg`.",
+        "enumValues": [
+          "none",
+          "sm",
+          "md",
+          "lg"
+        ]
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "[slot=title]",
+      "[slot=subtitle]",
+      "*",
+      "[slot=actions]"
+    ]
   },
   "RhombusCheckboxComponent": {
     "name": "RhombusCheckboxComponent",
@@ -335,13 +478,20 @@ export const API_METADATA: Record<string, ApiEntry> = {
   "RhombusChipDirective": {
     "name": "RhombusChipDirective",
     "kind": "class",
-    "selector": "mat-chip-option[rhombusChip], mat-chip[rhombusChip], mat-chip-row[rhombusChip]",
+    "selector": "mat-chip-option[rhombusChip",
     "description": "`[rhombusChip]` — RhombusKit decoration directive applied to\n`<mat-chip-option>`. Adds variant styling and a stable host class.\n\nApplied to `<mat-chip-option>` rather than wrapping it because Angular\nMaterial's `<mat-chip-listbox>` uses `@ContentChildren(MatChipOption)`\nto discover its chips. Content queries traverse projected content but\nNOT view-DOM of nested components — if we wrap mat-chip-option inside\na `<rhombus-chip>` component, the listbox can't find it and selection\n+ ARIA fail silently.\n\nUsage:\n  <rhombus-chip-group selection=\"single\">\n    <mat-chip-option rhombusChip variant=\"primary\" value=\"draft\">\n      Draft\n    </mat-chip-option>\n  </rhombus-chip-group>\n\nFor removable / leading-icon decorations, use Material's existing\n`matChipRemove` and `matChipAvatar` directives -- this directive\nintentionally stays out of their way.",
     "inputs": [
       {
         "name": "variant",
         "type": "ChipVariant",
-        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`."
+        "description": "Colour role, reflected to `data-variant`: `default` | `primary` | `success` | `warning` | `danger`.",
+        "enumValues": [
+          "default",
+          "primary",
+          "success",
+          "warning",
+          "danger"
+        ]
       }
     ],
     "outputs": [],
@@ -356,7 +506,12 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "selection",
         "type": "ChipGroupSelection",
-        "description": "Selection mode: `none` (default, decorative) | `single` | `multiple`; drives the listbox's `selectable`/`multiple`."
+        "description": "Selection mode: `none` (default, decorative) | `single` | `multiple`; drives the listbox's `selectable`/`multiple`.",
+        "enumValues": [
+          "none",
+          "single",
+          "multiple"
+        ]
       }
     ],
     "outputs": [
@@ -377,7 +532,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "code",
         "type": "string",
-        "description": "Source code to display verbatim (required)."
+        "description": "Source code to display verbatim (required).",
+        "required": true
       },
       {
         "name": "language",
@@ -493,7 +649,148 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits the row whose non-interactive area was clicked."
       }
     ],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "DataColumn",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "align",
+            "type": "\"start\" | \"center\" | \"end\"",
+            "description": ""
+          },
+          {
+            "name": "cellTemplate",
+            "type": "_angular_core.TemplateRef<{ $implicit: T; index: number; }>",
+            "description": "Custom cell renderer; receives the row as `$implicit` and the row `index`.\nOptional on a {@link DataColumn} (falls back to `row[key]`); required on a\n{@link DisplayColumn}, which has no row field to render by default."
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "hideBelow",
+            "type": "\"sm\" | \"md\"",
+            "description": "Hide this column below the named breakpoint (sm=640px, md=768px)."
+          },
+          {
+            "name": "key",
+            "type": "keyof T & string",
+            "description": "Indexes into the row for the default renderer (`row[key]`).",
+            "required": true
+          },
+          {
+            "name": "minWidth",
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "sortable",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "width",
+            "type": "string",
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DisplayColumn",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "align",
+            "type": "\"start\" | \"center\" | \"end\"",
+            "description": ""
+          },
+          {
+            "name": "cellTemplate",
+            "type": "_angular_core.TemplateRef<{ $implicit: T; index: number; }>",
+            "description": "Custom cell renderer; receives the row as `$implicit` and the row `index`.\nOptional on a {@link DataColumn} (falls back to `row[key]`); required on a\n{@link DisplayColumn}, which has no row field to render by default.",
+            "required": true
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "hideBelow",
+            "type": "\"sm\" | \"md\"",
+            "description": "Hide this column below the named breakpoint (sm=640px, md=768px)."
+          },
+          {
+            "name": "key",
+            "type": "string",
+            "description": "Arbitrary, stable column id; never indexes the row.",
+            "required": true
+          },
+          {
+            "name": "minWidth",
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "sortable",
+            "type": "never",
+            "description": ""
+          },
+          {
+            "name": "width",
+            "type": "string",
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "SortState",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "active",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "direction",
+            "type": "\"\" | \"asc\" | \"desc\"",
+            "description": "",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "PageState",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "length",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "pageIndex",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "type": "number",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
   },
   "RhombusDialogActionsDirective": {
     "name": "RhombusDialogActionsDirective",
@@ -517,7 +814,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "*",
+      "[rhombusDialogActions]"
+    ]
   },
   "RhombusDialogService": {
     "name": "RhombusDialogService",
@@ -548,7 +849,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "heading",
         "type": "string",
-        "description": "Primary heading text (required)."
+        "description": "Primary heading text (required).",
+        "required": true
       },
       {
         "name": "body",
@@ -602,7 +904,18 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "type",
         "type": "InputType",
-        "description": "Native input `type`: `text` (default), `email`, `password`, `number`, `search`, `tel`, `url`, `date`, `time`."
+        "description": "Native input `type`: `text` (default), `email`, `password`, `number`, `search`, `tel`, `url`, `date`, `time`.",
+        "enumValues": [
+          "text",
+          "email",
+          "password",
+          "number",
+          "search",
+          "tel",
+          "url",
+          "date",
+          "time"
+        ]
       },
       {
         "name": "placeholder",
@@ -612,12 +925,21 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`."
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
       },
       {
         "name": "disabled",
@@ -651,7 +973,16 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "[matPrefix]",
+      "[matIconPrefix]",
+      "[matTextPrefix]",
+      "[matSuffix]",
+      "[matIconSuffix]",
+      "[matTextSuffix]",
+      "[rhombusError]"
+    ]
   },
   "RhombusMenuComponent": {
     "name": "RhombusMenuComponent",
@@ -662,7 +993,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "items",
         "type": "MenuItem[]",
-        "description": "The menu entries."
+        "description": "The menu entries.",
+        "required": true
       },
       {
         "name": "iconButton",
@@ -676,7 +1008,50 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "*"
+    ],
+    "types": [
+      {
+        "name": "MenuItem",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "action",
+            "type": "() => void",
+            "description": "Invoked when the item is activated.",
+            "required": true
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the item inert."
+          },
+          {
+            "name": "dividerBefore",
+            "type": "boolean",
+            "description": "Inserts a divider above the item (ignored on the first item)."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "Optional leading Material icon name."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Display text.",
+            "required": true
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"danger\"",
+            "description": "Visual treatment; `'danger'` renders the item in `--error`. Defaults to `'default'`."
+          }
+        ]
+      }
+    ]
   },
   "RhombusOverflowMenuComponent": {
     "name": "RhombusOverflowMenuComponent",
@@ -687,7 +1062,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "items",
         "type": "MenuItem[]",
-        "description": "The menu entries."
+        "description": "The menu entries.",
+        "required": true
       },
       {
         "name": "triggerIcon",
@@ -701,7 +1077,47 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "MenuItem",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "action",
+            "type": "() => void",
+            "description": "Invoked when the item is activated.",
+            "required": true
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the item inert."
+          },
+          {
+            "name": "dividerBefore",
+            "type": "boolean",
+            "description": "Inserts a divider above the item (ignored on the first item)."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "Optional leading Material icon name."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Display text.",
+            "required": true
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"danger\"",
+            "description": "Visual treatment; `'danger'` renders the item in `--error`. Defaults to `'default'`."
+          }
+        ]
+      }
+    ]
   },
   "RhombusPageHeaderComponent": {
     "name": "RhombusPageHeaderComponent",
@@ -712,7 +1128,8 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "title",
         "type": "string",
-        "description": "Page title rendered as the `<h1>` heading (required)."
+        "description": "Page title rendered as the `<h1>` heading (required).",
+        "required": true
       },
       {
         "name": "badge",
@@ -726,7 +1143,10 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "[slot=actions]"
+    ]
   },
   "RhombusPaginationComponent": {
     "name": "RhombusPaginationComponent",
@@ -777,7 +1197,33 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits on page-index or page-size change."
       }
     ],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "PageState",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "length",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "pageIndex",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "type": "number",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
   },
   "RhombusPopoverCloseDirective": {
     "name": "RhombusPopoverCloseDirective",
@@ -797,7 +1243,14 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "position",
         "type": "RhombusPopoverPosition",
-        "description": "Preferred placement; flips to the opposite side when there is no room."
+        "description": "Preferred placement; flips to the opposite side when there is no room.",
+        "enumValues": [
+          "below-start",
+          "below-end",
+          "above-start",
+          "above-end",
+          "auto"
+        ]
       },
       {
         "name": "offset",
@@ -833,6 +1286,9 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "type": "() => void",
         "description": "Close the popover from projected content (e.g. after a selection)."
       }
+    ],
+    "slots": [
+      "*"
     ]
   },
   "RhombusPopoverTriggerDirective": {
@@ -842,9 +1298,10 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "description": "Attaches a `<rhombus-popover>` to any element. Mirrors `matMenuTriggerFor`:\n`<button [rhombusPopoverTriggerFor]=\"panel\">`. Manages the CDK overlay,\nreflects `aria-haspopup`/`aria-expanded`, and restores focus on close.",
     "inputs": [
       {
-        "name": "panel",
+        "name": "rhombusPopoverTriggerFor",
         "type": "RhombusPopoverComponent",
-        "description": "The `<rhombus-popover>` panel this trigger controls."
+        "description": "The `<rhombus-popover>` panel this trigger controls.",
+        "required": true
       },
       {
         "name": "disabled",
@@ -950,7 +1407,32 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits the newly selected option value when the user picks a radio (lightweight mode only)."
       }
     ],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "RadioOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
   },
   "RhombusSelectComponent": {
     "name": "RhombusSelectComponent",
@@ -971,12 +1453,21 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`."
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
       },
       {
         "name": "disabled",
@@ -1026,7 +1517,50 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Emits the selected value (or array of values when `multiple`) whenever the user changes selection."
       }
     ],
-    "methods": []
+    "methods": [],
+    "types": [
+      {
+        "name": "SelectOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "SelectOptionGroup",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "groupLabel",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "options",
+            "type": "SelectOption<T>[]",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
   },
   "RhombusShellAsideDirective": {
     "name": "RhombusShellAsideDirective",
@@ -1179,12 +1713,21 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "appearance",
         "type": "FormFieldAppearance",
-        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`."
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
       },
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`."
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
       },
       {
         "name": "disabled",
@@ -1233,7 +1776,10 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
-    "methods": []
+    "methods": [],
+    "slots": [
+      "[rhombusError]"
+    ]
   },
   "RhombusThemeMenuComponent": {
     "name": "RhombusThemeMenuComponent",
@@ -1332,27 +1878,27 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "description": "`[rhombusTooltip]` — RhombusKit's wrapper over Angular Material's\n`[matTooltip]`, composed via `hostDirectives` so consumers import only one\ndirective. Inputs are aliased with the `rhombusTooltip*` prefix (matching the\nbadge convention) so they don't collide with host-component inputs.\n\nThe tooltip surface renders in the CDK overlay; its colour is themed through\nthe `--tooltip-bg` / `--tooltip-text` contract tokens, bridged in\n`@rhombuskit/material-preset`.\n\n```html\n<button [rhombusTooltip]=\"'Archive this item'\">Archive</button>\n```",
     "inputs": [
       {
-        "name": "message",
+        "name": "rhombusTooltip",
         "type": "string",
         "description": "Tooltip text. Aliased `rhombusTooltip` for one-shot binding."
       },
       {
-        "name": "position",
+        "name": "rhombusTooltipPosition",
         "type": "TooltipPosition",
         "description": "Position relative to the host: `above` | `below` | `left` | `right` | `before` | `after` (default `below`)."
       },
       {
-        "name": "disabled",
+        "name": "rhombusTooltipDisabled",
         "type": "boolean",
         "description": "Disables the tooltip when `true` (default `false`)."
       },
       {
-        "name": "showDelay",
+        "name": "rhombusTooltipShowDelay",
         "type": "number",
         "description": "Delay in ms before the tooltip shows on hover/focus (default `0`)."
       },
       {
-        "name": "hideDelay",
+        "name": "rhombusTooltipHideDelay",
         "type": "number",
         "description": "Delay in ms before the tooltip hides after the trigger ends (default `0`)."
       }

@@ -93,6 +93,16 @@ export const CONTRACT = [
   '--status-scheduled-text',
   '--status-archived-bg',
   '--status-archived-text',
+
+  // Code / syntax highlighting (mapped onto highlight.js token classes by the
+  // code-block component; one hue per lexical role, AA on --surface-0 in both
+  // themes). Append-only like the rest of the contract.
+  '--code-keyword',
+  '--code-string',
+  '--code-function',
+  '--code-number',
+  '--code-comment',
+  '--code-punctuation',
 ] as const;
 
 export type SemanticTokenName = (typeof CONTRACT)[number];

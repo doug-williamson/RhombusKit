@@ -8,17 +8,32 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, of, switchMap } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { RhombusButtonComponent, RhombusConfirmService } from '@rhombuskit/core';
+import { RouterLink } from '@angular/router';
+import {
+  RhombusButtonComponent,
+  RhombusCodeBlockComponent,
+  RhombusConfirmService,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
 @Component({
   selector: 'app-confirm-dialog-page',
   standalone: true,
-  imports: [RhombusButtonComponent, ComponentPageComponent, ExampleComponent],
+  imports: [
+    RouterLink,
+    RhombusButtonComponent,
+    RhombusCodeBlockComponent,
+    ComponentPageComponent,
+    ExampleComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Confirm Dialog" apiKey="RhombusConfirmService">
+    <app-component-page
+      title="Confirm Dialog"
+      [hasUsage]="true"
+      apiKey="RhombusConfirmService"
+    >
       <div overview class="overview">
         <p class="overview__lead">
           A confirm dialog asks the user to approve or cancel a single action
@@ -32,28 +47,7 @@ import { ExampleComponent } from '../../shared/example.component';
         </p>
 
         <section class="showcase-section">
-          <h2>When to use</h2>
-          <ul>
-            <li>
-              Use a confirm dialog for a <strong>quick, reversible yes/no
-              decision</strong>, especially before a destructive action
-              (&ldquo;Delete post?&rdquo;). For a multi-field task use a full
-              <strong>Dialog</strong>; for passive feedback use a
-              <strong>Toast</strong>.
-            </li>
-            <li>
-              Configure copy via <code>title</code> / <code>message</code> /
-              <code>confirmLabel</code>, and set <code>variant: 'danger'</code>
-              to style the confirm button destructively. The canonical pattern is
-              <code>filter(Boolean)</code> &rarr; <code>switchMap</code> &rarr;
-              <code>takeUntilDestroyed</code> so a late result never fires a dead
-              handler.
-            </li>
-          </ul>
-        </section>
-
-        <section class="showcase-section">
-          <h2>Usage</h2>
+          <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-button variant="primary" (click)="defaultConfirm()">
               Publish post
@@ -61,15 +55,146 @@ import { ExampleComponent } from '../../shared/example.component';
           </app-example>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>When to use</h2>
+          <ul>
+            <li>
+              Use a confirm dialog for a <strong>quick, reversible yes/no
+              decision</strong>, especially before a destructive action
+              (&ldquo;Delete post?&rdquo;).
+            </li>
+            <li>
+              Reach for it when you need the action to <strong>block</strong>
+              until the user explicitly approves or cancels, and a single
+              sentence of context is enough to make the decision.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>When not to use</h2>
+          <ul>
+            <li>
+              For a task that needs multiple fields or richer content, build a
+              custom <a routerLink="/components/dialog">Dialog</a> instead.
+            </li>
+            <li>
+              For passive, non-blocking feedback after an action already ran,
+              use a <a routerLink="/components/toast">Toast</a>.
+            </li>
+            <li>
+              For an inline, persistent warning the user doesn't have to dismiss
+              to continue, use an <a routerLink="/components/alert">Alert</a>.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li>
+              <a routerLink="/components/dialog">Dialog</a> &mdash; the
+              general-purpose modal this service is built on.
+            </li>
+            <li>
+              <a routerLink="/components/toast">Toast</a> &mdash; transient
+              feedback once the action completes.
+            </li>
+            <li>
+              <a routerLink="/components/alert">Alert</a> &mdash; inline,
+              non-blocking warnings.
+            </li>
+            <li>
+              <a routerLink="/components/button">Button</a> &mdash; the trigger
+              that opens the confirmation.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          The confirm dialog is driven entirely through
+          <code>RhombusConfirmService</code>: inject it, call
+          <code>confirm(config)</code>, and react to the
+          <code>Observable&lt;boolean&gt;</code> it returns. The dialog
+          component itself is internal &mdash; you never declare or import it.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li>
+              <code>inject(RhombusConfirmService)</code> &mdash; the service is
+              <code>providedIn: 'root'</code>, so no module wiring is needed.
+            </li>
+            <li>
+              <code>confirm(config)</code> &mdash; opens the dialog and returns
+              an <code>Observable&lt;boolean&gt;</code> that emits exactly once:
+              <code>true</code> on confirm, <code>false</code> on cancel,
+              backdrop click, or <kbd>Escape</kbd>.
+            </li>
+            <li>
+              <code>config.title</code> / <code>config.message</code> &mdash;
+              required heading and body copy.
+            </li>
+            <li>
+              <code>config.confirmLabel</code> /
+              <code>config.cancelLabel</code> &mdash; optional button text
+              (default <code>'Confirm'</code> / <code>'Cancel'</code>).
+            </li>
+            <li>
+              <code>config.variant: 'danger'</code> &mdash; styles the confirm
+              button destructively for irreversible actions.
+            </li>
+            <li>
+              There are <strong>no content-projection slots</strong>: the dialog
+              body and actions are rendered internally from the config, so
+              everything is data-driven rather than templated.
+            </li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The dialog renders in a CDK overlay, so style overrides must target
+            the <code>.cdk-overlay-container</code> scope, not the host. The
+            panel surface (background, radius, elevation) comes from the global
+            <code>mat.dialog-overrides</code> bridge in
+            <code>@rhombuskit/material-preset</code>; the chrome itself reads
+            these contract tokens:
+          </p>
+          <ul>
+            <li><code>--font-sans</code> &mdash; dialog font family</li>
+            <li><code>--text-primary</code> &mdash; title colour</li>
+            <li><code>--text-secondary</code> &mdash; message body colour</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
-            Built on <code>RhombusDialogService</code>, so it inherits the same
-            modal behaviour: focus is <strong>trapped</strong> inside the dialog
-            on open and <strong>restored</strong> to the trigger on close.
+            The dialog is opened through Material's <code>MatDialog</code> (via
+            <code>RhombusConfirmService</code> &rarr;
+            <code>RhombusDialogService</code>), so it is a true
+            <code>role="dialog"</code> with <code>aria-modal</code>. The
+            <code>title</code> is wired as the accessible name via
+            <code>mat-dialog-title</code> (<code>aria-labelledby</code>). Focus
+            is <strong>trapped</strong> inside the dialog on open
+            (<code>autoFocus: 'dialog'</code>) and <strong>restored</strong> to
+            the triggering element on close (<code>restoreFocus: true</code>).
             <kbd>Escape</kbd> and a backdrop click both dismiss it, resolving to
             <code>false</code> &mdash; equivalent to cancelling &mdash; so no
-            action runs unless the user explicitly confirms.
+            action runs unless the user explicitly confirms. Because the body is
+            plain projected text rather than a live region, write a clear
+            <code>title</code> and <code>message</code> so the purpose is
+            announced when focus lands inside the dialog.
           </p>
         </section>
       </div>

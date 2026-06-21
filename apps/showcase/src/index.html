@@ -5,6 +5,38 @@
     <title>RhombusKit</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO + social. Per-route <title> and <meta name="description"> are kept in
+         sync by RhombusTitleStrategy; these are the static defaults + the
+         crawler-visible Open Graph / Twitter card. -->
+    <meta
+      name="description"
+      content="RhombusKit — accessible, signal-based Angular components over Angular Material, themed by a frozen design-token contract. Light/dark themes with WCAG 2.1 AA verified in CI."
+    />
+    <link rel="canonical" href="https://rhombuskit.online/" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RhombusKit" />
+    <meta property="og:url" content="https://rhombuskit.online/" />
+    <meta property="og:title" content="RhombusKit — accessible components, themed by tokens" />
+    <meta
+      property="og:description"
+      content="Standalone, signal-based Angular components over Angular Material. Themed by a frozen token contract; WCAG 2.1 AA verified in CI."
+    />
+    <meta property="og:image" content="https://rhombuskit.online/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="RhombusKit — accessible components, themed by tokens" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="RhombusKit — accessible components, themed by tokens" />
+    <meta
+      name="twitter:description"
+      content="Standalone, signal-based Angular components over Angular Material. Themed by a frozen token contract; WCAG 2.1 AA verified in CI."
+    />
+    <meta name="twitter:image" content="https://rhombuskit.online/og-image.png" />
     <!--
       Flash-of-wrong-theme prevention. Must run before Angular bootstraps and
       before first paint. Copy-pasted from @rhombuskit/theme-engine's
@@ -17,6 +49,7 @@
       (function(){try{var s=localStorage.getItem('rhombuskit:theme-preference');var r;if(s==='rhombus-light'||s==='rhombus-dark'){r=s;}else{r=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'rhombus-dark':'rhombus-light';}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
     </script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"

@@ -65,4 +65,50 @@
       }
     }
   }
+
+  // Cmd-K search affordance in the header. A quiet, input-like pill that opens
+  // the command palette; the kbd hint advertises the shortcut.
+  &__search {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem 0.35rem 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: border-color 150ms ease, color 150ms ease;
+
+    &:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    mat-icon {
+      font-size: 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    &-label {
+      @media (max-width: 599px) {
+        display: none;
+      }
+    }
+
+    &-kbd {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      // --text-secondary (not --text-muted) clears WCAG AA on --surface-2 in
+      // both themes; muted (slate-500) on surface-2 was only 3.86:1.
+      color: var(--text-secondary);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.05em 0.4em;
+    }
+  }
 }

@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
+import { RouterLink } from '@angular/router';
+import {
+  RhombusButtonComponent,
+  RhombusCardComponent,
+  RhombusCodeBlockComponent,
+} from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
 import { ExampleComponent } from '../../shared/example.component';
 
@@ -7,14 +12,16 @@ import { ExampleComponent } from '../../shared/example.component';
   selector: 'app-card-page',
   standalone: true,
   imports: [
+    RouterLink,
     RhombusCardComponent,
     RhombusButtonComponent,
+    RhombusCodeBlockComponent,
     ComponentPageComponent,
     ExampleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Card" apiKey="RhombusCardComponent">
+    <app-component-page title="Card" [hasUsage]="true" apiKey="RhombusCardComponent">
       <div overview class="overview">
         <p class="overview__lead">
           A card groups related content and actions into a single surface.
@@ -24,6 +31,18 @@ import { ExampleComponent } from '../../shared/example.component';
           border, and shadow through the token contract &mdash; toggle the theme
           above and the card re-skins without touching markup.
         </p>
+
+        <section class="showcase-section">
+          <h2>Example</h2>
+          <app-example [code]="usage">
+            <rhombus-card variant="elevated">
+              <span slot="title">Monthly report</span>
+              <span slot="subtitle">Updated 2 hours ago</span>
+              <p>Revenue is up 12% over last month across all regions.</p>
+              <rhombus-button slot="actions" appearance="text">View</rhombus-button>
+            </rhombus-card>
+          </app-example>
+        </section>
 
         <section class="showcase-section">
           <h2>When to use</h2>
@@ -38,33 +57,86 @@ import { ExampleComponent } from '../../shared/example.component';
               Pick a <code>variant</code> by emphasis:
               <code>elevated</code> for a raised surface, <code>outlined</code>
               for a flat bordered one, <code>filled</code> for a tonal panel.
-              Project content into <code>[slot=title]</code>,
-              <code>[slot=subtitle]</code>, and <code>[slot=actions]</code>.
             </li>
           </ul>
         </section>
 
         <section class="showcase-section">
-          <h2>Usage</h2>
-          <app-example [code]="usage">
-            <rhombus-card variant="elevated">
-              <span slot="title">Monthly report</span>
-              <span slot="subtitle">Updated 2 hours ago</span>
-              <p>Revenue is up 12% over last month across all regions.</p>
-              <rhombus-button slot="actions" appearance="text">View</rhombus-button>
-            </rhombus-card>
-          </app-example>
+          <h2>When not to use</h2>
+          <ul>
+            <li>For a single piece of status metadata &mdash; a count or label &mdash; use a <a routerLink="/components/badge">Badge</a> or <a routerLink="/components/chip">Chip</a> rather than a whole surface.</li>
+            <li>For transient feedback that should appear and dismiss itself, use a <a routerLink="/components/toast">Toast</a>; for inline messages, an <a routerLink="/components/alert">Alert</a>.</li>
+            <li>When the &ldquo;card&rdquo; must block the page until the user responds, use a <a routerLink="/components/dialog">Dialog</a> &mdash; a card never traps focus or dims the background.</li>
+            <li>To frame a whole route's heading and actions, use a <a routerLink="/components/page-header">Page Header</a> instead of a top-level card.</li>
+          </ul>
         </section>
 
-        <section class="overview__a11y">
+        <section class="showcase-section">
+          <h2>Related components</h2>
+          <ul>
+            <li><a routerLink="/components/button">Button</a> &mdash; the controls you project into <code>[slot=actions]</code>.</li>
+            <li><a routerLink="/components/page-header">Page Header</a> &mdash; route-level title and action bar.</li>
+            <li><a routerLink="/components/empty-state">Empty State</a> &mdash; the placeholder shown when a card's data set is empty.</li>
+            <li><a routerLink="/components/theming">Theming</a> &mdash; the token contract the card re-skins through.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div usage class="usage">
+        <p class="overview__lead">
+          A card is driven entirely by content projection: set the
+          <code>variant</code>, <code>padding</code>, and <code>hasHeader</code>
+          inputs, then project markup into the title, subtitle, body, and actions
+          slots.
+        </p>
+
+        <section class="showcase-section">
+          <h2>Import &amp; setup</h2>
+          <rhombus-code-block language="typescript" [code]="usage" />
+        </section>
+
+        <section class="showcase-section">
+          <h2>Anatomy &amp; slots</h2>
+          <ul>
+            <li><code>variant</code> &mdash; <code>elevated</code> (default) | <code>outlined</code> | <code>filled</code>; selects the surface treatment.</li>
+            <li><code>padding</code> &mdash; <code>none</code> | <code>sm</code> | <code>md</code> (default) | <code>lg</code>; sets inner body padding.</li>
+            <li><code>[hasHeader]="false"</code> &mdash; drops the title/subtitle region entirely for pure body + actions cards.</li>
+            <li><code>[slot=title]</code> &mdash; projects into the card title (give it a real heading element when the card represents one item).</li>
+            <li><code>[slot=subtitle]</code> &mdash; projects into the secondary subtitle line under the title.</li>
+            <li><code>[slot=actions]</code> &mdash; projects into the end-aligned footer; collapses when empty so cards without buttons reserve no dead space.</li>
+            <li><strong>Default slot</strong> &mdash; any other projected markup becomes the card body.</li>
+          </ul>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Theming</h2>
+          <p>
+            The card renders inline (no overlay) and reads these contract tokens,
+            so overriding any of them re-skins it in place:
+          </p>
+          <ul>
+            <li><code>--surface-0</code> &mdash; container background for <code>elevated</code> and <code>outlined</code></li>
+            <li><code>--surface-1</code> &mdash; tonal container background for <code>filled</code></li>
+            <li><code>--border</code> &mdash; outline colour for <code>outlined</code></li>
+            <li><code>--shadow-md</code> &mdash; elevation shadow for <code>elevated</code></li>
+            <li><code>--text-primary</code> &mdash; body and title colour</li>
+            <li><code>--text-secondary</code> &mdash; subtitle colour</li>
+            <li><code>--font-sans</code> &mdash; card font family</li>
+          </ul>
+        </section>
+
+        <section class="usage__a11y">
           <h2>Accessibility</h2>
           <p>
             A card is a styled container, not an interactive control, so it adds
-            no roles or keyboard handling of its own. Any focusable elements you
-            project &mdash; buttons in <code>[slot=actions]</code>, links in the
-            body &mdash; keep their native semantics and tab order. When the whole
-            card represents one item, give its <code>[slot=title]</code> a real
-            heading so assistive tech can navigate by structure.
+            no roles, ARIA attributes, or keyboard handling of its own &mdash; the
+            template renders a plain <code>&lt;mat-card&gt;</code> with projected
+            content. Any focusable elements you project &mdash; buttons in
+            <code>[slot=actions]</code>, links in the body &mdash; keep their native
+            semantics and tab order. When the whole card represents one item, give
+            its <code>[slot=title]</code> a real heading element so assistive tech
+            can navigate by structure; the title slot is styled text only and
+            carries no heading role on its own.
           </p>
         </section>
       </div>
@@ -167,7 +239,7 @@ import { ExampleComponent } from '../../shared/example.component';
   `,
 })
 export default class CardPageComponent {
-  /** Minimal import + usage snippet shown in the Overview tab. */
+  /** Minimal import + usage snippet shown in the Usage tab. */
   protected readonly usage = `import { RhombusButtonComponent, RhombusCardComponent } from '@rhombuskit/core';
 
 @Component({

@@ -78,4 +78,13 @@ export const rhombusDark: Record<SemanticTokenName, string> = {
   '--status-scheduled-text':  violet[400],
   '--status-archived-bg':     slate[800],
   '--status-archived-text':   slate[400],
+
+  // Code / syntax highlighting — brighter palette steps so each role is AA
+  // (≥4.5:1) on --surface-0 (slate[900]); mirrors the light theme's roles.
+  '--code-keyword':     violet[300],
+  '--code-string':      green[500],
+  '--code-function':    amber[500],
+  '--code-number':      red[500],
+  '--code-comment':     slate[400],
+  '--code-punctuation': slate[300],
 };
