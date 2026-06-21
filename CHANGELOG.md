@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.3.0](https://github.com/doug-williamson/RhombusKit/compare/v1.2.0...v1.3.0) (2026-06-21)
+
+
+### Features
+
+* **showcase:** add a Cmd-K command palette ([6ff073b](https://github.com/doug-williamson/RhombusKit/commit/6ff073bc95a58cc05386e955786ef442aa2b591e))
+* **showcase:** add opt-in Usage tab and migrate Popover to four tabs ([0c2b9e2](https://github.com/doug-williamson/RhombusKit/commit/0c2b9e272643d517dcdd7f2838a6686d93283043))
+* **showcase:** add social cards, favicons, and per-route meta ([9097fea](https://github.com/doug-williamson/RhombusKit/commit/9097fea44bb3c0451967323aa1a9cd4ae42c4f08))
+* **showcase:** document multiple exports per API tab ([5faa48c](https://github.com/doug-williamson/RhombusKit/commit/5faa48c512899ff5ee7ae7b3d0a8fc57a0e69b51))
+* **showcase:** enrich API metadata — required, enums, slots, config types ([882c4d8](https://github.com/doug-williamson/RhombusKit/commit/882c4d85239900148ddb8ee7c9fdd168f6c760f9))
+* **showcase:** enterprise docs polish — four-tab pages, enriched API, Cmd-K, social cards ([efbcc31](https://github.com/doug-williamson/RhombusKit/commit/efbcc316853130f3e394fcaccc20f055035d372d))
+* **showcase:** four-tab data-table page with server-side example ([14d4ac6](https://github.com/doug-williamson/RhombusKit/commit/14d4ac627a450703717107be83d50735c7b36543))
+* **showcase:** roll out four-tab layout to all component pages ([a5a3acd](https://github.com/doug-williamson/RhombusKit/commit/a5a3acd0517abd1a666ff1b8916c303a36f06da7))
+* **tokens:** add --code-* syntax tokens with theme-aware code highlighting ([a17be0c](https://github.com/doug-williamson/RhombusKit/commit/a17be0c010397bea679b51d732aa4ee003491182))
+
+
+### Bug Fixes
+
+* **core:** give alert an ARIA live role so it is announced ([1ca4d2b](https://github.com/doug-williamson/RhombusKit/commit/1ca4d2bd808c2137b6324f7b33d5cdc45c609be6))
+* **showcase:** resolve CI lint and color-contrast failures ([a8f2b77](https://github.com/doug-williamson/RhombusKit/commit/a8f2b77e96b5404c2057a8979472e1cfc35ff736))
+
 ## [1.2.0](https://github.com/doug-williamson/RhombusKit/compare/v1.1.1...v1.2.0) (2026-06-17)
 
 
