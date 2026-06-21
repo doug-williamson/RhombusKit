@@ -102,7 +102,9 @@
     &-kbd {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--text-muted);
+      // --text-secondary (not --text-muted) clears WCAG AA on --surface-2 in
+      // both themes; muted (slate-500) on surface-2 was only 3.86:1.
+      color: var(--text-secondary);
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);

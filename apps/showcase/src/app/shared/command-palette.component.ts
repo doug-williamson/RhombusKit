@@ -25,13 +25,22 @@ import { NAV_COMMANDS } from './navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (open()) {
-      <div class="cmdk-backdrop" (click)="close()">
+      <div class="cmdk-root">
+        <!-- Dismiss area: a real button so it's keyboard-accessible without a
+             non-interactive click handler; Escape also closes (global keydown). -->
+        <button
+          type="button"
+          class="cmdk-backdrop"
+          tabindex="-1"
+          aria-label="Close search"
+          (click)="close()"
+        ></button>
+
         <div
           class="cmdk-panel"
           role="dialog"
           aria-modal="true"
           aria-label="Search documentation"
-          (click)="$event.stopPropagation()"
         >
           <input
             #searchEl
@@ -50,12 +59,16 @@ import { NAV_COMMANDS } from './navigation';
             (keydown)="onKey($event)"
           />
 
-          <ul id="cmdk-list" class="cmdk-results" role="listbox">
+          <div id="cmdk-list" class="cmdk-results" role="listbox">
             @for (r of results(); track r.path; let i = $index) {
-              <li
+              <!-- Native button: focusable + keyboard-activatable. tabindex=-1
+                   keeps focus on the input (aria-activedescendant pattern). -->
+              <button
+                type="button"
                 [id]="'cmdk-opt-' + i"
                 class="cmdk-result"
                 role="option"
+                tabindex="-1"
                 [class.is-active]="i === activeIndex()"
                 [attr.aria-selected]="i === activeIndex()"
                 (click)="go(r)"
@@ -63,11 +76,11 @@ import { NAV_COMMANDS } from './navigation';
               >
                 <span class="cmdk-result__label">{{ r.label }}</span>
                 <span class="cmdk-result__group">{{ r.group }}</span>
-              </li>
+              </button>
             } @empty {
-              <li class="cmdk-empty">No matches for “{{ query() }}”.</li>
+              <p class="cmdk-empty">No matches for “{{ query() }}”.</p>
             }
-          </ul>
+          </div>
 
           <div class="cmdk-footer">
             <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
@@ -79,7 +92,7 @@ import { NAV_COMMANDS } from './navigation';
     }
   `,
   styles: `
-    .cmdk-backdrop {
+    .cmdk-root {
       position: fixed;
       inset: 0;
       z-index: 1000;
@@ -87,11 +100,26 @@ import { NAV_COMMANDS } from './navigation';
       justify-content: center;
       align-items: flex-start;
       padding: 12vh 1rem 1rem;
+    }
+
+    .cmdk-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      appearance: none;
       background: rgb(0 0 0 / 0.5);
       backdrop-filter: blur(2px);
+      cursor: default;
     }
 
     .cmdk-panel {
+      position: relative;
+      z-index: 1;
       width: min(640px, 100%);
       max-height: 70vh;
       display: flex;
@@ -127,6 +155,13 @@ import { NAV_COMMANDS } from './navigation';
     }
 
     .cmdk-result {
+      width: 100%;
+      box-sizing: border-box;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      color: inherit;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -172,6 +207,7 @@ import { NAV_COMMANDS } from './navigation';
       kbd {
         font-family: var(--font-mono);
         font-size: 0.9em;
+        color: var(--text-secondary);
         background: var(--surface-2);
         border: 1px solid var(--border);
         border-radius: var(--radius-sm);
@@ -213,7 +249,8 @@ export class CommandPaletteComponent {
   protected onDocKey(e: KeyboardEvent): void {
     if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault();
-      this.open() ? this.close() : this.openPalette();
+      if (this.open()) this.close();
+      else this.openPalette();
     } else if (e.key === 'Escape' && this.open()) {
       this.close();
     }
