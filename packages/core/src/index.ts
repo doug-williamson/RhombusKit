@@ -185,3 +185,13 @@ export { RhombusCodeBlockComponent } from './lib/code-block/rhombus-code-block.c
 // Element block — distinct from the data-table [rhombusEmptyState] attribute
 // directive exported above; the element may nest inside that directive.
 export { RhombusEmptyStateComponent } from './lib/empty-state/rhombus-empty-state.component';
+
+// Icon — registry-backed inline-SVG primitive. Renders any icon registered via
+// provideRhombusIcons() (a name → SVG-literal map, same shape as a Material
+// addSvgIconLiteral map) plus the library's built-in glyphs, as a currentColor
+// SVG; unknown names fall back to <mat-icon> (font). Size sm/md/lg or px.
+export { RhombusIconComponent } from './lib/icon/rhombus-icon.component';
+export type { RhombusIconSize } from './lib/icon/rhombus-icon.component';
+export { RhombusIconRegistry } from './lib/icon/rhombus-icon-registry';
+export { provideRhombusIcons } from './lib/icon/rhombus-icon.providers';
+export type { RhombusIconSet } from './lib/icon/rhombus-icon.providers';
