@@ -890,6 +890,57 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "outputs": [],
     "methods": []
   },
+  "RhombusIconComponent": {
+    "name": "RhombusIconComponent",
+    "kind": "class",
+    "selector": "rhombus-icon",
+    "description": "`<rhombus-icon>` — the library's icon primitive. Renders any icon registered\nwith the {@link RhombusIconRegistry} (typically via `provideRhombusIcons`) as\nan inline `currentColor` SVG, so icons inherit text colour and need no icon\nfont. The library's built-in glyphs are pre-registered; a name that is not\nregistered falls back to `<mat-icon>` (Material font).\n\nDecorative by default (`aria-hidden`); pass `ariaLabel` to expose it as a\nlabelled image (`role=\"img\"`). Set `size` for the box; colour follows\n`currentColor`, so set `color` on an ancestor to theme it.\n\n```html\n<rhombus-icon name=\"edit\" />\n<rhombus-icon name=\"delete\" size=\"lg\" ariaLabel=\"Delete\" />\n```",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "string",
+        "description": "Registered icon name (or a Material ligature name for the font fallback).",
+        "required": true
+      },
+      {
+        "name": "size",
+        "type": "RhombusIconSize",
+        "description": "Icon size — an `'sm' | 'md' | 'lg'` preset or an explicit pixel number."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible label. When set, the icon is exposed as `role=\"img\"` with this\nlabel; left unset (the default) it is decorative (`aria-hidden`)."
+      }
+    ],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusIconRegistry": {
+    "name": "RhombusIconRegistry",
+    "kind": "class",
+    "selector": null,
+    "description": "Name → inline-SVG registry backing `<rhombus-icon>`. Mirrors the shape of an\nAngular Material `addSvgIconLiteral` map: register an icon set once (typically\nvia {@link provideRhombusIcons}) and reference each entry by name.\n\nThe library's built-in glyphs are pre-seeded, so the frame components render\nwith no consumer setup. SVG literals are stored as trusted HTML\n(`DomSanitizer.bypassSecurityTrustHtml`), exactly as `MatIconRegistry` does —\nregister only static, bundled, trusted SVG strings, never markup derived from\nuser input.",
+    "inputs": [],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "register",
+        "type": "{ (name: string, svg: string): void; (icons: Record<string, string>): void; }",
+        "description": "Register one icon by name, or a whole name → SVG-literal map at once."
+      },
+      {
+        "name": "get",
+        "type": "(name: string) => SafeHtml | undefined",
+        "description": "The trusted SVG registered for `name`, or `undefined` if there is none."
+      },
+      {
+        "name": "has",
+        "type": "(name: string) => boolean",
+        "description": "Whether `name` resolves to a registered inline SVG."
+      }
+    ]
+  },
   "RhombusInputComponent": {
     "name": "RhombusInputComponent",
     "kind": "class",

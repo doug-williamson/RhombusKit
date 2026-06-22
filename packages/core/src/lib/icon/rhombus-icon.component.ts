@@ -3,48 +3,35 @@ import {
   Component,
   ViewEncapsulation,
   computed,
+  inject,
   input,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-
-interface RhombusGlyph {
-  viewBox: string;
-  path: string;
-}
+import { RhombusIconRegistry } from './rhombus-icon-registry';
 
 /**
- * Built-in default glyphs the library renders inline (Material Icons "filled",
- * 24px). Keyed by the Material ligature name so a default input value maps
- * straight through. Extend this map when a new built-in default icon appears.
+ * Icon size — a preset (`sm` 20px · `md` 24px · `lg` 32px) or an explicit pixel
+ * value. Defaults to `md`.
  */
-const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
-  more_vert: {
-    viewBox: '0 0 24 24',
-    path: 'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z',
-  },
-  light_mode: {
-    viewBox: '0 0 24 24',
-    path: 'M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13l2 0c.55 0 1-.45 1-1s-.45-1-1-1l-2 0c-.55 0-1 .45-1 1s.45 1 1 1zm18 0l2 0c.55 0 1-.45 1-1s-.45-1-1-1l-2 0c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z',
-  },
-  dark_mode: {
-    viewBox: '0 0 24 24',
-    path: 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z',
-  },
-  contrast: {
-    viewBox: '0 0 24 24',
-    path: 'M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm1-17.93c3.94.49 7 3.85 7 7.93s-3.05 7.44-7 7.93V4.07z',
-  },
-};
+export type RhombusIconSize = 'sm' | 'md' | 'lg' | number;
+
+const SIZE_PX: Record<'sm' | 'md' | 'lg', number> = { sm: 20, md: 24, lg: 32 };
 
 /**
- * Internal icon helper. Renders the library's built-in/default glyphs as inline
- * `currentColor` SVG so they display in hosts that do not bundle the Material
- * Icons font. Any name not in {@link RHOMBUS_DEFAULT_GLYPHS} falls back to
- * `<mat-icon>` (font), preserving consumer-supplied custom icons unchanged.
+ * `<rhombus-icon>` — the library's icon primitive. Renders any icon registered
+ * with the {@link RhombusIconRegistry} (typically via `provideRhombusIcons`) as
+ * an inline `currentColor` SVG, so icons inherit text colour and need no icon
+ * font. The library's built-in glyphs are pre-registered; a name that is not
+ * registered falls back to `<mat-icon>` (Material font).
  *
- * NOT part of the public API — consumed only by other core components. The svg
- * inherits its color via `currentColor`; the host scopes that through the same
- * Material icon-color tokens it would have applied to `<mat-icon>`.
+ * Decorative by default (`aria-hidden`); pass `ariaLabel` to expose it as a
+ * labelled image (`role="img"`). Set `size` for the box; colour follows
+ * `currentColor`, so set `color` on an ancestor to theme it.
+ *
+ * ```html
+ * <rhombus-icon name="edit" />
+ * <rhombus-icon name="delete" size="lg" ariaLabel="Delete" />
+ * ```
  */
 @Component({
   selector: 'rhombus-icon',
@@ -52,19 +39,15 @@ const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
   imports: [MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[style.--rhombus-icon-size]': 'sizeCss()',
+    '[attr.role]': "ariaLabel() ? 'img' : null",
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-hidden]': "ariaLabel() ? null : 'true'",
+  },
   template: `
-    @if (glyph(); as g) {
-      <svg
-        class="rhombus-icon"
-        [attr.viewBox]="g.viewBox"
-        width="24"
-        height="24"
-        fill="currentColor"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path [attr.d]="g.path" />
-      </svg>
+    @if (svg(); as html) {
+      <span class="rhombus-icon" [innerHTML]="html"></span>
     } @else {
       <mat-icon>{{ name() }}</mat-icon>
     }
@@ -73,21 +56,49 @@ const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
     rhombus-icon {
       display: inline-flex;
       line-height: 0;
-      /* Centre the icon against adjacent text when it sits inline (e.g. a
-         menu-item label). Inert in icon-only flex contexts like matIconButton.
-         Must be a CSS block comment: inline styles are emitted as raw CSS, and
-         a Sass-style line comment here swallows the next declaration. */
+      /* Centre the icon against adjacent inline text (e.g. a menu-item label).
+         Inert in icon-only flex contexts like matIconButton. Must be a CSS
+         block comment: inline styles are emitted as raw CSS, and a Sass-style
+         line comment here swallows the next declaration. */
       vertical-align: middle;
     }
     .rhombus-icon {
+      display: inline-flex;
+      width: var(--rhombus-icon-size, 24px);
+      height: var(--rhombus-icon-size, 24px);
+    }
+    .rhombus-icon svg {
       display: block;
+      width: 100%;
+      height: 100%;
+    }
+    rhombus-icon mat-icon {
+      font-size: var(--rhombus-icon-size, 24px);
+      width: var(--rhombus-icon-size, 24px);
+      height: var(--rhombus-icon-size, 24px);
     }
   `,
 })
 export class RhombusIconComponent {
-  readonly name = input.required<string>();
+  private readonly registry = inject(RhombusIconRegistry);
 
-  protected readonly glyph = computed<RhombusGlyph | null>(
-    () => RHOMBUS_DEFAULT_GLYPHS[this.name()] ?? null
-  );
+  /** Registered icon name (or a Material ligature name for the font fallback). */
+  readonly name = input.required<string>();
+  /** Icon size — an `'sm' | 'md' | 'lg'` preset or an explicit pixel number. */
+  readonly size = input<RhombusIconSize>('md');
+  /**
+   * Accessible label. When set, the icon is exposed as `role="img"` with this
+   * label; left unset (the default) it is decorative (`aria-hidden`).
+   */
+  readonly ariaLabel = input<string | null>(null);
+
+  /** The registered SVG for the current name, or `undefined` (→ font fallback). */
+  protected readonly svg = computed(() => this.registry.get(this.name()));
+
+  /** Resolved box size as a CSS length, bound to `--rhombus-icon-size`. */
+  protected readonly sizeCss = computed(() => {
+    const size = this.size();
+    const px = typeof size === 'number' ? size : SIZE_PX[size];
+    return `${px}px`;
+  });
 }

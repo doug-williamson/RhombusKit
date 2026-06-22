@@ -237,6 +237,22 @@
 ### RhombusErrorDirective (class)
   // (no public members)
 
+### RhombusIconComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly name: _angular_core.InputSignal<string>
+  readonly size: _angular_core.InputSignal<RhombusIconSize>
+
+### RhombusIconRegistry (class)
+  get: (name: string) => SafeHtml | undefined
+  has: (name: string) => boolean
+  register: { (name: string, svg: string): void; (icons: Record<string, string>): void; }
+
+### RhombusIconSet (type)
+  type RhombusIconSet = Record<string, string>
+
+### RhombusIconSize (type)
+  type RhombusIconSize = 'sm' | 'md' | 'lg' | number
+
 ### RhombusInputComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
   readonly autocomplete: _angular_core.InputSignal<string>
@@ -426,3 +442,6 @@
 
 ### ToastVariant (type)
   type ToastVariant = 'info' | 'success' | 'warning' | 'error'
+
+### provideRhombusIcons (function)
+  provideRhombusIcons: (icons: RhombusIconSet) => EnvironmentProviders
