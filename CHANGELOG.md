@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/doug-williamson/RhombusKit/compare/v1.3.0...v1.4.0) (2026-06-22)
+
+
+### Features
+
+* **core:** add public rhombus-icon primitive with icon registry ([2df4feb](https://github.com/doug-williamson/RhombusKit/commit/2df4feb15242fd418f47ee081c50087ee35a0e23))
+* **core:** add public rhombus-icon primitive with icon registry ([29a06e7](https://github.com/doug-williamson/RhombusKit/commit/29a06e7cc13a2745d5f7f88ab95cb8906a00606a))
+
 ## [1.3.0](https://github.com/doug-williamson/RhombusKit/compare/v1.2.0...v1.3.0) (2026-06-21)
 
 
