@@ -49,6 +49,7 @@
     height: 24px;
     background: var(--surface-1);
     border-radius: var(--radius-full);
+    overflow: hidden;
   }
 
   &__marker {
