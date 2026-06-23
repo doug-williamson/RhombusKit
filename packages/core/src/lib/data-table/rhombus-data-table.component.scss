@@ -40,7 +40,7 @@
   .mat-sort-header-recently-cleared-descending .mat-sort-header-arrow {
     animation: none;
     opacity: 0;
-    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
   }
 
   .mat-sort-header-recently-cleared-descending .mat-sort-header-arrow {
@@ -87,7 +87,7 @@
   &__row {
     &--clickable {
       cursor: pointer;
-      transition: background-color 120ms ease;
+      transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 
       &:hover {
         background-color: var(--surface-1);
