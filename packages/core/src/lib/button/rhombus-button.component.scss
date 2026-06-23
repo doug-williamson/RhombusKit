@@ -4,7 +4,7 @@
 .rhombus-button {
   font-family: var(--font-sans);
   cursor: pointer;
-  transition: box-shadow 150ms ease, opacity 150ms ease;
+  transition: box-shadow var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
 
   // --- Size variants (height + padding + font scale) ---
   // Material's .mdc-button pins the container to a fixed height (40px), zeroes

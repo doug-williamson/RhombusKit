@@ -179,6 +179,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/theming/theming-page.component'),
   },
   {
+    path: 'motion',
+    title: 'Motion',
+    loadComponent: () => import('./pages/motion/motion-page.component'),
+  },
+  {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./pages/home/home-page.component'),

@@ -12,7 +12,26 @@
   min-width: 180px;
   font-family: var(--font-sans);
 
+  // Entrance: subtle fade + lift + scale, played on each mount. Decelerate
+  // easing settles the panel to rest. Origin-neutral so it reads correctly
+  // whether the panel opens below or above the trigger. Exit is intentionally
+  // instant (the trigger disposes the overlay synchronously). Honoring
+  // prefers-reduced-motion is global (styles/_reset.scss zeroes the duration).
+  animation: rhombus-popover-enter var(--motion-duration-base)
+    var(--motion-ease-decelerate);
+
   &:focus {
     outline: none; // focus is trapped to the first focusable child via cdkTrapFocus
+  }
+}
+
+@keyframes rhombus-popover-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

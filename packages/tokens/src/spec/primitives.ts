@@ -69,5 +69,25 @@ export const radius = {
   full: '9999px',
 } as const;
 
-export const primitives = { slate, violet, green, amber, red, fontFamily, radius } as const;
+// Motion is theme-independent (a 150ms transition is 150ms in every theme), so
+// it lives here as a primitive — not in the themed CONTRACT. Durations form a
+// fastest→slowest scale; easings name the four standard roles. Component styles
+// reference these via var(--motion-duration-*) / var(--motion-ease-*). Honoring
+// prefers-reduced-motion is handled globally in styles/_reset.scss.
+export const motion = {
+  duration: {
+    instant: '0ms',
+    fast:    '120ms',
+    base:    '150ms',
+    slow:    '240ms',
+  },
+  ease: {
+    standard:   'cubic-bezier(0.4, 0, 0.2, 1)',
+    emphasized: 'cubic-bezier(0.2, 0, 0, 1)',
+    decelerate: 'cubic-bezier(0, 0, 0.2, 1)',
+    accelerate: 'cubic-bezier(0.4, 0, 1, 1)',
+  },
+} as const;
+
+export const primitives = { slate, violet, green, amber, red, fontFamily, radius, motion } as const;
 export type Primitives = typeof primitives;

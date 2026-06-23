@@ -49,7 +49,15 @@ export const tokens = {
   "radius-md": "0.375rem",
   "radius-lg": "0.5rem",
   "radius-xl": "0.75rem",
-  "radius-full": "9999px"
+  "radius-full": "9999px",
+  "motion-duration-instant": "0ms",
+  "motion-duration-fast": "120ms",
+  "motion-duration-base": "150ms",
+  "motion-duration-slow": "240ms",
+  "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+  "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)",
+  "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)",
+  "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"
 } as const,
   themes: {
     'rhombus-light': {
