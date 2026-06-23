@@ -19,6 +19,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/', label: 'Home' },
       { path: '/theming', label: 'Theming' },
+      { path: '/motion', label: 'Motion' },
     ],
   },
   {
