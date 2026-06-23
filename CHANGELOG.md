@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/doug-williamson/RhombusKit/compare/v1.4.0...v1.5.0) (2026-06-23)
+
+
+### Features
+
+* motion token foundation + popover entrance + Motion docs page ([b516f41](https://github.com/doug-williamson/RhombusKit/commit/b516f418e3eabab1f5b7dfb043b26afd226202b1))
+* **popover:** add tokenized entrance animation ([0b05d0e](https://github.com/doug-williamson/RhombusKit/commit/0b05d0ec4b8b02e4f17f674b5d807cec60e15b27))
+* **tokens:** add motion duration + easing primitives ([83c1ff2](https://github.com/doug-williamson/RhombusKit/commit/83c1ff2fd9ad7f89f4e8b6c5ce4a0de4b9a5b14f))
+
+
+### Bug Fixes
+
+* **showcase:** clip motion easing-demo track to contain the marker ([4993051](https://github.com/doug-williamson/RhombusKit/commit/499305121cd6037250d1543a1a4612601ac817eb))
+
 ## [1.4.0](https://github.com/doug-williamson/RhombusKit/compare/v1.3.0...v1.4.0) (2026-06-22)
 
 
