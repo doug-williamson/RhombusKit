@@ -13,6 +13,8 @@
         "outputPath": "dist/apps/showcase",
         "index": "apps/showcase/src/index.html",
         "browser": "apps/showcase/src/main.ts",
+        "server": "apps/showcase/src/main.server.ts",
+        "outputMode": "static",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/showcase/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
