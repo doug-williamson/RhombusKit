@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
   RhombusAppShellComponent,
   RhombusThemeMenuComponent,
 } from '@rhombuskit/core';
+import { AnalyticsService } from './shared/analytics.service';
 import { CommandPaletteComponent } from './shared/command-palette.component';
 import { NAV_GROUPS } from './shared/navigation';
 
@@ -72,4 +73,9 @@ import { NAV_GROUPS } from './shared/navigation';
 })
 export class AppComponent {
   protected readonly navGroups = NAV_GROUPS;
+
+  constructor() {
+    // No-op on the server and until a GoatCounter endpoint is configured.
+    inject(AnalyticsService).init();
+  }
 }

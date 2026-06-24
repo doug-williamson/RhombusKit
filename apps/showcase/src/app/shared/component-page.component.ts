@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RhombusTabGroupDirective } from '@rhombuskit/core';
 import { ApiTableComponent } from './api-table.component';
+import { PageFeedbackComponent } from './page-feedback.component';
 
 type TabId = 'overview' | 'usage' | 'examples' | 'api';
 
@@ -32,7 +33,12 @@ type TabId = 'overview' | 'usage' | 'examples' | 'api';
 @Component({
   selector: 'app-component-page',
   standalone: true,
-  imports: [MatTabsModule, RhombusTabGroupDirective, ApiTableComponent],
+  imports: [
+    MatTabsModule,
+    RhombusTabGroupDirective,
+    ApiTableComponent,
+    PageFeedbackComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="showcase-page component-page">
@@ -68,6 +74,8 @@ type TabId = 'overview' | 'usage' | 'examples' | 'api';
           </div>
         </mat-tab>
       </mat-tab-group>
+
+      <app-page-feedback [component]="title()" />
     </div>
   `,
 })
