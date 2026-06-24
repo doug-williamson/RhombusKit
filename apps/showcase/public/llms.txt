@@ -1,0 +1,63 @@
+# RhombusKit
+
+> Accessible, signal-based Angular 21 components built over Angular Material and themed by a frozen design-token contract. Light/dark theming with WCAG 2.1 AA verified in CI.
+
+RhombusKit ships four npm packages, versioned and released in lockstep:
+
+- `@rhombuskit/core` — standalone, signal-based Angular components
+- `@rhombuskit/tokens` — framework-agnostic design-token contract (CSS / SCSS / TS)
+- `@rhombuskit/theme-engine` — light / dark / system theming runtime
+- `@rhombuskit/material-preset` — bridges Angular Material's M3 tokens onto the contract
+
+Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
+
+## Documentation
+
+- [Component reference](https://rhombuskit.online): live showcase — a page per component with variants, states, and accessibility notes
+- [Theming guide](https://rhombuskit.online/theming): setup, runtime switching, custom themes, the Material bridge
+- [Full API + token reference (for LLMs)](https://rhombuskit.online/llms-full.txt): the complete machine-readable API surface and design-token contract
+- [Source, issues & contributing](https://github.com/doug-williamson/RhombusKit)
+
+## Components
+
+- [Button](https://rhombuskit.online/components/button)
+- [Badge](https://rhombuskit.online/components/badge)
+- [Card](https://rhombuskit.online/components/card)
+- [Chip](https://rhombuskit.online/components/chip)
+- [Icon](https://rhombuskit.online/components/icon)
+- [Checkbox](https://rhombuskit.online/components/checkbox)
+- [Radio Group](https://rhombuskit.online/components/radio)
+- [Switch](https://rhombuskit.online/components/switch)
+- [Input](https://rhombuskit.online/components/input)
+- [Textarea](https://rhombuskit.online/components/textarea)
+- [Select](https://rhombuskit.online/components/select)
+- [Data Table](https://rhombuskit.online/components/data-table)
+- [Overflow Menu](https://rhombuskit.online/components/overflow-menu)
+- [Tooltip](https://rhombuskit.online/components/tooltip)
+- [Toast](https://rhombuskit.online/components/toast)
+- [Dialog](https://rhombuskit.online/components/dialog)
+- [Confirm Dialog](https://rhombuskit.online/components/confirm-dialog)
+- [Tabs](https://rhombuskit.online/components/tabs)
+- [Menu](https://rhombuskit.online/components/menu)
+- [Popover](https://rhombuskit.online/components/popover)
+- [Bottom nav](https://rhombuskit.online/components/bottom-nav)
+- [Breadcrumbs](https://rhombuskit.online/components/breadcrumbs)
+- [Pagination](https://rhombuskit.online/components/pagination)
+- [Progress](https://rhombuskit.online/components/progress)
+- [Avatar](https://rhombuskit.online/components/avatar)
+- [Alert](https://rhombuskit.online/components/alert)
+- [App Shell](https://rhombuskit.online/components/app-shell)
+- [Theme Controls](https://rhombuskit.online/components/theme-toggle)
+- [Page Header](https://rhombuskit.online/components/page-header)
+- [Empty State](https://rhombuskit.online/components/empty-state)
+- [Code Block](https://rhombuskit.online/components/code-block)
+
+## Guides
+
+- [Theming](https://rhombuskit.online/theming)
+- [Motion](https://rhombuskit.online/motion)
+
+## Optional
+
+- [Contributing guide](https://github.com/doug-williamson/RhombusKit/blob/main/CONTRIBUTING.md)
+- [Suggest a feature or component](https://github.com/doug-williamson/RhombusKit/issues/new/choose)
