@@ -54,6 +54,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 
 ## Guides
 
+- [Migrate from Material](https://rhombuskit.online/migrate)
 - [Theming](https://rhombuskit.online/theming)
 - [Motion](https://rhombuskit.online/motion)
 

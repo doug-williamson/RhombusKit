@@ -174,6 +174,11 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'migrate',
+    title: 'Migrate from Angular Material',
+    loadComponent: () => import('./pages/migrate/migrate-page.component'),
+  },
+  {
     path: 'theming',
     title: 'Theming',
     loadComponent: () => import('./pages/theming/theming-page.component'),
