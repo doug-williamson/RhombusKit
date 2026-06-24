@@ -60,7 +60,7 @@ function packagesBlock() {
 function buildLlmsTxt() {
   const items = navItems();
   const components = items.filter((i) => i.path.startsWith('/components/'));
-  const guides = items.filter((i) => i.path === '/theming' || i.path === '/motion');
+  const guides = items.filter((i) => i.path !== '/' && !i.path.startsWith('/components/'));
 
   const componentLinks = components
     .map((c) => `- [${c.label}](${SITE}${c.path})`)
