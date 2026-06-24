@@ -18,6 +18,22 @@ Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system a
 - **Per-package guides** — install + quick start live in each package's README (linked in the table above).
 - **Public-surface contract** — the [`etc/*.api.md`](./etc) reports are the CI-guarded snapshot of every package's public exports. They're the machine-readable *surface contract*, not a tutorial — a diff there is a deliberate API-change review signal (see [How the surface is guarded](#how-the-surface-is-guarded)).
 
+## Contributing
+
+RhombusKit welcomes suggestions and contributions — and you don't have to write
+code to help. Suggesting a feature, proposing a component, reporting an
+accessibility gap, improving docs, or just 👍-ing an idea are all credited
+contributions.
+
+- **Suggest or report something** — open an [issue](https://github.com/doug-williamson/RhombusKit/issues/new/choose)
+  (feature request, new-component proposal, bug, or accessibility report).
+- **Ask or discuss** — start a [Discussion](https://github.com/doug-williamson/RhombusKit/discussions).
+- **Contribute code** — see [CONTRIBUTING.md](./CONTRIBUTING.md) for the
+  fast-lane vs. gated split, local setup, and how the CI surface gates work.
+
+By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). For
+security issues, please follow the [Security Policy](./SECURITY.md).
+
 ## Versioning & stability
 
 RhombusKit is **stable (`1.x`)**. As of `1.0.0` the semver contract below is in

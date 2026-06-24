@@ -1,0 +1,104 @@
+name: 💡 Feature request
+description: Suggest an improvement to an existing component, token, or behavior.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposing a **brand-new component**? Use the **New component proposal**
+        form instead.
+
+        Before filing, skim [Discussions](https://github.com/doug-williamson/RhombusKit/discussions)
+        — if your idea already exists, a 👍 there counts more than a duplicate
+        issue. Vote counts help decide what gets built next.
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package?
+      options:
+        - "@rhombuskit/core"
+        - "@rhombuskit/tokens"
+        - "@rhombuskit/theme-engine"
+        - "@rhombuskit/material-preset"
+        - "Multiple / not sure"
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Which component or area?
+      options:
+        - Alert
+        - App shell
+        - Avatar
+        - Badge
+        - Bottom nav
+        - Breadcrumbs
+        - Button
+        - Card
+        - Checkbox
+        - Chip
+        - Code block
+        - Confirm dialog
+        - Data table
+        - Dialog
+        - Empty state
+        - Icon
+        - Input
+        - Menu
+        - Overflow menu
+        - Page header
+        - Pagination
+        - Popover
+        - Progress / Spinner
+        - Radio
+        - Select
+        - Switch
+        - Tabs
+        - Textarea
+        - Theme toggle
+        - Toast
+        - Tooltip
+        - Tokens / theming (not a component)
+        - Multiple / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or limitation you've hit. What's missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should the component/token do? An API sketch is welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / workarounds
+      description: Anything you've tried, or how other libraries solve this.
+    validations:
+      required: false
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you be open to contributing this?
+      options:
+        - "Yes — I'd open a PR"
+        - "Maybe, with some guidance"
+        - "No, just suggesting"
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and Discussions and this isn't a duplicate.
+          required: true

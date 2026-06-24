@@ -1,0 +1,79 @@
+name: 🧩 New component proposal
+description: Propose a new component or directive for @rhombuskit/core.
+title: "[Component]: "
+labels: ["new-component", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the **gated lane**: a new component adds public surface, which is
+        guarded by semver and the API/token contract — so we agree on the design
+        *before* code. The more concrete your API sketch and accessibility plan,
+        the faster it moves. A proposal can be **accepted in principle** without a
+        committed delivery date, and the community can upvote and help build it.
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: Selector and/or class name.
+      placeholder: "rhombus-accordion / RhombusAccordion"
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Problem & use case
+      description: What does this solve, and who needs it? Real scenarios beat abstractions.
+    validations:
+      required: true
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: Equivalents in Angular Material, PrimeNG, Taiga, etc. — with links if handy.
+    validations:
+      required: false
+  - type: textarea
+    id: api
+    attributes:
+      label: Proposed API (signal-based)
+      description: Sketch the inputs/outputs and usage. Rough is fine.
+      render: typescript
+    validations:
+      required: true
+  - type: textarea
+    id: a11y
+    attributes:
+      label: Accessibility
+      description: Keyboard interaction, ARIA pattern/roles, focus management, WCAG 2.1 AA considerations.
+    validations:
+      required: true
+  - type: dropdown
+    id: token-impact
+    attributes:
+      label: Token / CONTRACT impact
+      options:
+        - "Reuses existing tokens"
+        - "Needs new tokens"
+        - "Not sure"
+    validations:
+      required: true
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Are you able to help build it?
+      options:
+        - "Yes — I'd open a PR"
+        - "With guidance"
+        - "No, just proposing"
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues, Discussions, and the showcase, and this component doesn't exist yet.
+          required: true
+        - label: I understand a proposal may be accepted in principle without a committed delivery date.
+          required: true
