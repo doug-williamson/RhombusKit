@@ -1,0 +1,97 @@
+name: ♿ Accessibility issue
+description: Report a WCAG, keyboard, or screen-reader problem. RhombusKit targets WCAG 2.1 AA.
+title: "[a11y]: "
+labels: ["a11y", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Accessibility is a headline goal for RhombusKit — thank you for helping us
+        hold the line. The more specific the criterion and assistive-tech setup,
+        the faster we can fix it.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Which component or area?
+      options:
+        - Alert
+        - App shell
+        - Avatar
+        - Badge
+        - Bottom nav
+        - Breadcrumbs
+        - Button
+        - Card
+        - Checkbox
+        - Chip
+        - Code block
+        - Confirm dialog
+        - Data table
+        - Dialog
+        - Empty state
+        - Icon
+        - Input
+        - Menu
+        - Overflow menu
+        - Page header
+        - Pagination
+        - Popover
+        - Progress / Spinner
+        - Radio
+        - Select
+        - Switch
+        - Tabs
+        - Textarea
+        - Theme toggle
+        - Toast
+        - Tooltip
+        - Tokens / theming (not a component)
+        - Multiple / not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - "Blocker — cannot complete the task with assistive tech"
+        - "Serious — major barrier, hard to work around"
+        - "Moderate — barrier with a workaround"
+        - "Minor — polish"
+    validations:
+      required: true
+  - type: input
+    id: wcag
+    attributes:
+      label: WCAG criterion (if known)
+      placeholder: "1.4.3 Contrast (Minimum)"
+    validations:
+      required: false
+  - type: input
+    id: at
+    attributes:
+      label: Assistive tech / browser
+      placeholder: "NVDA + Firefox, VoiceOver + Safari, keyboard only, ..."
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: What's the barrier?
+      description: Steps to reproduce, what you expected, and what actually happened.
+    validations:
+      required: true
+  - type: input
+    id: repro
+    attributes:
+      label: Reproduction link
+      placeholder: "https://stackblitz.com/edit/..."
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and this isn't a duplicate.
+          required: true
