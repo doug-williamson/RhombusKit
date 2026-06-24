@@ -179,6 +179,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/migrate/migrate-page.component'),
   },
   {
+    path: 'roadmap',
+    title: 'Roadmap',
+    loadComponent: () => import('./pages/roadmap/roadmap-page.component'),
+  },
+  {
     path: 'theming',
     title: 'Theming',
     loadComponent: () => import('./pages/theming/theming-page.component'),

@@ -18,6 +18,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Get started',
     items: [
       { path: '/', label: 'Home' },
+      { path: '/roadmap', label: 'Roadmap' },
       { path: '/migrate', label: 'Migrate from Material' },
       { path: '/theming', label: 'Theming' },
       { path: '/motion', label: 'Motion' },
