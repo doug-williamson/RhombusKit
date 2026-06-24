@@ -1,0 +1,23 @@
+{
+  "projectName": "RhombusKit",
+  "projectOwner": "doug-williamson",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["README.md"],
+  "imageSize": 80,
+  "commit": true,
+  "commitConvention": "angular",
+  "commitType": "docs",
+  "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": false,
+  "contributors": [
+    {
+      "login": "doug-williamson",
+      "name": "Doug Williamson",
+      "avatar_url": "https://github.com/doug-williamson.png",
+      "profile": "https://github.com/doug-williamson",
+      "contributions": ["code", "doc", "design", "maintenance", "a11y"]
+    }
+  ],
+  "skipCi": true
+}

@@ -21,6 +21,8 @@ Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system a
 
 ## Contributing
 
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+
 RhombusKit welcomes suggestions and contributions — and you don't have to write
 code to help. Suggesting a feature, proposing a component, reporting an
 accessibility gap, improving docs, or just 👍-ing an idea are all credited
@@ -34,6 +36,29 @@ contributions.
 
 By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). For
 security issues, please follow the [Security Policy](./SECURITY.md).
+
+## Contributors
+
+Every contribution counts — code, docs, design, accessibility audits, and ideas
+alike. This project follows the [all-contributors](https://allcontributors.org)
+specification; we credit non-code help too.
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/doug-williamson"><img src="https://github.com/doug-williamson.png" width="80px;" alt="Doug Williamson"/><br /><sub><b>Doug Williamson</b></sub></a><br /><a href="#code-doug-williamson" title="Code">💻</a> <a href="#doc-doug-williamson" title="Documentation">📖</a> <a href="#design-doug-williamson" title="Design">🎨</a> <a href="#maintenance-doug-williamson" title="Maintenance">🚧</a> <a href="#a11y-doug-williamson" title="Accessibility">️️️️♿️</a></td>
+    </tr>
+  </tbody>
+</table>
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+Maintainers credit a contribution by commenting
+`@all-contributors please add @user for a11y,doc,ideas` on any issue or PR.
 
 ## Versioning & stability
 

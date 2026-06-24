@@ -128,7 +128,10 @@ accepted proposal can sit on the roadmap for the community to upvote and help
 build.
 
 When a release ships a change you requested, you'll be **credited by name** in
-the [release history](./docs/release-history.md).
+the [release history](./docs/release-history.md). And every contributor —
+including non-code help like accessibility audits, docs, and ideas — is
+recognised in the [Contributors](./README.md#contributors) list via
+[all-contributors](https://allcontributors.org).
 
 ## Code of Conduct
 
