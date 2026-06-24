@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "moduleResolution": "node",
+    "rootDir": "schematics",
+    "outDir": "../../dist/packages/core/schematics",
+    "declaration": false,
+    "sourceMap": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["node"]
+  },
+  "include": ["schematics/**/*.ts"],
+  "exclude": ["schematics/**/*.spec.ts", "schematics/**/*.verify.ts", "schematics/**/files/**"]
+}

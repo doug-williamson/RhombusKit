@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "RhombusKitNgAdd",
+  "title": "RhombusKit ng-add",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The project to set RhombusKit up in.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  },
+  "additionalProperties": false
+}

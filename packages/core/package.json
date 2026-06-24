@@ -3,6 +3,19 @@
   "version": "1.5.0",
   "license": "MIT",
   "description": "Themeable, accessible Angular 21 component library — standalone, signal-based components over Angular Material, styled through the RhombusKit token contract.",
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
+  "ng-update": {
+    "migrations": "./schematics/migration.json",
+    "packageGroup": [
+      "@rhombuskit/core",
+      "@rhombuskit/theme-engine",
+      "@rhombuskit/tokens",
+      "@rhombuskit/material-preset"
+    ]
+  },
   "keywords": [
     "angular",
     "angular-material",

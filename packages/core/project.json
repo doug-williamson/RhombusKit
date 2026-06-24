@@ -9,7 +9,9 @@
       "options": {
         "commands": [
           "nx run core:ng-packagr",
-          "node tools/copy-core-assets.mjs"
+          "node tools/copy-core-assets.mjs",
+          "tsc -p packages/core/tsconfig.schematics.json",
+          "node tools/copy-schematics-assets.mjs"
         ],
         "parallel": false,
         "env": {
@@ -31,7 +33,7 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["packages/core/**/*.ts"]
+        "lintFilePatterns": ["packages/core/src/**/*.ts"]
       }
     },
     "test": {
