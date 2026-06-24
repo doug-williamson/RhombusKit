@@ -21,6 +21,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/roadmap', label: 'Roadmap' },
       { path: '/migrate', label: 'Migrate from Material' },
       { path: '/theming', label: 'Theming' },
+      { path: '/themes', label: 'Themes' },
       { path: '/motion', label: 'Motion' },
     ],
   },
