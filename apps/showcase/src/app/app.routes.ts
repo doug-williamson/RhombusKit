@@ -194,6 +194,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/themes/themes-page.component'),
   },
   {
+    path: 'accessibility',
+    title: 'Accessibility',
+    loadComponent: () => import('./pages/accessibility/accessibility-page.component'),
+  },
+  {
     path: 'motion',
     title: 'Motion',
     loadComponent: () => import('./pages/motion/motion-page.component'),

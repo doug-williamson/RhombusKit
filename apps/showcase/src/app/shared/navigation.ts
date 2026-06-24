@@ -23,6 +23,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/theming', label: 'Theming' },
       { path: '/themes', label: 'Themes' },
       { path: '/motion', label: 'Motion' },
+      { path: '/accessibility', label: 'Accessibility' },
     ],
   },
   {
