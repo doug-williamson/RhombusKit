@@ -15,6 +15,10 @@ released **in lockstep on one synced version**.
 
 | Version | Date | Theme |
 |---|---|---|
+| **1.5.0** | 2026-06-23 | Motion foundation: motion tokens (duration/easing), popover entrance, `/motion` page |
+| **1.4.0** | 2026-06-22 | Public `rhombus-icon` primitive + icon registry (`provideRhombusIcons`) |
+| **1.3.0** | 2026-06-21 | Enterprise docs polish: four-tab pages + Usage tab, Cmd-K, enriched API, syntax tokens |
+| **1.2.0** | 2026-06-17 | Mobile-first navigation: bottom-nav, popover, app-shell bottom mode |
 | **1.1.1** | 2026-06-11 | Patch: icon vertical-align, theme-menu active icon, sidenav corners |
 | **1.1.0** | 2026-06-10 | Showcase orientation overviews, branding; button size + scroll fixes |
 | **1.0.0** | 2026-06-05 | **Stable release.** Showcase redesign, generated API reference, theming guide |
@@ -33,6 +37,42 @@ released **in lockstep on one synced version**.
 ---
 
 ## 1.x — Stable
+
+### 1.5.0 — 2026-06-23 — Motion foundation
+First-class motion, introduced as primitives.
+
+- **Features** — motion **duration and easing primitives** added to the token
+  layer; the **popover** gained a tokenized **entrance animation**; and a new
+  **`/motion`** documentation page in the showcase.
+- Exit animations and broader per-component motion are deferred to a later
+  release.
+
+### 1.4.0 — 2026-06-22 — The icon primitive
+- **Features** — a public **`rhombus-icon`** component backed by an **icon
+  registry** (`provideRhombusIcons`), with a size input and a `mat-icon`
+  fallback, so applications register and render named icons through one
+  primitive.
+
+### 1.3.0 — 2026-06-21 — Enterprise docs polish
+A documentation-and-showcase release rather than new components.
+
+- **Features** — every component page moved to a **four-tab** layout (adding an
+  opt-in **Usage** tab); a **Cmd-K command palette**; **social cards, favicons,
+  and per-route metadata**; **enriched API metadata** (required flags, enums,
+  slots, config types) with multiple exports documented per API tab; a four-tab
+  **data-table** page with a server-side example; and theme-aware **`--code-*`
+  syntax tokens** for code highlighting.
+- **Fixes** — the **alert** now carries an ARIA live role so it is announced to
+  assistive technology.
+
+### 1.2.0 — 2026-06-17 — Mobile-first navigation
+- **Features** — **`RhombusBottomNav`** (router-driven or controlled items with
+  selection), the **`RhombusPopover`** panel + trigger directive (open/close,
+  outside-click and Escape dismissal, focus restore, ARIA wiring, and
+  contract-token theming), and an **app-shell bottom mode** (additive
+  `navMode` / `frame` / `phoneMaxWidth` inputs, a bottom-nav slot, and
+  phone-frame styles). The new public surface ships with type-fixtures.
+- **Fixes** — the popover overlay is disposed when its trigger is destroyed.
 
 ### 1.1.1 — 2026-06-11
 Patch release.
@@ -141,4 +181,8 @@ naming, with a font CONTRACT and M3 system-token bridge.
 ---
 
 *Maintained alongside [CHANGELOG.md](../CHANGELOG.md). When a new version is
-released, add a curated entry here summarizing its theme.*
+released, add a curated entry here summarizing its theme. When a release ships a
+change someone in the community requested, credit them inline — for example:
+add `size` input to Button (#142) — requested by @user. Run
+`node tools/release-credits.mjs` (or `pnpm release:credits`) to list the
+`Requested-by:` trailers since the last tag.*
