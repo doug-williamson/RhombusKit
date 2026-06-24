@@ -7,6 +7,7 @@ import {
   RhombusCodeBlockComponent,
   RhombusThemeToggleComponent,
 } from '@rhombuskit/core';
+import { OpenInStackblitzComponent } from '../../shared/open-in-stackblitz.component';
 
 interface Feature {
   icon: string;
@@ -31,6 +32,7 @@ interface Category {
     RhombusCardComponent,
     RhombusCodeBlockComponent,
     RhombusThemeToggleComponent,
+    OpenInStackblitzComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -113,6 +115,10 @@ interface Category {
             <rhombus-button appearance="text" trailingIcon="arrow_forward" routerLink="/theming">
               Read the theming guide
             </rhombus-button>
+            <p style="margin:1.25rem 0 0.5rem;color:var(--text-muted);font-size:0.9rem">
+              …or skip setup entirely:
+            </p>
+            <app-open-in-stackblitz />
           </div>
         </header>
 
