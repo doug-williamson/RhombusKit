@@ -1,6 +1,8 @@
 module.exports = {
   displayName: 'core',
   preset: '../../jest.preset.js',
+  // Schematics are plain CommonJS node code with their own (node-env) config.
+  testPathIgnorePatterns: ['<rootDir>/schematics/'],
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/packages/core',
   // Count EVERY shippable source file, not just the ones a test happens to

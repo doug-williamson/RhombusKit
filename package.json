@@ -11,6 +11,7 @@
     "affected:build": "nx affected --target=build",
     "affected:test": "nx affected --target=test",
     "release:credits": "node tools/release-credits.mjs",
+    "test:schematics": "tsx packages/core/schematics/ng-add/ng-add.verify.ts",
     "prepare": "husky"
   },
   "devDependencies": {
