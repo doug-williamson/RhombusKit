@@ -92,6 +92,8 @@ jobs:
         run: node tools/verify-component-styles.mjs
       - name: Verify public API surface (export snapshots)
         run: node tools/api-snapshot.mjs
+      - name: Verify llms.txt / llms-full.txt are in sync
+        run: node tools/generate-llms.mjs --check
 
   a11y:
     # Phase 4 (secondary): the only reliable color-contrast check. jsdom can't
