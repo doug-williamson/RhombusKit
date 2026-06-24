@@ -1,0 +1,35 @@
+name: stale
+
+# Narrowly scoped: ONLY nudges issues a maintainer has labelled
+# `needs-reproduction`. It never touches normal issues, feature requests, or
+# pull requests — so it can't silently bury real reports.
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          only-labels: 'needs-reproduction'
+          days-before-stale: 14
+          days-before-close: 7
+          stale-issue-label: 'stale'
+          exempt-all-milestones: true
+          stale-issue-message: >
+            This issue has been marked `needs-reproduction` for 14 days without a
+            minimal reproduction, so it's now marked stale. It will close in 7
+            days if no reproduction is added — just comment with a StackBlitz or
+            repo link to keep it open.
+          close-issue-message: >
+            Closing for now since no reproduction was provided. This isn't a
+            "no" — comment with a minimal repro and we'll happily reopen it.
+          # PRs are out of scope for this workflow.
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
