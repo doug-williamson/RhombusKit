@@ -9,4 +9,4 @@
  * At launch: create a free site at https://www.goatcounter.com/ and set this to
  * its count endpoint, e.g. `https://rhombuskit.goatcounter.com/count`.
  */
-export const GOATCOUNTER_ENDPOINT = '';
+export const GOATCOUNTER_ENDPOINT = 'https://rhombuskit.goatcounter.com/count';
