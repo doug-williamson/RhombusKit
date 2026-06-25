@@ -1,10 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RhombusButtonComponent } from '@rhombuskit/core';
 import { RhombusThemeService, type ThemePreference } from '@rhombuskit/theme-engine';
 import { tokens } from '@rhombuskit/tokens';
@@ -22,14 +16,13 @@ interface GalleryTheme {
 // Representative swatches shown per card.
 const SWATCH_KEYS = ['--bg', '--surface-2', '--text-primary', '--text-accent', '--btn-primary-bg', '--border-strong'];
 
-const STYLE_ID = 'rk-community-themes';
-
 /**
  * `/themes` — a gallery of selectable themes (built-in light/dark + community
- * presets). Applying a community preset injects its `[data-theme]` CSS once and
- * calls RhombusThemeService.setTheme(); built-in light/dark persist via the
- * engine, community presets apply for the session. The "Add a theme" path is a
- * token-only contribution, CI-validated for CONTRACT completeness + AA contrast.
+ * presets). Community presets are registered as first-class engine themes (see
+ * app.config `provideRhombusThemes`), so applying one is reflected in the theme
+ * menu and persists across reload — same as the built-ins. The "Add a theme"
+ * path is a token-only contribution, CI-validated for CONTRACT completeness + AA
+ * contrast.
  */
 @Component({
   selector: 'app-themes-page',
@@ -42,14 +35,18 @@ const STYLE_ID = 'rk-community-themes';
         <h1>Themes</h1>
         <p class="themes__lead">
           Every theme is just a map over the design-token contract — no
-          component changes. Apply one to preview it live. Built-in light and
-          dark persist; community presets apply for this session.
+          component changes. Apply one: your choice persists across reload, and
+          the theme menu in the header reflects it.
         </p>
       </header>
 
       <div class="gallery">
         @for (t of themes; track t.themeName) {
-          <article class="theme-card">
+          <article
+            class="theme-card"
+            [class.theme-card--active]="t.themeName === theme.current()"
+            [attr.aria-current]="t.themeName === theme.current() ? 'true' : null"
+          >
             <div class="theme-card__swatches" aria-hidden="true">
               @for (key of swatchKeys; track key) {
                 <span class="theme-card__sw" [style.background]="t.values[key]"></span>
@@ -61,6 +58,9 @@ const STYLE_ID = 'rk-community-themes';
                 {{ t.builtin ? 'Built-in' : 'Community' }} · {{ t.mode }} · {{ t.author }}
               </p>
             </div>
+            @if (t.themeName === theme.current()) {
+              <span class="theme-card__active">● Active</span>
+            }
             <rhombus-button variant="secondary" (click)="apply(t.themeName)">Apply</rhombus-button>
           </article>
         }
@@ -97,6 +97,10 @@ const STYLE_ID = 'rk-community-themes';
       flex-direction: column;
       gap: 0.85rem;
     }
+    .theme-card--active {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 0 1px var(--border-accent);
+    }
     .theme-card__swatches {
       display: flex;
       height: 2.5rem;
@@ -108,13 +112,13 @@ const STYLE_ID = 'rk-community-themes';
     .theme-card__meta { flex: 1; }
     .theme-card__name { font-size: 1rem; margin: 0; color: var(--text-primary); }
     .theme-card__by { font-size: 0.8125rem; color: var(--text-muted); margin: 0.2rem 0 0; text-transform: capitalize; }
+    .theme-card__active { font-size: 0.75rem; font-weight: 600; color: var(--text-accent); }
     .submit__lead { color: var(--text-secondary); max-width: 70ch; }
     .submit a { color: var(--text-primary); text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
   `,
 })
 export default class ThemesPageComponent {
-  private readonly theme = inject(RhombusThemeService);
-  private readonly doc = inject(DOCUMENT);
+  protected readonly theme = inject(RhombusThemeService);
 
   protected readonly swatchKeys = SWATCH_KEYS;
   protected readonly contributeUrl =
@@ -133,31 +137,10 @@ export default class ThemesPageComponent {
     })),
   ];
 
-  constructor() {
-    // Browser-only: register community presets as [data-theme] CSS so setTheme()
-    // can switch to them. Runs after render, never during SSG prerender.
-    afterNextRender(() => this.registerCommunityThemes());
-  }
-
   protected apply(themeName: string): void {
-    // The theme service does no runtime validation; community names are not in
-    // the ThemeRegistry type, so cast the string through.
+    // Community names are registered (app.config) but are data-driven strings,
+    // so cast through to the ThemePreference union. The engine + the app-level
+    // CSS injection (AppComponent) make this persist and reflect in the menu.
     this.theme.setTheme(themeName as ThemePreference);
-  }
-
-  private registerCommunityThemes(): void {
-    if (this.doc.getElementById(STYLE_ID)) return;
-    const css = COMMUNITY_THEMES.map(
-      (t) =>
-        `[data-theme="community-${t.slug}"]{` +
-        Object.entries(t.values)
-          .map(([k, v]) => `${k}:${v};`)
-          .join('') +
-        `}`,
-    ).join('\n');
-    const style = this.doc.createElement('style');
-    style.id = STYLE_ID;
-    style.textContent = css;
-    this.doc.head.appendChild(style);
   }
 }

@@ -2,7 +2,9 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TitleStrategy, provideRouter } from '@angular/router';
 import { provideRhombusIcons } from '@rhombuskit/core';
+import { provideRhombusThemes } from '@rhombuskit/theme-engine';
 import { appRoutes } from './app.routes';
+import { COMMUNITY_REGISTERED_THEMES } from './pages/themes/community-themes';
 import { RhombusTitleStrategy } from './shared/rhombus-title.strategy';
 
 export const appConfig: ApplicationConfig = {
@@ -11,6 +13,10 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideRouter(appRoutes),
     { provide: TitleStrategy, useClass: RhombusTitleStrategy },
+    // Register the community presets so the theme menu reflects them, mode/palette
+    // switching works, and the choice persists across reload (Phase 5). Their CSS
+    // is injected app-wide in AppComponent.
+    provideRhombusThemes(...COMMUNITY_REGISTERED_THEMES),
     // Sample icon set demonstrated on the Icon page. currentColor + no width/
     // height so <rhombus-icon> drives colour and size.
     provideRhombusIcons({

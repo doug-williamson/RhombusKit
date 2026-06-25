@@ -1,6 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { COMMUNITY_THEMES } from './community-themes';
+import {
+  COMMUNITY_THEMES,
+  COMMUNITY_REGISTERED_THEMES,
+  communityThemeCss,
+} from './community-themes';
 
 // The CONTRACT is the single source of truth for which tokens a theme must set.
 const CONTRACT: string[] = JSON.parse(
@@ -123,4 +127,35 @@ describe('community themes', () => {
       });
     });
   }
+});
+
+describe('COMMUNITY_REGISTERED_THEMES (first-class registration)', () => {
+  it('maps each preset to a community-<slug> engine name', () => {
+    const names = COMMUNITY_REGISTERED_THEMES.map((t) => t.name);
+    expect(names).toEqual(COMMUNITY_THEMES.map((t) => `community-${t.slug}`));
+  });
+
+  it('groups light/dark variants of a preset into one palette', () => {
+    const teal = COMMUNITY_REGISTERED_THEMES.filter((t) => t.palette === 'teal');
+    expect(teal.map((t) => t.mode).sort()).toEqual(['dark', 'light']);
+  });
+
+  it('carries the human label and mode from the preset', () => {
+    for (const reg of COMMUNITY_REGISTERED_THEMES) {
+      const src = COMMUNITY_THEMES.find((t) => `community-${t.slug}` === reg.name);
+      expect(reg.label).toBe(src?.label);
+      expect(reg.mode).toBe(src?.mode);
+    }
+  });
+});
+
+describe('communityThemeCss', () => {
+  it('emits one [data-theme] block per preset with contract token values', () => {
+    const css = communityThemeCss();
+    for (const t of COMMUNITY_THEMES) {
+      expect(css).toContain(`[data-theme="community-${t.slug}"]{`);
+    }
+    expect(css).toContain('--text-accent:');
+    expect(css).toContain('--bg:');
+  });
 });
