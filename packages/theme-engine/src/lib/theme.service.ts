@@ -208,30 +208,64 @@ export class RhombusThemeService {
   /**
    * Set the user's theme preference.
    *
-   * Note: cross-session hydration only recognizes the two configured theme
-   * names (config.light, config.dark) plus 'system'. A consumer that configures
-   * provideRhombusTheme({ light, dark }) gets those two names persisted across
-   * sessions. Any OTHER augmented theme name passed here applies within the
-   * session but is ignored on the next load (preference falls back to the
-   * default). Full multi-theme persistence is deferred to the theme registry.
+   * Cross-session persistence covers `'system'`, the configured light/dark names,
+   * and any theme registered DECLARATIVELY via provideRhombusThemes(). A name
+   * that is only registered imperatively (registerThemes()) — or not registered
+   * at all — applies for the session but falls back to the default on next load.
    */
   setTheme(preference: ThemePreference): void {
     this._preference.set(preference);
   }
 
   /**
-   * Cycle: light → dark → system → light.
+   * Cycle the active palette's mode: light → dark → system → light.
    *
-   * The 3-state cycle preserves access to the 'system' preference. If you want
-   * a 2-state toggle (light ↔ dark, ignoring system), call setTheme() directly.
+   * For the built-in palette this is the historical light → dark → system cycle.
+   * When a non-built-in palette is active, the light/dark legs stay WITHIN that
+   * palette (e.g. teal-light → teal-dark); the system leg returns to the
+   * OS-following built-in ('system' is a built-in-palette concept). Byte-identical
+   * for a single-palette (unconfigured) app.
    */
   toggle(): void {
-    const pref = this._preference();
-    const next: ThemePreference =
-      pref === this.config.light ? this.config.dark :
-      pref === this.config.dark  ? 'system' :
-      this.config.light;
-    this._preference.set(next);
+    if (this._preference() === 'system') {
+      this.setMode('light');
+    } else {
+      this.setMode(this.mode() === 'light' ? 'dark' : 'system');
+    }
+  }
+
+  /**
+   * Set the light/dark mode WITHIN the active palette, without changing palette.
+   * `'system'` returns to the OS-following built-in. If the active palette has no
+   * member for the requested mode, falls back to the built-in of that mode.
+   */
+  setMode(mode: 'light' | 'dark' | 'system'): void {
+    if (mode === 'system') {
+      this._preference.set('system');
+      return;
+    }
+    const active = this.palette();
+    const match = this.themes().find(
+      (t) => (t.palette ?? paletteOf(t.name)) === active && t.mode === mode,
+    );
+    const target = match?.name ?? (mode === 'light' ? this.config.light : this.config.dark);
+    this._preference.set(target);
+  }
+
+  /**
+   * Switch to another palette family, preserving the current resolved mode
+   * (light/dark). Falls back to the palette's available member if it has no
+   * theme for the current mode; a no-op for an unknown palette.
+   */
+  setPalette(palette: string): void {
+    const mode = this.mode();
+    const members = this.themes().filter(
+      (t) => (t.palette ?? paletteOf(t.name)) === palette,
+    );
+    const target = members.find((t) => t.mode === mode)?.name ?? members[0]?.name;
+    if (target) {
+      this._preference.set(target);
+    }
   }
 
   /**
@@ -248,18 +282,28 @@ export class RhombusThemeService {
   private hydrateFromStorage(): void {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (
-        stored === this.config.light ||
-        stored === this.config.dark ||
-        stored === 'system'
-      ) {
+      if (stored && this.isAcceptablePreference(stored)) {
         this._preference.set(stored as ThemePreference);
       }
-      // If stored value is null or an unrecognized string (e.g. a custom theme
-      // from a removed augmentation), leave preference at the default.
+      // Null, or an unrecognized string (a removed augmentation, or a theme only
+      // registered imperatively): leave preference at the default.
     } catch {
       // localStorage unavailable. Leave default.
     }
+  }
+
+  /**
+   * Whether a stored value may be restored on load. `'system'` and any theme in
+   * the CONSTRUCTION-time registry (built-ins + declaratively-provided themes)
+   * round-trip. Imperatively-registered themes are unknown at hydrate time, so
+   * they are session-only by design (use provideRhombusThemes() for persistence).
+   */
+  private isAcceptablePreference(value: string): boolean {
+    if (value === 'system') return true;
+    return (
+      this.builtinThemes.some((t) => t.name === value) ||
+      this.providedThemes.some((t) => t.name === value)
+    );
   }
 
   private subscribeToSystemTheme(): void {
