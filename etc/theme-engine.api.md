@@ -32,6 +32,8 @@
   readonly preference: _angular_core.Signal<ThemePreference>
   readonly themes: _angular_core.Signal<readonly RegisteredTheme[]>
   registerThemes: (themes: readonly RegisteredTheme[]) => void
+  setMode: (mode: "light" | "dark" | "system") => void
+  setPalette: (palette: string) => void
   setTheme: (preference: ThemePreference) => void
   toggle: () => void
 
