@@ -79,6 +79,29 @@ corepack pnpm exec nx serve showcase   # run the docs/showcase site locally
 > cleans `dist`, which wedges the showcase's global SCSS import. Stop the serve
 > first.
 
+## Scaffolding a new component
+
+Once a **New component proposal** has been accepted, don't start from a blank
+file — scaffold the house-style skeleton:
+
+```sh
+corepack pnpm run new:component <name>
+# e.g.
+corepack pnpm run new:component rating --title "Rating" --group "Status & layout"
+corepack pnpm run new:component split-button --dry-run   # preview, write nothing
+```
+
+This writes a bespoke `OnPush` component (source + token-driven SCSS + a spec
+with a jest-axe pass) under `packages/core/src/lib/<name>/`, a matching
+`component-page` doc page under `apps/showcase/`, and idempotently wires the
+public barrel, the route, and the sidebar/Cmd-K navigation. Re-running it is a
+safe no-op on those shared files.
+
+The generator deliberately stops at a green skeleton — it **doesn't bypass any
+gate**. After filling in the real API, run the follow-ups it prints (build +
+`api-snapshot.mjs --update`, `generate-llms.mjs`, add the component to
+`contrast.spec.ts`). Those are the same gates documented next.
+
 ## The CI gates (and how to satisfy them)
 
 Every PR must be green on these before merge. Most contributors never touch the
