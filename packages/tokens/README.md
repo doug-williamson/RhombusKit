@@ -17,11 +17,20 @@ No peer dependencies — this package is plain CSS/SCSS/TS.
 
 ## Usage
 
-**Global CSS** (no build step):
+Use these tokens with React, Vue, Svelte, Tailwind, or a plain HTML file —
+there's no framework coupling. For the CSS/SCSS paths, set the theme pack on your
+root element (this is also your dark-mode switch):
+
+```html
+<html data-theme="rhombus-light"><!-- or "rhombus-dark" --></html>
+```
+
+**Global CSS** (no build step — works straight from a CDN):
 
 ```css
-/* The default light + dark theme packs (drives [data-theme] switching). */
 @import '@rhombuskit/tokens/css';
+/* ...or, with no install at all: */
+/* @import 'https://cdn.jsdelivr.net/npm/@rhombuskit/tokens/dist/css/theme-rhombus.css'; */
 ```
 
 **SCSS** (recommended — load this first so downstream `@use`s can read the vars):
@@ -46,7 +55,26 @@ tokens.primitives['violet-600']; // '#7c3aed'
 tokens.themes['rhombus-dark']['--surface-0'];
 ```
 
+**Tailwind CSS v4** — map the contract onto Tailwind's colours with `@theme
+inline` (the `inline` keyword keeps the `var()` live, so utilities re-theme with
+`data-theme` automatically — no `dark:` variants needed):
+
+```css
+@import 'tailwindcss';
+@import '@rhombuskit/tokens/css';
+
+@theme inline {
+  --color-surface: var(--surface-0);
+  --color-body: var(--text-primary);
+  --color-border: var(--border);
+  --color-accent: var(--text-accent);
+}
+```
+
 Subpath exports: `./css`, `./css/primitives`, `./css/contract`, `./scss`, `./scss/*`.
+
+More framework recipes (React, Tailwind, vanilla JS) and a live, no-build demo:
+**[rhombuskit.online/tokens](https://rhombuskit.online/tokens)**.
 
 ## Theming
 
