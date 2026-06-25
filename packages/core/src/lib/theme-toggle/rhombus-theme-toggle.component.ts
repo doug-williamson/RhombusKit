@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RHOMBUS_THEME_CONFIG, RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RhombusThemeService } from '@rhombuskit/theme-engine';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
@@ -41,8 +41,6 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 })
 export class RhombusThemeToggleComponent {
   private readonly theme = inject(RhombusThemeService);
-  /** Resolved theme names (rhombus-* unless provideRhombusTheme overrides). */
-  private readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
   /** Icon shown when the light theme is active; defaults to `'light_mode'`. */
@@ -56,24 +54,44 @@ export class RhombusThemeToggleComponent {
   /** Whether to show the hover tooltip describing the current/next theme. */
   readonly showTooltip = input<boolean>(true);
 
+  /** `'system'` when following the OS, else the active theme's resolved mode. */
+  protected readonly activeMode = computed<'light' | 'dark' | 'system'>(() =>
+    this.theme.preference() === 'system' ? 'system' : this.theme.mode(),
+  );
+
   protected readonly currentIcon = computed(() => {
-    const pref = this.theme.preference();
-    if (pref === this.config.light) return this.lightIcon();
-    if (pref === this.config.dark) return this.darkIcon();
-    return this.systemIcon(); // 'system'
+    switch (this.activeMode()) {
+      case 'light':
+        return this.lightIcon();
+      case 'dark':
+        return this.darkIcon();
+      default:
+        return this.systemIcon();
+    }
   });
 
   protected readonly tooltipText = computed(() => {
     if (!this.showTooltip()) return '';
-    const pref = this.theme.preference();
-    if (pref === this.config.light) return 'Light mode (click for dark)';
-    if (pref === this.config.dark) return 'Dark mode (click for system)';
-    return 'System mode (click for light)';
+    switch (this.activeMode()) {
+      case 'light':
+        return 'Light mode (click for dark)';
+      case 'dark':
+        return 'Dark mode (click for system)';
+      default:
+        return 'System mode (click for light)';
+    }
   });
 
   protected readonly ariaLabel = computed(() => {
-    const pref = this.theme.preference();
-    return `Switch theme — current: ${pref}`;
+    const mode = this.activeMode();
+    if (mode === 'system') return 'Switch theme — current: System';
+    if (this.theme.palettes().length <= 1) {
+      return `Switch theme — current: ${mode}`;
+    }
+    const active = this.theme
+      .palettes()
+      .find((p) => p.palette === this.theme.palette());
+    return `Switch theme — current: ${active?.label ?? this.theme.palette()}, ${mode}`;
   });
 
   protected onToggle(): void {

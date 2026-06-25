@@ -1836,7 +1836,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusThemeMenuComponent",
     "kind": "class",
     "selector": "rhombus-theme-menu",
-    "description": "Theme menu: explicit Light / Dark / System options.\n\nWraps Material's MatMenu. Unlike the cycling toggle, each item calls\nRhombusThemeService.setTheme() directly, so any preference is reachable in a\nsingle click. The active preference is highlighted via an accent color;\nclicking it is a visual no-op.\n\nPrefer this in headers and toolbars where there's room for a dropdown. For\ncompact contexts (a tight icon row), use RhombusThemeToggleComponent.",
+    "description": "Theme menu: a Light / Dark / System mode picker, plus a palette picker that\nappears when more than one theme palette is registered (via\nprovideRhombusThemes()).\n\nWraps Material's MatMenu. The Light/Dark/System items set the MODE within the\nactive palette (`setMode`), so choosing one never discards a non-default\npalette; the palette section switches palette family (`setPalette`) while\nkeeping the current mode. Each axis is a radio group: the active mode and\npalette are highlighted and exposed as `aria-checked`.\n\nPrefer this in headers and toolbars. For a compact icon row, use\nRhombusThemeToggleComponent.",
     "inputs": [
       {
         "name": "lightIcon",
@@ -1852,6 +1852,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "systemIcon",
         "type": "string",
         "description": "Icon for the System menu item; defaults to `'contrast'`."
+      },
+      {
+        "name": "themeIcons",
+        "type": "Record<string, string>",
+        "description": "Optional per-palette icon overrides for the palette section, keyed by palette id."
       }
     ],
     "outputs": [],

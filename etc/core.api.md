@@ -394,6 +394,7 @@
   readonly darkIcon: _angular_core.InputSignal<string>
   readonly lightIcon: _angular_core.InputSignal<string>
   readonly systemIcon: _angular_core.InputSignal<string>
+  readonly themeIcons: _angular_core.InputSignal<Record<string, string>>
 
 ### RhombusThemeToggleComponent (class)
   readonly darkIcon: _angular_core.InputSignal<string>

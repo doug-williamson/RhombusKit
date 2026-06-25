@@ -4,8 +4,11 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
   RhombusThemeService,
   provideRhombusTheme,
+  provideRhombusThemes,
+  type RegisteredTheme,
   type ThemeName,
 } from '@rhombuskit/theme-engine';
+import { axe } from '../../testing/axe';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 import { RhombusThemeMenuComponent } from './rhombus-theme-menu.component';
 import { RhombusThemeToggleComponent } from './rhombus-theme-toggle.component';
@@ -150,5 +153,125 @@ describe('theme controls honor RHOMBUS_THEME_CONFIG', () => {
       fixture.detectChanges();
       expect(triggerIconName(fixture)).toBe('dark_mode');
     });
+  });
+});
+
+const teal = (mode: 'light' | 'dark'): RegisteredTheme => ({
+  name: `community-teal-${mode}` as ThemeName,
+  label: mode === 'light' ? 'Teal Light' : 'Teal Dark',
+  mode,
+  palette: 'teal',
+});
+const tealProviders = [provideRhombusThemes(teal('light'), teal('dark'))];
+
+describe('theme controls — registry-driven (Phase 4)', () => {
+  afterEach(() => TestBed.resetTestingModule());
+
+  function renderMenu(): ComponentFixture<RhombusThemeMenuComponent> {
+    configure(tealProviders);
+    const fixture = TestBed.createComponent(RhombusThemeMenuComponent);
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function openMenuButtons(
+    fixture: ComponentFixture<RhombusThemeMenuComponent>,
+  ): HTMLButtonElement[] {
+    (
+      fixture.nativeElement.querySelector(
+        '.rhombus-theme-menu__trigger',
+      ) as HTMLElement
+    ).click();
+    fixture.detectChanges();
+    const panels = document.querySelectorAll('.rhombus-theme-menu__panel');
+    const panel = panels[panels.length - 1];
+    return Array.from(
+      panel.querySelectorAll('button[mat-menu-item]'),
+    ) as HTMLButtonElement[];
+  }
+
+  const byText = (buttons: HTMLButtonElement[], text: string) =>
+    buttons.find((b) => b.textContent?.trim() === text);
+
+  it('Light preserves the active palette instead of reverting to rhombus', () => {
+    const fixture = renderMenu();
+    const service = TestBed.inject(RhombusThemeService);
+    service.setTheme('community-teal-dark' as ThemeName);
+    fixture.detectChanges();
+
+    byText(openMenuButtons(fixture), 'Light')!.click();
+
+    expect(service.current()).toBe('community-teal-light');
+    expect(service.palette()).toBe('teal');
+  });
+
+  it('renders a palette section when more than one palette is registered', () => {
+    const tealBtn = byText(openMenuButtons(renderMenu()), 'Teal');
+    expect(tealBtn).toBeTruthy();
+    expect(tealBtn?.getAttribute('role')).toBe('menuitemradio');
+  });
+
+  it('marks the active palette and mode as aria-checked', () => {
+    const fixture = renderMenu();
+    TestBed.inject(RhombusThemeService).setTheme('community-teal-dark' as ThemeName);
+    fixture.detectChanges();
+    const buttons = openMenuButtons(fixture);
+    expect(byText(buttons, 'Dark')?.getAttribute('aria-checked')).toBe('true');
+    expect(byText(buttons, 'Light')?.getAttribute('aria-checked')).toBe('false');
+    expect(byText(buttons, 'Teal')?.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('menu trigger icon reflects an active community theme mode', () => {
+    const fixture = renderMenu();
+    TestBed.inject(RhombusThemeService).setTheme('community-teal-dark' as ThemeName);
+    fixture.detectChanges();
+    expect(triggerIconName(fixture)).toBe('dark_mode');
+  });
+
+  it('toggle trigger icon reflects an active community theme mode', () => {
+    configure(tealProviders);
+    const fixture = TestBed.createComponent(RhombusThemeToggleComponent);
+    TestBed.inject(RhombusThemeService).setTheme('community-teal-dark' as ThemeName);
+    fixture.detectChanges();
+    expect(triggerIconName(fixture)).toBe('dark_mode');
+  });
+
+  it('a single-family configured app (no -light/-dark stem) stays a 3-item menu', () => {
+    configure([
+      provideRhombusTheme({
+        light: 'aurora-day' as ThemeName,
+        dark: 'aurora-night' as ThemeName,
+      }),
+    ]);
+    const fixture = TestBed.createComponent(RhombusThemeMenuComponent);
+    fixture.detectChanges();
+    const buttons = openMenuButtons(fixture);
+    expect(buttons).toHaveLength(3);
+    const panel = document.querySelector(
+      '.rhombus-theme-menu__panel',
+    ) as HTMLElement;
+    expect(panel.querySelector('.rhombus-theme-menu__palettes')).toBeNull();
+  });
+
+  it('toggle aria-label reflects the active community theme (no raw id)', () => {
+    configure(tealProviders);
+    const fixture = TestBed.createComponent(RhombusThemeToggleComponent);
+    TestBed.inject(RhombusThemeService).setTheme('community-teal-dark' as ThemeName);
+    fixture.detectChanges();
+    const label = (
+      fixture.nativeElement.querySelector('button') as HTMLElement
+    ).getAttribute('aria-label');
+    expect(label).not.toContain('community-teal-dark');
+    expect(label).toContain('Teal');
+    expect(label).toContain('dark');
+  });
+
+  it('the open menu has no accessibility violations', async () => {
+    const fixture = renderMenu();
+    openMenuButtons(fixture);
+    const panel = document.querySelector(
+      '.rhombus-theme-menu__panel',
+    ) as HTMLElement;
+    expect(await axe(panel)).toHaveNoViolations();
   });
 });
