@@ -1,3 +1,4 @@
+import type { RegisteredTheme } from '@rhombuskit/theme-engine';
 import { tokens } from '@rhombuskit/tokens';
 
 /**
@@ -73,3 +74,35 @@ const tealDark: CommunityTheme = {
 };
 
 export const COMMUNITY_THEMES: CommunityTheme[] = [tealLight, tealDark];
+
+/**
+ * The community presets as engine `RegisteredTheme` metadata, registered
+ * declaratively via `provideRhombusThemes()` so the theme controls reflect them,
+ * `setMode`/`setPalette` switch within their palette, and the choice persists
+ * across reload. The `name` cast is unavoidable — these names are data-driven,
+ * not string literals — but they map 1:1 to the `[data-theme]` blocks below.
+ */
+export const COMMUNITY_REGISTERED_THEMES: RegisteredTheme[] = COMMUNITY_THEMES.map(
+  (t) => ({
+    name: `community-${t.slug}` as RegisteredTheme['name'],
+    label: t.label,
+    mode: t.mode,
+    palette: t.slug.replace(/-(light|dark)$/, ''),
+  }),
+);
+
+/**
+ * The community presets rendered as `[data-theme="community-<slug>"]` CSS. The
+ * app injects this once into `<head>` (browser-only) so an applied or persisted
+ * community theme is styled on EVERY page, not just /themes.
+ */
+export function communityThemeCss(): string {
+  return COMMUNITY_THEMES.map(
+    (t) =>
+      `[data-theme="community-${t.slug}"]{` +
+      Object.entries(t.values)
+        .map(([k, v]) => `${k}:${v};`)
+        .join('') +
+      '}',
+  ).join('\n');
+}

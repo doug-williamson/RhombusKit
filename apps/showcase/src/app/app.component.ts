@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -8,6 +14,7 @@ import {
 import { AnalyticsService } from './shared/analytics.service';
 import { CommandPaletteComponent } from './shared/command-palette.component';
 import { NAV_GROUPS } from './shared/navigation';
+import { communityThemeCss } from './pages/themes/community-themes';
 
 /**
  * The showcase chrome dogfoods `<rhombus-app-shell>`: brand, the component nav,
@@ -77,5 +84,18 @@ export class AppComponent {
   constructor() {
     // No-op on the server and until a GoatCounter endpoint is configured.
     inject(AnalyticsService).init();
+
+    // Inject the community-theme [data-theme] CSS once, app-wide, so a preset
+    // applied on /themes (or persisted across reload) is styled on EVERY page.
+    // Browser-only via afterNextRender — never runs during SSG prerender.
+    const doc = inject(DOCUMENT);
+    afterNextRender(() => {
+      const id = 'rk-community-themes';
+      if (doc.getElementById(id)) return;
+      const style = doc.createElement('style');
+      style.id = id;
+      style.textContent = communityThemeCss();
+      doc.head.appendChild(style);
+    });
   }
 }
