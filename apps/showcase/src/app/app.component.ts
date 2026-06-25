@@ -1,10 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -85,17 +80,18 @@ export class AppComponent {
     // No-op on the server and until a GoatCounter endpoint is configured.
     inject(AnalyticsService).init();
 
-    // Inject the community-theme [data-theme] CSS once, app-wide, so a preset
-    // applied on /themes (or persisted across reload) is styled on EVERY page.
-    // Browser-only via afterNextRender — never runs during SSG prerender.
+    // Render the community-theme [data-theme] CSS into <head> during render —
+    // on the SERVER too, so it lands in the prerendered HTML and a persisted
+    // community theme is fully styled before first paint (no flash on hard
+    // reload). The id guard keeps browser hydration from duplicating the
+    // prerendered <style>; the rules apply on every page, app-wide.
     const doc = inject(DOCUMENT);
-    afterNextRender(() => {
-      const id = 'rk-community-themes';
-      if (doc.getElementById(id)) return;
+    const id = 'rk-community-themes';
+    if (!doc.getElementById(id)) {
       const style = doc.createElement('style');
       style.id = id;
       style.textContent = communityThemeCss();
       doc.head.appendChild(style);
-    });
+    }
   }
 }
