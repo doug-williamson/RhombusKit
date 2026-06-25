@@ -59,4 +59,12 @@ button.rhombus-theme-menu__trigger {
   rhombus-icon .mat-icon {
     margin: 0;
   }
+
+  // The palette radio group (shown only with >1 registered palette) is set off
+  // from the Light/Dark/System mode group by a divider.
+  .rhombus-theme-menu__palettes {
+    border-top: 1px solid var(--border);
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+  }
 }

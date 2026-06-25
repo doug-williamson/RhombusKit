@@ -8,19 +8,22 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RHOMBUS_THEME_CONFIG, RhombusThemeService } from '@rhombuskit/theme-engine';
+import { RhombusThemeService } from '@rhombuskit/theme-engine';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 
 /**
- * Theme menu: explicit Light / Dark / System options.
+ * Theme menu: a Light / Dark / System mode picker, plus a palette picker that
+ * appears when more than one theme palette is registered (via
+ * provideRhombusThemes()).
  *
- * Wraps Material's MatMenu. Unlike the cycling toggle, each item calls
- * RhombusThemeService.setTheme() directly, so any preference is reachable in a
- * single click. The active preference is highlighted via an accent color;
- * clicking it is a visual no-op.
+ * Wraps Material's MatMenu. The Light/Dark/System items set the MODE within the
+ * active palette (`setMode`), so choosing one never discards a non-default
+ * palette; the palette section switches palette family (`setPalette`) while
+ * keeping the current mode. Each axis is a radio group: the active mode and
+ * palette are highlighted and exposed as `aria-checked`.
  *
- * Prefer this in headers and toolbars where there's room for a dropdown. For
- * compact contexts (a tight icon row), use RhombusThemeToggleComponent.
+ * Prefer this in headers and toolbars. For a compact icon row, use
+ * RhombusThemeToggleComponent.
  */
 @Component({
   selector: 'rhombus-theme-menu',
@@ -39,43 +42,68 @@ import { RhombusIconComponent } from '../icon/rhombus-icon.component';
       <rhombus-icon [name]="currentIcon()" />
     </button>
     <mat-menu #menu="matMenu" class="rhombus-theme-menu__panel">
-      <button
-        mat-menu-item
-        (click)="theme.setTheme(config.light)"
-        [class.rhombus-theme-menu__item--active]="
-          theme.preference() === config.light
-        "
-      >
-        <rhombus-icon [name]="lightIcon()" />
-        <span>Light</span>
-      </button>
-      <button
-        mat-menu-item
-        (click)="theme.setTheme(config.dark)"
-        [class.rhombus-theme-menu__item--active]="
-          theme.preference() === config.dark
-        "
-      >
-        <rhombus-icon [name]="darkIcon()" />
-        <span>Dark</span>
-      </button>
-      <button
-        mat-menu-item
-        (click)="theme.setTheme('system')"
-        [class.rhombus-theme-menu__item--active]="
-          theme.preference() === 'system'
-        "
-      >
-        <rhombus-icon [name]="systemIcon()" />
-        <span>System</span>
-      </button>
+      <div role="group" aria-label="Mode">
+        <button
+          mat-menu-item
+          role="menuitemradio"
+          [attr.aria-checked]="activeMode() === 'light'"
+          (click)="theme.setMode('light')"
+          [class.rhombus-theme-menu__item--active]="activeMode() === 'light'"
+        >
+          <rhombus-icon [name]="lightIcon()" />
+          <span>Light</span>
+        </button>
+        <button
+          mat-menu-item
+          role="menuitemradio"
+          [attr.aria-checked]="activeMode() === 'dark'"
+          (click)="theme.setMode('dark')"
+          [class.rhombus-theme-menu__item--active]="activeMode() === 'dark'"
+        >
+          <rhombus-icon [name]="darkIcon()" />
+          <span>Dark</span>
+        </button>
+        <button
+          mat-menu-item
+          role="menuitemradio"
+          [attr.aria-checked]="activeMode() === 'system'"
+          (click)="theme.setMode('system')"
+          [class.rhombus-theme-menu__item--active]="activeMode() === 'system'"
+        >
+          <rhombus-icon [name]="systemIcon()" />
+          <span>System</span>
+        </button>
+      </div>
+
+      @if (palettes().length > 1) {
+        <div
+          role="group"
+          aria-label="Palette"
+          class="rhombus-theme-menu__palettes"
+        >
+          @for (p of palettes(); track p.palette) {
+            <button
+              mat-menu-item
+              role="menuitemradio"
+              [attr.aria-checked]="theme.palette() === p.palette"
+              (click)="theme.setPalette(p.palette)"
+              [class.rhombus-theme-menu__item--active]="
+                theme.palette() === p.palette
+              "
+            >
+              @if (themeIcons()[p.palette]; as icon) {
+                <rhombus-icon [name]="icon" />
+              }
+              <span>{{ p.label }}</span>
+            </button>
+          }
+        </div>
+      }
     </mat-menu>
   `,
 })
 export class RhombusThemeMenuComponent {
   protected readonly theme = inject(RhombusThemeService);
-  /** Resolved theme names (rhombus-* unless provideRhombusTheme overrides). */
-  protected readonly config = inject(RHOMBUS_THEME_CONFIG);
 
   // Icon overrides — consumers can substitute brand-specific icons.
   /** Icon for the Light menu item; defaults to `'light_mode'`. */
@@ -84,15 +112,37 @@ export class RhombusThemeMenuComponent {
   readonly darkIcon = input<string>('dark_mode');
   /** Icon for the System menu item; defaults to `'contrast'`. */
   readonly systemIcon = input<string>('contrast');
+  /** Optional per-palette icon overrides for the palette section, keyed by palette id. */
+  readonly themeIcons = input<Record<string, string>>({});
+
+  /** Registered palettes (a palette section renders only when there's >1). */
+  protected readonly palettes = this.theme.palettes;
+
+  /** `'system'` when following the OS, else the resolved light/dark mode. */
+  protected readonly activeMode = computed<'light' | 'dark' | 'system'>(() =>
+    this.theme.preference() === 'system' ? 'system' : this.theme.mode(),
+  );
 
   protected readonly currentIcon = computed(() => {
-    const pref = this.theme.preference();
-    if (pref === this.config.light) return this.lightIcon();
-    if (pref === this.config.dark) return this.darkIcon();
-    return this.systemIcon(); // 'system'
+    switch (this.activeMode()) {
+      case 'light':
+        return this.lightIcon();
+      case 'dark':
+        return this.darkIcon();
+      default:
+        return this.systemIcon();
+    }
   });
 
-  protected readonly ariaLabel = computed(
-    () => `Theme: ${this.theme.preference()}. Open theme menu.`,
-  );
+  protected readonly ariaLabel = computed(() => {
+    const mode = this.activeMode();
+    if (mode === 'system') return 'Theme: System. Open theme menu.';
+    if (this.theme.palettes().length <= 1) {
+      return `Theme: ${mode}. Open theme menu.`;
+    }
+    const active = this.theme
+      .palettes()
+      .find((p) => p.palette === this.theme.palette());
+    return `Theme: ${active?.label ?? this.theme.palette()}, ${mode}. Open theme menu.`;
+  });
 }

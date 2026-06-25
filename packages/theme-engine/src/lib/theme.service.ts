@@ -26,6 +26,27 @@ function paletteLabel(label: string): string {
   return label.replace(/\s*(light|dark)\s*$/i, '').trim();
 }
 
+/**
+ * Shared palette id for the two built-ins: the common prefix of the configured
+ * light/dark names (trailing separators trimmed), so a config whose names don't
+ * share a `-light`/`-dark` stem (e.g. `aurora-day`/`aurora-night`) is still ONE
+ * palette and never surfaces a spurious palette picker. Falls back to paletteOf.
+ */
+function commonPaletteId(light: string, dark: string): string {
+  let i = 0;
+  while (i < light.length && i < dark.length && light[i] === dark[i]) i++;
+  return light.slice(0, i).replace(/[-_ ]+$/, '') || paletteOf(light);
+}
+
+/** Humanise a palette id for display: `'rhombus'` → `'Rhombus'`. */
+function titleCase(id: string): string {
+  return id
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
 /** Merge themes, deduping by name (last value wins; first position kept). */
 function dedupeByName(
   themes: readonly RegisteredTheme[],
@@ -50,7 +71,7 @@ function groupByPalette(
   const groups = new Map<string, ThemePalette>();
   for (const theme of themes) {
     const id = theme.palette ?? paletteOf(theme.name);
-    const group = groups.get(id) ?? { palette: id, label: id };
+    const group = groups.get(id) ?? { palette: id, label: titleCase(id) };
     if (theme.mode === 'light') group.light = theme.name;
     else group.dark = theme.name;
     const derived = paletteLabel(theme.label);
@@ -110,9 +131,13 @@ export class RhombusThemeService {
    * The two built-in entries, derived from the resolved config names so a
    * configured app (provideRhombusTheme) reflects its own names, not rhombus-*.
    */
+  /** One palette id shared by both built-ins, so a single-family configured app
+   *  (any naming) is one palette and never shows a spurious palette picker. */
+  private readonly builtinPalette = commonPaletteId(this.config.light, this.config.dark);
+
   private readonly builtinThemes: readonly RegisteredTheme[] = [
-    { name: this.config.light, label: 'Light', mode: 'light', palette: paletteOf(this.config.light) },
-    { name: this.config.dark, label: 'Dark', mode: 'dark', palette: paletteOf(this.config.dark) },
+    { name: this.config.light, label: 'Light', mode: 'light', palette: this.builtinPalette },
+    { name: this.config.dark, label: 'Dark', mode: 'dark', palette: this.builtinPalette },
   ];
 
   // --- Reactive state ---
@@ -241,7 +266,7 @@ export class RhombusThemeService {
    */
   setMode(mode: 'light' | 'dark' | 'system'): void {
     if (mode === 'system') {
-      this._preference.set('system');
+      this.setTheme('system');
       return;
     }
     const active = this.palette();
@@ -249,7 +274,7 @@ export class RhombusThemeService {
       (t) => (t.palette ?? paletteOf(t.name)) === active && t.mode === mode,
     );
     const target = match?.name ?? (mode === 'light' ? this.config.light : this.config.dark);
-    this._preference.set(target);
+    this.setTheme(target);
   }
 
   /**
@@ -264,7 +289,7 @@ export class RhombusThemeService {
     );
     const target = members.find((t) => t.mode === mode)?.name ?? members[0]?.name;
     if (target) {
-      this._preference.set(target);
+      this.setTheme(target);
     }
   }
 
