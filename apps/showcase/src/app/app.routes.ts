@@ -194,6 +194,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/themes/themes-page.component'),
   },
   {
+    path: 'tokens',
+    title: 'Design Tokens',
+    loadComponent: () => import('./pages/tokens/tokens-page.component'),
+  },
+  {
     path: 'accessibility',
     title: 'Accessibility',
     loadComponent: () => import('./pages/accessibility/accessibility-page.component'),
