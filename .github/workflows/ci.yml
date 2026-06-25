@@ -53,6 +53,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec tsc --noEmit -p packages/core/tsconfig.spec.json
 
+  schematics:
+    # `ng add @rhombuskit/core` is verified outside jest (the @angular-devkit
+    # SchematicTestRunner breaks jest's module loading), via a tsx-run script
+    # that scaffolds a real workspace and asserts the providers + ordered SCSS
+    # layers + idempotency. No build step: tsx runs the schematic source and the
+    # collection factory is resolved by path. Add to branch protection.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:schematics
+
   test:
     runs-on: ubuntu-latest
     steps:
