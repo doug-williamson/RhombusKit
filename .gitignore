@@ -21,3 +21,9 @@ tmp/
 # Firebase emulator state + scratch prompt files (never commit)
 .firebase/emulator-data/
 prompt.md
+
+# Environment / secrets (never commit) — keep a committed .env.example instead
+.env
+.env.*
+!.env.example
+*.local
