@@ -20,7 +20,8 @@ describe('ThemesPageComponent', () => {
 
     expect(names).toContain('Light');
     expect(names).toContain('Dark');
-    expect(names).toContain('Teal');
+    expect(names).toContain('Teal Light');
+    expect(names).toContain('Teal Dark');
     // Each card has an Apply button.
     expect(fixture.nativeElement.querySelectorAll('rhombus-button').length).toBe(names.length);
   });
