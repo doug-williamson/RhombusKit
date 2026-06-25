@@ -8,11 +8,14 @@ export {
   THEME_ATTRIBUTE,
   RHOMBUS_THEME_CONFIG,
   RHOMBUS_THEME_DEFAULT_CONFIG,
+  RHOMBUS_THEME_REGISTRY,
   provideRhombusTheme,
+  provideRhombusThemes,
 } from './lib/theme.tokens';
 export type { RhombusThemeConfig } from './lib/theme.tokens';
 export type {
   ThemeName,
   ThemePreference,
   ThemeRegistry,
+  RegisteredTheme,
 } from './lib/theme.types';
