@@ -10,6 +10,15 @@
 ### RHOMBUS_THEME_DEFAULT_CONFIG (const)
   RHOMBUS_THEME_DEFAULT_CONFIG: RhombusThemeConfig
 
+### RHOMBUS_THEME_REGISTRY (const)
+  RHOMBUS_THEME_REGISTRY: _angular_core.InjectionToken<readonly RegisteredTheme[]>
+
+### RegisteredTheme (interface)
+  label: string
+  mode: "light" | "dark"
+  name: keyof ThemeRegistry
+  palette?: string
+
 ### RhombusThemeConfig (interface)
   dark: keyof ThemeRegistry
   default: ThemePreference
@@ -17,7 +26,12 @@
 
 ### RhombusThemeService (class)
   readonly current: _angular_core.Signal<keyof ThemeRegistry>
+  readonly mode: _angular_core.Signal<"light" | "dark">
+  readonly palette: _angular_core.Signal<string>
+  readonly palettes: _angular_core.Signal<readonly { palette: string; label: string; light?: ThemeName; dark?: ThemeName; }[]>
   readonly preference: _angular_core.Signal<ThemePreference>
+  readonly themes: _angular_core.Signal<readonly RegisteredTheme[]>
+  registerThemes: (themes: readonly RegisteredTheme[]) => void
   setTheme: (preference: ThemePreference) => void
   toggle: () => void
 
@@ -45,3 +59,6 @@
 
 ### provideRhombusTheme (function)
   provideRhombusTheme: (config?: Partial<RhombusThemeConfig>) => EnvironmentProviders
+
+### provideRhombusThemes (function)
+  provideRhombusThemes: (...themes: readonly RegisteredTheme[]) => EnvironmentProviders

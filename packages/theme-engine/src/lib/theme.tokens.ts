@@ -3,7 +3,7 @@ import {
   makeEnvironmentProviders,
   type EnvironmentProviders,
 } from '@angular/core';
-import type { ThemeName, ThemePreference } from './theme.types';
+import type { RegisteredTheme, ThemeName, ThemePreference } from './theme.types';
 
 /**
  * localStorage key for theme preference. Namespaced to avoid collision with
@@ -80,4 +80,43 @@ export function provideRhombusTheme(
       useValue: { ...RHOMBUS_THEME_DEFAULT_CONFIG, ...config },
     },
   ]);
+}
+
+/**
+ * Multi-provider token carrying themes registered via `provideRhombusThemes()`.
+ * The service merges these contributions with its config-derived built-ins and
+ * any imperative `registerThemes()` calls into the registry the controls read.
+ * No default providers — an app that never registers anything injects nothing.
+ * Typed as the element array (the `HTTP_INTERCEPTORS` convention): each provider
+ * contributes one `RegisteredTheme`; injecting yields the flat array.
+ */
+export const RHOMBUS_THEME_REGISTRY = new InjectionToken<readonly RegisteredTheme[]>(
+  'RHOMBUS_THEME_REGISTRY',
+);
+
+/**
+ * Register one or more themes with the engine so the theme controls reflect,
+ * offer, and persist them. Metadata only — you still ship the matching
+ * `[data-theme="<name>"]` CSS. Augment `ThemeRegistry` so the names type-check.
+ *
+ * This is the declarative path: registered at provider-config time, so the
+ * service knows the themes in its constructor (before hydrate) and they persist
+ * across reload. For runtime-discovered themes use `RhombusThemeService.registerThemes()`.
+ *
+ * @example
+ * provideRhombusThemes(
+ *   { name: 'midnight-light', label: 'Midnight', mode: 'light', palette: 'midnight' },
+ *   { name: 'midnight-dark', label: 'Midnight', mode: 'dark', palette: 'midnight' },
+ * )
+ */
+export function provideRhombusThemes(
+  ...themes: readonly RegisteredTheme[]
+): EnvironmentProviders {
+  return makeEnvironmentProviders(
+    themes.map((theme) => ({
+      provide: RHOMBUS_THEME_REGISTRY,
+      useValue: theme,
+      multi: true,
+    })),
+  );
 }
