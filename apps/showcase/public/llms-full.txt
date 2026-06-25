@@ -553,7 +553,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   rhombus-light: true
 
 ### getThemeInitScript (function)
-  getThemeInitScript: (config?: RhombusThemeConfig) => string
+  getThemeInitScript: (config?: RhombusThemeConfig, registeredThemes?: readonly RegisteredTheme[]) => string
 
 ### provideRhombusTheme (function)
   provideRhombusTheme: (config?: Partial<RhombusThemeConfig>) => EnvironmentProviders

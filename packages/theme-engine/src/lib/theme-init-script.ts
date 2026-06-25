@@ -4,6 +4,7 @@ import {
   THEME_ATTRIBUTE,
   type RhombusThemeConfig,
 } from './theme.tokens';
+import type { RegisteredTheme } from './theme.types';
 
 /**
  * Builds the pre-paint init script body for a given resolved-theme config.
@@ -21,9 +22,18 @@ import {
  * config produces output behaviourally identical to the original rhombus-only
  * script.
  */
-function buildInitBody(config: RhombusThemeConfig): string {
+function buildInitBody(
+  config: RhombusThemeConfig,
+  registeredThemes: readonly RegisteredTheme[] = [],
+): string {
   const { light, dark, default: def } = config;
-  return `(function(){try{var L='${light}',D='${dark}',d='${def}';var s=localStorage.getItem('${STORAGE_KEY}');var p=(s===L||s===D||s==='system')?s:d;var r=p==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?D:L):p;document.documentElement.setAttribute('${THEME_ATTRIBUTE}',r);}catch(e){}})();`;
+  // Registered theme names widen the pre-paint accept-set so a stored one
+  // resolves to itself instead of falling back to the default. Emitted ONLY when
+  // non-empty, so the default (rhombus-only) output stays byte-identical.
+  const names = registeredThemes.map((t) => t.name);
+  const rDecl = names.length ? `,R=${JSON.stringify(names)}` : '';
+  const rCheck = names.length ? '||R.indexOf(s)>=0' : '';
+  return `(function(){try{var L='${light}',D='${dark}',d='${def}'${rDecl};var s=localStorage.getItem('${STORAGE_KEY}');var p=(s===L||s===D||s==='system'${rCheck})?s:d;var r=p==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?D:L):p;document.documentElement.setAttribute('${THEME_ATTRIBUTE}',r);}catch(e){}})();`;
 }
 
 /**
@@ -50,9 +60,17 @@ export const THEME_INIT_SCRIPT = buildInitBody(RHOMBUS_THEME_DEFAULT_CONFIG);
  * Use this when programmatically composing index.html (e.g. via an Angular
  * builder transform). Pass the same config given to provideRhombusTheme() so the
  * pre-paint theme matches the service; omit it for the rhombus defaults.
+ *
+ * Pass the themes registered via provideRhombusThemes() as the 2nd argument so a
+ * stored registered theme name resolves to itself pre-paint (instead of falling
+ * back to the default). No-flash for such a theme still requires its
+ * `[data-theme="<name>"]` CSS to be present in <head> before first paint — this
+ * script only sets the attribute, it does not ship the palette CSS. Omitting the
+ * argument produces byte-identical output to before.
  */
 export function getThemeInitScript(
   config: RhombusThemeConfig = RHOMBUS_THEME_DEFAULT_CONFIG,
+  registeredThemes: readonly RegisteredTheme[] = [],
 ): string {
-  return `<script>${buildInitBody(config)}</script>`;
+  return `<script>${buildInitBody(config, registeredThemes)}</script>`;
 }

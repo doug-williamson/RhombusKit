@@ -57,7 +57,7 @@
   rhombus-light: true
 
 ### getThemeInitScript (function)
-  getThemeInitScript: (config?: RhombusThemeConfig) => string
+  getThemeInitScript: (config?: RhombusThemeConfig, registeredThemes?: readonly RegisteredTheme[]) => string
 
 ### provideRhombusTheme (function)
   provideRhombusTheme: (config?: Partial<RhombusThemeConfig>) => EnvironmentProviders
