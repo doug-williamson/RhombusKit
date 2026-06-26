@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/doug-williamson/RhombusKit/compare/v1.6.0...v1.7.0) (2026-06-26)
+
+
+### Features
+
+* button links, nav-list, and geometry/motion/border tokens ([#101](https://github.com/doug-williamson/RhombusKit/issues/101)) ([67720bc](https://github.com/doug-williamson/RhombusKit/commit/67720bc396ae0accebf46480816257a1eafd130a))
+* **theme:** make System follow the OS within the active palette ([#99](https://github.com/doug-williamson/RhombusKit/issues/99)) ([df6950e](https://github.com/doug-williamson/RhombusKit/commit/df6950e369bf30b44102031a102af5c6a0fded9a))
+
 ## [1.6.0](https://github.com/doug-williamson/RhombusKit/compare/v1.5.0...v1.6.0) (2026-06-26)
 
 
