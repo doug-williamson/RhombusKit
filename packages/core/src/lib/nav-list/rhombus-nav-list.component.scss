@@ -21,7 +21,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-muted);
+  // --text-secondary (not the lighter --text-muted): the nav-list's home is the
+  // app-shell sidenav (surface-1), where muted slate-500 on slate-100 lands at
+  // 4.34:1 and fails WCAG AA for this 11px label. Secondary clears it (6.92:1);
+  // the uppercase / size / weight still read it as a heading.
+  color: var(--text-secondary);
 }
 
 .rhombus-nav-list__group {
@@ -48,8 +52,11 @@
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
     color var(--motion-duration-fast) var(--motion-ease-standard);
 
+  // Hover uses --surface-2, not --surface-1: the nav-list's home is the
+  // app-shell sidenav, which is itself --surface-1, so a surface-1 hover would be
+  // invisible (same-on-same). surface-2 reads on both surface-0 and surface-1 bases.
   &:hover:not(.rhombus-nav-list__item--active):not(.rhombus-nav-list__item--disabled) {
-    background-color: var(--surface-1);
+    background-color: var(--surface-2);
     color: var(--text-primary);
   }
 

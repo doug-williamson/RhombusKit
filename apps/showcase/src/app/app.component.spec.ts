@@ -22,16 +22,28 @@ describe('AppComponent', () => {
     );
   });
 
-  it('projects one nav link per component page, including App Shell', () => {
+  it('lists each component page in the sidebar nav-list, including App Shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
 
     const links = Array.from(
-      el.querySelectorAll('.showcase-shell__nav a'),
+      el.querySelectorAll('rhombus-nav-list a'),
     ).map((a) => a.textContent?.trim());
 
     expect(links).toContain('Button');
     expect(links).toContain('App Shell');
+    // The "Get started" guides moved out of the sidebar into the header menu.
+    expect(links).not.toContain('Theming');
+  });
+
+  it('moves the guides into a header Guides menu', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('.showcase-shell__guides')?.textContent).toContain(
+      'Guides',
+    );
   });
 });
