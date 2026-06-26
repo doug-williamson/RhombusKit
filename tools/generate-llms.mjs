@@ -82,6 +82,7 @@ Install: \`pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine
 - [Component reference](${SITE}): live showcase — a page per component with variants, states, and accessibility notes
 - [Theming guide](${SITE}/theming): setup, runtime switching, custom themes, the Material bridge
 - [Full API + token reference (for LLMs)](${SITE}/llms-full.txt): the complete machine-readable API surface and design-token contract
+- [MCP docs server](${REPO}/tree/main/packages/mcp): run \`npx -y @rhombuskit/mcp\` to query this API surface and the token CONTRACT interactively from Claude Code, Cursor, and other MCP clients
 - [Source, issues & contributing](${REPO})
 
 ## Components
@@ -115,7 +116,8 @@ function buildLlmsFullTxt() {
 
 This file is generated from the committed API snapshots (\`etc/*.api.md\`), the
 design-token CONTRACT (\`packages/tokens/contract.snapshot.json\`), and the
-theming guide. It is the machine-readable companion to ${SITE}.
+theming guide. It is the machine-readable companion to ${SITE}. For interactive
+access, run the MCP server: \`npx -y @rhombuskit/mcp\`.
 
 ## Packages
 

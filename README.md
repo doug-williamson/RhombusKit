@@ -1,5 +1,5 @@
 # RhombusKit
-Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system and Angular component library. Ships @rhombuskit/tokens, @rhombuskit/theme-engine, @rhombuskit/material-preset, and @rhombuskit/core.
+Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system and Angular component library. Ships @rhombuskit/tokens, @rhombuskit/theme-engine, @rhombuskit/material-preset, @rhombuskit/core, and the @rhombuskit/mcp docs server for AI assistants.
 
 ## Packages
 
@@ -9,11 +9,12 @@ Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system a
 | [@rhombuskit/tokens](./packages/tokens) | Framework-agnostic design-token contract (CSS / SCSS / TS) |
 | [@rhombuskit/theme-engine](./packages/theme-engine) | Light / dark / system theming runtime for Angular |
 | [@rhombuskit/material-preset](./packages/material-preset) | Bridges Angular Material's M3 tokens onto the contract |
+| [@rhombuskit/mcp](./packages/mcp) | MCP server exposing the API surface + token CONTRACT to AI assistants (`npx -y @rhombuskit/mcp`) |
 
 ## Documentation
 
 - **Component reference** — the live showcase at **[rhombuskit.online](https://rhombuskit.online)**: a page per component with variants, states, and accessibility notes.
-- **For AI assistants** — [`/llms.txt`](https://rhombuskit.online/llms.txt) (curated index) and [`/llms-full.txt`](https://rhombuskit.online/llms-full.txt) (full API surface + design-token contract), generated from the CI-guarded snapshots so they never drift.
+- **For AI assistants** — [`/llms.txt`](https://rhombuskit.online/llms.txt) (curated index) and [`/llms-full.txt`](https://rhombuskit.online/llms-full.txt) (full API surface + design-token contract), generated from the CI-guarded snapshots so they never drift. For **interactive** access from Claude Code, Cursor, and other MCP clients, run the docs server — `npx -y @rhombuskit/mcp` (see [@rhombuskit/mcp](./packages/mcp)).
 - **Theming guide** — [docs/theming.md](./docs/theming.md): setup, runtime switching, custom themes, and the Material bridge.
 - **Release history** — [docs/release-history.md](./docs/release-history.md): a curated, human-readable narrative of every release (the machine-generated [CHANGELOG.md](./CHANGELOG.md) is the exhaustive commit-level record).
 - **Per-package guides** — install + quick start live in each package's README (linked in the table above).
@@ -70,9 +71,9 @@ and the GitHub release notes before upgrading.
 
 ### Semver contract
 
-The four packages — `@rhombuskit/tokens`, `@rhombuskit/theme-engine`,
-`@rhombuskit/material-preset`, and `@rhombuskit/core` — are released **in lockstep
-on one synced version**.
+The five packages — `@rhombuskit/tokens`, `@rhombuskit/theme-engine`,
+`@rhombuskit/material-preset`, `@rhombuskit/core`, and `@rhombuskit/mcp` — are
+released **in lockstep on one synced version**.
 
 **Covered by semver** (a breaking change requires a major bump):
 

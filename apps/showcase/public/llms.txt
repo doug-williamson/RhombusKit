@@ -16,6 +16,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Component reference](https://rhombuskit.online): live showcase — a page per component with variants, states, and accessibility notes
 - [Theming guide](https://rhombuskit.online/theming): setup, runtime switching, custom themes, the Material bridge
 - [Full API + token reference (for LLMs)](https://rhombuskit.online/llms-full.txt): the complete machine-readable API surface and design-token contract
+- [MCP docs server](https://github.com/doug-williamson/RhombusKit/tree/main/packages/mcp): run `npx -y @rhombuskit/mcp` to query this API surface and the token CONTRACT interactively from Claude Code, Cursor, and other MCP clients
 - [Source, issues & contributing](https://github.com/doug-williamson/RhombusKit)
 
 ## Components
