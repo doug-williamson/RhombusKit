@@ -1,0 +1,19 @@
+[
+  "--border-width",
+  "--border-width-strong",
+  "--motion-duration-base",
+  "--motion-duration-fast",
+  "--motion-duration-instant",
+  "--motion-duration-slow",
+  "--motion-ease-accelerate",
+  "--motion-ease-decelerate",
+  "--motion-ease-emphasized",
+  "--motion-ease-standard",
+  "--radius-full",
+  "--radius-lg",
+  "--radius-md",
+  "--radius-none",
+  "--radius-sm",
+  "--radius-xl",
+  "--radius-xs"
+]

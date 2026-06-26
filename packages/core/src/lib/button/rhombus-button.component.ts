@@ -5,8 +5,10 @@ import {
   computed,
   input,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 /**
  * Visual variant — picks the colour role applied to the button.
@@ -28,16 +30,50 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
 @Component({
   selector: 'rhombus-button',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule],
+  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-button.component.scss',
+  // Renders an inner element matching MatButton (so the styling/tokens are
+  // identical), swapping <button> for <a> when a link target is set. The icon +
+  // projected-label body lives in one #content template stamped into the active
+  // branch, so there is exactly one <ng-content/>. MatButton owns the disabled
+  // semantics on the anchor (aria-disabled + tab removal, since <a> has no native
+  // :disabled); we also drop the href/routerLink so it isn't activatable.
   template: `
-    <button
-      [matButton]="appearance()"
-      [disabled]="disabled()"
-      [class]="hostClasses()"
-    >
+    @if (routerLink() != null) {
+      <a
+        [matButton]="appearance()"
+        [class]="hostClasses()"
+        [disabled]="disabled()"
+        [routerLink]="disabled() ? null : routerLink()"
+        [attr.target]="disabled() ? null : target()"
+        [attr.rel]="computedRel()"
+      >
+        <ng-container [ngTemplateOutlet]="content" />
+      </a>
+    } @else if (href() != null) {
+      <a
+        [matButton]="appearance()"
+        [class]="hostClasses()"
+        [disabled]="disabled()"
+        [attr.href]="disabled() ? null : href()"
+        [attr.target]="disabled() ? null : target()"
+        [attr.rel]="computedRel()"
+      >
+        <ng-container [ngTemplateOutlet]="content" />
+      </a>
+    } @else {
+      <button
+        [matButton]="appearance()"
+        [disabled]="disabled()"
+        [class]="hostClasses()"
+      >
+        <ng-container [ngTemplateOutlet]="content" />
+      </button>
+    }
+
+    <ng-template #content>
       @if (leadingIcon()) {
         <mat-icon>{{ leadingIcon() }}</mat-icon>
       }
@@ -45,7 +81,7 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
       @if (trailingIcon()) {
         <mat-icon iconPositionEnd>{{ trailingIcon() }}</mat-icon>
       }
-    </button>
+    </ng-template>
   `,
 })
 export class RhombusButtonComponent {
@@ -61,6 +97,37 @@ export class RhombusButtonComponent {
   readonly leadingIcon = input<string | null>(null);
   /** Material icon name rendered after the projected label; `null` (default) hides it. */
   readonly trailingIcon = input<string | null>(null);
+
+  /**
+   * Router destination. When set, the button renders as a real `<a>` (with
+   * `routerLink`) carrying identical styling — for nav CTAs, "back to home", etc.
+   * Takes precedence over `href`. `null` (default) renders a `<button>`.
+   */
+  readonly routerLink = input<string | unknown[] | null>(null);
+  /**
+   * Plain anchor destination. When set (and `routerLink` is not), the button
+   * renders as `<a href>`. `null` (default) renders a `<button>`.
+   */
+  readonly href = input<string | null>(null);
+  /** Anchor `target` (e.g. `_blank`), forwarded to the rendered `<a>`. */
+  readonly target = input<string | null>(null);
+  /**
+   * Anchor `rel`. When omitted and `target="_blank"`, defaults to
+   * `noopener noreferrer` to harden the external link.
+   */
+  readonly rel = input<string | null>(null);
+
+  /** True when a link target is set, so the button renders as an anchor. */
+  protected readonly isLink = computed(
+    () => this.routerLink() != null || this.href() != null
+  );
+
+  /** The `rel` actually applied: the explicit value, or a safe `_blank` default. */
+  protected readonly computedRel = computed(() => {
+    const explicit = this.rel();
+    if (explicit) return explicit;
+    return this.target() === '_blank' ? 'noopener noreferrer' : null;
+  });
 
   protected readonly hostClasses = computed(() =>
     [

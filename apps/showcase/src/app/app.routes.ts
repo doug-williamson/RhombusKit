@@ -114,6 +114,12 @@ export const appRoutes: Route[] = [
           import('./pages/bottom-nav/bottom-nav-page.component'),
       },
       {
+        path: 'nav-list',
+        title: 'Nav List',
+        loadComponent: () =>
+          import('./pages/nav-list/nav-list-page.component'),
+      },
+      {
         path: 'breadcrumbs',
         title: 'Breadcrumbs',
         loadComponent: () =>

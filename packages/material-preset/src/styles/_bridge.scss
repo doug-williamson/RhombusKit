@@ -135,19 +135,26 @@
 // selectors directly — that breaks across Material upgrades.
 
 :root {
+  // Corner radius + outline width flow through @rhombuskit/tokens geometry
+  // primitives (--radius-* / --border-width) so overriding a token re-themes the
+  // control. The default token values equal the current literals (8px = --radius-lg,
+  // 12px = --radius-xl, 9999px = --radius-full, 1px = --border-width), so this is a
+  // zero pixel change — it only makes the previously-hardcoded geometry overridable.
   @include mat.button-overrides((
-    filled-container-shape:   8px,
-    outlined-container-shape: 8px,
-    text-container-shape:     8px,
+    filled-container-shape:   var(--radius-lg),
+    outlined-container-shape: var(--radius-lg),
+    text-container-shape:     var(--radius-lg),
+    outlined-outline-width:   var(--border-width),
   ));
 
   @include mat.card-overrides((
-    elevated-container-shape: 12px,
-    outlined-container-shape: 12px,
+    elevated-container-shape: var(--radius-xl),
+    outlined-container-shape: var(--radius-xl),
+    outlined-outline-width:   var(--border-width),
   ));
 
   @include mat.chips-overrides((
-    container-shape-radius: 9999px,
+    container-shape-radius: var(--radius-full),
   ));
 
   // Form field — outlined/filled label + container shape + error text.
@@ -156,8 +163,10 @@
     error-text-color:                var(--error),
     outlined-label-text-color:       var(--text-secondary),
     outlined-focus-label-text-color: var(--text-accent),
-    outlined-container-shape:        8px,
-    filled-container-shape:          8px,
+    outlined-container-shape:        var(--radius-lg),
+    filled-container-shape:          var(--radius-lg),
+    outlined-outline-width:          var(--border-width),
+    outlined-focus-outline-width:    var(--border-width-strong),
     // Subscript (hint/error) size — the bridge supplies Material's colour roles
     // but not the M3 typography tokens, so this would otherwise inherit the 16px
     // root size. Body-small = 12px.
@@ -232,7 +241,7 @@
   // the CDK overlay, so rhombus-confirm-dialog.component.scss also scopes these.
   @include mat.dialog-overrides((
     container-color:       var(--surface-0),
-    container-shape:       12px,
+    container-shape:       var(--radius-xl),
     subhead-color:         var(--text-primary),
     // Title size/weight — without the M3 type tokens the headline falls back to
     // its 1rem (16px) hard default. RhombusKit dialog title = 1.125rem / 600.

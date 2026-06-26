@@ -379,6 +379,26 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "trailingIcon",
         "type": "string",
         "description": "Material icon name rendered after the projected label; `null` (default) hides it."
+      },
+      {
+        "name": "routerLink",
+        "type": "string | unknown[]",
+        "description": "Router destination. When set, the button renders as a real `<a>` (with\n`routerLink`) carrying identical styling — for nav CTAs, \"back to home\", etc.\nTakes precedence over `href`. `null` (default) renders a `<button>`."
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "description": "Plain anchor destination. When set (and `routerLink` is not), the button\nrenders as `<a href>`. `null` (default) renders a `<button>`."
+      },
+      {
+        "name": "target",
+        "type": "string",
+        "description": "Anchor `target` (e.g. `_blank`), forwarded to the rendered `<a>`."
+      },
+      {
+        "name": "rel",
+        "type": "string",
+        "description": "Anchor `rel`. When omitted and `target=\"_blank\"`, defaults to\n`noopener noreferrer` to harden the external link."
       }
     ],
     "outputs": [],
@@ -1039,7 +1059,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusMenuComponent",
     "kind": "class",
     "selector": "rhombus-menu",
-    "description": "`<rhombus-menu>` — a MatMenu wrapper driven by a homogeneous `items` array,\neach `MenuItem` carrying its own `action` callback (dispatch is co-located\nwith the item; there is no `(itemClick)` output). The trigger is whatever you\nproject as content; pass `[iconButton]=\"true\"` for the round icon-button\ntreatment. The panel renders in the CDK overlay and is themed under\n`.cdk-overlay-container`.\n\n`<rhombus-overflow-menu>` is the icon-button preset of this component.\n\n```html\n<rhombus-menu [items]=\"actions\" ariaLabel=\"Row actions\">\n  <span>Actions</span>\n</rhombus-menu>\n```",
+    "description": "`<rhombus-menu>` — a MatMenu wrapper driven by an `items` array. Each\n`MenuItem` is either a command (its own `action` callback) or a navigation\nlink (`routerLink` / `href`, rendered as a real `<a mat-menu-item>`); dispatch\nor navigation is co-located with the item (there is no `(itemClick)` output).\nThe trigger is whatever you project as content; pass `[iconButton]=\"true\"` for\nthe round icon-button treatment. The panel renders in the CDK overlay and is\nthemed under `.cdk-overlay-container`.\n\n`<rhombus-overflow-menu>` is the icon-button preset of this component.\n\n```html\n<rhombus-menu [items]=\"actions\" ariaLabel=\"Row actions\">\n  <span>Actions</span>\n</rhombus-menu>\n```",
     "inputs": [
       {
         "name": "items",
@@ -1071,8 +1091,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
           {
             "name": "action",
             "type": "() => void",
-            "description": "Invoked when the item is activated.",
-            "required": true
+            "description": "Invoked when the item is activated. Optional when the item is a navigation\nlink (`routerLink` / `href`); for a plain command item it is the handler.\nA link item may still set `action` to run alongside navigation."
           },
           {
             "name": "disabled",
@@ -1083,6 +1102,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "name": "dividerBefore",
             "type": "boolean",
             "description": "Inserts a divider above the item (ignored on the first item)."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "description": "Plain anchor destination — renders the item as `<a mat-menu-item href>`."
           },
           {
             "name": "icon",
@@ -1096,9 +1120,64 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "required": true
           },
           {
+            "name": "rel",
+            "type": "string",
+            "description": "Anchor `rel` for `routerLink` / `href` items."
+          },
+          {
+            "name": "routerLink",
+            "type": "string | unknown[]",
+            "description": "Router destination — renders the item as `<a mat-menu-item [routerLink]>` so\nthe menu can host navigation. Takes precedence over `href`."
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "description": "Anchor `target` (e.g. `_blank`) for `routerLink` / `href` items."
+          },
+          {
             "name": "variant",
             "type": "\"default\" | \"danger\"",
             "description": "Visual treatment; `'danger'` renders the item in `--error`. Defaults to `'default'`."
+          }
+        ]
+      }
+    ]
+  },
+  "RhombusNavListComponent": {
+    "name": "RhombusNavListComponent",
+    "kind": "class",
+    "selector": "rhombus-nav-list",
+    "description": "`<rhombus-nav-list>` — a persistent, vertical, sectioned navigation list,\ndesigned to fill the app-shell `[shellNav]` slot (or any sidebar / \"link in\nbio\" column). Router items (with `routerLink`) self-highlight via\n`routerLinkActive` and render `aria-current=\"page\"`; `href` items point at an\nexternal destination and accept a manual `active` flag. The whole list is a\n`<nav>` landmark, items are real `<a>` links (native keyboard order + focus\nring), and every colour flows through the",
+    "inputs": [
+      {
+        "name": "sections",
+        "type": "RhombusNavSection[]",
+        "description": "Sections of nav items, top to bottom.",
+        "required": true
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible label for the `<nav>` landmark. Defaults to `'Primary'`."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "types": [
+      {
+        "name": "RhombusNavSection",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "heading",
+            "type": "string",
+            "description": "Optional section heading rendered above the group."
+          },
+          {
+            "name": "items",
+            "type": "RhombusNavItem[]",
+            "description": "The items in this section, top to bottom.",
+            "required": true
           }
         ]
       }
@@ -1137,8 +1216,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
           {
             "name": "action",
             "type": "() => void",
-            "description": "Invoked when the item is activated.",
-            "required": true
+            "description": "Invoked when the item is activated. Optional when the item is a navigation\nlink (`routerLink` / `href`); for a plain command item it is the handler.\nA link item may still set `action` to run alongside navigation."
           },
           {
             "name": "disabled",
@@ -1151,6 +1229,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "description": "Inserts a divider above the item (ignored on the first item)."
           },
           {
+            "name": "href",
+            "type": "string",
+            "description": "Plain anchor destination — renders the item as `<a mat-menu-item href>`."
+          },
+          {
             "name": "icon",
             "type": "string",
             "description": "Optional leading Material icon name."
@@ -1160,6 +1243,21 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "type": "string",
             "description": "Display text.",
             "required": true
+          },
+          {
+            "name": "rel",
+            "type": "string",
+            "description": "Anchor `rel` for `routerLink` / `href` items."
+          },
+          {
+            "name": "routerLink",
+            "type": "string | unknown[]",
+            "description": "Router destination — renders the item as `<a mat-menu-item [routerLink]>` so\nthe menu can host navigation. Takes precedence over `href`."
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "description": "Anchor `target` (e.g. `_blank`) for `routerLink` / `href` items."
           },
           {
             "name": "variant",

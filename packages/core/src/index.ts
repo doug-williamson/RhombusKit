@@ -176,6 +176,17 @@ export type {
   BottomNavIndicator,
 } from './lib/bottom-nav/rhombus-bottom-nav.component';
 
+// Nav list — persistent, vertical, sectioned sidebar navigation for the
+// app-shell [shellNav] slot (or any "link in bio" column). Router items
+// self-highlight (routerLinkActive + aria-current="page"); href items support an
+// external target + a manual `active` flag. First real consumer of the
+// --nav-active-bg / --nav-active-text contract tokens.
+export { RhombusNavListComponent } from './lib/nav-list/rhombus-nav-list.component';
+export type {
+  RhombusNavItem,
+  RhombusNavSection,
+} from './lib/nav-list/nav-list.types';
+
 // 1.0 — content composites. Leaf components ported from FolioKit. page-header
 // composes [rhombusChip] for its badge; code-block lazily + optionally loads
 // highlight.js (degrades to plain code); empty-state composes rhombus-button for
