@@ -7,8 +7,8 @@
 // --mat-sys-* consumed as a value). No .hljs-* syntax-token rules ship in 1.0.
 
 .rhombus-code-block {
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 
   &__toolbar {
@@ -17,7 +17,7 @@
     justify-content: space-between;
     padding: 0.25rem 0.5rem 0.25rem 1rem;
     background: var(--surface-1);
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-width) solid var(--border);
   }
 
   &__lang {

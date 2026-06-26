@@ -42,6 +42,7 @@ export function flattenPrimitives(obj, prefix = '') {
 function primitiveType(flatKey) {
   if (flatKey.startsWith('font-family-')) return 'fontFamily';
   if (flatKey.startsWith('radius-')) return 'dimension';
+  if (flatKey.startsWith('border-width')) return 'dimension';
   if (flatKey.startsWith('motion-duration-')) return 'duration';
   if (flatKey.startsWith('motion-ease-')) return 'cubicBezier';
   return 'color'; // slate / violet / green / amber / red scales

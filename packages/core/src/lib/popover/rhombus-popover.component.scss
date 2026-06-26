@@ -5,7 +5,7 @@
 .cdk-overlay-container .rhombus-popover__panel {
   background: var(--surface-0);
   color: var(--text-primary);
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: 8px;

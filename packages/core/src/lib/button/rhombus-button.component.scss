@@ -46,7 +46,7 @@
     --mat-sys-on-primary: var(--text-accent);
     color: var(--text-accent);
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       --mat-sys-primary: var(--surface-1);
     }
   }
@@ -55,19 +55,25 @@
     --mat-sys-primary:    var(--error);
     --mat-sys-on-primary: var(--bg);
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
       --mat-sys-primary: var(--error-bg);
       color: var(--error);
     }
   }
 
   // --- State ---
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled):not([aria-disabled='true']) {
     box-shadow: var(--shadow-sm);
   }
 
-  &:disabled {
+  // A native <button> uses :disabled; the link variant is an <a>, which has no
+  // :disabled state, so it carries aria-disabled='true' instead. Both render the
+  // disabled look; the anchor also needs pointer-events suppressed (the UA gives
+  // a disabled <button> that for free).
+  &:disabled,
+  &[aria-disabled='true'] {
     opacity: 0.4;
     cursor: not-allowed;
+    pointer-events: none;
   }
 }

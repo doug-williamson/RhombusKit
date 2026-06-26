@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -39,7 +40,9 @@ function setup(): {
   loader: HarnessLoader;
   el: HTMLElement;
 } {
-  TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+  TestBed.configureTestingModule({
+    providers: [provideNoopAnimations(), provideRouter([])],
+  });
   const fixture = TestBed.createComponent(HostComponent);
   const loader = TestbedHarnessEnvironment.loader(fixture);
   fixture.detectChanges();
@@ -91,6 +94,31 @@ describe('rhombus-menu', () => {
     const overlay = TestBed.inject(OverlayContainer).getContainerElement();
     const danger = overlay.querySelector('.rhombus-menu__item--danger');
     expect(danger?.textContent).toContain('Delete');
+  });
+
+  it('renders routerLink and href items as anchors', async () => {
+    const { fixture, host, loader } = setup();
+    host.items.set([
+      { label: 'Docs', routerLink: '/docs' },
+      { label: 'GitHub', href: 'https://github.com', target: '_blank' },
+      { label: 'Run', action: () => host.log.push('Run') },
+    ]);
+    fixture.detectChanges();
+    const menu = await loader.getHarness(MatMenuHarness);
+    await menu.open();
+    const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+    const anchors = Array.from(
+      overlay.querySelectorAll<HTMLAnchorElement>('a.rhombus-menu__item')
+    );
+    expect(anchors.length).toBe(2);
+    expect(
+      anchors.find((a) => a.textContent?.includes('Docs'))?.getAttribute('href')
+    ).toBe('/docs');
+    const gh = anchors.find((a) => a.textContent?.includes('GitHub'));
+    expect(gh?.getAttribute('href')).toBe('https://github.com');
+    expect(gh?.getAttribute('target')).toBe('_blank');
+    // The plain command item stays a <button>.
+    expect(overlay.querySelectorAll('button.rhombus-menu__item').length).toBe(1);
   });
 
   it('has no accessibility violations on the trigger or the open panel', async () => {

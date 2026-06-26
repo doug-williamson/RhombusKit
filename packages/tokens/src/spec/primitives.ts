@@ -63,6 +63,11 @@ export const fontFamily = {
 export const radius = {
   none: '0',
   sm:   '0.125rem',
+  // `xs` is the form-control corner (4px). NOTE: by value it sits *between* `sm`
+  // (2px) and `md` (6px) — `sm` is an unusually tight 2px — so the scale is not
+  // strictly monotonic by name. It exists so form fields can consume a radius
+  // token at their native Material corner with zero pixel change.
+  xs:   '0.25rem',
   md:   '0.375rem',
   lg:   '0.5rem',
   xl:   '0.75rem',
@@ -89,5 +94,15 @@ export const motion = {
   },
 } as const;
 
-export const primitives = { slate, violet, green, amber, red, fontFamily, radius, motion } as const;
+// Border widths are theme-independent (a 1px hairline is 1px in every theme), so
+// they live here as primitives — like radius/motion, not in the themed CONTRACT.
+// `--border-width` is the default hairline (component borders / dividers);
+// `--border-width-strong` is the emphasis width (e.g. a focused field outline).
+// Component styles reference these via var(--border-width). Authored as top-level
+// scalars so flattenPrimitives yields exactly `--border-width` /
+// `--border-width-strong` (a nested object would prefix them).
+export const borderWidth = '1px';
+export const borderWidthStrong = '2px';
+
+export const primitives = { slate, violet, green, amber, red, fontFamily, radius, motion, borderWidth, borderWidthStrong } as const;
 export type Primitives = typeof primitives;

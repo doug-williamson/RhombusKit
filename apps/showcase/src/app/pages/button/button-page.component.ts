@@ -59,8 +59,11 @@ import { ExampleComponent } from '../../shared/example.component';
           <h2>When not to use</h2>
           <ul>
             <li>
-              For moving between pages or to an external URL, use a real link
-              (<code>&lt;a&gt;</code>) — semantically a navigation, not an action.
+              For moving between pages or to an external URL, set
+              <code>routerLink</code> / <code>href</code> so the button renders a
+              real <code>&lt;a&gt;</code> (see <em>Link buttons</em> below) —
+              don't fake a navigation with <code>(click)</code> on a plain
+              button.
             </li>
             <li>
               For an on/off setting that takes effect immediately, use a
@@ -103,6 +106,7 @@ import { ExampleComponent } from '../../shared/example.component';
             <li><code>&lt;rhombus-button&gt;</code> renders a native <code>&lt;button&gt;</code> wrapping Material's <code>matButton</code>; the <code>appearance</code> input picks <code>filled</code> / <code>outlined</code> / <code>text</code>.</li>
             <li><strong>Default content slot</strong> — whatever you project becomes the visible label (the component exposes no named slots).</li>
             <li><code>leadingIcon</code> renders a Material icon before the label; <code>trailingIcon</code> renders one after it. Pass a Material icon name string; <code>null</code> (default) hides it.</li>
+            <li>Set <code>routerLink</code> or <code>href</code> to render the button as a real <code>&lt;a&gt;</code> instead of a <code>&lt;button&gt;</code> (<code>target</code> / <code>rel</code> pass through; <code>routerLink</code> wins if both are set). Omit both for a plain button.</li>
             <li>Bind <code>(click)</code> on the host as usual; <code>[disabled]="true"</code> disables the underlying native button.</li>
           </ul>
         </section>
@@ -135,7 +139,12 @@ import { ExampleComponent } from '../../shared/example.component';
             readers announce as the accessible name. For an icon-only button (a
             <code>leadingIcon</code> / <code>trailingIcon</code> with no projected
             text), add an <code>aria-label</code> so its purpose is announced — the
-            component does not derive a label from the icon name.
+            component does not derive a label from the icon name. With
+            <code>routerLink</code> / <code>href</code> the button is a genuine
+            <code>&lt;a&gt;</code> link; a disabled link drops its href, sets
+            <code>aria-disabled="true"</code>, and leaves the tab order
+            (<code>tabindex="-1"</code>), since an anchor has no native disabled
+            state.
           </p>
         </section>
       </div>
@@ -179,11 +188,62 @@ import { ExampleComponent } from '../../shared/example.component';
             </rhombus-button>
           </div>
         </section>
+
+        <section class="showcase-section">
+          <h2>Link buttons</h2>
+          <p class="showcase-section__lead">
+            Set <code>routerLink</code> (or <code>href</code>) and the same
+            button renders as a real <code>&lt;a&gt;</code> — identical pixels,
+            with full link semantics for keyboard and screen-reader users. Use
+            it for nav CTAs, "back to home", social links, and "link in bio"
+            rows. External links with <code>target="_blank"</code> auto-harden
+            <code>rel="noopener noreferrer"</code>.
+          </p>
+          <div class="showcase-row">
+            <rhombus-button routerLink="/components/card" leadingIcon="arrow_back">
+              Back to Card
+            </rhombus-button>
+            <rhombus-button
+              href="https://github.com/doug-williamson/RhombusKit"
+              target="_blank"
+              appearance="outlined"
+              trailingIcon="open_in_new"
+            >
+              View on GitHub
+            </rhombus-button>
+            <rhombus-button
+              routerLink="/components/button"
+              appearance="text"
+              [disabled]="true"
+            >
+              Disabled link
+            </rhombus-button>
+          </div>
+          <rhombus-code-block language="html" [code]="linkUsage" />
+        </section>
       </div>
     </app-component-page>
   `,
+  styles: `
+    .showcase-section__lead {
+      color: var(--text-secondary);
+      margin: 0 0 1rem 0;
+      max-width: 70ch;
+    }
+  `,
 })
 export default class ButtonPageComponent {
+  /** Link-button snippet shown in the Examples tab. */
+  protected readonly linkUsage = `<!-- routerLink → renders <a routerLink> with identical button styling -->
+<rhombus-button routerLink="/dashboard" leadingIcon="arrow_back">
+  Back to dashboard
+</rhombus-button>
+
+<!-- href + target → external link; rel auto-hardens to "noopener noreferrer" -->
+<rhombus-button href="https://example.com" target="_blank" appearance="outlined">
+  Open docs
+</rhombus-button>`;
+
   /** Minimal import + usage snippet shown in the Overview tab. */
   protected readonly usage = `import { RhombusButtonComponent } from '@rhombuskit/core';
 

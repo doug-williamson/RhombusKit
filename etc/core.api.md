@@ -81,11 +81,15 @@
   type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url' | 'date' | 'time'
 
 ### MenuItem (interface)
-  action: () => void
+  action?: () => void
   disabled?: boolean
   dividerBefore?: boolean
+  href?: string
   icon?: string
   label: string
+  rel?: string
+  routerLink?: string | unknown[]
+  target?: string
   variant?: "default" | "danger"
 
 ### OverflowMenuItem (type)
@@ -152,8 +156,12 @@
 ### RhombusButtonComponent (class)
   readonly appearance: _angular_core.InputSignal<ButtonAppearance>
   readonly disabled: _angular_core.InputSignal<boolean>
+  readonly href: _angular_core.InputSignal<string>
   readonly leadingIcon: _angular_core.InputSignal<string>
+  readonly rel: _angular_core.InputSignal<string>
+  readonly routerLink: _angular_core.InputSignal<string | unknown[]>
   readonly size: _angular_core.InputSignal<ButtonSize>
+  readonly target: _angular_core.InputSignal<string>
   readonly trailingIcon: _angular_core.InputSignal<string>
   readonly variant: _angular_core.InputSignal<ButtonVariant>
 
@@ -270,6 +278,26 @@
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly iconButton: _angular_core.InputSignal<boolean>
   readonly items: _angular_core.InputSignal<MenuItem[]>
+
+### RhombusNavItem (interface)
+  active?: boolean
+  badge?: string | number
+  disabled?: boolean
+  exact?: boolean
+  href?: string
+  icon?: string
+  label: string
+  rel?: string
+  routerLink?: string | unknown[]
+  target?: string
+
+### RhombusNavListComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly sections: _angular_core.InputSignal<RhombusNavSection[]>
+
+### RhombusNavSection (interface)
+  heading?: string
+  items: RhombusNavItem[]
 
 ### RhombusOverflowMenuComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>

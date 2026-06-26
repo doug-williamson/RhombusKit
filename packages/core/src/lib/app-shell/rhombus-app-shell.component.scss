@@ -20,7 +20,7 @@ rhombus-app-shell {
   z-index: 2;
   min-height: var(--rhombus-app-shell-toolbar-height, 56px);
   gap: 4px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-width) solid var(--border);
 }
 
 .rhombus-app-shell__container {
@@ -38,7 +38,7 @@ rhombus-app-shell {
 // `--rhombus-app-shell-sidenav-width` authoritative.
 rhombus-app-shell .rhombus-app-shell__sidenav {
   width: var(--rhombus-app-shell-sidenav-width, 220px);
-  border-right: 1px solid var(--border);
+  border-right: var(--border-width) solid var(--border);
 
   // Square the drawer: Material M3 rounds the content-facing corners
   // (border-*-right-radius: corner-large on .mat-drawer), which reads as a
@@ -72,7 +72,7 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
 }
 
 .rhombus-app-shell__nav-footer {
-  border-top: 1px solid var(--border);
+  border-top: var(--border-width) solid var(--border);
   padding: 8px;
 }
 
@@ -92,7 +92,7 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
   margin-inline-end: 8px;
   padding: 0;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: transparent;
   color: var(--text-primary);
   cursor: pointer;
@@ -142,7 +142,7 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
 }
 
 .rhombus-app-shell__aside {
-  border-left: 1px solid var(--border);
+  border-left: var(--border-width) solid var(--border);
 
   @media (max-width: 1023.98px) {
     display: none;
@@ -161,5 +161,5 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
 .rhombus-app-shell--phone {
   max-width: var(--rhombus-app-shell-phone-max, 430px);
   margin-inline: auto;
-  border-inline: 1px solid var(--border);
+  border-inline: var(--border-width) solid var(--border);
 }

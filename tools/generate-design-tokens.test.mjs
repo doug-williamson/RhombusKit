@@ -72,6 +72,10 @@ assert.equal(doc.primitives['radius-md'].$type, 'dimension', 'radius → dimensi
 assert.equal(doc.primitives['motion-duration-base'].$type, 'duration', 'duration → duration');
 assert.equal(doc.primitives['motion-ease-standard'].$type, 'cubicBezier', 'ease → cubicBezier');
 assert.equal(doc.primitives['font-family-sans'].$type, 'fontFamily', 'font family → fontFamily');
+assert.equal(doc.primitives['radius-xs'].$value, '0.25rem', 'radius-xs added (4px)');
+assert.equal(doc.primitives['border-width'].$type, 'dimension', 'border-width → dimension');
+assert.equal(doc.primitives['border-width'].$value, '1px', 'border-width value');
+assert.equal(doc.primitives['border-width-strong'].$value, '2px', 'border-width-strong value');
 
 // 8. Pure / deterministic — same inputs, structurally equal output.
 const again = buildDesignTokens({

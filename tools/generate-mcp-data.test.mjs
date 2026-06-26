@@ -53,10 +53,11 @@ assert.ok(svc && svc.kind === 'class' && /setTheme/.test(svc.body), 'service sym
 const btnVariant = data.api.core.symbols.find((s) => s.name === 'ButtonVariant');
 assert.ok(btnVariant && btnVariant.kind === 'type', 'type symbol parsed');
 
-// 4. Tokens: all 58, light/dark resolved (aliases dereferenced), typed.
-assert.equal(data.tokens.length, snapshot.length, 'every contract token present');
+// 4. Tokens: every CONTRACT token present (light/dark resolved + typed), PLUS the
+//    published geometry/motion primitives appended beyond the CONTRACT.
 const names = new Set(data.tokens.map((t) => t.name));
 for (const n of snapshot) assert.ok(names.has(n), `token ${n} present`);
+assert.ok(data.tokens.length > snapshot.length, 'published primitives appended beyond CONTRACT');
 const bg = data.tokens.find((t) => t.name === '--bg');
 assert.ok(bg.type === 'color' && /^#|^rgb/.test(bg.light) && /^#|^rgb/.test(bg.dark), 'bg colour');
 const fontSans = data.tokens.find((t) => t.name === '--font-sans');
@@ -64,6 +65,18 @@ assert.ok(
   fontSans.type === 'fontFamily' && fontSans.light.includes('Inter') && !fontSans.light.includes('{'),
   'font alias resolved to a concrete stack',
 );
+
+// 4b. Published primitives (radius / motion / border-width) surface in list_tokens,
+//     typed, and theme-invariant (light === dark). Raw palette stays internal.
+const radiusMd = data.tokens.find((t) => t.name === '--radius-md');
+assert.ok(radiusMd && radiusMd.type === 'dimension' && radiusMd.light === radiusMd.dark, '--radius-md surfaced');
+const borderWidth = data.tokens.find((t) => t.name === '--border-width');
+assert.ok(borderWidth && borderWidth.type === 'dimension' && borderWidth.light === '1px', '--border-width surfaced');
+const motionFast = data.tokens.find((t) => t.name === '--motion-duration-fast');
+assert.ok(motionFast && motionFast.type === 'duration', '--motion-duration-fast surfaced');
+const ease = data.tokens.find((t) => t.name === '--motion-ease-standard');
+assert.ok(ease && ease.type === 'cubicBezier', '--motion-ease-standard surfaced');
+assert.ok(!names.has('--slate-500'), 'raw palette primitives stay internal');
 
 // 5. Theming guide inlined.
 assert.ok(data.theming.length > 100 && data.theming.includes('#'), 'theming guide inlined');

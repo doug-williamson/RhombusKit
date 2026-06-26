@@ -99,6 +99,33 @@ import { TOKENS_STACKBLITZ_STARTER } from '../../shared/tokens-stackblitz-starte
       </section>
 
       <section class="showcase-section">
+        <h2>Geometry &amp; motion primitives</h2>
+        <p class="tokens-lead">
+          Radius, border-width, and motion are
+          <strong>theme-invariant primitives</strong> — identical in light and
+          dark — so they form one geometry/motion layer shared by RhombusKit's
+          components and your own surfaces. They're part of the published token
+          API (the MCP <code>list_tokens</code> returns them), and RhombusKit's
+          components consume them internally, so overriding one re-themes the
+          matching components too. There's no need to define a parallel
+          <code>--r-*</code> / <code>--motion-*</code> scale.
+        </p>
+
+        <h3>Corner radius</h3>
+        <rhombus-code-block language="css" [code]="radiusScale" />
+
+        <h3>Border width</h3>
+        <rhombus-code-block language="css" [code]="borderWidthScale" />
+
+        <h3>Motion — duration &amp; easing</h3>
+        <p class="tokens-lead">
+          See the <a routerLink="/motion">Motion</a> page for interactive demos
+          of every duration and easing curve.
+        </p>
+        <rhombus-code-block language="css" [code]="motionScale" />
+      </section>
+
+      <section class="showcase-section">
         <h2>Dark mode, no framework</h2>
         <p class="tokens-lead">
           Both theme packs ship in the one stylesheet, keyed off
@@ -270,4 +297,32 @@ chart.setSeriesColor(palette['--text-accent']);`;
 const html = document.documentElement;
 html.dataset.theme =
   html.dataset.theme === 'rhombus-dark' ? 'rhombus-light' : 'rhombus-dark';`;
+
+  protected readonly radiusScale = `/* Theme-invariant — listed smallest → largest by value. */
+:root {
+  --radius-none: 0;
+  --radius-sm:   0.125rem; /* 2px */
+  --radius-xs:   0.25rem;  /* 4px — form-control corner */
+  --radius-md:   0.375rem; /* 6px — nav rows, small surfaces */
+  --radius-lg:   0.5rem;   /* 8px — buttons, inputs, popovers */
+  --radius-xl:   0.75rem;  /* 12px — cards, dialogs, tables */
+  --radius-full: 9999px;   /* pills, avatars, badges */
+}`;
+
+  protected readonly borderWidthScale = `:root {
+  --border-width:        1px; /* hairlines, dividers, control outlines */
+  --border-width-strong: 2px; /* focused field outline */
+}`;
+
+  protected readonly motionScale = `:root {
+  --motion-duration-instant: 0ms;
+  --motion-duration-fast:    120ms;
+  --motion-duration-base:    150ms;
+  --motion-duration-slow:    240ms;
+
+  --motion-ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --motion-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+}`;
 }

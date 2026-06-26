@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { axe } from '../../testing/axe';
 import {
   ButtonAppearance,
@@ -20,6 +21,10 @@ import {
       [disabled]="disabled"
       [leadingIcon]="leadingIcon"
       [trailingIcon]="trailingIcon"
+      [routerLink]="routerLink"
+      [href]="href"
+      [target]="target"
+      [rel]="rel"
     >
       {{ label }}
     </rhombus-button>
@@ -33,6 +38,10 @@ class HostComponent {
   leadingIcon: string | null = null;
   trailingIcon: string | null = null;
   label = 'Save';
+  routerLink: string | unknown[] | null = null;
+  href: string | null = null;
+  target: string | null = null;
+  rel: string | null = null;
 }
 
 function setup(): {
@@ -40,7 +49,9 @@ function setup(): {
   host: HostComponent;
   el: HTMLElement;
 } {
-  TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+  TestBed.configureTestingModule({
+    providers: [provideNoopAnimations(), provideRouter([])],
+  });
   const fixture = TestBed.createComponent(HostComponent);
   return {
     fixture,
@@ -51,6 +62,10 @@ function setup(): {
 
 function button(el: HTMLElement): HTMLButtonElement {
   return el.querySelector('button') as HTMLButtonElement;
+}
+
+function anchor(el: HTMLElement): HTMLAnchorElement {
+  return el.querySelector('a') as HTMLAnchorElement;
 }
 
 function icons(el: HTMLElement): HTMLElement[] {
@@ -91,6 +106,7 @@ describe('rhombus-button', () => {
 
   it('disables the native button when disabled is set', () => {
     const { fixture, host, el } = setup();
+    fixture.detectChanges();
     expect(button(el).disabled).toBe(false);
     host.disabled = true;
     fixture.detectChanges();
@@ -136,5 +152,104 @@ describe('rhombus-button', () => {
     const { fixture, el } = setup();
     fixture.detectChanges();
     expect(await axe(el)).toHaveNoViolations();
+  });
+
+  describe('link variant', () => {
+    it('renders an anchor (not a button) when routerLink is set', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/dashboard';
+      fixture.detectChanges();
+      expect(button(el)).toBeNull();
+      const a = anchor(el);
+      expect(a).toBeTruthy();
+      expect(a.textContent?.trim()).toContain('Save');
+      expect(a.classList).toContain('rhombus-button');
+      expect(a.classList).toContain('rhombus-button--primary');
+      expect(a.getAttribute('href')).toBe('/dashboard');
+    });
+
+    it('renders an anchor with href when href is set', () => {
+      const { fixture, host, el } = setup();
+      host.href = 'https://rhombuskit.online';
+      fixture.detectChanges();
+      expect(button(el)).toBeNull();
+      expect(anchor(el).getAttribute('href')).toBe('https://rhombuskit.online');
+    });
+
+    it('prefers routerLink over href when both are set', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/a';
+      host.href = '/b';
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('href')).toBe('/a');
+    });
+
+    it('still carries appearance/size/variant/icons on the anchor', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/x';
+      host.variant = 'ghost';
+      host.size = 'lg';
+      host.appearance = 'outlined';
+      host.leadingIcon = 'home';
+      host.trailingIcon = 'arrow_forward';
+      fixture.detectChanges();
+      const a = anchor(el);
+      expect(a.classList).toContain('rhombus-button--ghost');
+      expect(a.classList).toContain('rhombus-button--lg');
+      expect(a.classList).toContain('rhombus-button--outlined');
+      expect(icons(el).map((i) => i.textContent?.trim())).toEqual([
+        'home',
+        'arrow_forward',
+      ]);
+    });
+
+    it('marks a disabled routerLink anchor inert (aria-disabled, no tab, no href)', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/x';
+      host.disabled = true;
+      fixture.detectChanges();
+      const a = anchor(el);
+      expect(a.getAttribute('aria-disabled')).toBe('true');
+      expect(a.getAttribute('tabindex')).toBe('-1');
+      expect(a.hasAttribute('href')).toBe(false);
+    });
+
+    it('marks a disabled href anchor inert', () => {
+      const { fixture, host, el } = setup();
+      host.href = 'https://rhombuskit.online';
+      host.disabled = true;
+      fixture.detectChanges();
+      const a = anchor(el);
+      expect(a.getAttribute('aria-disabled')).toBe('true');
+      expect(a.getAttribute('tabindex')).toBe('-1');
+      expect(a.hasAttribute('href')).toBe(false);
+    });
+
+    it('passes target through and hardens rel for _blank by default', () => {
+      const { fixture, host, el } = setup();
+      host.href = 'https://example.com';
+      host.target = '_blank';
+      fixture.detectChanges();
+      const a = anchor(el);
+      expect(a.getAttribute('target')).toBe('_blank');
+      expect(a.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('respects an explicit rel over the _blank default', () => {
+      const { fixture, host, el } = setup();
+      host.href = 'https://example.com';
+      host.target = '_blank';
+      host.rel = 'external';
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('rel')).toBe('external');
+    });
+
+    it('has no accessibility violations as a link', async () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/x';
+      host.label = 'Go to dashboard';
+      fixture.detectChanges();
+      expect(await axe(el)).toHaveNoViolations();
+    });
   });
 });

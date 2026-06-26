@@ -10,6 +10,7 @@ import { searchComponents, getComponentApi, listTokens, getToken } from '../src/
 
 // --- Pure accessors -------------------------------------------------------
 assert.ok(searchComponents('button').some((c) => c.slug === 'button'), 'search finds button');
+assert.ok(searchComponents('nav').some((c) => c.slug === 'nav-list'), 'search finds nav-list');
 assert.ok(searchComponents('Forms').length >= 1, 'search matches by group');
 assert.ok(searchComponents().length >= 28, 'empty query returns all components');
 
@@ -24,11 +25,27 @@ assert.deepEqual(getComponentApi('definitely-not-a-symbol'), { symbols: [], comp
 const shadows = listTokens('shadow');
 assert.equal(shadows.length, 5, 'five shadow tokens');
 assert.ok(shadows.every((t) => t.type === 'shadow'), 'shadow filter typed');
-assert.ok(listTokens().length === 58, 'list all = full contract');
+
+// list_tokens returns the 58-name themed CONTRACT plus the published geometry /
+// motion primitives (radius / motion / border-width) so downstream tooling sees
+// the full token API.
+const all = listTokens();
+assert.ok(all.length > 58, 'list all = contract + published primitives');
+assert.ok(all.some((t) => t.name === '--bg'), 'list includes contract tokens');
+assert.ok(
+  listTokens('radius').length >= 7 && listTokens('radius').every((t) => t.name.startsWith('--radius-')),
+  'radius query returns the radius scale',
+);
+assert.ok(listTokens('motion').length >= 8, 'motion query returns the motion scale');
+assert.ok(
+  listTokens('border-width').some((t) => t.name === '--border-width'),
+  'border-width is listed',
+);
 
 assert.equal(getToken('--bg')?.name, '--bg', 'getToken by full name');
 assert.equal(getToken('text-primary')?.name, '--text-primary', 'getToken accepts stripped name');
 assert.ok(getToken('--font-sans')?.light.includes('Inter'), 'font token value resolved');
+assert.equal(getToken('--radius-xs')?.light, '0.25rem', 'getToken resolves a published primitive');
 assert.equal(getToken('nope'), undefined, 'unknown token → undefined');
 
 // --- In-memory server round-trip -----------------------------------------

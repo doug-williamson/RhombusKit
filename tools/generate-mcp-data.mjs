@@ -113,6 +113,18 @@ export function buildMcpData({ apis, snapshot, navigationSource, theming, design
     throw new Error(`design-tokens.json is missing CONTRACT tokens: ${missing.join(', ')}`);
   }
 
+  // Append the PUBLISHED geometry / motion primitives (radius / motion /
+  // border-width). They are theme-invariant (light === dark) so they live outside
+  // the themed CONTRACT, but they ARE a published part of the token API — so the
+  // MCP server's list_tokens / get_token surface them too. The raw colour palette
+  // and font-family primitives stay internal (not listed).
+  const PUBLISHED_PRIMITIVE_PREFIXES = ['radius-', 'motion-duration-', 'motion-ease-', 'border-width'];
+  for (const key of Object.keys(primitives)) {
+    if (!PUBLISHED_PRIMITIVE_PREFIXES.some((p) => key.startsWith(p))) continue;
+    const value = primitives[key].$value;
+    tokens.push({ name: `--${key}`, type: primitives[key].$type, light: value, dark: value });
+  }
+
   return { site: SITE, repo: REPO, summary: SUMMARY, packages: PACKAGES, components, guides, api, tokens, theming };
 }
 

@@ -66,6 +66,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/menu', label: 'Menu' },
       { path: '/components/popover', label: 'Popover' },
       { path: '/components/bottom-nav', label: 'Bottom nav' },
+      { path: '/components/nav-list', label: 'Nav List' },
       { path: '/components/breadcrumbs', label: 'Breadcrumbs' },
       { path: '/components/pagination', label: 'Pagination' },
     ],

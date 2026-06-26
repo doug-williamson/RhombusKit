@@ -46,6 +46,7 @@ export const tokens = {
   "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif",
   "radius-none": "0",
   "radius-sm": "0.125rem",
+  "radius-xs": "0.25rem",
   "radius-md": "0.375rem",
   "radius-lg": "0.5rem",
   "radius-xl": "0.75rem",
@@ -57,7 +58,9 @@ export const tokens = {
   "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
   "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)",
   "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)",
-  "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"
+  "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)",
+  "border-width": "1px",
+  "border-width-strong": "2px"
 } as const,
   themes: {
     'rhombus-light': {
