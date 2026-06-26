@@ -39,14 +39,16 @@
     <meta name="twitter:image" content="https://rhombuskit.online/og-image.png" />
     <!--
       Flash-of-wrong-theme prevention. Must run before Angular bootstraps and
-      before first paint. Copy-pasted from @rhombuskit/theme-engine's
-      THEME_INIT_SCRIPT constant — this showcase is the canonical reference, so
-      future changes to that constant must be mirrored here by hand. Drift
-      between the two is a bug (the service expects the same STORAGE_KEY,
-      THEME_ATTRIBUTE, and recognized values).
+      before first paint. Based on @rhombuskit/theme-engine's THEME_INIT_SCRIPT,
+      widened to also accept this app's registered community-* themes (the
+      prefix form of getThemeInitScript(config, COMMUNITY_REGISTERED_THEMES)) so
+      a persisted community theme is set pre-paint. Their [data-theme] CSS is
+      rendered into <head> during SSG (see AppComponent), so first paint is fully
+      styled — no flash on hard reload. Keep STORAGE_KEY/THEME_ATTRIBUTE in sync
+      with the service.
     -->
     <script>
-      (function(){try{var s=localStorage.getItem('rhombuskit:theme-preference');var r;if(s==='rhombus-light'||s==='rhombus-dark'){r=s;}else{r=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'rhombus-dark':'rhombus-light';}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
+      (function(){try{var s=localStorage.getItem('rhombuskit:theme-preference');var r;if(s==='rhombus-light'||s==='rhombus-dark'||(s&&s.indexOf('community-')===0)){r=s;}else{r=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'rhombus-dark':'rhombus-light';}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
     </script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
