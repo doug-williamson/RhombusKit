@@ -27,10 +27,13 @@ export interface ThemeRegistry {
 export type ThemeName = keyof ThemeRegistry;
 
 /**
- * What the user can express as a preference. Either a concrete theme, or
- * 'system' meaning "follow OS preference."
+ * What the user can express as a preference:
+ *   - a concrete theme name;
+ *   - `'system'` — follow the OS within the built-in palette;
+ *   - `` `system:${palette}` `` — follow the OS within a specific registered
+ *     palette (so "follow system" survives a non-built-in palette choice).
  */
-export type ThemePreference = ThemeName | 'system';
+export type ThemePreference = ThemeName | 'system' | `system:${string}`;
 
 /**
  * Metadata describing a theme registered with the engine, so the theme controls

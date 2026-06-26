@@ -118,9 +118,9 @@ export class RhombusThemeMenuComponent {
   /** Registered palettes (a palette section renders only when there's >1). */
   protected readonly palettes = this.theme.palettes;
 
-  /** `'system'` when following the OS, else the resolved light/dark mode. */
+  /** `'system'` when following the OS (any palette), else the resolved light/dark mode. */
   protected readonly activeMode = computed<'light' | 'dark' | 'system'>(() =>
-    this.theme.preference() === 'system' ? 'system' : this.theme.mode(),
+    this.theme.followsSystem() ? 'system' : this.theme.mode(),
   );
 
   protected readonly currentIcon = computed(() => {

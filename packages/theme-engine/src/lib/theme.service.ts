@@ -15,11 +15,7 @@ import {
   STORAGE_KEY,
   THEME_ATTRIBUTE,
 } from './theme.tokens';
-
-/** Strip a trailing `-light`/`-dark` from a theme name to get its palette id. */
-function paletteOf(name: string): string {
-  return name.replace(/-(light|dark)$/, '');
-}
+import { formatSystem, paletteOf, parsePreference } from './theme.util';
 
 /** Strip a trailing "light"/"dark" word from a label (`'Teal Light'` → `'Teal'`). */
 function paletteLabel(label: string): string {
@@ -85,14 +81,17 @@ function groupByPalette(
  * Theme management service.
  *
  * Tracks two pieces of state:
- *   - preference: what the user explicitly chose (config.light | config.dark | 'system')
- *   - current:    the resolved theme actually applied to the DOM (never 'system')
+ *   - preference: what the user explicitly chose — a concrete theme name,
+ *                 'system' (follow OS in the built-in palette), or
+ *                 'system:<palette>' (follow OS within a specific palette)
+ *   - current:    the resolved theme actually applied to the DOM (always concrete)
  *
  * The concrete light/dark theme names come from RHOMBUS_THEME_CONFIG (see
  * provideRhombusTheme). Unconfigured, they are 'rhombus-light'/'rhombus-dark'.
  *
- * When preference is 'system', current resolves via prefers-color-scheme and
- * updates reactively if the OS theme changes mid-session.
+ * When preference follows the OS, current resolves via prefers-color-scheme —
+ * within the built-in palette for 'system', or the named palette for
+ * 'system:<palette>' — and updates reactively if the OS theme changes mid-session.
  *
  * SSR-safe. On the server, all operations are no-ops; the service resolves to
  * the configured light theme and never touches localStorage or matchMedia.
@@ -160,11 +159,24 @@ export class RhombusThemeService {
    */
   readonly current = computed<ThemeName>(() => {
     const pref = this._preference();
-    if (pref === 'system') {
-      return this.systemPrefersDark() ? this.config.dark : this.config.light;
+    const parsed = parsePreference(pref);
+    if (parsed.kind === 'system') {
+      return this.resolveSystem(
+        parsed.palette ?? this.builtinPalette,
+        this.systemPrefersDark(),
+      );
     }
-    return pref;
+    return pref as ThemeName;
   });
+
+  /**
+   * Whether the active preference follows the OS — `'system'` (built-in palette)
+   * or `'system:<palette>'` (a specific palette). The theme controls read this
+   * to highlight the System option regardless of which palette is active.
+   */
+  readonly followsSystem = computed<boolean>(
+    () => parsePreference(this._preference()).kind === 'system',
+  );
 
   /**
    * All registered themes — config-derived built-ins first, then declarative
@@ -246,13 +258,13 @@ export class RhombusThemeService {
    * Cycle the active palette's mode: light → dark → system → light.
    *
    * For the built-in palette this is the historical light → dark → system cycle.
-   * When a non-built-in palette is active, the light/dark legs stay WITHIN that
-   * palette (e.g. teal-light → teal-dark); the system leg returns to the
-   * OS-following built-in ('system' is a built-in-palette concept). Byte-identical
-   * for a single-palette (unconfigured) app.
+   * Every leg — including system — stays WITHIN the active palette (e.g.
+   * teal-light → teal-dark → follow-OS-in-teal → teal-light), so toggling never
+   * discards a non-built-in palette. Byte-identical for a single-palette
+   * (unconfigured) app, where the system leg is the bare 'system' preference.
    */
   toggle(): void {
-    if (this._preference() === 'system') {
+    if (this.followsSystem()) {
       this.setMode('light');
     } else {
       this.setMode(this.mode() === 'light' ? 'dark' : 'system');
@@ -261,15 +273,18 @@ export class RhombusThemeService {
 
   /**
    * Set the light/dark mode WITHIN the active palette, without changing palette.
-   * `'system'` returns to the OS-following built-in. If the active palette has no
-   * member for the requested mode, falls back to the built-in of that mode.
+   * `'system'` follows the OS within the active palette (bare `'system'` for the
+   * built-in, `'system:<palette>'` otherwise). If the active palette has no
+   * member for the requested light/dark mode, falls back to the built-in of that
+   * mode.
    */
   setMode(mode: 'light' | 'dark' | 'system'): void {
+    const active = this.palette();
     if (mode === 'system') {
-      this.setTheme('system');
+      // Follow the OS WITHIN the active palette (bare 'system' for the built-in).
+      this.setTheme(formatSystem(active, this.builtinPalette));
       return;
     }
-    const active = this.palette();
     const match = this.themes().find(
       (t) => (t.palette ?? paletteOf(t.name)) === active && t.mode === mode,
     );
@@ -283,14 +298,18 @@ export class RhombusThemeService {
    * theme for the current mode; a no-op for an unknown palette.
    */
   setPalette(palette: string): void {
-    const mode = this.mode();
     const members = this.themes().filter(
       (t) => (t.palette ?? paletteOf(t.name)) === palette,
     );
-    const target = members.find((t) => t.mode === mode)?.name ?? members[0]?.name;
-    if (target) {
-      this.setTheme(target);
+    if (!members.length) return; // unknown palette: no-op (unchanged contract)
+    if (this.followsSystem()) {
+      // Preserve "follow OS" — just move it to the new palette.
+      this.setTheme(formatSystem(palette, this.builtinPalette));
+      return;
     }
+    const mode = this.mode();
+    const target = members.find((t) => t.mode === mode)?.name ?? members[0].name;
+    this.setTheme(target);
   }
 
   /**
@@ -324,11 +343,32 @@ export class RhombusThemeService {
    * they are session-only by design (use provideRhombusThemes() for persistence).
    */
   private isAcceptablePreference(value: string): boolean {
-    if (value === 'system') return true;
+    const parsed = parsePreference(value);
+    if (parsed.kind === 'system') {
+      // Bare 'system' always restores; 'system:<palette>' restores only when that
+      // palette exists in the construction-time registry (built-ins + provided).
+      if (parsed.palette === undefined) return true;
+      return [...this.builtinThemes, ...this.providedThemes].some(
+        (t) => (t.palette ?? paletteOf(t.name)) === parsed.palette,
+      );
+    }
     return (
       this.builtinThemes.some((t) => t.name === value) ||
       this.providedThemes.some((t) => t.name === value)
     );
+  }
+
+  /**
+   * Resolve a "follow OS" preference to a concrete theme within `palette`. Falls
+   * back to the built-in theme of the OS-resolved polarity when the palette has
+   * no member for that mode, so light/dark always tracks the OS.
+   */
+  private resolveSystem(palette: string, wantDark: boolean): ThemeName {
+    const mode = wantDark ? 'dark' : 'light';
+    const member = this.themes().find(
+      (t) => (t.palette ?? paletteOf(t.name)) === palette && t.mode === mode,
+    );
+    return member?.name ?? (wantDark ? this.config.dark : this.config.light);
   }
 
   private subscribeToSystemTheme(): void {

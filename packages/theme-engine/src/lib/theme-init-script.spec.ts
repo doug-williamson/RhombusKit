@@ -70,3 +70,63 @@ describe('getThemeInitScript — registered themes (Phase 3 no-flash)', () => {
     expect(run(getThemeInitScript())).toBe('rhombus-light');
   });
 });
+
+describe('getThemeInitScript — system:<palette> pre-paint (palette-aware System)', () => {
+  const tealLight: RegisteredTheme = {
+    name: 'community-teal-light' as ThemeName,
+    label: 'Teal Light',
+    mode: 'light',
+    palette: 'teal',
+  };
+  const tealDark: RegisteredTheme = {
+    name: 'community-teal-dark' as ThemeName,
+    label: 'Teal Dark',
+    mode: 'dark',
+    palette: 'teal',
+  };
+
+  function run(out: string): string | null {
+    document.documentElement.removeAttribute('data-theme');
+    const body = out.replace(/^<script>/, '').replace(/<\/script>$/, '');
+    eval(body);
+    return document.documentElement.getAttribute('data-theme');
+  }
+
+  function mockMatchMedia(matches: boolean): void {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: () => ({ matches }),
+    });
+  }
+
+  afterEach(() => {
+    // Restore jsdom's default (matchMedia absent) for the other suites.
+    delete (window as { matchMedia?: unknown }).matchMedia;
+  });
+
+  it('resolves system:<palette> to the palette member matching the OS', () => {
+    localStorage.clear();
+    localStorage.setItem(STORAGE_KEY, 'system:teal');
+    const script = getThemeInitScript(undefined, [tealLight, tealDark]);
+
+    mockMatchMedia(false);
+    expect(run(script)).toBe('community-teal-light');
+    mockMatchMedia(true);
+    expect(run(script)).toBe('community-teal-dark');
+  });
+
+  it('falls back to the built-in polarity for an unknown palette', () => {
+    localStorage.clear();
+    localStorage.setItem(STORAGE_KEY, 'system:ocean'); // not registered
+    mockMatchMedia(true);
+    expect(run(getThemeInitScript(undefined, [tealLight, tealDark]))).toBe('rhombus-dark');
+  });
+
+  it('falls back to the built-in polarity when the palette lacks the OS mode', () => {
+    localStorage.clear();
+    localStorage.setItem(STORAGE_KEY, 'system:teal');
+    mockMatchMedia(false); // OS light, but only the dark teal member is registered
+    expect(run(getThemeInitScript(undefined, [tealDark]))).toBe('rhombus-light');
+  });
+});

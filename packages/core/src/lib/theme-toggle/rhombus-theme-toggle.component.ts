@@ -54,9 +54,9 @@ export class RhombusThemeToggleComponent {
   /** Whether to show the hover tooltip describing the current/next theme. */
   readonly showTooltip = input<boolean>(true);
 
-  /** `'system'` when following the OS, else the active theme's resolved mode. */
+  /** `'system'` when following the OS (any palette), else the active theme's resolved mode. */
   protected readonly activeMode = computed<'light' | 'dark' | 'system'>(() =>
-    this.theme.preference() === 'system' ? 'system' : this.theme.mode(),
+    this.theme.followsSystem() ? 'system' : this.theme.mode(),
   );
 
   protected readonly currentIcon = computed(() => {

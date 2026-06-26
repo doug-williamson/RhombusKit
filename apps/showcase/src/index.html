@@ -42,13 +42,16 @@
       before first paint. Based on @rhombuskit/theme-engine's THEME_INIT_SCRIPT,
       widened to also accept this app's registered community-* themes (the
       prefix form of getThemeInitScript(config, COMMUNITY_REGISTERED_THEMES)) so
-      a persisted community theme is set pre-paint. Their [data-theme] CSS is
-      rendered into <head> during SSG (see AppComponent), so first paint is fully
-      styled — no flash on hard reload. Keep STORAGE_KEY/THEME_ATTRIBUTE in sync
-      with the service.
+      a persisted community theme is set pre-paint, AND to resolve the
+      `system:<palette>` "follow OS within a palette" preference (here: teal) to
+      the matching community member by prefers-color-scheme. Their [data-theme]
+      CSS is rendered into <head> during SSG (see AppComponent), so first paint
+      is fully styled — no flash on hard reload. An unknown palette or missing
+      member degrades to the built-in of the OS polarity. Keep
+      STORAGE_KEY/THEME_ATTRIBUTE and the palette map in sync with the service.
     -->
     <script>
-      (function(){try{var s=localStorage.getItem('rhombuskit:theme-preference');var r;if(s==='rhombus-light'||s==='rhombus-dark'||(s&&s.indexOf('community-')===0)){r=s;}else{r=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'rhombus-dark':'rhombus-light';}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
+      (function(){try{var P={"teal":{"l":"community-teal-light","d":"community-teal-dark"}};var s=localStorage.getItem('rhombuskit:theme-preference');var dk=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;var bi=dk?'rhombus-dark':'rhombus-light';var r;if(s&&s.indexOf('system:')===0){var g=P[s.slice(7)];r=g?((dk?g.d:g.l)||bi):bi;}else if(s==='rhombus-light'||s==='rhombus-dark'||(s&&s.indexOf('community-')===0)){r=s;}else{r=bi;}document.documentElement.setAttribute('data-theme',r);}catch(e){}})();
     </script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />

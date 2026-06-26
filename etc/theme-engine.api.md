@@ -26,6 +26,7 @@
 
 ### RhombusThemeService (class)
   readonly current: _angular_core.Signal<keyof ThemeRegistry>
+  readonly followsSystem: _angular_core.Signal<boolean>
   readonly mode: _angular_core.Signal<"light" | "dark">
   readonly palette: _angular_core.Signal<string>
   readonly palettes: _angular_core.Signal<readonly { palette: string; label: string; light?: ThemeName; dark?: ThemeName; }[]>
@@ -50,7 +51,7 @@
   type ThemeName = keyof ThemeRegistry
 
 ### ThemePreference (type)
-  type ThemePreference = ThemeName | 'system'
+  type ThemePreference = ThemeName | 'system' | `system:${string}`
 
 ### ThemeRegistry (interface)
   rhombus-dark: true

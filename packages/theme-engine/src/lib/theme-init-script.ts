@@ -5,6 +5,7 @@ import {
   type RhombusThemeConfig,
 } from './theme.tokens';
 import type { RegisteredTheme } from './theme.types';
+import { paletteOf } from './theme.util';
 
 /**
  * Builds the pre-paint init script body for a given resolved-theme config.
@@ -33,7 +34,22 @@ function buildInitBody(
   const names = registeredThemes.map((t) => t.name);
   const rDecl = names.length ? `,R=${JSON.stringify(names)}` : '';
   const rCheck = names.length ? '||R.indexOf(s)>=0' : '';
-  return `(function(){try{var L='${light}',D='${dark}',d='${def}'${rDecl};var s=localStorage.getItem('${STORAGE_KEY}');var p=(s===L||s===D||s==='system'${rCheck})?s:d;var r=p==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?D:L):p;document.documentElement.setAttribute('${THEME_ATTRIBUTE}',r);}catch(e){}})();`;
+  // Palette -> light/dark member map, so a stored `system:<palette>` resolves to
+  // that palette's member by prefers-color-scheme (mirrors resolveSystem). Built
+  // here in TS; emitted (with the rewrite that consumes it) ONLY when themes are
+  // registered, keeping the default output byte-identical. An unknown palette or
+  // a missing member degrades to bare 'system' -> built-in (polarity preserved).
+  const paletteMap: Record<string, { l?: string; d?: string }> = {};
+  for (const t of registeredThemes) {
+    const pid = t.palette ?? paletteOf(t.name);
+    const slot = (paletteMap[pid] ??= {});
+    if (t.mode === 'light') slot.l = t.name;
+    else slot.d = t.name;
+  }
+  const sysRewrite = names.length
+    ? `var P=${JSON.stringify(paletteMap)};if(s&&s.indexOf('system:')===0){var g=P[s.slice(7)],dk=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;s=g?((dk?g.d:g.l)||'system'):'system';}`
+    : '';
+  return `(function(){try{var L='${light}',D='${dark}',d='${def}'${rDecl};var s=localStorage.getItem('${STORAGE_KEY}');${sysRewrite}var p=(s===L||s===D||s==='system'${rCheck})?s:d;var r=p==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?D:L):p;document.documentElement.setAttribute('${THEME_ATTRIBUTE}',r);}catch(e){}})();`;
 }
 
 /**
