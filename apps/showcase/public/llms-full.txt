@@ -4,7 +4,8 @@
 
 This file is generated from the committed API snapshots (`etc/*.api.md`), the
 design-token CONTRACT (`packages/tokens/contract.snapshot.json`), and the
-theming guide. It is the machine-readable companion to https://rhombuskit.online.
+theming guide. It is the machine-readable companion to https://rhombuskit.online. For interactive
+access, run the MCP server: `npx -y @rhombuskit/mcp`.
 
 ## Packages
 
