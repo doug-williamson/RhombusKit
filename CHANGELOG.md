@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/doug-williamson/RhombusKit/compare/v1.7.1...v1.7.2) (2026-06-26)
+
+
+### Bug Fixes
+
+* **core:** nav-list heading contrast and hover on sidebar surfaces ([#104](https://github.com/doug-williamson/RhombusKit/issues/104)) ([733c7e4](https://github.com/doug-williamson/RhombusKit/commit/733c7e492d0b0134e009d5d5bab7cd5eb00396cc))
+
 ## [1.7.1](https://github.com/doug-williamson/RhombusKit/compare/v1.7.0...v1.7.1) (2026-06-26)
 
 
