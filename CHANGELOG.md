@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.6.0](https://github.com/doug-williamson/RhombusKit/compare/v1.5.0...v1.6.0) (2026-06-26)
+
+
+### Features
+
+* **core:** add `ng add @rhombuskit/core` schematic ([dfdacea](https://github.com/doug-williamson/RhombusKit/commit/dfdaceab4afe7edb91da7a24b31d9b707467a4fd)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **core:** ng add @rhombuskit/core schematic ([59a0366](https://github.com/doug-williamson/RhombusKit/commit/59a036690b774a5073f6ca15f947913ebb4ca321))
+* **core:** theme controls read the registry — palette-aware menu/toggle (Phase 4) ([#90](https://github.com/doug-williamson/RhombusKit/issues/90)) ([b005c7b](https://github.com/doug-williamson/RhombusKit/commit/b005c7b8110a7dc7dc60b91de848d7cd17399ab9))
+* **mcp:** publish @rhombuskit/mcp — an MCP docs server for AI assistants ([#93](https://github.com/doug-williamson/RhombusKit/issues/93)) ([#96](https://github.com/doug-williamson/RhombusKit/issues/96)) ([d75d825](https://github.com/doug-williamson/RhombusKit/commit/d75d825a80ee80857be04890dcd50997b431558d))
+* **showcase:** add "Open in StackBlitz" starter ([4aeddaa](https://github.com/doug-williamson/RhombusKit/commit/4aeddaa145d9500468066e5b0f8e0868d8621a83)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** add honest /accessibility report page ([f18eb1b](https://github.com/doug-williamson/RhombusKit/commit/f18eb1bcc68b6ca996e33a93befc68a88ba093ec)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** add Migrate-from-Material gap-finder + comparison ([804cdb7](https://github.com/doug-williamson/RhombusKit/commit/804cdb788b0443532714d53c06df948a26d7abce)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** add per-page feedback widget with privacy-friendly analytics ([d4261c9](https://github.com/doug-williamson/RhombusKit/commit/d4261c951f2f6d882eb956660e61e51ed8470676)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** add public Now/Next/Considering roadmap ([bfdaa58](https://github.com/doug-williamson/RhombusKit/commit/bfdaa58c78b024261fc2add33943cfe2e70ce597)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** add Teal Dark community theme ([#86](https://github.com/doug-williamson/RhombusKit/issues/86)) ([b5e652f](https://github.com/doug-williamson/RhombusKit/commit/b5e652f1c38196dbee4154b7c7d447aef7f17e89))
+* **showcase:** community theme gallery + AA-validated contribution path ([b4571e8](https://github.com/doug-williamson/RhombusKit/commit/b4571e84624b386fc116b025bf0a81be1c4a556c))
+* **showcase:** community theme gallery with AA-validated contribution path ([818da39](https://github.com/doug-williamson/RhombusKit/commit/818da39f1b89aa3d959c97d978c566c84b4797d8)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** community themes are first-class — reflected, persisted, app-wide (Phase 5) ([#91](https://github.com/doug-williamson/RhombusKit/issues/91)) ([a9dbd09](https://github.com/doug-williamson/RhombusKit/commit/a9dbd098ab2f697efe0426752e9c1a89c4c8bc1f))
+* **showcase:** generate llms.txt + llms-full.txt for AI assistants ([c69f730](https://github.com/doug-williamson/RhombusKit/commit/c69f7304f0b60f4de53ab635961731bc02689987))
+* **showcase:** generate llms.txt + llms-full.txt for AI assistants ([0aa72ad](https://github.com/doug-williamson/RhombusKit/commit/0aa72ad56234597a3adefa44d26fa79211fec1d3)), closes [#70](https://github.com/doug-williamson/RhombusKit/issues/70)
+* **showcase:** honest /accessibility report page ([f8f36b7](https://github.com/doug-williamson/RhombusKit/commit/f8f36b73c3f04abc9c080590d33f76d79c8d4162))
+* **showcase:** in-product feedback widget + analytics + triage bots ([af7e5ba](https://github.com/doug-williamson/RhombusKit/commit/af7e5ba5a8104507c5d3e9b7fcfd3e32d1d0a4df))
+* **showcase:** Migrate-from-Material gap-finder + honest comparison ([a239130](https://github.com/doug-williamson/RhombusKit/commit/a2391303527ff22270348e53f742de5d545d64f0))
+* **showcase:** Open-in-StackBlitz starter ([0c16b4f](https://github.com/doug-williamson/RhombusKit/commit/0c16b4f603d07046f2594df7082b9b8d53e01a16))
+* **showcase:** promote @rhombuskit/tokens as a standalone product (Wave 6b) ([#85](https://github.com/doug-williamson/RhombusKit/issues/85)) ([f654c9f](https://github.com/doug-williamson/RhombusKit/commit/f654c9f9f6f5581e9619319e98d82cbd0b8a96c7))
+* **showcase:** public Now/Next/Considering roadmap ([f150c2d](https://github.com/doug-williamson/RhombusKit/commit/f150c2df4312c3c467a5bb03b3541cab0471343e))
+* **showcase:** statically prerender all routes (SSG) ([40d1dd5](https://github.com/doug-williamson/RhombusKit/commit/40d1dd5ba6f9fb539d156aab331058097760214b))
+* **showcase:** statically prerender all routes (SSG) ([edfd1f3](https://github.com/doug-williamson/RhombusKit/commit/edfd1f30efcbfb1ebcf847d0812496a7d5969220))
+* **showcase:** true no-flash for persisted community themes ([#92](https://github.com/doug-williamson/RhombusKit/issues/92)) ([d5c6878](https://github.com/doug-williamson/RhombusKit/commit/d5c6878bce2478b285f9951b3829fd8e232414d0))
+* **theme-engine:** add theme registry foundation (Phase 1) ([#87](https://github.com/doug-williamson/RhombusKit/issues/87)) ([b7aaffb](https://github.com/doug-williamson/RhombusKit/commit/b7aaffb05f6c8efddde1ec53d8c5eeb3995b8db9))
+* **theme-engine:** mode/palette controls + registered-theme persistence (Phase 2) ([#88](https://github.com/doug-williamson/RhombusKit/issues/88)) ([12ceaf1](https://github.com/doug-williamson/RhombusKit/commit/12ceaf1d59ba1b1f16c16410250f15b6fbc5b394))
+* **theme-engine:** pre-paint init script honours registered themes (Phase 3) ([#89](https://github.com/doug-williamson/RhombusKit/issues/89)) ([d9b48f9](https://github.com/doug-williamson/RhombusKit/commit/d9b48f9f0965fb2f729ebcc5358d1606168ce954))
+* **tokens:** export the CONTRACT as W3C/Tokens-Studio design tokens for Figma ([#94](https://github.com/doug-williamson/RhombusKit/issues/94)) ([#95](https://github.com/doug-williamson/RhombusKit/issues/95)) ([b5483d6](https://github.com/doug-williamson/RhombusKit/commit/b5483d6f14060fe379982f13ff7128e581f9b72b))
+* **tools:** scaffold new components + gate ng-add in CI (Wave 5d) ([#84](https://github.com/doug-williamson/RhombusKit/issues/84)) ([f95bb0d](https://github.com/doug-williamson/RhombusKit/commit/f95bb0d41b80d937b6aa9bf3cd102951e5cc1334))
+
+
+### Bug Fixes
+
+* restore release version state to 1.5.0 and stop the phantom 1.0.0 ([1f935e2](https://github.com/doug-williamson/RhombusKit/commit/1f935e26dd5afc424e57b04d11fa227a2aad9d85))
+* **showcase:** link the Motion page in the sidebar nav ([db8fa2e](https://github.com/doug-williamson/RhombusKit/commit/db8fa2e24c70fd4a1c813fa640ddb13a5b1a82c3))
+* **showcase:** link the Motion page in the sidebar nav ([bb831d2](https://github.com/doug-williamson/RhombusKit/commit/bb831d273de5dcb7c7363750ffdd4bc92a170cc8))
+
 ## [1.5.0](https://github.com/doug-williamson/RhombusKit/compare/v1.4.0...v1.5.0) (2026-06-23)
 
 
