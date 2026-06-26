@@ -17,7 +17,8 @@
         { "type": "json", "path": "packages/tokens/package.json", "jsonpath": "$.version" },
         { "type": "json", "path": "packages/theme-engine/package.json", "jsonpath": "$.version" },
         { "type": "json", "path": "packages/material-preset/package.json", "jsonpath": "$.version" },
-        { "type": "json", "path": "packages/core/package.json", "jsonpath": "$.version" }
+        { "type": "json", "path": "packages/core/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/mcp/package.json", "jsonpath": "$.version" }
       ]
     }
   }

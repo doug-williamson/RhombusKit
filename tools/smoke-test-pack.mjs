@@ -64,7 +64,8 @@ const ANGULAR_RUNTIME = [
   '@angular/animations', // ambient app runtime some Material entrypoints expect
 ];
 
-// Publish order: tokens -> theme-engine -> material-preset -> core.
+// Publish order: tokens -> theme-engine -> material-preset -> core -> mcp.
+// (mcp has no @rhombuskit/* runtime deps, so its position is independent.)
 const PACKAGES = [
   {
     dir: 'tokens',
@@ -96,6 +97,13 @@ const PACKAGES = [
       "if (typeof m.RhombusButtonComponent !== 'function') throw new Error('missing named export: RhombusButtonComponent');",
     ivyMarker: 'ngDeclareComponent',
     scss: true,
+  },
+  {
+    dir: 'mcp',
+    name: '@rhombuskit/mcp',
+    label: 'createServer',
+    assert:
+      "if (typeof m.createServer !== 'function') throw new Error('missing named export: createServer');",
   },
 ];
 
