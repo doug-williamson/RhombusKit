@@ -1,0 +1,54 @@
+{
+  "name": "@rhombuskit/mcp",
+  "version": "1.5.0",
+  "license": "MIT",
+  "description": "Model Context Protocol (MCP) server for RhombusKit — serves the component API surface and the design-token CONTRACT to AI coding assistants. The interactive companion to llms.txt.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "rhombuskit",
+    "design-system",
+    "angular",
+    "ai",
+    "llm"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doug-williamson/RhombusKit.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://rhombuskit.online",
+  "bugs": {
+    "url": "https://github.com/doug-williamson/RhombusKit/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "rhombuskit-mcp": "./dist/cli.mjs"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build && node ../../tools/generate-mcp-data.mjs --check"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  }
+}

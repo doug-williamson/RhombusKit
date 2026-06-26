@@ -70,6 +70,24 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:schematics
 
+  mcp:
+    # @rhombuskit/mcp is verified outside jest (the MCP SDK is ESM and the stdio
+    # server needs no jsdom), via a tsx-run script that unit-tests the pure
+    # accessors and round-trips the real server against an in-memory MCP client.
+    # No build step: tsx runs the source against the committed data bundle. The
+    # bundle's freshness vs the docs sources is guarded by the build job's
+    # `generate-mcp-data --check`. Add to branch protection.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:mcp
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -111,6 +129,14 @@ jobs:
         run: node tools/api-snapshot.mjs
       - name: Verify llms.txt / llms-full.txt are in sync
         run: node tools/generate-llms.mjs --check
+      - name: Verify design-token DTCG export builder
+        run: pnpm test:design-tokens
+      - name: Verify design-tokens.json (Figma export) is in sync
+        run: pnpm exec tsx tools/generate-design-tokens.mjs --check
+      - name: Verify MCP data-bundle builder
+        run: pnpm test:mcp-data
+      - name: Verify mcp-data.ts (bundled docs) is in sync
+        run: node tools/generate-mcp-data.mjs --check
 
   a11y:
     # Phase 4 (secondary): the only reliable color-contrast check. jsdom can't
