@@ -80,6 +80,14 @@ const COLOR_TOKENS: Swatch[] = Object.keys(LIGHT)
             </div>
           }
         </div>
+        <p class="theming-lead">
+          Designing in Figma? The same contract is exported as
+          <a href="/design-tokens.json" download>design-tokens.json</a> — W3C /
+          <a href="https://tokens.studio" target="_blank" rel="noopener"
+            >Tokens Studio</a
+          >
+          format, so Figma variables map 1:1 to these tokens.
+        </p>
       </section>
 
       <section class="showcase-section">
