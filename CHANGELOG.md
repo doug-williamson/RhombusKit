@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/doug-williamson/RhombusKit/compare/v1.7.0...v1.7.1) (2026-06-26)
+
+
+### Bug Fixes
+
+* **core:** button icon alignment, size, and spacing ([#102](https://github.com/doug-williamson/RhombusKit/issues/102)) ([164d6de](https://github.com/doug-williamson/RhombusKit/commit/164d6deb0914ed34c23e3cd5cd7ede6c881419da))
+
 ## [1.7.0](https://github.com/doug-williamson/RhombusKit/compare/v1.6.0...v1.7.0) (2026-06-26)
 
 
