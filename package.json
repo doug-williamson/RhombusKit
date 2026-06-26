@@ -13,6 +13,7 @@
     "release:credits": "node tools/release-credits.mjs",
     "new:component": "node tools/new-component.mjs",
     "test:schematics": "tsx packages/core/schematics/ng-add/ng-add.verify.ts",
+    "test:design-tokens": "tsx tools/generate-design-tokens.test.mjs",
     "prepare": "husky"
   },
   "devDependencies": {
