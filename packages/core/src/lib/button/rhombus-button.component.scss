@@ -6,15 +6,24 @@
   cursor: pointer;
   transition: box-shadow var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
 
-  // Icon vertical-centering. Material wraps the projected content in a *block*
-  // `.mdc-button__label`, where a leading/trailing <mat-icon> (24px, inline-block,
-  // vertical-align: baseline) rides ~6.5px above the text's optical centre and
-  // reads as misaligned. Flex the label so the icon and text centre together; the
-  // icon's existing margin keeps the gap. Verified by Playwright box measurement
-  // (icon centre == button centre) — jsdom has no layout engine to catch this.
+  // Leading/trailing icon treatment. Material wraps the projected content in a
+  // *block* `.mdc-button__label` where a default <mat-icon> is 24px and
+  // vertical-align: baseline — so it renders oversized, gap-less, and ~6.5px above
+  // the text's optical centre. Flex the label (centres the icon + text and supplies
+  // the gap) and size the glyph to the button's font (1.25em ≈ 18px at md), so it
+  // scales with the sm/md/lg variants. Verified by Playwright box measurement
+  // (icon centre == button centre, 18px glyph, ~7px gap) — jsdom has no layout
+  // engine to catch any of this.
   .mdc-button__label {
     display: inline-flex;
     align-items: center;
+    gap: 0.5em;
+  }
+
+  .mat-icon {
+    font-size: 1.25em;
+    width: 1em;
+    height: 1em;
   }
 
   // --- Size variants (height + padding + font scale) ---
