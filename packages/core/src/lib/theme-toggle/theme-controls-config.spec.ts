@@ -236,6 +236,25 @@ describe('theme controls — registry-driven (Phase 4)', () => {
     expect(triggerIconName(fixture)).toBe('dark_mode');
   });
 
+  it('menu marks System active when following the OS within a palette', () => {
+    const fixture = renderMenu();
+    TestBed.inject(RhombusThemeService).setTheme('system:teal');
+    fixture.detectChanges();
+    expect(triggerIconName(fixture)).toBe('contrast');
+    const buttons = openMenuButtons(fixture);
+    expect(byText(buttons, 'System')?.getAttribute('aria-checked')).toBe('true');
+    expect(byText(buttons, 'Dark')?.getAttribute('aria-checked')).toBe('false');
+    expect(byText(buttons, 'Teal')?.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('toggle trigger shows the system icon when following the OS within a palette', () => {
+    configure(tealProviders);
+    const fixture = TestBed.createComponent(RhombusThemeToggleComponent);
+    TestBed.inject(RhombusThemeService).setTheme('system:teal');
+    fixture.detectChanges();
+    expect(triggerIconName(fixture)).toBe('contrast');
+  });
+
   it('a single-family configured app (no -light/-dark stem) stays a 3-item menu', () => {
     configure([
       provideRhombusTheme({

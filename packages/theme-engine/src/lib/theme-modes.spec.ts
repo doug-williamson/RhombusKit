@@ -120,6 +120,7 @@ describe('RhombusThemeService — setMode/setPalette/toggle (Phase 2)', () => {
 
     it('persists a registered theme selection to localStorage', () => {
       const service = setup({ providers: tealProviders });
+      service.setMode('light'); // leave the default OS-following state first
       service.setPalette('teal');
       flush();
       expect(localStorage.getItem(STORAGE_KEY)).toMatch(/^community-teal-(light|dark)$/);
@@ -144,5 +145,84 @@ describe('RhombusThemeService — setMode/setPalette/toggle (Phase 2)', () => {
       service.toggle();
       expect(service.preference()).toBe('community-teal-dark');
     });
+  });
+});
+
+describe('RhombusThemeService — palette-aware System (follow OS within a palette)', () => {
+  it('setMode("system") keeps the active community palette', () => {
+    const service = setup({ providers: tealProviders });
+    service.setTheme('community-teal-light' as ThemeName);
+    service.setMode('system');
+    expect(service.preference()).toBe('system:teal');
+  });
+
+  it('resolves system:teal to the teal member matching the OS', () => {
+    expect(
+      setup({ providers: tealProviders, stored: 'system:teal', dark: false }).current(),
+    ).toBe('community-teal-light');
+    expect(
+      setup({ providers: tealProviders, stored: 'system:teal', dark: true }).current(),
+    ).toBe('community-teal-dark');
+  });
+
+  it('keeps the built-in System as bare "system"', () => {
+    const service = setup();
+    service.setMode('dark');
+    service.setMode('system');
+    expect(service.preference()).toBe('system');
+  });
+
+  it('switching palette while following the OS stays in System (new palette)', () => {
+    const service = setup({ providers: tealProviders, stored: 'system', dark: true });
+    expect(service.followsSystem()).toBe(true);
+
+    service.setPalette('teal');
+    expect(service.preference()).toBe('system:teal');
+    expect(service.followsSystem()).toBe(true);
+    expect(service.current()).toBe('community-teal-dark');
+  });
+
+  it('switching back to the built-in palette while following the OS yields bare "system"', () => {
+    const service = setup({ providers: tealProviders, stored: 'system:teal', dark: true });
+    service.setPalette('rhombus');
+    expect(service.preference()).toBe('system');
+    expect(service.current()).toBe('rhombus-dark');
+  });
+
+  it('followsSystem is true for both system forms, false for a concrete theme', () => {
+    expect(setup({ stored: 'system' }).followsSystem()).toBe(true);
+    expect(
+      setup({ providers: tealProviders, stored: 'system:teal' }).followsSystem(),
+    ).toBe(true);
+    expect(setup({ stored: 'rhombus-dark' }).followsSystem()).toBe(false);
+  });
+
+  it('toggle cycles light -> dark -> system within the teal palette', () => {
+    const service = setup({ providers: tealProviders });
+    service.setTheme('community-teal-light' as ThemeName);
+    service.toggle();
+    expect(service.preference()).toBe('community-teal-dark');
+    service.toggle();
+    expect(service.preference()).toBe('system:teal');
+    service.toggle();
+    expect(service.preference()).toBe('community-teal-light');
+  });
+
+  it('hydrates a stored system:<palette> when the palette is registered', () => {
+    expect(
+      setup({ providers: tealProviders, stored: 'system:teal' }).preference(),
+    ).toBe('system:teal');
+  });
+
+  it('rejects a stored system:<palette> for an unregistered palette (falls back)', () => {
+    expect(setup({ stored: 'system:teal' }).preference()).toBe('system');
+  });
+
+  it('falls back to the built-in polarity when the palette lacks the OS mode', () => {
+    // Only the dark teal member is registered; OS prefers light -> built-in light.
+    const darkOnly = [provideRhombusThemes(teal('dark'))];
+    expect(
+      setup({ providers: darkOnly, stored: 'system:teal', dark: false }).current(),
+    ).toBe('rhombus-light');
   });
 });
