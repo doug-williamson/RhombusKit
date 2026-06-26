@@ -1,15 +1,22 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
   RhombusAppShellComponent,
+  RhombusMenuComponent,
+  RhombusNavListComponent,
   RhombusThemeMenuComponent,
+  type MenuItem,
+  type RhombusNavSection,
 } from '@rhombuskit/core';
 import { AnalyticsService } from './shared/analytics.service';
 import { CommandPaletteComponent } from './shared/command-palette.component';
 import { NAV_GROUPS } from './shared/navigation';
 import { communityThemeCss } from './pages/themes/community-themes';
+
+/** The "learn" group split out of the sidebar into the header "Guides" menu. */
+const GUIDES_GROUP = 'Get started';
 
 /**
  * The showcase chrome dogfoods `<rhombus-app-shell>`: brand, the component nav,
@@ -17,19 +24,24 @@ import { communityThemeCss } from './pages/themes/community-themes';
  * slot holds the router outlet. The shell owns the frame, the collapsible
  * sidenav, and the responsive overlay collapse — `[mobileBreakpoint]="959"`
  * reproduces the previous 960px breakpoint, and `closeOnNavigate` (default)
- * dismisses the overlay drawer after a mobile navigation. Nav-link styling lives
- * in app.component.scss; the shell never styles projected content. The nav list
- * comes from the shared `NAV_GROUPS` (also feeding the command palette).
+ * dismisses the overlay drawer after a mobile navigation.
+ *
+ * The IA splits the single shared `NAV_GROUPS` source (which still feeds the
+ * Cmd-K palette and the MCP catalog) into two surfaces: the "Get started" guides
+ * become a header `<rhombus-menu>` (dogfooding the menu's routerLink items), and
+ * the component reference fills the sidenav via `<rhombus-nav-list>` — which both
+ * tidies the long rail and puts the new nav-list in its natural habitat.
  */
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterLink,
-    RouterLinkActive,
     RouterOutlet,
     MatIconModule,
     RhombusAppShellComponent,
+    RhombusMenuComponent,
+    RhombusNavListComponent,
     RhombusThemeMenuComponent,
     CommandPaletteComponent,
   ],
@@ -38,20 +50,22 @@ import { communityThemeCss } from './pages/themes/community-themes';
     <rhombus-app-shell [mobileBreakpoint]="959">
       <a shellBrand routerLink="/" class="showcase-shell__brand">RhombusKit</a>
 
-      <nav shellNav class="showcase-shell__nav">
-        @for (group of navGroups; track group.label) {
-          <p class="showcase-shell__nav-group">{{ group.label }}</p>
-          @for (item of group.items; track item.path) {
-            <a
-              [routerLink]="item.path"
-              routerLinkActive="is-active"
-              [routerLinkActiveOptions]="{ exact: item.path === '/' }"
-            >
-              {{ item.label }}
-            </a>
-          }
-        }
-      </nav>
+      <rhombus-nav-list
+        shellNav
+        class="showcase-shell__nav-list"
+        [sections]="navSections"
+        ariaLabel="Components"
+      />
+
+      <rhombus-menu
+        shellHeaderActions
+        class="showcase-shell__guides"
+        [items]="guideItems"
+        ariaLabel="Guides menu"
+      >
+        <span>Guides</span>
+        <mat-icon aria-hidden="true">expand_more</mat-icon>
+      </rhombus-menu>
 
       <button
         shellHeaderActions
@@ -74,7 +88,20 @@ import { communityThemeCss } from './pages/themes/community-themes';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  protected readonly navGroups = NAV_GROUPS;
+  /** "Get started" guides → header menu. Home is dropped (the brand links to /). */
+  protected readonly guideItems: MenuItem[] = (
+    NAV_GROUPS.find((g) => g.label === GUIDES_GROUP)?.items ?? []
+  )
+    .filter((item) => item.path !== '/')
+    .map((item) => ({ label: item.label, routerLink: item.path }));
+
+  /** Every other group → the sidebar component reference. */
+  protected readonly navSections: RhombusNavSection[] = NAV_GROUPS.filter(
+    (g) => g.label !== GUIDES_GROUP,
+  ).map((g) => ({
+    heading: g.label,
+    items: g.items.map((item) => ({ label: item.label, routerLink: item.path })),
+  }));
 
   constructor() {
     // No-op on the server and until a GoatCounter endpoint is configured.

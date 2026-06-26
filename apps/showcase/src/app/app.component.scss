@@ -20,49 +20,21 @@
     color: var(--text-primary);
   }
 
-  &__nav-group {
-    margin: 1.25rem 0.75rem 0.25rem;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    // Section heading on the surface-1 sidenav: --text-secondary clears AA here
-    // where the lighter --text-muted (small 11px text) would not.
-    color: var(--text-secondary);
-
-    &:first-child {
-      margin-top: 0;
-    }
+  // Component reference nav, now the dogfooded <rhombus-nav-list> (it brings its
+  // own section/active/hover styling via the contract tokens). The shell's
+  // sidenav body already pads the slot; just give the list a little breathing room.
+  &__nav-list {
+    display: block;
+    padding: 0.75rem;
   }
 
-  &__nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 1rem 0.75rem;
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-
-    a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      // Suppress the default mobile tap-flash; the .is-active state below
-      // is the real selection feedback.
-      -webkit-tap-highlight-color: transparent;
-
-      &:hover {
-        color: var(--text-primary);
-        background-color: var(--surface-1);
-      }
-
-      &.is-active {
-        color: var(--nav-active-text);
-        background-color: var(--nav-active-bg);
-        font-weight: 500;
-      }
+  // Header "Guides" menu — dogfoods <rhombus-menu>'s default trigger. Size the
+  // projected chevron to the trigger's 0.875rem text (mat-icon defaults to 24px).
+  &__guides {
+    mat-icon {
+      font-size: 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
     }
   }
 
