@@ -437,7 +437,7 @@
     },
     "status-archived-text": {
       "$type": "color",
-      "$value": "#64748b"
+      "$value": "#475569"
     },
     "ink-surface": {
       "$type": "color",

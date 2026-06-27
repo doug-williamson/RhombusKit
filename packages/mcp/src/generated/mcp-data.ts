@@ -1118,7 +1118,7 @@ export const MCP_DATA = {
     {
       "name": "--status-archived-text",
       "type": "color",
-      "light": "#64748b",
+      "light": "#475569",
       "dark": "#94a3b8"
     },
     {

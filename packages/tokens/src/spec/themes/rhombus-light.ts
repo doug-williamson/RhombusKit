@@ -75,7 +75,11 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--status-scheduled-bg':    violet[50],
   '--status-scheduled-text':  violet[600],
   '--status-archived-bg':     slate[100],
-  '--status-archived-text':   slate[500],
+  // slate[600] (not slate[500]): slate-500 on slate-100 is ~3.65:1 and fails
+  // WCAG AA for small text (exposed by <rhombus-tag>'s 12px archived pill);
+  // slate-600 clears it (~5.3:1). Only deepens the colour — improves the chip's
+  // archived/danger variant too.
+  '--status-archived-text':   slate[600],
 
   // Ink — theme-invariant inverse surface. IDENTICAL to the dark pack: a
   // constant near-black surface with light text (~17:1, AAA), so decorative UI
