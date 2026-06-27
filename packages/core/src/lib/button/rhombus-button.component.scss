@@ -37,6 +37,21 @@
   &--md.mdc-button { height: auto; min-height: 2.5rem; font-size: 0.875rem;  padding: 0.5rem   1rem;    }
   &--lg.mdc-button { height: auto; min-height: 3rem;   font-size: 1rem;      padding: 0.625rem 1.5rem;  }
 
+  // --- Icon-only mode (compact square) ---
+  // Material pins .mdc-button to min-width: 64px and horizontal padding at
+  // single-class specificity (0,1,0). Anchor the overrides on .&--icon-button.mdc-button
+  // (0,2,0) — the same specificity trick the size rules use — to release the
+  // min-width and zero the padding, then size a square per the size scale (the
+  // square equals each size's min-height: 32 / 40 / 48px). The corner radius is
+  // left untouched so the variant fills, hover shadow, focus ring, and disabled
+  // treatment all carry over and the shape matches the brand's other buttons.
+  // The lone glyph is centred via the label flex.
+  &--icon-button.mdc-button { min-width: 0; padding: 0; }
+  &--icon-button.rhombus-button--sm.mdc-button { width: 2rem;   height: 2rem;   }
+  &--icon-button.rhombus-button--md.mdc-button { width: 2.5rem; height: 2.5rem; }
+  &--icon-button.rhombus-button--lg.mdc-button { width: 3rem;   height: 3rem;   }
+  &--icon-button .mdc-button__label { gap: 0; justify-content: center; }
+
   // --- Colour variants ---
   // Each variant locally rebinds the --mat-sys-* roles that Material reads
   // at paint time, so the button picks up our colours without us touching

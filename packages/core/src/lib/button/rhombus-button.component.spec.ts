@@ -21,6 +21,8 @@ import {
       [disabled]="disabled"
       [leadingIcon]="leadingIcon"
       [trailingIcon]="trailingIcon"
+      [iconButton]="iconButton"
+      [ariaLabel]="ariaLabel"
       [routerLink]="routerLink"
       [href]="href"
       [target]="target"
@@ -37,6 +39,8 @@ class HostComponent {
   disabled = false;
   leadingIcon: string | null = null;
   trailingIcon: string | null = null;
+  iconButton = false;
+  ariaLabel: string | null = null;
   label = 'Save';
   routerLink: string | unknown[] | null = null;
   href: string | null = null;
@@ -152,6 +156,70 @@ describe('rhombus-button', () => {
     const { fixture, el } = setup();
     fixture.detectChanges();
     expect(await axe(el)).toHaveNoViolations();
+  });
+
+  describe('icon-only mode + ariaLabel', () => {
+    it('adds the icon-button class when iconButton is set', () => {
+      const { fixture, host, el } = setup();
+      host.iconButton = true;
+      fixture.detectChanges();
+      expect(button(el).classList).toContain('rhombus-button--icon-button');
+    });
+
+    it('carries the icon-button class on the routerLink and href anchors', () => {
+      const { fixture, host, el } = setup();
+      host.iconButton = true;
+      host.routerLink = '/x';
+      fixture.detectChanges();
+      expect(anchor(el).classList).toContain('rhombus-button--icon-button');
+
+      host.routerLink = null;
+      host.href = 'https://example.com';
+      fixture.detectChanges();
+      expect(anchor(el).classList).toContain('rhombus-button--icon-button');
+    });
+
+    it('suppresses the trailing icon in icon-only mode', () => {
+      const { fixture, host, el } = setup();
+      host.iconButton = true;
+      host.leadingIcon = 'edit';
+      host.trailingIcon = 'arrow_forward';
+      host.ariaLabel = 'Edit';
+      host.label = '';
+      fixture.detectChanges();
+      const rendered = icons(el);
+      expect(rendered.length).toBe(1);
+      expect(rendered[0].textContent?.trim()).toBe('edit');
+    });
+
+    it('forwards ariaLabel to the button and removes it when null', () => {
+      const { fixture, host, el } = setup();
+      host.ariaLabel = 'Edit row';
+      fixture.detectChanges();
+      expect(button(el).getAttribute('aria-label')).toBe('Edit row');
+
+      host.ariaLabel = null;
+      fixture.detectChanges();
+      expect(button(el).hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('forwards ariaLabel to the link anchor', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/x';
+      host.ariaLabel = 'Back';
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('aria-label')).toBe('Back');
+    });
+
+    it('an icon-only button is accessible when ariaLabel supplies the name', async () => {
+      const { fixture, host, el } = setup();
+      host.iconButton = true;
+      host.leadingIcon = 'delete';
+      host.ariaLabel = 'Delete item';
+      host.label = '';
+      fixture.detectChanges();
+      expect(await axe(el)).toHaveNoViolations();
+    });
   });
 
   describe('link variant', () => {
