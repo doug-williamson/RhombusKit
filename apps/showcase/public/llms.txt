@@ -25,6 +25,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Badge](https://rhombuskit.online/components/badge)
 - [Card](https://rhombuskit.online/components/card)
 - [Chip](https://rhombuskit.online/components/chip)
+- [Tag](https://rhombuskit.online/components/tag)
 - [Icon](https://rhombuskit.online/components/icon)
 - [Checkbox](https://rhombuskit.online/components/checkbox)
 - [Radio Group](https://rhombuskit.online/components/radio)

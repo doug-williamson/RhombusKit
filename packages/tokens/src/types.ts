@@ -94,6 +94,12 @@ export const CONTRACT = [
   '--status-archived-bg',
   '--status-archived-text',
 
+  // Ink (theme-INVARIANT inverse surface — identical value in light and dark,
+  // mirroring Material's inverse roles). For decorative UI that must stay dark in
+  // both themes: code-editor mockups, inverted callouts, screenshots.
+  '--ink-surface',
+  '--ink-on-surface',
+
   // Code / syntax highlighting (mapped onto highlight.js token classes by the
   // code-block component; one hue per lexical role, AA on --surface-0 in both
   // themes). Append-only like the rest of the contract.

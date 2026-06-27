@@ -58,6 +58,8 @@
   --status-scheduled-text: map.get($values, 'status-scheduled-text');
   --status-archived-bg: map.get($values, 'status-archived-bg');
   --status-archived-text: map.get($values, 'status-archived-text');
+  --ink-surface: map.get($values, 'ink-surface');
+  --ink-on-surface: map.get($values, 'ink-on-surface');
   --code-keyword: map.get($values, 'code-keyword');
   --code-string: map.get($values, 'code-string');
   --code-function: map.get($values, 'code-function');

@@ -4,16 +4,30 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { Router, provideRouter } from '@angular/router';
 import { axe } from '../../testing/axe';
 import { RhombusNavListComponent } from './rhombus-nav-list.component';
-import { RhombusNavSection } from './nav-list.types';
+import {
+  NavListAppearance,
+  RhombusNavItem,
+  RhombusNavSection,
+} from './nav-list.types';
 
 @Component({
   standalone: true,
   imports: [RhombusNavListComponent],
-  template: `<rhombus-nav-list [sections]="sections" [ariaLabel]="ariaLabel" />`,
+  template: `<rhombus-nav-list
+    [sections]="sections"
+    [ariaLabel]="ariaLabel"
+    [appearance]="appearance"
+    (itemAction)="onItemAction($event)"
+  />`,
 })
 class HostComponent {
   sections: RhombusNavSection[] = [];
   ariaLabel = 'Primary';
+  appearance: NavListAppearance = 'sidebar';
+  actioned: RhombusNavItem[] = [];
+  onItemAction(item: RhombusNavItem): void {
+    this.actioned.push(item);
+  }
 }
 
 function setup(sections: RhombusNavSection[]): {
@@ -174,5 +188,177 @@ describe('rhombus-nav-list', () => {
       },
     ]);
     expect(await axe(el)).toHaveNoViolations();
+  });
+
+  describe('locked items', () => {
+    it('renders a locked item as a focusable button (not an anchor)', () => {
+      const { el } = setup([
+        { items: [{ label: 'Pro feature', routerLink: '/dashboard', locked: true }] },
+      ]);
+      const btn = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__item'
+      );
+      expect(btn).toBeTruthy();
+      expect(btn?.classList).toContain('rhombus-nav-list__item--locked');
+      // It must not navigate — no anchor / href is rendered.
+      expect(el.querySelector('a.rhombus-nav-list__item')).toBeNull();
+      // Buttons are focusable by default (no tabindex removal).
+      expect(btn?.getAttribute('tabindex')).not.toBe('-1');
+    });
+
+    it('shows a trailing lock affordance on locked items', () => {
+      const { el } = setup([
+        { items: [{ label: 'Pro feature', locked: true }] },
+      ]);
+      expect(el.querySelector('rhombus-icon.rhombus-nav-list__lock')).toBeTruthy();
+    });
+
+    it('fires both item.action and (itemAction) on click, without navigating', () => {
+      let actionCalls = 0;
+      const item: RhombusNavItem = {
+        label: 'Pro feature',
+        routerLink: '/dashboard',
+        locked: true,
+        action: () => actionCalls++,
+      };
+      const { fixture, host, el } = setup([{ items: [item] }]);
+      const btn = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__item'
+      );
+      btn?.click();
+      fixture.detectChanges();
+      expect(actionCalls).toBe(1);
+      expect(host.actioned).toEqual([item]);
+    });
+
+    it('lets disabled win over locked (stays inert)', () => {
+      const { el } = setup([
+        {
+          items: [
+            { label: 'Gated', routerLink: '/dashboard', locked: true, disabled: true },
+          ],
+        },
+      ]);
+      // No locked button — falls through to the inert anchor rendering.
+      expect(el.querySelector('button.rhombus-nav-list__item')).toBeNull();
+      const a = el.querySelector<HTMLAnchorElement>('a.rhombus-nav-list__item');
+      expect(a?.getAttribute('aria-disabled')).toBe('true');
+      expect(a?.getAttribute('tabindex')).toBe('-1');
+    });
+  });
+
+  describe('collapsible sections', () => {
+    it('renders the heading as a disclosure button wired to the group', () => {
+      const { el } = setup([
+        {
+          heading: 'Admin',
+          collapsible: true,
+          items: [{ label: 'Settings', routerLink: '/settings' }],
+        },
+      ]);
+      const toggle = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__heading'
+      );
+      expect(toggle).toBeTruthy();
+      expect(toggle?.getAttribute('aria-expanded')).toBe('true');
+      const controls = toggle?.getAttribute('aria-controls');
+      expect(controls).toBeTruthy();
+      const group = el.querySelector('ul.rhombus-nav-list__group');
+      expect(group?.id).toBe(controls);
+    });
+
+    it('honours expanded: false and keeps the group in the DOM but hidden', () => {
+      const { el } = setup([
+        {
+          heading: 'Admin',
+          collapsible: true,
+          expanded: false,
+          items: [{ label: 'Settings', routerLink: '/settings' }],
+        },
+      ]);
+      const toggle = el.querySelector('button.rhombus-nav-list__heading');
+      expect(toggle?.getAttribute('aria-expanded')).toBe('false');
+      const group = el.querySelector<HTMLElement>('ul.rhombus-nav-list__group');
+      expect(group).toBeTruthy(); // still present (aria-controls target)
+      expect(group?.hidden).toBe(true);
+    });
+
+    it('toggles expanded state on click', () => {
+      const { fixture, el } = setup([
+        {
+          heading: 'Admin',
+          collapsible: true,
+          items: [{ label: 'Settings', routerLink: '/settings' }],
+        },
+      ]);
+      const toggle = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__heading'
+      );
+      const group = el.querySelector<HTMLElement>('ul.rhombus-nav-list__group');
+      expect(group?.hidden).toBe(false);
+      toggle?.click();
+      fixture.detectChanges();
+      expect(toggle?.getAttribute('aria-expanded')).toBe('false');
+      expect(group?.hidden).toBe(true);
+    });
+
+    it('leaves a non-collapsible heading as a static paragraph', () => {
+      const { el } = setup([
+        { heading: 'Main', items: [{ label: 'Home', routerLink: '/' }] },
+      ]);
+      expect(el.querySelector('p.rhombus-nav-list__heading')).toBeTruthy();
+      expect(el.querySelector('button.rhombus-nav-list__heading')).toBeNull();
+    });
+  });
+
+  describe('list appearance', () => {
+    it('adds the list modifier and preserves active-state styling', async () => {
+      const { fixture, host, el } = setup([
+        {
+          items: [
+            { label: 'Dashboard', routerLink: '/dashboard', icon: 'dashboard' },
+          ],
+        },
+      ]);
+      host.appearance = 'list';
+      fixture.detectChanges();
+      expect(el.querySelector('nav.rhombus-nav-list--list')).toBeTruthy();
+      await TestBed.inject(Router).navigateByUrl('/dashboard');
+      fixture.detectChanges();
+      expect(el.querySelector('.rhombus-nav-list__item--active')).toBeTruthy();
+    });
+
+    it('renders a per-item trailing icon', () => {
+      const { el } = setup([
+        {
+          items: [
+            {
+              label: 'Portfolio',
+              href: 'https://example.com',
+              trailingIcon: 'chevron_right',
+            },
+          ],
+        },
+      ]);
+      expect(
+        el.querySelector('rhombus-icon.rhombus-nav-list__trailing-icon')
+      ).toBeTruthy();
+    });
+
+    it('has no accessibility violations in list appearance with locked + collapsible', async () => {
+      const { fixture, host, el } = setup([
+        {
+          heading: 'Links',
+          collapsible: true,
+          items: [
+            { label: 'Home', href: 'https://example.com', icon: 'home', trailingIcon: 'chevron_right' },
+            { label: 'Pro', icon: 'star', locked: true },
+          ],
+        },
+      ]);
+      host.appearance = 'list';
+      fixture.detectChanges();
+      expect(await axe(el)).toHaveNoViolations();
+    });
   });
 });

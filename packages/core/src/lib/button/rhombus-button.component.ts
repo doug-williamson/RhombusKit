@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  booleanAttribute,
   computed,
   input,
 } from '@angular/core';
@@ -49,6 +50,7 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
         [routerLink]="disabled() ? null : routerLink()"
         [attr.target]="disabled() ? null : target()"
         [attr.rel]="computedRel()"
+        [attr.aria-label]="ariaLabel()"
       >
         <ng-container [ngTemplateOutlet]="content" />
       </a>
@@ -60,6 +62,7 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
         [attr.href]="disabled() ? null : href()"
         [attr.target]="disabled() ? null : target()"
         [attr.rel]="computedRel()"
+        [attr.aria-label]="ariaLabel()"
       >
         <ng-container [ngTemplateOutlet]="content" />
       </a>
@@ -68,17 +71,21 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
         [matButton]="appearance()"
         [disabled]="disabled()"
         [class]="hostClasses()"
+        [attr.aria-label]="ariaLabel()"
       >
         <ng-container [ngTemplateOutlet]="content" />
       </button>
     }
 
+    <!-- Icon-only mode renders a single leadingIcon and suppresses both the
+         projected label area's gap and the trailingIcon (see SCSS) — pair it
+         with ariaLabel for an accessible name. -->
     <ng-template #content>
       @if (leadingIcon()) {
         <mat-icon>{{ leadingIcon() }}</mat-icon>
       }
       <ng-content />
-      @if (trailingIcon()) {
+      @if (trailingIcon() && !iconButton()) {
         <mat-icon iconPositionEnd>{{ trailingIcon() }}</mat-icon>
       }
     </ng-template>
@@ -97,6 +104,22 @@ export class RhombusButtonComponent {
   readonly leadingIcon = input<string | null>(null);
   /** Material icon name rendered after the projected label; `null` (default) hides it. */
   readonly trailingIcon = input<string | null>(null);
+
+  /**
+   * Renders a compact, square icon button (equal padding; ~sm 32 / md 40 / lg
+   * 48px) instead of a text button — for edit / delete / back / close actions in
+   * tables, toolbars, and cards. Pair it with a single `leadingIcon` and
+   * `ariaLabel` (the `trailingIcon` is suppressed in this mode). Defaults to
+   * `false`. Mirrors `RhombusMenuComponent`'s `iconButton` preset. Accepts the
+   * bare attribute form (`<rhombus-button iconButton …>`) via `booleanAttribute`.
+   */
+  readonly iconButton = input(false, { transform: booleanAttribute });
+  /**
+   * Accessible name forwarded to the inner `<button>` / `<a>` as `aria-label`.
+   * Required for icon-only buttons (no visible text); harmless on text buttons.
+   * `null` (default) leaves the attribute off.
+   */
+  readonly ariaLabel = input<string | null>(null);
 
   /**
    * Router destination. When set, the button renders as a real `<a>` (with
@@ -135,6 +158,9 @@ export class RhombusButtonComponent {
       `rhombus-button--${this.variant()}`,
       `rhombus-button--${this.size()}`,
       `rhombus-button--${this.appearance()}`,
-    ].join(' ')
+      this.iconButton() ? 'rhombus-button--icon-button' : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
   );
 }

@@ -111,8 +111,15 @@ import { ExampleComponent } from '../../shared/example.component';
               <code>alt</code> text.
             </li>
             <li>
-              <code>[size]</code> &mdash; <code>'sm'</code> / <code>'md'</code>
-              (default) / <code>'lg'</code>.
+              <code>[size]</code> &mdash; a preset (<code>'sm'</code> 24 /
+              <code>'md'</code> 40 (default) / <code>'lg'</code> 64 /
+              <code>'xl'</code> 96px) or an explicit pixel number for
+              profile-photo previews and upload widgets.
+            </li>
+            <li>
+              <code>[srcDark]</code> &mdash; an optional dark-theme image. When
+              set, the avatar swaps to it under a dark theme &mdash; pure CSS, so
+              it is SSR-safe with no flash.
             </li>
             <li>
               <strong>No content slots.</strong> The component has no
@@ -154,14 +161,44 @@ import { ExampleComponent } from '../../shared/example.component';
       <div examples>
       <section class="showcase-section">
         <h2>Initials fallback</h2>
-        <p class="showcase-section__lead">Sizes <code>sm</code> / <code>md</code> / <code>lg</code>.</p>
+        <p class="showcase-section__lead">Presets <code>sm</code> / <code>md</code> / <code>lg</code> / <code>xl</code>.</p>
         <div class="showcase-row" style="align-items: center; gap: 1rem;">
           <rhombus-avatar name="Ada Lovelace" size="sm" />
           <rhombus-avatar name="Ada Lovelace" size="md" />
           <rhombus-avatar name="Ada Lovelace" size="lg" />
+          <rhombus-avatar name="Ada Lovelace" size="xl" />
           <rhombus-avatar name="Grace Hopper" />
           <rhombus-avatar name="Linus" />
         </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>Custom (numeric) size</h2>
+        <p class="showcase-section__lead">
+          Pass a pixel number to <code>[size]</code> for profile-photo previews
+          and upload widgets — the initials font scales with the box.
+        </p>
+        <div class="showcase-row" style="align-items: center; gap: 1rem;">
+          <rhombus-avatar name="Ada Lovelace" [size]="96" />
+          <rhombus-avatar name="Ada Lovelace" [size]="120" src="https://i.pravatar.cc/240?img=5" />
+        </div>
+      </section>
+
+      <section class="showcase-section">
+        <h2>Dark-mode source</h2>
+        <p class="showcase-section__lead">
+          Set <code>srcDark</code> to swap the photo when a dark theme is active
+          — toggle the theme above to see it switch. Pure CSS, no flash.
+        </p>
+        <div class="showcase-row" style="align-items: center; gap: 1rem;">
+          <rhombus-avatar
+            name="Ada Lovelace"
+            size="xl"
+            src="https://i.pravatar.cc/192?img=12"
+            srcDark="https://i.pravatar.cc/192?img=68"
+          />
+        </div>
+        <rhombus-code-block language="html" [code]="darkUsage" />
       </section>
 
       <section class="showcase-section">
@@ -194,6 +231,15 @@ import { ExampleComponent } from '../../shared/example.component';
   `,
 })
 export default class AvatarPageComponent {
+  /** Dark-mode-source snippet shown in the Examples tab. */
+  protected readonly darkUsage = `<!-- Swaps to srcDark under a dark theme (pure CSS, SSR-safe, no flash) -->
+<rhombus-avatar
+  name="Ada Lovelace"
+  size="xl"
+  src="/avatar-light.png"
+  srcDark="/avatar-dark.png"
+/>`;
+
   /** Minimal import + usage snippet shown in the Overview tab. */
   protected readonly usage = `import { RhombusAvatarComponent } from '@rhombuskit/core';
 

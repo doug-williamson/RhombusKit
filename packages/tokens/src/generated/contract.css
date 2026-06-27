@@ -56,6 +56,8 @@
   --status-scheduled-text: initial;
   --status-archived-bg: initial;
   --status-archived-text: initial;
+  --ink-surface: initial;
+  --ink-on-surface: initial;
   --code-keyword: initial;
   --code-string: initial;
   --code-function: initial;

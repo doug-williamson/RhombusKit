@@ -25,6 +25,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/chip/chip-page.component'),
       },
       {
+        path: 'tag',
+        title: 'Tag',
+        loadComponent: () => import('./pages/tag/tag-page.component'),
+      },
+      {
         path: 'icon',
         title: 'Icon',
         loadComponent: () => import('./pages/icon/icon-page.component'),

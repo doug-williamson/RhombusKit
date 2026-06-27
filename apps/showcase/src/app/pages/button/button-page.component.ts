@@ -107,6 +107,8 @@ import { ExampleComponent } from '../../shared/example.component';
             <li><strong>Default content slot</strong> — whatever you project becomes the visible label (the component exposes no named slots).</li>
             <li><code>leadingIcon</code> renders a Material icon before the label; <code>trailingIcon</code> renders one after it. Pass a Material icon name string; <code>null</code> (default) hides it.</li>
             <li>Set <code>routerLink</code> or <code>href</code> to render the button as a real <code>&lt;a&gt;</code> instead of a <code>&lt;button&gt;</code> (<code>target</code> / <code>rel</code> pass through; <code>routerLink</code> wins if both are set). Omit both for a plain button.</li>
+            <li><code>iconButton</code> renders a compact square icon button from a single <code>leadingIcon</code> (the <code>trailingIcon</code> and projected label are suppressed); always pair it with <code>ariaLabel</code> for the accessible name.</li>
+            <li><code>ariaLabel</code> is forwarded to the underlying <code>&lt;button&gt;</code> / <code>&lt;a&gt;</code> as <code>aria-label</code> — required for icon-only buttons, harmless on labelled ones.</li>
             <li>Bind <code>(click)</code> on the host as usual; <code>[disabled]="true"</code> disables the underlying native button.</li>
           </ul>
         </section>
@@ -190,6 +192,57 @@ import { ExampleComponent } from '../../shared/example.component';
         </section>
 
         <section class="showcase-section">
+          <h2>Icon buttons</h2>
+          <p class="showcase-section__lead">
+            Set <code>iconButton</code> with a single <code>leadingIcon</code>
+            and an <code>ariaLabel</code> to render a compact, square icon
+            button (~32 / 40 / 48px at <code>sm</code> / <code>md</code> /
+            <code>lg</code>) — for edit / delete / back / close actions in
+            tables, toolbars, and cards. It keeps the normal variant, hover,
+            focus-ring, and disabled treatment, and works as a link too.
+          </p>
+          <div class="showcase-row">
+            <rhombus-button
+              iconButton
+              ariaLabel="Edit"
+              variant="ghost"
+              leadingIcon="edit"
+            />
+            <rhombus-button
+              iconButton
+              ariaLabel="Delete"
+              variant="danger"
+              leadingIcon="delete"
+            />
+            <rhombus-button
+              iconButton
+              ariaLabel="More"
+              variant="secondary"
+              leadingIcon="more_vert"
+            />
+            <rhombus-button
+              iconButton
+              ariaLabel="Settings"
+              appearance="outlined"
+              leadingIcon="settings"
+            />
+            <rhombus-button
+              iconButton
+              ariaLabel="Back to Card"
+              appearance="text"
+              leadingIcon="arrow_back"
+              routerLink="/components/card"
+            />
+          </div>
+          <div class="showcase-row" style="align-items: center;">
+            <rhombus-button iconButton ariaLabel="Edit (small)" size="sm" appearance="outlined" leadingIcon="edit" />
+            <rhombus-button iconButton ariaLabel="Edit (medium)" size="md" appearance="outlined" leadingIcon="edit" />
+            <rhombus-button iconButton ariaLabel="Edit (large)" size="lg" appearance="outlined" leadingIcon="edit" />
+          </div>
+          <rhombus-code-block language="html" [code]="iconUsage" />
+        </section>
+
+        <section class="showcase-section">
           <h2>Link buttons</h2>
           <p class="showcase-section__lead">
             Set <code>routerLink</code> (or <code>href</code>) and the same
@@ -233,6 +286,15 @@ import { ExampleComponent } from '../../shared/example.component';
   `,
 })
 export default class ButtonPageComponent {
+  /** Icon-button snippet shown in the Examples tab. */
+  protected readonly iconUsage = `<!-- iconButton + a single leadingIcon + ariaLabel → compact square icon button -->
+<rhombus-button iconButton ariaLabel="Edit" variant="ghost" leadingIcon="edit"
+                (click)="edit(row)" />
+
+<!-- works as a link, too -->
+<rhombus-button iconButton ariaLabel="Back" appearance="text"
+                leadingIcon="arrow_back" routerLink="/dashboard" />`;
+
   /** Link-button snippet shown in the Examples tab. */
   protected readonly linkUsage = `<!-- routerLink → renders <a routerLink> with identical button styling -->
 <rhombus-button routerLink="/dashboard" leadingIcon="arrow_back">

@@ -437,7 +437,15 @@
     },
     "status-archived-text": {
       "$type": "color",
-      "$value": "#64748b"
+      "$value": "#475569"
+    },
+    "ink-surface": {
+      "$type": "color",
+      "$value": "#0f172a"
+    },
+    "ink-on-surface": {
+      "$type": "color",
+      "$value": "#f8fafc"
     },
     "code-keyword": {
       "$type": "color",
@@ -672,6 +680,14 @@
     "status-archived-text": {
       "$type": "color",
       "$value": "#94a3b8"
+    },
+    "ink-surface": {
+      "$type": "color",
+      "$value": "#0f172a"
+    },
+    "ink-on-surface": {
+      "$type": "color",
+      "$value": "#f8fafc"
     },
     "code-keyword": {
       "$type": "color",

@@ -23,6 +23,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 - Badge: https://rhombuskit.online/components/badge
 - Card: https://rhombuskit.online/components/card
 - Chip: https://rhombuskit.online/components/chip
+- Tag: https://rhombuskit.online/components/tag
 - Icon: https://rhombuskit.online/components/icon
 - Checkbox: https://rhombuskit.online/components/checkbox
 - Radio Group: https://rhombuskit.online/components/radio
@@ -60,7 +61,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   type AlertVariant = 'info' | 'success' | 'warning' | 'error'
 
 ### AvatarSize (type)
-  type AvatarSize = 'sm' | 'md' | 'lg'
+  type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | number
 
 ### BadgeVariant (type)
   type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger'
@@ -176,6 +177,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   readonly name: _angular_core.InputSignal<string>
   readonly size: _angular_core.InputSignal<AvatarSize>
   readonly src: _angular_core.InputSignal<string>
+  readonly srcDark: _angular_core.InputSignal<string>
 
 ### RhombusBadgeDirective (class)
   readonly content: _angular_core.InputSignal<string | number>
@@ -207,8 +209,10 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 
 ### RhombusButtonComponent (class)
   readonly appearance: _angular_core.InputSignal<ButtonAppearance>
+  readonly ariaLabel: _angular_core.InputSignal<string>
   readonly disabled: _angular_core.InputSignal<boolean>
   readonly href: _angular_core.InputSignal<string>
+  readonly iconButton: _angular_core.InputSignalWithTransform<boolean, unknown>
   readonly leadingIcon: _angular_core.InputSignal<string>
   readonly rel: _angular_core.InputSignal<string>
   readonly routerLink: _angular_core.InputSignal<string | unknown[]>
@@ -332,6 +336,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   readonly items: _angular_core.InputSignal<MenuItem[]>
 
 ### RhombusNavItem (interface)
+  action?: () => void
   active?: boolean
   badge?: string | number
   disabled?: boolean
@@ -339,15 +344,21 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   href?: string
   icon?: string
   label: string
+  locked?: boolean
   rel?: string
   routerLink?: string | unknown[]
   target?: string
+  trailingIcon?: string
 
 ### RhombusNavListComponent (class)
+  readonly appearance: _angular_core.InputSignal<NavListAppearance>
   readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly itemAction: _angular_core.OutputEmitterRef<RhombusNavItem>
   readonly sections: _angular_core.InputSignal<RhombusNavSection[]>
 
 ### RhombusNavSection (interface)
+  collapsible?: boolean
+  expanded?: boolean
   heading?: string
   items: RhombusNavItem[]
 
@@ -455,6 +466,10 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 ### RhombusTabGroupDirective (class)
   readonly tabChange: _angular_core.OutputEmitterRef<number>
 
+### RhombusTagComponent (class)
+  readonly size: _angular_core.InputSignal<TagSize>
+  readonly variant: _angular_core.InputSignal<TagVariant>
+
 ### RhombusTextareaComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
   readonly autosize: _angular_core.InputSignal<boolean>
@@ -513,6 +528,12 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 ### SortState (interface)
   active: string
   direction: "" | "asc" | "desc"
+
+### TagSize (type)
+  type TagSize = 'sm' | 'md'
+
+### TagVariant (type)
+  type TagVariant = 'default' | 'info' | 'success' | 'warning' | 'error' | 'draft' | 'published' | 'scheduled' | 'archived'
 
 ### ToastConfig (interface)
   action?: string
@@ -605,19 +626,19 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 
 ### ThemePack (interface)
   name: string
-  values: Record<"--bg" | "--bg-subtle" | "--surface-0" | "--surface-1" | "--surface-2" | "--surface-3" | "--text-primary" | "--text-secondary" | "--text-muted" | "--text-disabled" | "--text-accent" | "--text-on-accent" | "--border" | "--border-strong" | "--border-accent" | "--focus-ring" | "--focus-border" | "--error" | "--error-bg" | "--btn-primary-bg" | "--btn-primary-text" | "--btn-primary-hover" | "--nav-active-bg" | "--nav-active-text" | "--switch-track-off" | "--switch-track-on" | "--tooltip-bg" | "--tooltip-text" | "--toast-info-bg" | "--toast-info-text" | "--toast-success-bg" | "--toast-success-text" | "--toast-warning-bg" | "--toast-warning-text" | "--toast-error-bg" | "--toast-error-text" | "--shadow-sm" | "--shadow-md" | "--shadow-lg" | "--shadow-xl" | "--shadow-btn-primary" | "--font-sans" | "--font-mono" | "--font-prose" | "--status-draft-bg" | "--status-draft-text" | "--status-published-bg" | "--status-published-text" | "--status-scheduled-bg" | "--status-scheduled-text" | "--status-archived-bg" | "--status-archived-text" | "--code-keyword" | "--code-string" | "--code-function" | "--code-number" | "--code-comment" | "--code-punctuation", string>
+  values: Record<"--bg" | "--bg-subtle" | "--surface-0" | "--surface-1" | "--surface-2" | "--surface-3" | "--text-primary" | "--text-secondary" | "--text-muted" | "--text-disabled" | "--text-accent" | "--text-on-accent" | "--border" | "--border-strong" | "--border-accent" | "--focus-ring" | "--focus-border" | "--error" | "--error-bg" | "--btn-primary-bg" | "--btn-primary-text" | "--btn-primary-hover" | "--nav-active-bg" | "--nav-active-text" | "--switch-track-off" | "--switch-track-on" | "--tooltip-bg" | "--tooltip-text" | "--toast-info-bg" | "--toast-info-text" | "--toast-success-bg" | "--toast-success-text" | "--toast-warning-bg" | "--toast-warning-text" | "--toast-error-bg" | "--toast-error-text" | "--shadow-sm" | "--shadow-md" | "--shadow-lg" | "--shadow-xl" | "--shadow-btn-primary" | "--font-sans" | "--font-mono" | "--font-prose" | "--status-draft-bg" | "--status-draft-text" | "--status-published-bg" | "--status-published-text" | "--status-scheduled-bg" | "--status-scheduled-text" | "--status-archived-bg" | "--status-archived-text" | "--ink-surface" | "--ink-on-surface" | "--code-keyword" | "--code-string" | "--code-function" | "--code-number" | "--code-comment" | "--code-punctuation", string>
 
 ### tokens (const)
   tokens: { readonly primitives: { readonly "slate-50": "#f8fafc"; readonly "slate-100": "#f1f5f9"; readonly "slate-200": "#e2e8f0"; readonly "slate-300": "#cbd5e1"; readonly "slate-400": "#94a3b8"; readonly "slate-500": "#64748b"; readonly "slate-600": "#475569"; readonly "slate-700": "#334155"; readonly "slate-800": "#1e293b"; readonly "slate-900": "#0f172a"; readonly "slate-950": "#020617"; readonly "violet-50": "#f5f3ff"; readonly "violet-100": "#ede9fe"; readonly "violet-200": "#ddd6fe"; readonly "violet-300": "#c4b5fd"; readonly "violet-400": "#a78bfa"; readonly "violet-500": "#8b5cf6"; readonly "violet-600": "#7c3aed"; readonly "violet-700": "#6d28d9"; readonly "violet-800": "#5b21b6"; readonly "violet-900": "#4c1d95"; readonly "violet-950": "#2e1065"; readonly "green-50": "#f0fdf4"; readonly "green-100": "#dcfce7"; readonly "green-500": "#22c55e"; readonly "green-600": "#16a34a"; readonly "green-700": "#15803d"; readonly "amber-50": "#fffbeb"; readonly "amber-100": "#fef3c7"; readonly "amber-500": "#f59e0b"; readonly "amber-600": "#d97706"; readonly "amber-700": "#b45309"; readonly "red-50": "#fef2f2"; readonly "red-100": "#fee2e2"; readonly "red-500": "#ef4444"; readonly "red-600": "#dc2626"; readonly "red-700": "#b91c1c"; readonly "font-family-sans": "\"Inter Variable\", \"Inter\", system-ui, sans-serif"; readonly "font-family-mono": "\"JetBrains Mono Variable\", \"JetBrains Mono\", monospace"; readonly "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif"; readonly "radius-none": "0"; readonly "radius-sm": "0.125rem"; readonly "radius-xs": "0.25rem"; readonly "radius-md": "0.375rem"; readonly "radius-lg": "0.5rem"; readonly "radius-xl": "0.75rem"; readonly "radius-full": "9999px"; readonly "motion-duration-instant": "0ms"; readonly "motion-duration-fast": "120ms"; readonly "motion-duration-base": "150ms"; readonly "motion-duration-slow": "240ms"; readonly "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)"; readonly "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)"; readonly "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)"; readonly "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"; readonly "border-width": "1px"; readonly "border-width-strong": "2px"; }; readonly themes: { readonly "rhombus-light": Record<SemanticTokenName, string>; readonly "rhombus-dark": Record<SemanticTokenName, string>; }; }
 
 ---
 
-## Design tokens — the CONTRACT (58 CSS custom properties)
+## Design tokens — the CONTRACT (60 CSS custom properties)
 
 These names are the frozen design-token contract. Override their values to
 theme; the names themselves are covered by semver.
 
-`--bg`, `--bg-subtle`, `--border`, `--border-accent`, `--border-strong`, `--btn-primary-bg`, `--btn-primary-hover`, `--btn-primary-text`, `--code-comment`, `--code-function`, `--code-keyword`, `--code-number`, `--code-punctuation`, `--code-string`, `--error`, `--error-bg`, `--focus-border`, `--focus-ring`, `--font-mono`, `--font-prose`, `--font-sans`, `--nav-active-bg`, `--nav-active-text`, `--shadow-btn-primary`, `--shadow-lg`, `--shadow-md`, `--shadow-sm`, `--shadow-xl`, `--status-archived-bg`, `--status-archived-text`, `--status-draft-bg`, `--status-draft-text`, `--status-published-bg`, `--status-published-text`, `--status-scheduled-bg`, `--status-scheduled-text`, `--surface-0`, `--surface-1`, `--surface-2`, `--surface-3`, `--switch-track-off`, `--switch-track-on`, `--text-accent`, `--text-disabled`, `--text-muted`, `--text-on-accent`, `--text-primary`, `--text-secondary`, `--toast-error-bg`, `--toast-error-text`, `--toast-info-bg`, `--toast-info-text`, `--toast-success-bg`, `--toast-success-text`, `--toast-warning-bg`, `--toast-warning-text`, `--tooltip-bg`, `--tooltip-text`
+`--bg`, `--bg-subtle`, `--border`, `--border-accent`, `--border-strong`, `--btn-primary-bg`, `--btn-primary-hover`, `--btn-primary-text`, `--code-comment`, `--code-function`, `--code-keyword`, `--code-number`, `--code-punctuation`, `--code-string`, `--error`, `--error-bg`, `--focus-border`, `--focus-ring`, `--font-mono`, `--font-prose`, `--font-sans`, `--ink-on-surface`, `--ink-surface`, `--nav-active-bg`, `--nav-active-text`, `--shadow-btn-primary`, `--shadow-lg`, `--shadow-md`, `--shadow-sm`, `--shadow-xl`, `--status-archived-bg`, `--status-archived-text`, `--status-draft-bg`, `--status-draft-text`, `--status-published-bg`, `--status-published-text`, `--status-scheduled-bg`, `--status-scheduled-text`, `--surface-0`, `--surface-1`, `--surface-2`, `--surface-3`, `--switch-track-off`, `--switch-track-on`, `--text-accent`, `--text-disabled`, `--text-muted`, `--text-on-accent`, `--text-primary`, `--text-secondary`, `--toast-error-bg`, `--toast-error-text`, `--toast-info-bg`, `--toast-info-text`, `--toast-success-bg`, `--toast-success-text`, `--toast-warning-bg`, `--toast-warning-text`, `--tooltip-bg`, `--tooltip-text`
 
 ---
 

@@ -128,7 +128,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusAvatarComponent",
     "kind": "class",
     "selector": "rhombus-avatar",
-    "description": "`<rhombus-avatar>` — a circular user avatar. Renders the `src` image when\nprovided (with `name` as its `alt`); otherwise falls back to initials\nderived from `name`, exposing `name` as the accessible label\n(`role=\"img\"`). Bespoke — no Material primitive, no new tokens.\n\n```html\n<rhombus-avatar name=\"Ada Lovelace\" />\n<rhombus-avatar name=\"Ada Lovelace\" src=\"/ada.png\" size=\"lg\" />\n```",
+    "description": "`<rhombus-avatar>` — a circular user avatar. Renders the `src` image when\nprovided (with `name` as its `alt`); otherwise falls back to initials\nderived from `name`, exposing `name` as the accessible label\n(`role=\"img\"`). Bespoke — no Material primitive, no new tokens.\n\n`size` is a preset (`sm`/`md`/`lg`/`xl`) or an explicit pixel number. Pass\n`srcDark` to swap the photo under a dark theme (pure CSS — no JS, no flash).\n\n```html\n<rhombus-avatar name=\"Ada Lovelace\" />\n<rhombus-avatar name=\"Ada Lovelace\" src=\"/ada.png\" size=\"xl\" />\n<rhombus-avatar name=\"Ada Lovelace\" [size]=\"120\" src=\"/light.png\" srcDark=\"/dark.png\" />\n```",
     "inputs": [
       {
         "name": "name",
@@ -141,14 +141,14 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Image URL. When set, the image replaces the initials fallback."
       },
       {
+        "name": "srcDark",
+        "type": "string",
+        "description": "Dark-theme image URL. When set (and `src` is too), the avatar swaps to this\nphoto under a `[data-theme*=\"dark\"]` ancestor — pure CSS, SSR-safe, no flash."
+      },
+      {
         "name": "size",
         "type": "AvatarSize",
-        "description": "Size. Defaults to `'md'`.",
-        "enumValues": [
-          "sm",
-          "md",
-          "lg"
-        ]
+        "description": "Size: a `sm`/`md`/`lg`/`xl` preset or a pixel number. Defaults to `'md'`."
       }
     ],
     "outputs": [],
@@ -379,6 +379,16 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "trailingIcon",
         "type": "string",
         "description": "Material icon name rendered after the projected label; `null` (default) hides it."
+      },
+      {
+        "name": "iconButton",
+        "type": "boolean",
+        "description": "Renders a compact, square icon button (equal padding; ~sm 32 / md 40 / lg\n48px) instead of a text button — for edit / delete / back / close actions in\ntables, toolbars, and cards. Pair it with a single `leadingIcon` and\n`ariaLabel` (the `trailingIcon` is suppressed in this mode). Defaults to\n`false`. Mirrors `RhombusMenuComponent`'s `iconButton` preset. Accepts the\nbare attribute form (`<rhombus-button iconButton …>`) via `booleanAttribute`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name forwarded to the inner `<button>` / `<a>` as `aria-label`.\nRequired for icon-only buttons (no visible text); harmless on text buttons.\n`null` (default) leaves the attribute off."
       },
       {
         "name": "routerLink",
@@ -1159,15 +1169,36 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "ariaLabel",
         "type": "string",
         "description": "Accessible label for the `<nav>` landmark. Defaults to `'Primary'`."
+      },
+      {
+        "name": "appearance",
+        "type": "NavListAppearance",
+        "description": "List appearance: `'sidebar'` (default, compact rows) or `'list'`\n(full-width \"link-row\" cells for link-in-bio pages)."
       }
     ],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "itemAction",
+        "type": "RhombusNavItem",
+        "description": "Emits the activated item when a `locked` item is clicked (alongside the\nitem's own `action`). Use it to open an upgrade sheet/dialog without\nnavigating."
+      }
+    ],
     "methods": [],
     "types": [
       {
         "name": "RhombusNavSection",
         "kind": "interface",
         "members": [
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "description": "Render the (required) `heading` as a disclosure toggle so the group can be\ncollapsed and expanded, with `aria-expanded` wired to the items. Defaults to\n`false` (a static heading). Requires a `heading`."
+          },
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "description": "Initial expanded state for a `collapsible` section. Defaults to `true`\n(expanded). The toggle is uncontrolled — the component tracks the state\nafter first interaction."
+          },
           {
             "name": "heading",
             "type": "string",
@@ -1178,6 +1209,78 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "type": "RhombusNavItem[]",
             "description": "The items in this section, top to bottom.",
             "required": true
+          }
+        ]
+      },
+      {
+        "name": "RhombusNavItem",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "action",
+            "type": "() => void",
+            "description": "Custom callback invoked on activation. Fires for `locked` items (alongside\nthe `(itemAction)` output) so dispatch can be co-located with the item, the\nway {@link MenuItem} does. Ignored for inert (`disabled`) items."
+          },
+          {
+            "name": "active",
+            "type": "boolean",
+            "description": "Manual active state for `href` / non-router items — applies the active\nstyling and `aria-current=\"page\"`. Ignored for `routerLink` items, which\nderive active state from the router."
+          },
+          {
+            "name": "badge",
+            "type": "string | number",
+            "description": "Trailing badge — a count, a short string, or `'dot'` for a marker."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the item inert: not focusable, not activatable."
+          },
+          {
+            "name": "exact",
+            "type": "boolean",
+            "description": "Exact-match active state for `routerLink` (RouterLinkActive `exact`)."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "description": "Plain anchor destination (external links, non-router targets). Used when\n`routerLink` is absent; pair with `active` for manual highlighting."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "RhombusIcon glyph name (falls back to a Material icon). Optional."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Visible text and the item's accessible name.",
+            "required": true
+          },
+          {
+            "name": "locked",
+            "type": "boolean",
+            "description": "Marks the item as gated (e.g. behind a plan/feature lock). Unlike\n`disabled`, a locked item stays **focusable and activatable**: it renders as\na `<button>` that does NOT navigate (any `routerLink` / `href` is ignored)\nand instead runs its `action` and emits `(itemAction)`, so the consumer can\nopen an upgrade sheet/dialog. A trailing lock affordance is shown. `disabled`\ntakes precedence over `locked` (a disabled item stays inert)."
+          },
+          {
+            "name": "rel",
+            "type": "string",
+            "description": "Anchor `rel` for `href` items."
+          },
+          {
+            "name": "routerLink",
+            "type": "string | unknown[]",
+            "description": "`routerLink` target. When set, the item self-highlights via\n`routerLinkActive` and renders `aria-current=\"page\"` when active."
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "description": "Anchor `target` (e.g. `_blank`) for `href` items."
+          },
+          {
+            "name": "trailingIcon",
+            "type": "string",
+            "description": "Trailing icon glyph rendered after the label (and badge), e.g. a\n`'chevron_right'` for link-in-bio rows. Works in both appearances; most at\nhome in the `'list'` appearance."
           }
         ]
       }
@@ -1842,6 +1945,44 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "methods": []
+  },
+  "RhombusTagComponent": {
+    "name": "RhombusTagComponent",
+    "kind": "class",
+    "selector": "rhombus-tag",
+    "description": "`<rhombus-tag>` — an inline, rounded status/label pill. Bespoke (no Material\nprimitive, no new tokens): it themes itself from the existing `--status-*` and\n`--toast-*` contract pairs, so a `published` / `draft` / `info` tag re-skins\nwith the theme. The label is content-projected and carries the meaning — the\ncolour reinforces it, never replaces it (don't rely on colour alone).\n\nDistinct from `RhombusBadgeDirective` (an overlay count/dot) and\n`[rhombusChip]` (a selectable Material chip): a tag is inline, static text.\n\n```html\n<rhombus-tag variant=\"published\">Published</rhombus-tag>\n<rhombus-tag variant=\"warning\" size=\"sm\">Needs review</rhombus-tag>\n```",
+    "inputs": [
+      {
+        "name": "variant",
+        "type": "TagVariant",
+        "description": "Colour role, reflected to `data-variant`. Defaults to `'default'`.",
+        "enumValues": [
+          "default",
+          "info",
+          "success",
+          "warning",
+          "error",
+          "draft",
+          "published",
+          "scheduled",
+          "archived"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "TagSize",
+        "description": "Size, reflected to `data-size`: `'sm'` | `'md'` (default).",
+        "enumValues": [
+          "sm",
+          "md"
+        ]
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "*"
+    ]
   },
   "RhombusTextareaComponent": {
     "name": "RhombusTextareaComponent",
