@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   RhombusNavListComponent,
   RhombusNavSection,
+  RhombusNavItem,
   RhombusCodeBlockComponent,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
@@ -106,6 +107,10 @@ import { ExampleComponent } from '../../shared/example.component';
             <li>Each <code>RhombusNavItem</code> needs a <code>label</code>; add an <code>icon</code> (RhombusIcon glyph, Material-icon fallback) and a <code>badge</code> (a count, a string, or <code>'dot'</code>).</li>
             <li>Give it a <code>routerLink</code> for router-driven highlighting (with <code>exact</code> for exact matching), or an <code>href</code> (+ <code>target</code> / <code>rel</code>) for an external link with a manual <code>active</code> flag.</li>
             <li><code>disabled</code> renders the row inert (<code>aria-disabled</code>, removed from the tab order); <code>RhombusNavSection.heading</code> renders an optional group label.</li>
+            <li><code>locked</code> keeps the row focusable but non-navigating: it fires the item's <code>action</code> and the list's <code>(itemAction)</code> output (for plan/feature gates) and shows a trailing lock. <code>disabled</code> takes precedence over <code>locked</code>.</li>
+            <li><code>trailingIcon</code> adds a glyph after the label (e.g. a <code>chevron_right</code> for link rows).</li>
+            <li>On a <code>RhombusNavSection</code>, <code>collapsible</code> makes the heading a disclosure toggle (seed with <code>expanded</code>).</li>
+            <li>Set <code>appearance="list"</code> on the component for full-width "link-row" cells; the default is <code>"sidebar"</code>.</li>
           </ul>
         </section>
 
@@ -153,6 +158,52 @@ import { ExampleComponent } from '../../shared/example.component';
             <rhombus-nav-list [sections]="badges" ariaLabel="Badges" />
           </div>
         </section>
+
+        <section class="showcase-section">
+          <h2>Locked items</h2>
+          <p class="showcase-section__lead">
+            A <code>locked</code> item stays focusable and, instead of
+            navigating, fires <code>(itemAction)</code> (and its own
+            <code>action</code>) so you can open an upgrade sheet — with a
+            trailing lock affordance. Activate <em>Advanced reports</em> below:
+            {{ lastLocked() || 'nothing yet' }}.
+          </p>
+          <div class="nav-list-frame">
+            <rhombus-nav-list
+              [sections]="locked"
+              ariaLabel="Locked"
+              (itemAction)="onLocked($event)"
+            />
+          </div>
+        </section>
+
+        <section class="showcase-section">
+          <h2>Collapsible sections</h2>
+          <p class="showcase-section__lead">
+            Set <code>collapsible</code> on a section to turn its heading into a
+            disclosure toggle (<code>aria-expanded</code> + a rotating chevron).
+            Seed the initial state with <code>expanded</code>.
+          </p>
+          <div class="nav-list-frame">
+            <rhombus-nav-list [sections]="collapsible" ariaLabel="Collapsible" />
+          </div>
+        </section>
+
+        <section class="showcase-section">
+          <h2>List appearance (link-in-bio)</h2>
+          <p class="showcase-section__lead">
+            <code>appearance="list"</code> renders full-width, prominent rows
+            (leading icon · label · trailing chevron) — for link-in-bio and
+            link-row pages.
+          </p>
+          <div class="nav-list-frame nav-list-frame--wide">
+            <rhombus-nav-list
+              [sections]="links"
+              appearance="list"
+              ariaLabel="Links"
+            />
+          </div>
+        </section>
       </div>
     </app-component-page>
   `,
@@ -170,9 +221,86 @@ import { ExampleComponent } from '../../shared/example.component';
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
     }
+    .nav-list-frame--wide {
+      max-width: 420px;
+    }
   `,
 })
 export default class NavListPageComponent {
+  /** Last locked item the visitor activated (demonstrates (itemAction)). */
+  protected readonly lastLocked = signal<string>('');
+  protected onLocked(item: RhombusNavItem): void {
+    this.lastLocked.set(`activated "${item.label}"`);
+  }
+
+  protected readonly locked: RhombusNavSection[] = [
+    {
+      heading: 'Reports',
+      items: [
+        { label: 'Overview', icon: 'dashboard', routerLink: '/components/nav-list', exact: true },
+        { label: 'Advanced reports', icon: 'insights', locked: true },
+        { label: 'Data export', icon: 'download', locked: true },
+      ],
+    },
+  ];
+
+  protected readonly collapsible: RhombusNavSection[] = [
+    {
+      heading: 'Main',
+      items: [
+        { label: 'Overview', icon: 'dashboard', routerLink: '/components/nav-list', exact: true },
+        { label: 'Buttons', icon: 'smart_button', routerLink: '/components/button' },
+      ],
+    },
+    {
+      heading: 'Account',
+      collapsible: true,
+      items: [
+        { label: 'Inputs', icon: 'edit', routerLink: '/components/input' },
+        { label: 'Alerts', icon: 'notifications', routerLink: '/components/alert' },
+      ],
+    },
+    {
+      heading: 'Archived',
+      collapsible: true,
+      expanded: false,
+      items: [
+        { label: 'Old project', icon: 'folder', routerLink: '/components/card' },
+      ],
+    },
+  ];
+
+  protected readonly links: RhombusNavSection[] = [
+    {
+      items: [
+        {
+          label: 'Portfolio',
+          icon: 'work',
+          href: 'https://example.com',
+          target: '_blank',
+          rel: 'noopener',
+          trailingIcon: 'chevron_right',
+        },
+        {
+          label: 'Newsletter',
+          icon: 'mail',
+          href: 'https://example.com',
+          target: '_blank',
+          rel: 'noopener',
+          trailingIcon: 'chevron_right',
+        },
+        {
+          label: 'Book a call',
+          icon: 'event',
+          href: 'https://example.com',
+          target: '_blank',
+          rel: 'noopener',
+          trailingIcon: 'chevron_right',
+        },
+      ],
+    },
+  ];
+
   protected readonly sections: RhombusNavSection[] = [
     {
       heading: 'Main',

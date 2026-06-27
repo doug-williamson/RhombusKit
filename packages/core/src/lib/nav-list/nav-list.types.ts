@@ -16,8 +16,29 @@ export interface RhombusNavItem {
   href?: string;
   /** Trailing badge — a count, a short string, or `'dot'` for a marker. */
   badge?: number | string | 'dot';
+  /**
+   * Trailing icon glyph rendered after the label (and badge), e.g. a
+   * `'chevron_right'` for link-in-bio rows. Works in both appearances; most at
+   * home in the `'list'` appearance.
+   */
+  trailingIcon?: string;
   /** Renders the item inert: not focusable, not activatable. */
   disabled?: boolean;
+  /**
+   * Marks the item as gated (e.g. behind a plan/feature lock). Unlike
+   * `disabled`, a locked item stays **focusable and activatable**: it renders as
+   * a `<button>` that does NOT navigate (any `routerLink` / `href` is ignored)
+   * and instead runs its `action` and emits `(itemAction)`, so the consumer can
+   * open an upgrade sheet/dialog. A trailing lock affordance is shown. `disabled`
+   * takes precedence over `locked` (a disabled item stays inert).
+   */
+  locked?: boolean;
+  /**
+   * Custom callback invoked on activation. Fires for `locked` items (alongside
+   * the `(itemAction)` output) so dispatch can be co-located with the item, the
+   * way {@link MenuItem} does. Ignored for inert (`disabled`) items.
+   */
+  action?: () => void;
   /** Exact-match active state for `routerLink` (RouterLinkActive `exact`). */
   exact?: boolean;
   /**
@@ -36,6 +57,27 @@ export interface RhombusNavItem {
 export interface RhombusNavSection {
   /** Optional section heading rendered above the group. */
   heading?: string;
-  /** The items in this section, top to bottom. */
+  /**
+   * The items in this section, top to bottom. */
   items: RhombusNavItem[];
+  /**
+   * Render the (required) `heading` as a disclosure toggle so the group can be
+   * collapsed and expanded, with `aria-expanded` wired to the items. Defaults to
+   * `false` (a static heading). Requires a `heading`.
+   */
+  collapsible?: boolean;
+  /**
+   * Initial expanded state for a `collapsible` section. Defaults to `true`
+   * (expanded). The toggle is uncontrolled — the component tracks the state
+   * after first interaction.
+   */
+  expanded?: boolean;
 }
+
+/**
+ * Visual appearance of the whole list.
+ * - `'sidebar'` (default) — compact rows for an app-shell sidenav / sidebar.
+ * - `'list'` — full-width, prominent rows (leading icon · label · trailing
+ *   icon) for "link in bio" / link-row pages.
+ */
+export type NavListAppearance = 'sidebar' | 'list';

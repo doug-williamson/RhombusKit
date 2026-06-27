@@ -28,6 +28,43 @@
   color: var(--text-secondary);
 }
 
+// Collapsible heading — a disclosure <button> that keeps the heading typography
+// (the class above) but resets the native button chrome and adds the chevron.
+button.rhombus-nav-list__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: 0;
+  // <button> does not inherit font-family; the rest (size/weight/transform) is
+  // set by the .rhombus-nav-list__heading rule above.
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: var(--border-width-strong) solid var(--focus-border);
+    outline-offset: -2px;
+  }
+}
+
+.rhombus-nav-list__chevron {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+
+  // chevron_right points right when collapsed; rotate to point down when open.
+  &--open {
+    transform: rotate(90deg);
+  }
+}
+
 .rhombus-nav-list__group {
   list-style: none;
   margin: 0;
@@ -78,9 +115,29 @@
   }
 }
 
+// Locked items render as a <button> (focusable, fires action / (itemAction)
+// instead of navigating). Reset the native button chrome so it matches the
+// anchor/span rows; the shared .rhombus-nav-list__item rule supplies the rest.
+button.rhombus-nav-list__item {
+  width: 100%;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  text-align: left;
+}
+
 .rhombus-nav-list__icon {
   flex-shrink: 0;
   display: inline-flex;
+}
+
+// Trailing affordances (link-row chevrons, the lock on gated items). Quiet by
+// default so they read as secondary to the label.
+.rhombus-nav-list__trailing-icon,
+.rhombus-nav-list__lock {
+  flex-shrink: 0;
+  display: inline-flex;
+  color: var(--text-secondary);
 }
 
 .rhombus-nav-list__label {
@@ -113,5 +170,31 @@
     height: 0.5rem;
     padding: 0;
     background-color: var(--text-accent);
+  }
+}
+
+// --- List ("link-row") appearance ---
+// Full-width, prominent rows for link-in-bio / link-row pages. Every override is
+// scoped under the modifier so the default sidebar rendering (and its
+// --nav-active-* theming) is untouched.
+.rhombus-nav-list--list {
+  gap: 8px;
+
+  .rhombus-nav-list__item {
+    padding: 14px 16px;
+    font-size: 1rem;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background-color: var(--surface-0);
+
+    &:hover:not(.rhombus-nav-list__item--active):not(.rhombus-nav-list__item--disabled) {
+      background-color: var(--surface-1);
+      border-color: var(--border-strong);
+    }
+  }
+
+  // Slightly larger trailing chevron so the row reads as tappable.
+  .rhombus-nav-list__trailing-icon {
+    color: var(--text-muted);
   }
 }
