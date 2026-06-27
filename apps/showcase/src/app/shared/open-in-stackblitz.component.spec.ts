@@ -41,8 +41,12 @@ describe('STACKBLITZ_STARTER', () => {
   it('pins RhombusKit + Angular 21 from public npm and has a start script', () => {
     const pkg = JSON.parse(STACKBLITZ_STARTER.files['package.json']);
     expect(pkg.scripts.start).toBe('ng serve');
-    expect(pkg.dependencies['@rhombuskit/core']).toBe('^1.5.0');
+    expect(pkg.dependencies['@rhombuskit/core']).toBe('^1.8.0');
     expect(pkg.dependencies['@angular/core']).toBe('^21.0.0');
+    // core's Code Block lazy-loads highlight.js via dynamic import(); the app
+    // bundler resolves it at build time, so the starter must declare it or
+    // `ng build` fails. (Enforced end-to-end by the smoke-test-stackblitz gate.)
+    expect(pkg.dependencies['highlight.js']).toBe('^11.0.0');
   });
 
   it('imports the SCSS layers in the required order', () => {

@@ -373,7 +373,7 @@ export default class HomePageComponent {
     {
       icon: 'accessibility_new',
       title: 'WCAG 2.1 AA, verified',
-      body: 'axe runs in CI on every component, and colour-contrast is checked in both themes against real rendered output.',
+      body: 'Every component is scanned by axe in CI, and colour contrast is verified in both light and dark themes against the real rendered output.',
     },
     {
       icon: 'bolt',
@@ -388,10 +388,10 @@ export default class HomePageComponent {
   ];
 
   protected readonly categories: Category[] = [
-    { label: 'Primitives', blurb: 'Button, Badge, Card', to: '/components/button', items: 'Button · Badge · Card · Chip' },
+    { label: 'Primitives', blurb: 'Button, Badge, Card', to: '/components/button', items: 'Button · Badge · Card · Chip · Tag' },
     { label: 'Forms', blurb: 'Inputs & controls', to: '/components/input', items: 'Input · Select · Checkbox · Radio · Switch · Textarea' },
     { label: 'Data & overlays', blurb: 'Tables & dialogs', to: '/components/data-table', items: 'Data Table · Dialog · Tooltip · Toast · Menu' },
-    { label: 'Navigation', blurb: 'Move around', to: '/components/tabs', items: 'Tabs · Breadcrumbs · Pagination · Menu' },
+    { label: 'Navigation', blurb: 'Move around', to: '/components/tabs', items: 'Tabs · Nav List · Breadcrumbs · Pagination · Menu' },
     { label: 'Status & layout', blurb: 'Feedback & frame', to: '/components/alert', items: 'Alert · Avatar · Progress · App Shell' },
     { label: 'Content', blurb: 'Page composition', to: '/components/page-header', items: 'Page Header · Empty State · Code Block' },
   ];

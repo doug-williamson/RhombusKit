@@ -16,6 +16,7 @@
     "test:design-tokens": "tsx tools/generate-design-tokens.test.mjs",
     "test:mcp": "tsx packages/mcp/test/mcp.verify.ts",
     "test:mcp-data": "node tools/generate-mcp-data.test.mjs",
+    "test:stackblitz": "tsx tools/smoke-test-stackblitz.mjs",
     "prepare": "husky"
   },
   "devDependencies": {

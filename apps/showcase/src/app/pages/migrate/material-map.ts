@@ -66,7 +66,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Portal', api: 'CdkPortal', pkg: 'cdk', rk: '', match: 'gap', note: 'Low-level primitive; not re-exported.' },
   { material: 'Tree (CDK)', api: 'cdk-tree', pkg: 'cdk', rk: '', match: 'gap', note: 'Unstyled tree primitive; no RhombusKit tree.' },
   { material: 'Table (CDK)', api: 'cdk-table', pkg: 'cdk', rk: 'Data Table', match: 'partial', note: 'Data Table covers the styled case, not an unstyled fully-custom primitive.' },
-  { material: 'Accordion (CDK)', api: 'CdkAccordion', pkg: 'cdk', rk: '', match: 'gap', note: 'No accordion behavior/component.' },
+  { material: 'Accordion (CDK)', api: 'CdkAccordion', pkg: 'cdk', rk: '', match: 'gap', note: 'No accordion behaviour/component.' },
   { material: 'Stepper (CDK)', api: 'CdkStepper', pkg: 'cdk', rk: '', match: 'gap', note: 'No stepper logic/component.' },
   { material: 'Dialog (CDK)', api: 'CdkDialog', pkg: 'cdk', rk: 'Dialog', match: 'partial', note: 'RhombusDialogService is opinionated, not the low-level CDK dialog primitive.' },
   { material: 'Menu (CDK)', api: 'cdkMenu', pkg: 'cdk', rk: 'Menu', match: 'partial', note: 'Covers triggered menus, not the full WAI-ARIA menubar/context-menu surface.' },

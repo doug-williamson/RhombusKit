@@ -29,7 +29,7 @@ import { ExampleComponent } from '../../shared/example.component';
           <code>[rhombusTabGroup]</code> directive to Material's
           <code>&lt;mat-tab-group&gt;</code> so colour flows through the token
           contract — the active label and ink bar track <code>--text-accent</code>,
-          re-skinning when you toggle the theme.
+          updating when you toggle the theme.
         </p>
 
         <section class="showcase-section">
