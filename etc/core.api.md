@@ -8,7 +8,7 @@
   type AlertVariant = 'info' | 'success' | 'warning' | 'error'
 
 ### AvatarSize (type)
-  type AvatarSize = 'sm' | 'md' | 'lg'
+  type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | number
 
 ### BadgeVariant (type)
   type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger'
@@ -124,6 +124,7 @@
   readonly name: _angular_core.InputSignal<string>
   readonly size: _angular_core.InputSignal<AvatarSize>
   readonly src: _angular_core.InputSignal<string>
+  readonly srcDark: _angular_core.InputSignal<string>
 
 ### RhombusBadgeDirective (class)
   readonly content: _angular_core.InputSignal<string | number>
@@ -155,8 +156,10 @@
 
 ### RhombusButtonComponent (class)
   readonly appearance: _angular_core.InputSignal<ButtonAppearance>
+  readonly ariaLabel: _angular_core.InputSignal<string>
   readonly disabled: _angular_core.InputSignal<boolean>
   readonly href: _angular_core.InputSignal<string>
+  readonly iconButton: _angular_core.InputSignalWithTransform<boolean, unknown>
   readonly leadingIcon: _angular_core.InputSignal<string>
   readonly rel: _angular_core.InputSignal<string>
   readonly routerLink: _angular_core.InputSignal<string | unknown[]>
@@ -280,6 +283,7 @@
   readonly items: _angular_core.InputSignal<MenuItem[]>
 
 ### RhombusNavItem (interface)
+  action?: () => void
   active?: boolean
   badge?: string | number
   disabled?: boolean
@@ -287,15 +291,21 @@
   href?: string
   icon?: string
   label: string
+  locked?: boolean
   rel?: string
   routerLink?: string | unknown[]
   target?: string
+  trailingIcon?: string
 
 ### RhombusNavListComponent (class)
+  readonly appearance: _angular_core.InputSignal<NavListAppearance>
   readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly itemAction: _angular_core.OutputEmitterRef<RhombusNavItem>
   readonly sections: _angular_core.InputSignal<RhombusNavSection[]>
 
 ### RhombusNavSection (interface)
+  collapsible?: boolean
+  expanded?: boolean
   heading?: string
   items: RhombusNavItem[]
 
@@ -403,6 +413,10 @@
 ### RhombusTabGroupDirective (class)
   readonly tabChange: _angular_core.OutputEmitterRef<number>
 
+### RhombusTagComponent (class)
+  readonly size: _angular_core.InputSignal<TagSize>
+  readonly variant: _angular_core.InputSignal<TagVariant>
+
 ### RhombusTextareaComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
   readonly autosize: _angular_core.InputSignal<boolean>
@@ -461,6 +475,12 @@
 ### SortState (interface)
   active: string
   direction: "" | "asc" | "desc"
+
+### TagSize (type)
+  type TagSize = 'sm' | 'md'
+
+### TagVariant (type)
+  type TagVariant = 'default' | 'info' | 'success' | 'warning' | 'error' | 'draft' | 'published' | 'scheduled' | 'archived'
 
 ### ToastConfig (interface)
   action?: string

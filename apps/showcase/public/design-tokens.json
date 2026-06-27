@@ -439,6 +439,14 @@
       "$type": "color",
       "$value": "#64748b"
     },
+    "ink-surface": {
+      "$type": "color",
+      "$value": "#0f172a"
+    },
+    "ink-on-surface": {
+      "$type": "color",
+      "$value": "#f8fafc"
+    },
     "code-keyword": {
       "$type": "color",
       "$value": "#6d28d9"
@@ -672,6 +680,14 @@
     "status-archived-text": {
       "$type": "color",
       "$value": "#94a3b8"
+    },
+    "ink-surface": {
+      "$type": "color",
+      "$value": "#0f172a"
+    },
+    "ink-on-surface": {
+      "$type": "color",
+      "$value": "#f8fafc"
     },
     "code-keyword": {
       "$type": "color",
