@@ -28,7 +28,7 @@ import { ExampleComponent } from '../../shared/example.component';
         <p class="overview__lead">
           <code>&lt;rhombus-empty-state&gt;</code> is a centered icon, heading,
           optional body, and optional CTA for &ldquo;nothing here yet&rdquo;
-          surfaces. The icon is a Material <strong>ligature</strong> name and the
+          states. The icon is a Material <strong>ligature</strong> name and the
           CTA composes <code>&lt;rhombus-button&gt;</code>, so it inherits the
           token contract and re-skins with the theme.
         </p>

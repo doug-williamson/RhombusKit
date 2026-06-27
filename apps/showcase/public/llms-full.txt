@@ -40,7 +40,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 - Tabs: https://rhombuskit.online/components/tabs
 - Menu: https://rhombuskit.online/components/menu
 - Popover: https://rhombuskit.online/components/popover
-- Bottom nav: https://rhombuskit.online/components/bottom-nav
+- Bottom Nav: https://rhombuskit.online/components/bottom-nav
 - Nav List: https://rhombuskit.online/components/nav-list
 - Breadcrumbs: https://rhombuskit.online/components/breadcrumbs
 - Pagination: https://rhombuskit.online/components/pagination

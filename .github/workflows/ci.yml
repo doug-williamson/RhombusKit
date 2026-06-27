@@ -138,6 +138,27 @@ jobs:
       - name: Verify mcp-data.ts (bundled docs) is in sync
         run: node tools/generate-mcp-data.mjs --check
 
+  stackblitz:
+    # The "Open in StackBlitz" starter (apps/showcase/src/app/shared/
+    # stackblitz-starter.ts) ships its app.component.ts / main.ts / styles.scss as
+    # string literals that nothing else in the repo compiles. This job rebuilds
+    # that exact project and runs a real `ng build` against the PR's freshly-packed
+    # @rhombuskit packages, so a starter that doesn't compile can't reach users.
+    # Add to branch protection.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      # `pnpm pack` packs each package's dist (publishConfig.directory), so build
+      # the four the starter depends on before the gate packs them.
+      - run: pnpm exec nx run-many --target=build --projects=tokens,theme-engine,material-preset,core
+      - run: pnpm test:stackblitz
+
   a11y:
     # Phase 4 (secondary): the only reliable color-contrast check. jsdom can't
     # measure contrast, so the jest-axe pass skips it; this renders the showcase
