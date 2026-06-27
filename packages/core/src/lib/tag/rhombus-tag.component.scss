@@ -1,0 +1,74 @@
+// RhombusKit tag — inline status/label pill. Bespoke; every colour flows through
+// the @rhombuskit/tokens CONTRACT (reusing the --status-* and --toast-* pairs).
+// No hard-coded colour / radius literals; no .mat-mdc-* selectors. Variants are
+// keyed off the `data-variant` host attribute (the chip pattern).
+
+.rhombus-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  // Neutral default — a quiet surface pill.
+  background-color: var(--surface-2);
+  color: var(--text-secondary);
+
+  // --- Sizes ---
+  // md (default): comfortable label pill. sm: dense, for table rows.
+  &[data-size='md'] {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  &[data-size='sm'] {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  // --- Generic semantics (shared --toast-* tint pairs) ---
+  &[data-variant='info'] {
+    background-color: var(--toast-info-bg);
+    color: var(--toast-info-text);
+  }
+
+  &[data-variant='success'] {
+    background-color: var(--toast-success-bg);
+    color: var(--toast-success-text);
+  }
+
+  &[data-variant='warning'] {
+    background-color: var(--toast-warning-bg);
+    color: var(--toast-warning-text);
+  }
+
+  &[data-variant='error'] {
+    background-color: var(--toast-error-bg);
+    color: var(--toast-error-text);
+  }
+
+  // --- Status roles (--status-* pairs; post/page lifecycle labels) ---
+  &[data-variant='draft'] {
+    background-color: var(--status-draft-bg);
+    color: var(--status-draft-text);
+  }
+
+  &[data-variant='published'] {
+    background-color: var(--status-published-bg);
+    color: var(--status-published-text);
+  }
+
+  &[data-variant='scheduled'] {
+    background-color: var(--status-scheduled-bg);
+    color: var(--status-scheduled-text);
+  }
+
+  &[data-variant='archived'] {
+    background-color: var(--status-archived-bg);
+    color: var(--status-archived-text);
+  }
+}

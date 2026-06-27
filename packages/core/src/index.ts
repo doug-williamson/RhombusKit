@@ -23,6 +23,13 @@ export type { ChipVariant } from './lib/chip/rhombus-chip.directive';
 export { RhombusChipGroupDirective } from './lib/chip/rhombus-chip-group.directive';
 export type { ChipGroupSelection } from './lib/chip/rhombus-chip-group.directive';
 
+// Tag — bespoke inline status/label pill (Draft / Published / Scheduled /
+// Archived + generic info/success/warning/error). No Material, no new tokens:
+// themed from the existing --status-* and --toast-* contract pairs. Distinct
+// from the overlay Badge and the selectable Chip.
+export { RhombusTagComponent } from './lib/tag/rhombus-tag.component';
+export type { TagVariant, TagSize } from './lib/tag/rhombus-tag.component';
+
 // Phase 3a — form primitives. Each component inlines its own
 // <mat-form-field>; shared styling ships via @rhombuskit/core/scss.
 export { RhombusInputComponent } from './lib/input/rhombus-input.component';
