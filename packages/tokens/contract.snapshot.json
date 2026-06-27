@@ -20,6 +20,8 @@
   "--font-mono",
   "--font-prose",
   "--font-sans",
+  "--ink-on-surface",
+  "--ink-surface",
   "--nav-active-bg",
   "--nav-active-text",
   "--shadow-btn-primary",

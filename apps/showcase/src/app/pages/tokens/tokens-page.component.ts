@@ -126,6 +126,27 @@ import { TOKENS_STACKBLITZ_STARTER } from '../../shared/tokens-stackblitz-starte
       </section>
 
       <section class="showcase-section">
+        <h2>Ink — a theme-invariant inverse surface</h2>
+        <p class="tokens-lead">
+          <code>--ink-surface</code> and <code>--ink-on-surface</code> are a
+          small <strong>theme-invariant</strong> pair — the same constant
+          near-black surface and light text in <em>both</em> light and dark
+          themes (mirroring Material's inverse roles). Reach for them when a
+          decorative surface must stay dark regardless of theme: code-editor
+          mockups, inverted callouts, tooltips, or screenshots. The card below
+          keeps its colours when you toggle the theme above.
+        </p>
+        <div class="ink-demo" aria-hidden="true">
+          <div class="ink-demo__dots">
+            <span></span><span></span><span></span>
+          </div>
+          <pre class="ink-demo__code"><span class="ink-demo__muted">// stays dark in both themes</span>
+const theme = <span class="ink-demo__accent">'rhombuskit'</span>;</pre>
+        </div>
+        <rhombus-code-block language="css" [code]="inkScale" />
+      </section>
+
+      <section class="showcase-section">
         <h2>Dark mode, no framework</h2>
         <p class="tokens-lead">
           Both theme packs ship in the one stylesheet, keyed off
@@ -212,6 +233,42 @@ import { TOKENS_STACKBLITZ_STARTER } from '../../shared/tokens-stackblitz-starte
     .tokens rhombus-code-block {
       display: block;
       margin-bottom: 1rem;
+    }
+
+    /* Ink demo — a tiny code-editor mockup on the theme-invariant ink surface.
+       It uses --ink-surface / --ink-on-surface, so it stays dark in both themes. */
+    .ink-demo {
+      max-width: 28rem;
+      margin: 0 0 1rem;
+      border-radius: var(--radius-xl);
+      background: var(--ink-surface);
+      color: var(--ink-on-surface);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .ink-demo__dots {
+      display: flex;
+      gap: 0.375rem;
+      padding: 0.75rem 1rem;
+      span {
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: var(--radius-full);
+        background: color-mix(in srgb, var(--ink-on-surface) 30%, transparent);
+      }
+    }
+    .ink-demo__code {
+      margin: 0;
+      padding: 0 1rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .ink-demo__muted {
+      color: color-mix(in srgb, var(--ink-on-surface) 55%, transparent);
+    }
+    .ink-demo__accent {
+      color: var(--code-string);
     }
   `,
 })
@@ -312,6 +369,12 @@ html.dataset.theme =
   protected readonly borderWidthScale = `:root {
   --border-width:        1px; /* hairlines, dividers, control outlines */
   --border-width-strong: 2px; /* focused field outline */
+}`;
+
+  protected readonly inkScale = `/* Theme-invariant — identical in light AND dark. */
+.code-mockup {
+  background: var(--ink-surface);     /* constant near-black surface */
+  color:      var(--ink-on-surface);  /* constant light text (~17:1, AAA) */
 }`;
 
   protected readonly motionScale = `:root {

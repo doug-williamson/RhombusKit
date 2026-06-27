@@ -77,6 +77,12 @@ export const rhombusLight: Record<SemanticTokenName, string> = {
   '--status-archived-bg':     slate[100],
   '--status-archived-text':   slate[500],
 
+  // Ink — theme-invariant inverse surface. IDENTICAL to the dark pack: a
+  // constant near-black surface with light text (~17:1, AAA), so decorative UI
+  // (code mockups, inverted callouts) stays dark in both themes.
+  '--ink-surface':    slate[900],
+  '--ink-on-surface': slate[50],
+
   // Code / syntax highlighting — one hue per lexical role, each AA (≥4.5:1) on
   // --surface-0 (#ffffff). Drawn from the brand palette so code reads as native.
   '--code-keyword':     violet[700],
