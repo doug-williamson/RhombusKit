@@ -153,7 +153,7 @@ export const MCP_DATA = {
     },
     {
       "slug": "bottom-nav",
-      "label": "Bottom nav",
+      "label": "Bottom Nav",
       "group": "Navigation",
       "url": "https://rhombuskit.online/components/bottom-nav"
     },
