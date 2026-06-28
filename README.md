@@ -38,6 +38,17 @@ contributions.
 By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md). For
 security issues, please follow the [Security Policy](./SECURITY.md).
 
+## Support
+
+RhombusKit is a solo, AI-assisted project, and sponsorship is a longevity
+signal — not a paywall. Every component and fix stays free and MIT-licensed.
+Sponsorship covers the running costs (CI minutes for the WCAG 2.1 AA checks, the
+[rhombuskit.online](https://rhombuskit.online) docs hosting, and the AI tooling
+behind the release cadence).
+
+- **Sponsor** — [github.com/sponsors/doug-williamson](https://github.com/sponsors/doug-williamson) (monthly or one-time), or see [Support](https://rhombuskit.online/support).
+- **Free ways to help** — star the repo, [propose or upvote a component](https://rhombuskit.online/roadmap), or report an accessibility gap. All credited.
+
 ## Contributors
 
 Every contribution counts — code, docs, design, accessibility audits, and ideas

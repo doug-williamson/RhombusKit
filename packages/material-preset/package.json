@@ -25,6 +25,7 @@
     "directory": "packages/material-preset"
   },
   "homepage": "https://rhombuskit.online",
+  "funding": "https://github.com/sponsors/doug-williamson",
   "bugs": {
     "url": "https://github.com/doug-williamson/RhombusKit/issues"
   },

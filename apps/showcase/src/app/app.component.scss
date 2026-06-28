@@ -83,4 +83,36 @@
       padding: 0.05em 0.4em;
     }
   }
+
+  // Site-wide footer, projected into the shell's [shellFooter] slot (v1.9). A
+  // quiet line: the licence note plus a single tasteful Sponsor link. Pinned to
+  // the content width by the shell; we only style the row contents here.
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.8125rem;
+  }
+
+  &__footer-meta {
+    color: var(--text-muted);
+  }
+
+  &__sponsor {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 150ms ease;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
 }

@@ -66,6 +66,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Themes](https://rhombuskit.online/themes)
 - [Motion](https://rhombuskit.online/motion)
 - [Accessibility](https://rhombuskit.online/accessibility)
+- [Support](https://rhombuskit.online/support)
 
 ## Optional
 

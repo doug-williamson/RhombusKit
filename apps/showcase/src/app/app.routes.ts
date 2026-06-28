@@ -232,6 +232,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/motion/motion-page.component'),
   },
   {
+    path: 'support',
+    title: 'Support',
+    loadComponent: () => import('./pages/support/support-page.component'),
+  },
+  {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./pages/home/home-page.component'),

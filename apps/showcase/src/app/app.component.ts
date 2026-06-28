@@ -4,8 +4,10 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
   RhombusAppShellComponent,
+  RhombusIconComponent,
   RhombusMenuComponent,
   RhombusNavListComponent,
+  RhombusShellFooterDirective,
   RhombusThemeMenuComponent,
   type MenuItem,
   type RhombusNavSection,
@@ -40,8 +42,10 @@ const GUIDES_GROUP = 'Get started';
     RouterOutlet,
     MatIconModule,
     RhombusAppShellComponent,
+    RhombusIconComponent,
     RhombusMenuComponent,
     RhombusNavListComponent,
+    RhombusShellFooterDirective,
     RhombusThemeMenuComponent,
     CommandPaletteComponent,
   ],
@@ -83,6 +87,14 @@ const GUIDES_GROUP = 'Get started';
 
       <router-outlet />
       <app-command-palette #palette />
+
+      <footer shellFooter class="showcase-shell__footer">
+        <span class="showcase-shell__footer-meta">RhombusKit · MIT licensed</span>
+        <a routerLink="/support" class="showcase-shell__sponsor">
+          <rhombus-icon name="heart" size="sm" />
+          Sponsor
+        </a>
+      </footer>
     </rhombus-app-shell>
   `,
   styleUrl: './app.component.scss',
