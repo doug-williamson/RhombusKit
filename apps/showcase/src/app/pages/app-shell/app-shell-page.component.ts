@@ -9,6 +9,7 @@ import {
   RhombusShellAsideDirective,
   RhombusShellAuthDirective,
   RhombusShellBottomNavDirective,
+  RhombusShellFooterDirective,
   RhombusShellNavFooterDirective,
 } from '@rhombuskit/core';
 import { ComponentPageComponent } from '../../shared/component-page.component';
@@ -34,6 +35,7 @@ import { ExampleComponent } from '../../shared/example.component';
     RhombusShellNavFooterDirective,
     RhombusShellAuthDirective,
     RhombusShellAsideDirective,
+    RhombusShellFooterDirective,
     ComponentPageComponent,
     ExampleComponent,
   ],
@@ -146,6 +148,7 @@ import { ExampleComponent } from '../../shared/example.component';
             <li><code>[shellNav]</code> — the navigation links inside the sidenav drawer.</li>
             <li><code>[shellNavFooter]</code> — presence-gated footer pinned to the bottom of the sidenav (e.g. a version badge).</li>
             <li><code>[shellAside]</code> — presence-gated right-rail; when present the content becomes a 3-column grid on desktop and the aside hides below 1024px.</li>
+            <li><code>[shellFooter]</code> — presence-gated footer pinned below the content scroll region (it never scrolls away). It spans the content column — to the right of the sidenav in <code>navMode="sidenav"</code>, above the bar in <code>navMode="bottom"</code>. Replaces styling the private <code>.rhombus-app-shell__main</code> to anchor a footer.</li>
             <li><code>[shellBottomNav]</code> — the bar shown only when <code>navMode="bottom"</code>; project a <a routerLink="/components/bottom-nav">Bottom Nav</a> here.</li>
             <li><strong>Default slot</strong> — everything not matched lands in the <code>&lt;main&gt;</code> content region (your routed view / <code>&lt;router-outlet&gt;</code>).</li>
           </ul>
@@ -214,6 +217,12 @@ import { ExampleComponent } from '../../shared/example.component';
             Nav footer
           </rhombus-button>
           <rhombus-button
+            [variant]="showFooter() ? 'primary' : 'secondary'"
+            (click)="showFooter.set(!showFooter())"
+          >
+            Footer
+          </rhombus-button>
+          <rhombus-button
             [variant]="forceOverlay() ? 'primary' : 'secondary'"
             (click)="forceOverlay.set(!forceOverlay())"
           >
@@ -269,12 +278,19 @@ import { ExampleComponent } from '../../shared/example.component';
               <p>
                 This is the default content slot. Toggle <em>Aside</em> to move
                 between the 2-column and 3-column layout, <em>Auth slot</em> /
-                <em>Nav footer</em> to see the presence-gated regions appear,
-                <em>Force overlay</em> to collapse the sidenav into an overlay
-                drawer with the toolbar hamburger, and <em>Bare route</em> to drop
-                the nav drawer entirely.
+                <em>Nav footer</em> / <em>Footer</em> to see the presence-gated
+                regions appear, <em>Force overlay</em> to collapse the sidenav into
+                an overlay drawer with the toolbar hamburger, and <em>Bare route</em>
+                to drop the nav drawer entirely.
               </p>
             </div>
+
+            @if (showFooter()) {
+              <footer shellFooter class="app-shell-demo__footer">
+                <span>© 2026 AcmeDocs</span>
+                <span>v1.9.0</span>
+              </footer>
+            }
           </rhombus-app-shell>
         </div>
       </section>
@@ -408,6 +424,15 @@ import { ExampleComponent } from '../../shared/example.component';
         max-width: 52ch;
       }
     }
+
+    .app-shell-demo__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
   `,
 })
 export default class AppShellPageComponent {
@@ -440,6 +465,7 @@ export class AppComponent {}`;
   protected readonly showAside = signal(true);
   protected readonly showAuth = signal(true);
   protected readonly showNavFooter = signal(true);
+  protected readonly showFooter = signal(true);
   protected readonly forceOverlay = signal(false);
   protected readonly hasNav = signal(true);
 
