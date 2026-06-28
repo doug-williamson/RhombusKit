@@ -38,4 +38,5 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'page-header', label: 'Page Header' },
   { slug: 'empty-state', label: 'Empty State' },
   { slug: 'code-block', label: 'Code Block' },
+  { slug: 'accordion', label: 'Accordion' },
 ];

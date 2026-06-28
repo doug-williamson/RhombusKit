@@ -187,6 +187,12 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/code-block/code-block-page.component'),
       },
+      {
+        path: 'accordion',
+        title: 'Accordion',
+        loadComponent: () =>
+          import('./pages/accordion/accordion-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

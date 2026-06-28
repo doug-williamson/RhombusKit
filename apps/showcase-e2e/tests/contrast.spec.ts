@@ -51,6 +51,7 @@ const COMPONENTS = [
   '/components/page-header',
   '/components/empty-state',
   '/components/code-block',
+  '/components/accordion',
 ] as const;
 
 // Each component page splits content across Overview / Examples / API tabs; the

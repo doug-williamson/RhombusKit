@@ -91,6 +91,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Content',
     items: [
+      { path: '/components/accordion', label: 'Accordion' },
       { path: '/components/page-header', label: 'Page Header' },
       { path: '/components/empty-state', label: 'Empty State' },
       { path: '/components/code-block', label: 'Code Block' },

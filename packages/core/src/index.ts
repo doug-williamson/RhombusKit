@@ -169,6 +169,15 @@ export { RhombusShellAsideDirective } from './lib/app-shell/rhombus-shell-aside.
 export { RhombusShellBottomNavDirective } from './lib/app-shell/rhombus-shell-bottom-nav.directive';
 export { RhombusShellFooterDirective } from './lib/app-shell/rhombus-shell-footer.directive';
 
+// Accordion — a hand-rolled disclosure stack (native button headers + region
+// bodies, full APG keyboard), single- or multi-expand. Project header content
+// via the title/description inputs or the marker directives; body is the default
+// slot. Themed off the contract — no Material expansion-panel underneath.
+export { RhombusAccordionComponent } from './lib/accordion/rhombus-accordion.component';
+export { RhombusAccordionPanelComponent } from './lib/accordion/rhombus-accordion-panel.component';
+export { RhombusAccordionTitleDirective } from './lib/accordion/rhombus-accordion-title.directive';
+export { RhombusAccordionDescriptionDirective } from './lib/accordion/rhombus-accordion-description.directive';
+
 // Popover — a CDK-Overlay panel hosting arbitrary projected content, attached to
 // any element via [rhombusPopoverTriggerFor]. Use [rhombusPopoverClose] on inner
 // controls to dismiss. Fills the gap RhombusMenu (menu-items only) leaves.

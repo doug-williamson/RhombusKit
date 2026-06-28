@@ -1,0 +1,118 @@
+// rhombus-accordion — hand-rolled disclosure stack. Encapsulation: None, so this
+// one stylesheet (loaded by the container) styles both the container and its
+// panels. Every colour flows through the @rhombuskit/tokens CONTRACT; no Material
+// system vars, no piercing combinators.
+
+.rhombus-accordion {
+  display: block;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface-0);
+}
+
+// Panels stack with dividers between them; the first has no top rule.
+.rhombus-accordion__panel + .rhombus-accordion__panel {
+  border-top: var(--border-width) solid var(--border);
+}
+
+.rhombus-accordion__heading {
+  margin: 0;
+  font: inherit;
+}
+
+// Full-width header button — reset native chrome, keep it a flex row.
+.rhombus-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+
+  &:hover {
+    background: var(--surface-1);
+  }
+
+  &:focus-visible {
+    outline: var(--border-width-strong) solid var(--focus-border);
+    outline-offset: -2px;
+  }
+}
+
+.rhombus-accordion__heading-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.rhombus-accordion__title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rhombus-accordion__description {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+// Chevron points right when collapsed, rotates down when open.
+.rhombus-accordion__chevron {
+  flex: none;
+  color: var(--text-secondary);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+
+  &--open {
+    transform: rotate(90deg);
+  }
+}
+
+// Disabled panel: dim the header, block the pointer (toggle is also guarded in TS).
+.rhombus-accordion__panel--disabled .rhombus-accordion__trigger {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover {
+    background: none;
+  }
+}
+
+// Expand/collapse via grid-template-rows 0fr → 1fr (animatable, unlike height
+// auto). The inner wrapper clips the content while the row collapses.
+.rhombus-accordion__region {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-base)
+    var(--motion-ease-standard);
+}
+
+.rhombus-accordion__panel--expanded .rhombus-accordion__region {
+  grid-template-rows: 1fr;
+}
+
+.rhombus-accordion__region-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.rhombus-accordion__content {
+  padding: 0 1rem 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rhombus-accordion__region,
+  .rhombus-accordion__chevron,
+  .rhombus-accordion__trigger {
+    transition: none;
+  }
+}
