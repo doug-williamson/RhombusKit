@@ -35,7 +35,10 @@ async function main(): Promise<void> {
   assert.match(config, /provideRhombusIcons/, 'app.config.ts should gain provideRhombusIcons');
 
   const styles = tree.readContent('/projects/app/src/styles.scss');
-  assert.ok(styles.includes("@use '@rhombuskit/core/scss';"), 'styles.scss should @use core');
+  assert.ok(
+    styles.includes("@use '@rhombuskit/core/scss' as core;"),
+    'styles.scss should @use core (aliased)',
+  );
   assert.ok(
     styles.indexOf('@rhombuskit/tokens/scss') < styles.indexOf('@rhombuskit/material-preset/scss'),
     'tokens must precede material-preset',
@@ -43,6 +46,17 @@ async function main(): Promise<void> {
   assert.ok(
     styles.indexOf('@rhombuskit/material-preset/scss') < styles.indexOf('@rhombuskit/core/scss'),
     'material-preset must precede core',
+  );
+  // The bridge is opt-in as of v1.9: the schematic must emit the include, after
+  // the @use layers, so Material follows the active theme out of the box.
+  assert.match(
+    styles,
+    /@include\s+rhombus\.material-bridge\(\)/,
+    'styles.scss should include the material-bridge() mixin',
+  );
+  assert.ok(
+    styles.indexOf('@rhombuskit/material-preset/scss') < styles.indexOf('material-bridge()'),
+    'the @use layers must precede the bridge include',
   );
 
   const pkg = JSON.parse(tree.readContent('/package.json'));

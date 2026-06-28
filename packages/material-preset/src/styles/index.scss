@@ -1,11 +1,16 @@
 // @rhombuskit/material-preset — SCSS entry point
-// Consume from app global styles via:
-//   @use '@rhombuskit/material-preset/scss';
-// Must be loaded AFTER @use '@rhombuskit/tokens/scss' so the bridge can
-// reference CONTRACT variables that the tokens package has already declared.
+//
+// OPT-IN as of v1.9: importing this entry point no longer emits any CSS on its
+// own. Bridge Angular Material onto the RhombusKit token contract by including
+// the `material-bridge()` mixin at the element that carries `data-theme`:
+//
+//   @use '@rhombuskit/tokens/scss';
+//   @use '@rhombuskit/material-preset/scss' as rhombus;
+//   :root { @include rhombus.material-bridge(); }
+//
+// Load it after @rhombuskit/tokens so the contract variables the bridge
+// references are declared. `material-compat()` is exported too (the reset shims),
+// but `material-bridge()` already includes it.
 
 @forward 'bridge';
-
-// Reset compatibility shims for Material components (loaded after the bridge,
-// and after @rhombuskit/tokens' reset). See _compat.scss.
 @forward 'compat';

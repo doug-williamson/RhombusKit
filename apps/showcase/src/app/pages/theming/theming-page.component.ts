@@ -134,7 +134,16 @@ const COLOR_TOKENS: Swatch[] = Object.keys(LIGHT)
           <code>&#64;rhombuskit/material-preset</code> maps Angular Material's M3
           system tokens (<code>--mat-sys-*</code>) onto the CONTRACT, so Material
           components inherit the active theme automatically — no
-          <code>.mat-mdc-*</code> overrides. It tracks Angular Material 21.x.
+          <code>.mat-mdc-*</code> overrides and no hand-maintained
+          <code>mat.theme()</code> mapping. It tracks Angular Material 21.x.
+        </p>
+        <p class="theming-lead">
+          As of v1.9 the bridge is <strong>opt-in</strong>: include the
+          <code>material-bridge()</code> mixin once at the element that carries
+          <code>data-theme</code> (see <em>Setup</em> above). Because every value
+          is a <code>var(--contract-token)</code>, it tracks light/dark and every
+          registered palette with no per-theme configuration — you can delete any
+          local <code>mat.theme()</code> bridge SCSS.
         </p>
         <p class="theming-lead">
           The full guide lives in
@@ -233,7 +242,13 @@ export default class ThemingPageComponent {
   protected readonly setupStyles = `// styles.scss — order matters
 @use '@rhombuskit/tokens/scss' as tokens;
 @use '@rhombuskit/material-preset/scss' as preset;
-@use '@rhombuskit/core/scss' as core;`;
+@use '@rhombuskit/core/scss' as core;
+
+// Opt in to the Material bridge on the element that carries data-theme,
+// so every --mat-sys-* re-resolves per active theme + palette.
+:root {
+  @include preset.material-bridge();
+}`;
 
   protected readonly setupProviders = `// app.config.ts
 import { provideRhombusTheme } from '@rhombuskit/theme-engine';

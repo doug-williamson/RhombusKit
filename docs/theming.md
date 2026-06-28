@@ -47,7 +47,17 @@ custom properties they declare):
 @use '@rhombuskit/tokens/scss' as tokens;          // declares the CONTRACT vars
 @use '@rhombuskit/material-preset/scss' as preset; // maps Material → CONTRACT
 @use '@rhombuskit/core/scss' as core;              // RhombusKit component/directive globals
+
+// Opt in to the Material bridge on the element that carries data-theme (here
+// :root) so every --mat-sys-* re-resolves per active theme + palette.
+:root {
+  @include preset.material-bridge();
+}
 ```
+
+> **Breaking change in v1.9:** `@use '@rhombuskit/material-preset/scss'` no longer
+> auto-applies the bridge at `:root`. Add the `@include preset.material-bridge();`
+> line above. This makes the bridge opt-in and lets you scope it to a Material subtree.
 
 Register the theme runtime in your app providers:
 
@@ -191,8 +201,27 @@ WCAG 2.1 AA in both themes.
 [`@rhombuskit/material-preset`](https://www.npmjs.com/package/@rhombuskit/material-preset)
 maps Angular Material's M3 system tokens (`--mat-sys-*`) onto the RhombusKit CONTRACT —
 e.g. `--mat-sys-primary: var(--btn-primary-bg)`, `--mat-sys-surface: var(--surface-0)`.
-With the bridge imported, Material components inherit the active theme automatically; no
-`.mat-mdc-*` overrides and no hard-coded colours.
+With the bridge included, Material components inherit the active theme automatically; no
+`.mat-mdc-*` overrides, no hard-coded colours, and no hand-maintained `mat.theme()` →
+`--mat-sys-*` mapping to keep in sync.
+
+**Opt-in (v1.9):** include the bridge once on the element that carries `data-theme`:
+
+```scss
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+:root {
+  @include rhombus.material-bridge();
+}
+```
+
+Because every value is a `var(--contract-token)`, the bridge tracks light/dark and every
+registered palette with no per-theme configuration — so you can delete any local
+`mat.theme()` bridge SCSS. Include it on a scoped selector instead to theme a Material
+subtree; note that components rendered in the body-level CDK overlay (menu, tooltip,
+toast, datepicker and select panels) are only reached by a `:root` / `html` include.
+Before v1.9 the bridge auto-applied at `:root` on import; that auto-apply was removed, so
+existing consumers must add the `@include` line above.
 
 **Support model:** the bridge tracks Angular Material **21.x** and uses the official
 `mat.*-overrides()` mixins for shape/typography that `--mat-sys-*` can't express.

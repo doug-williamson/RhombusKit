@@ -30,6 +30,11 @@ pnpm add @rhombuskit/core @rhombuskit/material-preset
 @use '@rhombuskit/tokens/scss' as tokens;             // CONTRACT custom properties
 @use '@rhombuskit/material-preset/scss' as preset;    // Material → token bridge
 @use '@rhombuskit/core/scss' as core;                 // directive/component globals
+
+// Opt in to the Material bridge on the element that carries data-theme (v1.9+).
+:root {
+  @include preset.material-bridge();
+}
 ```
 
 **2. Providers** (`app.config.ts`):

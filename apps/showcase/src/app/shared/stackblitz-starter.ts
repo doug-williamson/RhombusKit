@@ -129,6 +129,12 @@ const STYLES_SCSS = `// Order matters — see the RhombusKit setup guide.
 @use '@rhombuskit/material-preset/scss' as preset;
 @use '@rhombuskit/core/scss' as core;
 
+// Opt in to the Material bridge on the element that carries data-theme so every
+// --mat-sys-* re-resolves per active theme + palette.
+:root {
+  @include preset.material-bridge();
+}
+
 body {
   margin: 0;
   padding: 2rem;
