@@ -32,19 +32,6 @@ export interface Roadmap {
 export const ROADMAP: Roadmap = {
   now: [
     {
-      title: 'Public contribution flywheel',
-      detail:
-        'In-app feedback, the Angular Material migration gap-finder, llms.txt for AI assistants, and this roadmap — making RhombusKit easy to shape.',
-    },
-    {
-      title: 'Community launch',
-      detail:
-        'Opening the project for public issues, discussions, and pull requests, with guided issue forms and a contribution guide.',
-      link: { label: 'How to contribute', url: `${REPO}/blob/main/CONTRIBUTING.md` },
-    },
-  ],
-  next: [
-    {
       title: 'Motion: exit animations',
       detail:
         'Extend the motion foundation beyond enter-only — overlay/popover exit transitions and Tier 2 component motion.',
@@ -54,12 +41,13 @@ export const ROADMAP: Roadmap = {
       detail: 'Finish the mat-icon → rhombus-icon migration across consumers.',
     },
   ],
-  considering: [
+  next: [
     {
       title: 'Datepicker',
       detail: 'A top Angular Material migration gap — no calendar date-selection component yet.',
-      link: { label: 'Request / upvote', url: requestComponentUrl('Datepicker') },
     },
+  ],
+  considering: [
     {
       title: 'Slider',
       detail: 'Numeric / range control — requested by Material migrators.',

@@ -21,7 +21,7 @@ import { ExampleComponent } from '../../shared/example.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-component-page title="Bottom nav" [hasUsage]="true" apiKey="RhombusBottomNavComponent">
+    <app-component-page title="Bottom Nav" [hasUsage]="true" apiKey="RhombusBottomNavComponent">
       <div overview class="overview">
         <p class="overview__lead">
           <code>&lt;rhombus-bottom-nav&gt;</code> is a Material-style bottom tab bar for

@@ -22,7 +22,7 @@ import { ExampleComponent } from '../../shared/example.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-component-page
-      title="Nav list"
+      title="Nav List"
       [hasUsage]="true"
       apiKey="RhombusNavListComponent"
     >

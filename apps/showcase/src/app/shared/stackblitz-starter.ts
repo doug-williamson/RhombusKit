@@ -21,10 +21,16 @@ const PACKAGE_JSON = JSON.stringify(
       '@angular/material': '^21.0.0',
       '@angular/platform-browser': '^21.0.0',
       '@angular/router': '^21.0.0',
-      '@rhombuskit/core': '^1.5.0',
-      '@rhombuskit/material-preset': '^1.5.0',
-      '@rhombuskit/theme-engine': '^1.5.0',
-      '@rhombuskit/tokens': '^1.5.0',
+      '@rhombuskit/core': '^1.8.0',
+      '@rhombuskit/material-preset': '^1.8.0',
+      '@rhombuskit/theme-engine': '^1.8.0',
+      '@rhombuskit/tokens': '^1.8.0',
+      // Optional peer of @rhombuskit/core: the Code Block component lazy-loads
+      // highlight.js via dynamic `import('highlight.js/lib/languages/*')`. The app
+      // bundler resolves those at build time, so without this dep `ng build`/`ng
+      // serve` fail with "Could not resolve highlight.js/...". Keep it (the
+      // smoke-test-stackblitz CI gate enforces that the starter still builds).
+      'highlight.js': '^11.0.0',
       rxjs: '^7.8.0',
       tslib: '^2.3.0',
       'zone.js': '~0.16.0',

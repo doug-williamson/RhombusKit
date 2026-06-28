@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/doug-williamson/RhombusKit/compare/v1.7.2...v1.8.0) (2026-06-27)
+
+
+### Features
+
+* v1.8 downstream-adoption gaps (button icon-only, Tag, nav-list, avatar, ink tokens) ([#106](https://github.com/doug-williamson/RhombusKit/issues/106)) ([f72123c](https://github.com/doug-williamson/RhombusKit/commit/f72123cab0d1cb7f95df87f83aca86bbdd3447e3))
+
 ## [1.7.2](https://github.com/doug-williamson/RhombusKit/compare/v1.7.1...v1.7.2) (2026-06-26)
 
 

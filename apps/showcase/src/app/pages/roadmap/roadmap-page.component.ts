@@ -28,6 +28,11 @@ interface Column {
           what the community requests and upvotes — see a gap, request it, and
           watch it move. Items track release trains, not calendar dates.
         </p>
+        <p class="roadmap__shipped">
+          v1.8 recently shipped the new <strong>Tag</strong> pill, Nav List
+          locking and collapsible sections, extra Avatar sizes, icon-only Buttons,
+          and theme-invariant ink tokens.
+        </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>
         </p>
@@ -63,6 +68,12 @@ interface Column {
       color: var(--text-secondary);
       max-width: 70ch;
       margin: 0.5rem 0 0;
+    }
+    .roadmap__shipped {
+      color: var(--text-muted);
+      max-width: 70ch;
+      margin: 0.75rem 0 0;
+      font-size: 0.85rem;
     }
     .roadmap__cta { margin: 0.75rem 0 0; }
     .roadmap__cta a,
