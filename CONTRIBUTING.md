@@ -23,6 +23,20 @@ showcase example are all real, credited contributions.
 Voting (👍) on an existing issue or Discussion is itself a contribution — it's
 how we decide what to build next, so it beats a duplicate.
 
+## Sponsoring
+
+Code isn't the only way to keep RhombusKit healthy. If it saves your team time,
+**[sponsoring](https://github.com/sponsors/doug-williamson)** helps cover the
+running costs — CI minutes for the accessibility checks, the docs hosting, and
+the tooling behind the release cadence. It's a longevity signal, not a paywall:
+every component and fix stays free and MIT-licensed.
+
+Sponsors are credited in the [README](./README.md#sponsors) and on the
+[Support page](https://rhombuskit.online/support). Not in a position to sponsor?
+Starring the repo, upvoting a component on the
+[roadmap](https://rhombuskit.online/roadmap), or filing an accessibility report
+help just as much — and all are credited too.
+
 ## The two lanes: fast vs. gated
 
 RhombusKit's public surface is guarded in CI by snapshot checks. That guard
