@@ -76,11 +76,12 @@ describe('isoToDate / dateToIso', () => {
   });
 
   it('parses to local-midnight fields, not UTC', () => {
-    const d = isoToDate('2026-06-15')!;
-    expect(d.getFullYear()).toBe(2026);
-    expect(d.getMonth()).toBe(5); // June (0-indexed)
-    expect(d.getDate()).toBe(15);
-    expect(d.getHours()).toBe(0);
+    const d = isoToDate('2026-06-15');
+    expect(d).not.toBeNull();
+    expect(d?.getFullYear()).toBe(2026);
+    expect(d?.getMonth()).toBe(5); // June (0-indexed)
+    expect(d?.getDate()).toBe(15);
+    expect(d?.getHours()).toBe(0);
   });
 
   it('rejects empty, malformed, and impossible dates', () => {

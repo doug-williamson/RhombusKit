@@ -29,6 +29,93 @@ export interface ApiEntry {
 }
 
 export const API_METADATA: Record<string, ApiEntry> = {
+  "RhombusAccordionComponent": {
+    "name": "RhombusAccordionComponent",
+    "kind": "class",
+    "selector": "rhombus-accordion",
+    "description": "`<rhombus-accordion>` — a vertical stack of collapsible\n`<rhombus-accordion-panel>`s. Hand-rolled (native `<button>` headers +\n`role=\"region\"` bodies), so it carries no `--mat-sys-*` and needs no\n`::ng-deep` to theme — everything routes through the",
+    "inputs": [
+      {
+        "name": "multi",
+        "type": "boolean",
+        "description": "Allow multiple panels open at once; otherwise opening one closes the rest."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "*"
+    ]
+  },
+  "RhombusAccordionDescriptionDirective": {
+    "name": "RhombusAccordionDescriptionDirective",
+    "kind": "class",
+    "selector": "[rhombusAccordionDescription]",
+    "description": "`[rhombusAccordionDescription]` — marks secondary header text projected into a\n`<rhombus-accordion-panel>`, shown under the title. A semantic slot marker; it\ncarries no behaviour. Prefer the panel's `description` string input for the\nsimple text case.\n\n```html\n<rhombus-accordion-panel title=\"Security\">\n  <span rhombusAccordionDescription>Passwords, 2FA, sessions</span>\n  …content…\n</rhombus-accordion-panel>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusAccordionPanelComponent": {
+    "name": "RhombusAccordionPanelComponent",
+    "kind": "class",
+    "selector": "rhombus-accordion-panel",
+    "description": "`<rhombus-accordion-panel>` — one collapsible section inside\n`<rhombus-accordion>`. A native `<button>` header (inside an `<h3>`) toggles a\n`role=\"region\"` body, wired with `aria-expanded` / `aria-controls` /\n`aria-labelledby`. The panel owns its own open state via the two-way\n`expanded` model; the parent accordion enforces single- vs multi-expand and\narrow-key roving. Themed entirely off the",
+    "inputs": [
+      {
+        "name": "expanded",
+        "type": "boolean",
+        "description": "Two-way open state. Defaults to collapsed."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the panel: the header stays focusable (per APG) but won't toggle."
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Plain-text header title; for rich content project `[rhombusAccordionTitle]`."
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Plain-text secondary header line; for rich content project `[rhombusAccordionDescription]`."
+      }
+    ],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "toggle",
+        "type": "() => void",
+        "description": "Toggle open/closed unless disabled. Called from the header click + Enter/Space."
+      },
+      {
+        "name": "headerElement",
+        "type": "() => HTMLButtonElement",
+        "description": "The header button element — used by the parent accordion for arrow-key roving."
+      },
+      {
+        "name": "focusHeader",
+        "type": "() => void",
+        "description": "Move focus to this panel's header (parent-driven roving)."
+      }
+    ],
+    "slots": [
+      "[rhombusAccordionTitle]",
+      "[rhombusAccordionDescription]",
+      "*"
+    ]
+  },
+  "RhombusAccordionTitleDirective": {
+    "name": "RhombusAccordionTitleDirective",
+    "kind": "class",
+    "selector": "[rhombusAccordionTitle]",
+    "description": "`[rhombusAccordionTitle]` — marks rich header title content projected into a\n`<rhombus-accordion-panel>` (e.g. an icon + text + badge). A semantic slot\nmarker; it carries no behaviour. Prefer the panel's `title` string input for\nthe simple text case.\n\n```html\n<rhombus-accordion-panel>\n  <span rhombusAccordionTitle><rhombus-icon name=\"lock\" /> Security</span>\n  …content…\n</rhombus-accordion-panel>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
   "RhombusAlertComponent": {
     "name": "RhombusAlertComponent",
     "kind": "class",
@@ -73,7 +160,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusAppShellComponent",
     "kind": "class",
     "selector": "rhombus-app-shell",
-    "description": "`<rhombus-app-shell>` — a slotted application layout primitive. A full-width\ntop app bar (`mat-toolbar`) sits above a `mat-sidenav-container`: the toolbar\ncarries brand + header actions, the sidenav holds navigation, and the content\narea holds the routed view plus an optional right-rail aside. It owns\n*structure* only — it renders no nav items, no brand, no theme control, and\nreferences no route; every product concern is a projected slot.\n\nSlots: `[shellBrand]`, `[shellHeaderActions]`, `[shellAuthSlot]` (presence-\ngated) in the top bar; `[shellNav]`, `[shellNavFooter]` (presence-gated) in\nthe sidenav; `[shellAside]` (presence-gated) and the default content slot in\nthe content area.\n\nResponsive contract, driven by {@link mobileBreakpoint} and {@link iconRail}:\n- viewport ≤ `mobileBreakpoint` → overlay drawer (`mode=\"over\"`), closed by\n  default; the toolbar hamburger toggles it.\n- `iconRail` enabled, viewport in `(mobileBreakpoint, 1024)` → a persistent\n  narrow side rail (`mode=\"side\"`, open) carrying the\n  `rhombus-app-shell__sidenav--icon-rail` modifier. The shell sets the rail\n  width only; hiding nav labels in the rail is the consumer's responsibility.\n- viewport ≥ 1024 → full side nav (`mode=\"side\"`, open).\n\nSet `hasNav` to false for bare routes (sign-up, 404, marketing): the drawer is\nomitted and the content spans full width, while the toolbar chrome is retained.\n\nOn navigation to a new path the content region scrolls back to the top — the\nshell's internal scroll container sits outside the router's window-based\n`scrollPositionRestoration`, so it resets the offset itself; a query-only\nchange (e.g. a `?tab=` switch) preserves the scroll position.\n\nConsumer-overridable CSS custom properties (with their defaults):\n`--rhombus-app-shell-sidenav-width` (220px), `--rhombus-app-shell-aside-width`\n(240px).",
+    "description": "`<rhombus-app-shell>` — a slotted application layout primitive. A full-width\ntop app bar (`mat-toolbar`) sits above a `mat-sidenav-container`: the toolbar\ncarries brand + header actions, the sidenav holds navigation, and the content\narea holds the routed view plus an optional right-rail aside. It owns\n*structure* only — it renders no nav items, no brand, no theme control, and\nreferences no route; every product concern is a projected slot.\n\nSlots: `[shellBrand]`, `[shellHeaderActions]`, `[shellAuthSlot]` (presence-\ngated) in the top bar; `[shellNav]`, `[shellNavFooter]` (presence-gated) in\nthe sidenav; `[shellAside]` (presence-gated), the default content slot, and\n`[shellFooter]` (presence-gated, pinned below the scroll region) in the\ncontent area.\n\nResponsive contract, driven by {@link mobileBreakpoint} and {@link iconRail}:\n- viewport ≤ `mobileBreakpoint` → overlay drawer (`mode=\"over\"`), closed by\n  default; the toolbar hamburger toggles it.\n- `iconRail` enabled, viewport in `(mobileBreakpoint, 1024)` → a persistent\n  narrow side rail (`mode=\"side\"`, open) carrying the\n  `rhombus-app-shell__sidenav--icon-rail` modifier. The shell sets the rail\n  width only; hiding nav labels in the rail is the consumer's responsibility.\n- viewport ≥ 1024 → full side nav (`mode=\"side\"`, open).\n\nSet `hasNav` to false for bare routes (sign-up, 404, marketing): the drawer is\nomitted and the content spans full width, while the toolbar chrome is retained.\n\nOn navigation to a new path the content region scrolls back to the top — the\nshell's internal scroll container sits outside the router's window-based\n`scrollPositionRestoration`, so it resets the offset itself; a query-only\nchange (e.g. a `?tab=` switch) preserves the scroll position.\n\nConsumer-overridable CSS custom properties (with their defaults):\n`--rhombus-app-shell-sidenav-width` (220px), `--rhombus-app-shell-aside-width`\n(240px).",
     "inputs": [
       {
         "name": "mobileBreakpoint",
@@ -121,6 +208,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[shellNavFooter]",
       "*",
       "[shellAside]",
+      "[shellFooter]",
       "[shellBottomNav]"
     ]
   },
@@ -820,6 +908,89 @@ export const API_METADATA: Record<string, ApiEntry> = {
           }
         ]
       }
+    ]
+  },
+  "RhombusDatePickerComponent": {
+    "name": "RhombusDatePickerComponent",
+    "kind": "class",
+    "selector": "rhombus-date-picker",
+    "description": "`<rhombus-date-picker>` — wrapper over `<mat-form-field>` + `<input matInput>`\n+ `<mat-datepicker>`, consistent with `<rhombus-input>` / `<rhombus-select>`.\n\nThe public value semantics are **`string | null`** (ISO `YYYY-MM-DD`), so it\ndrops into a reactive form beside the other RhombusKit controls. Material's\ndatepicker works in `Date`, so the component mirrors the public\n`FormControl<string | null>` to a private `FormControl<Date | null>` and\nconverts at the boundary (local-midnight, see {@link isoToDate }). No\nControlValueAccessor — pass a FormControl via `control`, like the other\ncontrols. `min` / `max` are ISO strings too.\n\nThe component self-provides `provideNativeDateAdapter()`, so it is drop-in with\nno app-level setup. The displayed text is locale-formatted by the adapter; the\nvalue the form sees is always ISO.\n\n  <rhombus-date-picker label=\"Publish date\" [control]=\"dateCtrl\" min=\"2026-01-01\" />",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown when the field is empty."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "min",
+        "type": "string",
+        "description": "Earliest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "string",
+        "description": "Latest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no upper bound."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<string>",
+        "description": "Reactive-forms `FormControl<string | null>` (ISO); when set, the standalone `disabled` input is ignored."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "dateChange",
+        "type": "string",
+        "description": "Emits the selected date as ISO `YYYY-MM-DD` (or `null` when cleared) on user change."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[rhombusError]"
     ]
   },
   "RhombusDialogActionsDirective": {
@@ -1837,6 +2008,15 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "kind": "class",
     "selector": "[shellBottomNav]",
     "description": "Marker for the bottom-navigation slot, used when the shell runs in\n`navMode=\"bottom\"`. Apply it to the projected bar:\n\n```html\n<rhombus-app-shell navMode=\"bottom\" frame=\"phone\">\n  <rhombus-bottom-nav shellBottomNav [items]=\"navItems\" />\n</rhombus-app-shell>\n```\n\nThe shell selects this content (`ng-content select=\"[shellBottomNav]\"`) and\ndetects its presence (`contentChild`) to render the fixed bottom region.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusShellFooterDirective": {
+    "name": "RhombusShellFooterDirective",
+    "kind": "class",
+    "selector": "[shellFooter]",
+    "description": "Marker for the optional shell footer slot (e.g. a status bar, legal links, or a\npersistent action row). Apply it to the element you project, e.g.\n\n```html\n<rhombus-app-shell>\n  <main>…routed content…</main>\n  <footer shellFooter>© 2026 Acme · v1.9.0</footer>\n</rhombus-app-shell>\n```\n\nThe shell both selects this content (`ng-content select=\"[shellFooter]\"`) and\ndetects its presence (`contentChild`), so the footer region only renders when\nsomething is projected into it. The footer is pinned below the main scroll\nregion (it does not scroll with the content) and spans the content column:\n- `navMode=\"sidenav\"` → it sits to the right of the sidenav, aligned with main.\n- `navMode=\"bottom\"` → it sits above the bottom nav bar.\n\nThe shell provides the pinned region only; the footer's own content and layout\nare consumer-owned. Consumers no longer need to style the private\n`.rhombus-app-shell__main` to pin a footer.",
     "inputs": [],
     "outputs": [],
     "methods": []

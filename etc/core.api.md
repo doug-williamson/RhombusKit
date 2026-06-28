@@ -105,6 +105,24 @@
   label: string
   value: T
 
+### RhombusAccordionComponent (class)
+  readonly multi: _angular_core.InputSignalWithTransform<boolean, unknown>
+
+### RhombusAccordionDescriptionDirective (class)
+  // (no public members)
+
+### RhombusAccordionPanelComponent (class)
+  focusHeader: () => void
+  headerElement: () => HTMLButtonElement
+  readonly description: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly expanded: _angular_core.ModelSignal<boolean>
+  readonly title: _angular_core.InputSignal<string>
+  toggle: () => void
+
+### RhombusAccordionTitleDirective (class)
+  // (no public members)
+
 ### RhombusAlertComponent (class)
   readonly dismissed: _angular_core.OutputEmitterRef<void>
   readonly dismissible: _angular_core.InputSignalWithTransform<boolean, unknown>
@@ -213,6 +231,20 @@
   readonly sortStart: _angular_core.InputSignal<"asc" | "desc">
   readonly sortState: _angular_core.InputSignal<SortState>
   readonly totalCount: _angular_core.InputSignal<number>
+
+### RhombusDatePickerComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<FormControl<string>>
+  readonly dateChange: _angular_core.OutputEmitterRef<string>
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<string>
+  readonly min: _angular_core.InputSignal<string>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly required: _angular_core.InputSignal<boolean>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
 ### RhombusDialogActionsDirective (class)
   // (no public members)
@@ -389,6 +421,9 @@
   // (no public members)
 
 ### RhombusShellBottomNavDirective (class)
+  // (no public members)
+
+### RhombusShellFooterDirective (class)
   // (no public members)
 
 ### RhombusShellNavFooterDirective (class)

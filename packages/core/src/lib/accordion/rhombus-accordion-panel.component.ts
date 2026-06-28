@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { RhombusIconComponent } from '../icon/rhombus-icon.component';
 import { RhombusAccordionDescriptionDirective } from './rhombus-accordion-description.directive';
-import { RhombusAccordionTitleDirective } from './rhombus-accordion-title.directive';
 
 /** Per-instance id seed for header ↔ region ARIA wiring (SSR-safe, deterministic). */
 let nextId = 0;
