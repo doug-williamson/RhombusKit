@@ -51,6 +51,27 @@ export interface RhombusNavItem {
   target?: string;
   /** Anchor `rel` for `href` items. */
   rel?: string;
+  /**
+   * One level of nested navigation. When present and non-empty, the item becomes
+   * a **navigable parent**: if it also carries a `routerLink` / `href` it renders
+   * as the usual link row *plus* an adjacent disclosure toggle (so the row both
+   * navigates and expands its children); a parent with no link target renders as
+   * a pure disclosure toggle (like a {@link RhombusNavSection} `collapsible`
+   * heading, but at the item level). The children render as indented routed rows
+   * with `aria-expanded` / `aria-controls` wired to the toggle.
+   *
+   * Only one level is supported — a child's own `children` is ignored. Use a
+   * {@link RhombusNavSection} for top-level grouping and this for a navigable
+   * sub-tree (e.g. a docs sidebar where "AppShell" both routes to `/docs/app-shell`
+   * and expands to its API / Theming / Examples pages).
+   */
+  children?: RhombusNavItem[];
+  /**
+   * Initial expanded state for a parent item with `children`. Defaults to `true`
+   * (expanded), matching {@link RhombusNavSection.expanded}. The toggle is
+   * uncontrolled — the component tracks the state after first interaction.
+   */
+  expanded?: boolean;
 }
 
 /** A titled (or untitled) group of nav items. */

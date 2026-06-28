@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { Params, provideRouter } from '@angular/router';
 import { axe } from '../../testing/axe';
 import {
   ButtonAppearance,
@@ -24,6 +24,8 @@ import {
       [iconButton]="iconButton"
       [ariaLabel]="ariaLabel"
       [routerLink]="routerLink"
+      [queryParams]="queryParams"
+      [fragment]="fragment"
       [href]="href"
       [target]="target"
       [rel]="rel"
@@ -43,6 +45,8 @@ class HostComponent {
   ariaLabel: string | null = null;
   label = 'Save';
   routerLink: string | unknown[] | null = null;
+  queryParams: Params | null = null;
+  fragment: string | null = null;
   href: string | null = null;
   target: string | null = null;
   rel: string | null = null;
@@ -242,6 +246,33 @@ describe('rhombus-button', () => {
       fixture.detectChanges();
       expect(button(el)).toBeNull();
       expect(anchor(el).getAttribute('href')).toBe('https://rhombuskit.online');
+    });
+
+    it('composes queryParams into the routerLink anchor href', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/settings';
+      host.queryParams = { tab: 'billing' };
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('href')).toBe('/settings?tab=billing');
+    });
+
+    it('composes a fragment into the routerLink anchor href', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/settings';
+      host.fragment = 'billing';
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('href')).toBe('/settings#billing');
+    });
+
+    it('composes queryParams and fragment together', () => {
+      const { fixture, host, el } = setup();
+      host.routerLink = '/settings';
+      host.queryParams = { tab: 'billing' };
+      host.fragment = 'invoices';
+      fixture.detectChanges();
+      expect(anchor(el).getAttribute('href')).toBe(
+        '/settings?tab=billing#invoices'
+      );
     });
 
     it('prefers routerLink over href when both are set', () => {

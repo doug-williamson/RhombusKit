@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/doug-williamson/RhombusKit/compare/v1.9.0...v1.10.0) (2026-06-28)
+
+
+### Features
+
+* downstream-adoption gaps (nav-list nested tree, tag input, button fragment) ([#112](https://github.com/doug-williamson/RhombusKit/issues/112)) ([d934820](https://github.com/doug-williamson/RhombusKit/commit/d934820fffa3ecd358c17437e2314d6b2f4bfb38))
+
 ## [1.9.0](https://github.com/doug-williamson/RhombusKit/compare/v1.8.0...v1.9.0) (2026-06-28)
 
 

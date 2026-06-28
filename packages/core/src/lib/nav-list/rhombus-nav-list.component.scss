@@ -126,6 +126,58 @@ button.rhombus-nav-list__item {
   text-align: left;
 }
 
+// --- Nested children (one-level navigable tree) ---
+// A parent item pairs a navigable leaf row with an adjacent disclosure toggle;
+// its children render as an indented, collapsible group.
+.rhombus-nav-list__parent {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+
+  // The leaf link/button grows; the disclosure keeps its square footprint.
+  > .rhombus-nav-list__item {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+// Disclosure toggle beside a navigable parent: a square, quiet button that
+// resets native chrome and houses the rotating chevron (shared with sections).
+.rhombus-nav-list__disclosure {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--motion-duration-fast)
+    var(--motion-ease-standard);
+
+  &:hover {
+    background-color: var(--surface-2);
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: var(--border-width-strong) solid var(--focus-border);
+    outline-offset: -2px;
+  }
+}
+
+// Indented child group under a parent item. The inset + guide rail read the
+// rows as a sub-level without needing a second heading.
+.rhombus-nav-list__group--nested {
+  margin-top: 2px;
+  margin-left: 14px;
+  padding-left: 12px;
+  border-left: var(--border-width) solid var(--border);
+}
+
 .rhombus-nav-list__icon {
   flex-shrink: 0;
   display: inline-flex;

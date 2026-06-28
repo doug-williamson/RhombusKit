@@ -28,10 +28,13 @@ let nextId = 0;
  * ring), and every colour flows through the @rhombuskit/tokens contract —
  * including the previously-dormant `--nav-active-bg` / `--nav-active-text`.
  *
- * Three opt-in behaviours layer on top: per-item `locked` items stay focusable
+ * Four opt-in behaviours layer on top: per-item `locked` items stay focusable
  * and fire `action` / `(itemAction)` instead of navigating (for plan/feature
  * gates); `collapsible` sections turn their heading into a disclosure toggle;
- * and `appearance="list"` renders full-width "link-row" cells.
+ * an item with `children` becomes a navigable parent — a routed row plus an
+ * adjacent disclosure that expands one level of indented child rows (e.g. a docs
+ * sidebar where a node both routes and expands); and `appearance="list"` renders
+ * full-width "link-row" cells.
  *
  * Drop it into the shell with the slot marker:
  * `<rhombus-nav-list shellNav [sections]="nav" />`.
@@ -77,68 +80,141 @@ let nextId = 0;
             [attr.aria-label]="section.heading || null"
             [hidden]="section.collapsible && !isExpanded(si, section)"
           >
-            @for (item of section.items; track item.label) {
-              <li class="rhombus-nav-list__cell">
-                @if (item.locked && !item.disabled) {
-                  <button
-                    type="button"
-                    class="rhombus-nav-list__item rhombus-nav-list__item--locked"
-                    (click)="activate(item)"
+            @for (item of section.items; track item.label; let ii = $index) {
+              @if (item.children && item.children.length) {
+                <li class="rhombus-nav-list__cell rhombus-nav-list__cell--parent">
+                  @if (
+                    item.routerLink != null ||
+                    item.href != null ||
+                    (item.locked && !item.disabled)
+                  ) {
+                    <!-- Navigable parent: the usual link/button row PLUS an
+                         adjacent disclosure toggle, so the row both navigates
+                         (real anchor — middle-click works) and expands. -->
+                    <div class="rhombus-nav-list__parent">
+                      <ng-container
+                        *ngTemplateOutlet="leaf; context: { $implicit: item }"
+                      />
+                      <button
+                        type="button"
+                        class="rhombus-nav-list__disclosure"
+                        [attr.aria-expanded]="isItemExpanded(si, ii, item)"
+                        [attr.aria-controls]="itemGroupId(si, ii)"
+                        [attr.aria-label]="'Toggle ' + item.label"
+                        (click)="toggleItem(si, ii, item)"
+                      >
+                        <rhombus-icon
+                          class="rhombus-nav-list__chevron"
+                          [class.rhombus-nav-list__chevron--open]="
+                            isItemExpanded(si, ii, item)
+                          "
+                          name="chevron_right"
+                        />
+                      </button>
+                    </div>
+                  } @else {
+                    <!-- Pure parent (no link target): the whole row toggles,
+                         like a collapsible section heading at the item level. -->
+                    <button
+                      type="button"
+                      class="rhombus-nav-list__item rhombus-nav-list__item--parent"
+                      [attr.aria-expanded]="isItemExpanded(si, ii, item)"
+                      [attr.aria-controls]="itemGroupId(si, ii)"
+                      (click)="toggleItem(si, ii, item)"
+                    >
+                      <ng-container
+                        *ngTemplateOutlet="row; context: { $implicit: item }"
+                      />
+                      <rhombus-icon
+                        class="rhombus-nav-list__chevron"
+                        [class.rhombus-nav-list__chevron--open]="
+                          isItemExpanded(si, ii, item)
+                        "
+                        name="chevron_right"
+                      />
+                    </button>
+                  }
+                  <ul
+                    class="rhombus-nav-list__group rhombus-nav-list__group--nested"
+                    [id]="itemGroupId(si, ii)"
+                    [hidden]="!isItemExpanded(si, ii, item)"
                   >
-                    <ng-container
-                      *ngTemplateOutlet="row; context: { $implicit: item }"
-                    />
-                  </button>
-                } @else if (item.routerLink != null) {
-                  <a
-                    class="rhombus-nav-list__item"
-                    [class.rhombus-nav-list__item--disabled]="item.disabled"
-                    [routerLink]="item.disabled ? null : item.routerLink"
-                    routerLinkActive="rhombus-nav-list__item--active"
-                    [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-                    #rla="routerLinkActive"
-                    [attr.aria-current]="rla.isActive ? 'page' : null"
-                    [attr.aria-disabled]="item.disabled ? 'true' : null"
-                    [attr.tabindex]="item.disabled ? -1 : null"
-                  >
-                    <ng-container
-                      *ngTemplateOutlet="row; context: { $implicit: item }"
-                    />
-                  </a>
-                } @else if (item.href != null) {
-                  <a
-                    class="rhombus-nav-list__item"
-                    [class.rhombus-nav-list__item--active]="item.active"
-                    [class.rhombus-nav-list__item--disabled]="item.disabled"
-                    [attr.href]="item.disabled ? null : item.href"
-                    [attr.target]="item.target"
-                    [attr.rel]="item.rel"
-                    [attr.aria-current]="item.active ? 'page' : null"
-                    [attr.aria-disabled]="item.disabled ? 'true' : null"
-                    [attr.tabindex]="item.disabled ? -1 : null"
-                  >
-                    <ng-container
-                      *ngTemplateOutlet="row; context: { $implicit: item }"
-                    />
-                  </a>
-                } @else {
-                  <span
-                    class="rhombus-nav-list__item"
-                    [class.rhombus-nav-list__item--active]="item.active"
-                    [class.rhombus-nav-list__item--disabled]="item.disabled"
-                    [attr.aria-current]="item.active ? 'page' : null"
-                  >
-                    <ng-container
-                      *ngTemplateOutlet="row; context: { $implicit: item }"
-                    />
-                  </span>
-                }
-              </li>
+                    @for (child of item.children; track child.label) {
+                      <li
+                        class="rhombus-nav-list__cell rhombus-nav-list__cell--child"
+                      >
+                        <ng-container
+                          *ngTemplateOutlet="leaf; context: { $implicit: child }"
+                        />
+                      </li>
+                    }
+                  </ul>
+                </li>
+              } @else {
+                <li class="rhombus-nav-list__cell">
+                  <ng-container
+                    *ngTemplateOutlet="leaf; context: { $implicit: item }"
+                  />
+                </li>
+              }
             }
           </ul>
         </div>
       }
     </nav>
+
+    <!-- A single navigable leaf row: picks the host element from the item's
+         shape (locked button · routerLink anchor · href anchor · inert span) and
+         stamps the shared #row body inside. Reused for both top-level items and
+         the nested children of a parent item. -->
+    <ng-template #leaf let-item>
+      @if (item.locked && !item.disabled) {
+        <button
+          type="button"
+          class="rhombus-nav-list__item rhombus-nav-list__item--locked"
+          (click)="activate(item)"
+        >
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: item }" />
+        </button>
+      } @else if (item.routerLink != null) {
+        <a
+          class="rhombus-nav-list__item"
+          [class.rhombus-nav-list__item--disabled]="item.disabled"
+          [routerLink]="item.disabled ? null : item.routerLink"
+          routerLinkActive="rhombus-nav-list__item--active"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          #rla="routerLinkActive"
+          [attr.aria-current]="rla.isActive ? 'page' : null"
+          [attr.aria-disabled]="item.disabled ? 'true' : null"
+          [attr.tabindex]="item.disabled ? -1 : null"
+        >
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: item }" />
+        </a>
+      } @else if (item.href != null) {
+        <a
+          class="rhombus-nav-list__item"
+          [class.rhombus-nav-list__item--active]="item.active"
+          [class.rhombus-nav-list__item--disabled]="item.disabled"
+          [attr.href]="item.disabled ? null : item.href"
+          [attr.target]="item.target"
+          [attr.rel]="item.rel"
+          [attr.aria-current]="item.active ? 'page' : null"
+          [attr.aria-disabled]="item.disabled ? 'true' : null"
+          [attr.tabindex]="item.disabled ? -1 : null"
+        >
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: item }" />
+        </a>
+      } @else {
+        <span
+          class="rhombus-nav-list__item"
+          [class.rhombus-nav-list__item--active]="item.active"
+          [class.rhombus-nav-list__item--disabled]="item.disabled"
+          [attr.aria-current]="item.active ? 'page' : null"
+        >
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: item }" />
+        </span>
+      }
+    </ng-template>
 
     <!-- Shared row body (icon · label · badge · trailing icon · lock) for every
          item kind. -->
@@ -190,6 +266,13 @@ export class RhombusNavListComponent {
   private readonly idBase = `rhombus-nav-list-${nextId++}`;
   /** Per-section expanded overrides set after the user toggles a disclosure. */
   private readonly expandedOverrides = signal<Map<number, boolean>>(new Map());
+  /**
+   * Per-parent-item expanded overrides set after the user toggles a nested
+   * disclosure, keyed by `"<sectionIndex>-<itemIndex>"`.
+   */
+  private readonly itemExpandedOverrides = signal<Map<string, boolean>>(
+    new Map(),
+  );
 
   /** Stable id for a section's `<ul>`, used as the disclosure `aria-controls`. */
   protected sectionId(index: number): string {
@@ -207,6 +290,35 @@ export class RhombusNavListComponent {
     const next = new Map(this.expandedOverrides());
     next.set(index, !this.isExpanded(index, section));
     this.expandedOverrides.set(next);
+  }
+
+  /** Stable id for a parent item's nested `<ul>`, used as `aria-controls`. */
+  protected itemGroupId(sectionIndex: number, itemIndex: number): string {
+    return `${this.idBase}-section-${sectionIndex}-item-${itemIndex}`;
+  }
+
+  /** Whether a parent item's children are expanded (override, else the seed). */
+  protected isItemExpanded(
+    sectionIndex: number,
+    itemIndex: number,
+    item: RhombusNavItem,
+  ): boolean {
+    const override = this.itemExpandedOverrides().get(
+      `${sectionIndex}-${itemIndex}`,
+    );
+    return override ?? item.expanded ?? true;
+  }
+
+  /** Flip a parent item's expanded state. */
+  protected toggleItem(
+    sectionIndex: number,
+    itemIndex: number,
+    item: RhombusNavItem,
+  ): void {
+    const key = `${sectionIndex}-${itemIndex}`;
+    const next = new Map(this.itemExpandedOverrides());
+    next.set(key, !this.isItemExpanded(sectionIndex, itemIndex, item));
+    this.itemExpandedOverrides.set(next);
   }
 
   /** Run a locked item's callback and emit `(itemAction)`. */

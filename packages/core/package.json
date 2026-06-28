@@ -1,6 +1,6 @@
 {
   "name": "@rhombuskit/core",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "license": "MIT",
   "description": "Themeable, accessible Angular 21 component library — standalone, signal-based components over Angular Material, styled through the RhombusKit token contract.",
   "schematics": "./schematics/collection.json",

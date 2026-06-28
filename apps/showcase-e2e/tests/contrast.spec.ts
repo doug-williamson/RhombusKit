@@ -32,6 +32,7 @@ const COMPONENTS = [
   '/components/textarea',
   '/components/select',
   '/components/date-picker',
+  '/components/tag-input',
   '/components/data-table',
   '/components/overflow-menu',
   '/components/tooltip',

@@ -176,9 +176,11 @@
   readonly appearance: _angular_core.InputSignal<ButtonAppearance>
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly disabled: _angular_core.InputSignal<boolean>
+  readonly fragment: _angular_core.InputSignal<string>
   readonly href: _angular_core.InputSignal<string>
   readonly iconButton: _angular_core.InputSignalWithTransform<boolean, unknown>
   readonly leadingIcon: _angular_core.InputSignal<string>
+  readonly queryParams: _angular_core.InputSignal<Params>
   readonly rel: _angular_core.InputSignal<string>
   readonly routerLink: _angular_core.InputSignal<string | unknown[]>
   readonly size: _angular_core.InputSignal<ButtonSize>
@@ -318,8 +320,10 @@
   action?: () => void
   active?: boolean
   badge?: string | number
+  children?: RhombusNavItem[]
   disabled?: boolean
   exact?: boolean
+  expanded?: boolean
   href?: string
   icon?: string
   label: string
@@ -451,6 +455,24 @@
 ### RhombusTagComponent (class)
   readonly size: _angular_core.InputSignal<TagSize>
   readonly variant: _angular_core.InputSignal<TagVariant>
+
+### RhombusTagInputComponent (class)
+  readonly addOnBlur: _angular_core.InputSignal<boolean>
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly control: _angular_core.InputSignal<FormControl<string[]>>
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly maxTags: _angular_core.InputSignal<number>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly required: _angular_core.InputSignal<boolean>
+  readonly separatorKeyCodes: _angular_core.InputSignal<number[]>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+  readonly tags: _angular_core.InputSignal<string[]>
+  readonly tagsChange: _angular_core.OutputEmitterRef<string[]>
+  readonly variant: _angular_core.InputSignal<ChipVariant>
 
 ### RhombusTextareaComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
