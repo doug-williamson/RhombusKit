@@ -1,34 +1,28 @@
 // Datepicker calendar panel — styled outside the component's BEM namespace
-// because the calendar renders inside the CDK overlay (.cdk-overlay-container),
-// appended to <body> outside the component host, so mat.datepicker-overrides()
-// in the @rhombuskit/material-preset bridge can't reach it on its own. All
-// values flow through CONTRACT vars. No ::ng-deep, no --mat-sys-* writes.
+// because the calendar renders inside the body-level CDK overlay
+// (.cdk-overlay-container), outside the component host. The
+// @rhombuskit/material-preset bridge already maps these tokens at :root for the
+// common setup; re-declaring them on the overlay container here is a fallback so
+// the calendar stays themed even when a consumer scopes the bridge to a subtree
+// (the overlay is never inside that subtree). Every value flows through CONTRACT
+// vars — no --mat-sys-* writes, no ::ng-deep.
 //
-// Same split as rhombus-select (angular/components#30779): most calendar tokens
-// inherit, so the container scope reaches every cell; the panel *background*
-// token is registered non-inheriting, so it must sit on the panel element
-// itself — reached via the panelClass rhombus-date-picker sets on
-// <mat-datepicker> ("rhombus-datepicker-panel").
-
+// Unlike mat-select's panel-background token, the datepicker calendar tokens all
+// inherit, so declaring them on the container reaches mat-datepicker-content and
+// every calendar cell.
 .cdk-overlay-container {
-  --mat-datepicker-calendar-container-text-color:               var(--text-primary);
-  --mat-datepicker-calendar-date-text-color:                    var(--text-primary);
-  --mat-datepicker-calendar-date-selected-state-text-color:     var(--btn-primary-text);
-  --mat-datepicker-calendar-date-selected-state-background-color: var(--btn-primary-bg);
-  --mat-datepicker-calendar-date-today-outline-color:           var(--text-accent);
-  --mat-datepicker-calendar-date-hover-state-background-color:   var(--surface-1);
-  --mat-datepicker-calendar-date-focus-state-background-color:   var(--surface-2);
-  --mat-datepicker-calendar-header-text-color:                   var(--text-secondary);
-  --mat-datepicker-calendar-body-label-text-color:              var(--text-secondary);
-  --mat-datepicker-calendar-period-button-text-color:           var(--text-primary);
-  --mat-datepicker-calendar-period-button-icon-color:           var(--text-secondary);
-  --mat-datepicker-calendar-navigation-button-icon-color:       var(--text-secondary);
-}
-
-.rhombus-datepicker-panel.mat-datepicker-content {
   --mat-datepicker-calendar-container-background-color: var(--surface-0);
-  background-color: var(--surface-0);
-  color: var(--text-primary);
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-xl);
+  --mat-datepicker-calendar-container-text-color: var(--text-primary);
+  --mat-datepicker-calendar-container-shape: var(--radius-xl);
+  --mat-datepicker-calendar-date-text-color: var(--text-primary);
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--btn-primary-bg);
+  --mat-datepicker-calendar-date-selected-state-text-color: var(--btn-primary-text);
+  --mat-datepicker-calendar-date-today-outline-color: var(--text-accent);
+  --mat-datepicker-calendar-date-hover-state-background-color: var(--surface-1);
+  --mat-datepicker-calendar-date-focus-state-background-color: var(--surface-2);
+  --mat-datepicker-calendar-header-text-color: var(--text-secondary);
+  --mat-datepicker-calendar-body-label-text-color: var(--text-secondary);
+  --mat-datepicker-calendar-period-button-text-color: var(--text-primary);
+  --mat-datepicker-calendar-period-button-icon-color: var(--text-secondary);
+  --mat-datepicker-calendar-navigation-button-icon-color: var(--text-secondary);
 }

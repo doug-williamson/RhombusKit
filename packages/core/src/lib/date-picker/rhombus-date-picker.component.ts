@@ -108,7 +108,7 @@ export function dateToIso(date: Date | null | undefined): string | null {
         [placeholder]="placeholder()"
       />
       <mat-datepicker-toggle matIconSuffix [for]="picker" />
-      <mat-datepicker #picker panelClass="rhombus-datepicker-panel" />
+      <mat-datepicker #picker />
 
       @if (hint()) {
         <mat-hint>{{ hint() }}</mat-hint>
