@@ -43,6 +43,8 @@ export type {
   SelectOptionGroup,
 } from './lib/select/rhombus-select.component';
 
+export { RhombusDatePickerComponent } from './lib/date-picker/rhombus-date-picker.component';
+
 export type {
   FormFieldAppearance,
   FormFieldSize,

@@ -32,7 +32,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Card', api: 'mat-card', pkg: 'material', rk: 'Card', match: 'full', note: 'rhombus-card is a direct content-surface equivalent.' },
   { material: 'Checkbox', api: 'mat-checkbox', pkg: 'material', rk: 'Checkbox', match: 'full', note: 'Binary + indeterminate, form-bound.' },
   { material: 'Chips', api: 'mat-chip', pkg: 'material', rk: 'Chip', match: 'partial', note: 'Display/filter/selection chips map; chip-grid text entry is not covered.' },
-  { material: 'Datepicker', api: 'mat-datepicker', pkg: 'material', rk: '', match: 'gap', note: 'No calendar date-selection component (single or range).' },
+  { material: 'Datepicker', api: 'mat-datepicker', pkg: 'material', rk: 'Date Picker', match: 'partial', note: 'rhombus-date-picker covers single-date selection (ISO string value); date ranges are not covered yet.' },
   { material: 'Dialog', api: 'MatDialog', pkg: 'material', rk: 'Dialog', match: 'full', note: 'RhombusDialogService + Confirm Dialog wrap MatDialog.' },
   { material: 'Divider', api: 'mat-divider', pkg: 'material', rk: '', match: 'gap', note: 'No dedicated divider/rule component.' },
   { material: 'Expansion Panel / Accordion', api: 'mat-expansion-panel', pkg: 'material', rk: '', match: 'gap', note: 'No collapsible panel or accordion component.' },

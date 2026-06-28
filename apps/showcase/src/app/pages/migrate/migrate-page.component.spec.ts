@@ -29,7 +29,7 @@ describe('MigratePageComponent', () => {
       toggle(api: string, checked: boolean): void;
     };
     cmp.toggle('mat-slide-toggle', true); // full → Switch
-    cmp.toggle('mat-datepicker', true); // gap
+    cmp.toggle('mat-slider', true); // gap
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
@@ -42,7 +42,7 @@ describe('MigratePageComponent', () => {
     const cmp = fixture.componentInstance as unknown as {
       toggle(api: string, checked: boolean): void;
     };
-    cmp.toggle('mat-datepicker', true);
+    cmp.toggle('mat-slider', true);
     fixture.detectChanges();
 
     const cta = fixture.nativeElement.querySelector('.result__cta') as HTMLAnchorElement;

@@ -187,6 +187,30 @@
     enabled-arrow-color: var(--text-secondary),
   ));
 
+  // Date picker — calendar colours + toggle. The calendar panel renders in the
+  // CDK overlay, so rhombus-date-picker.component.scss also scopes the panel
+  // background (a non-inheriting token) via its panelClass.
+  @include mat.datepicker-overrides((
+    calendar-container-background-color:            var(--surface-0),
+    calendar-container-text-color:                  var(--text-primary),
+    calendar-container-shape:                       var(--radius-xl),
+    calendar-date-text-color:                       var(--text-primary),
+    calendar-date-selected-state-background-color:  var(--btn-primary-bg),
+    calendar-date-selected-state-text-color:        var(--btn-primary-text),
+    calendar-date-today-outline-color:              var(--text-accent),
+    calendar-date-hover-state-background-color:     var(--surface-1),
+    calendar-date-focus-state-background-color:     var(--surface-2),
+    calendar-date-in-range-state-background-color:  var(--surface-1),
+    calendar-header-text-color:                     var(--text-secondary),
+    calendar-header-divider-color:                  var(--border),
+    calendar-body-label-text-color:                 var(--text-secondary),
+    calendar-period-button-text-color:              var(--text-primary),
+    calendar-period-button-icon-color:              var(--text-secondary),
+    calendar-navigation-button-icon-color:          var(--text-secondary),
+    toggle-icon-color:                              var(--text-secondary),
+    toggle-active-state-icon-color:                 var(--text-accent),
+  ));
+
   // Data table (Phase 3b) — global defaults for any direct mat-table consumer.
   // rhombus-data-table.component.scss also sets these scoped to the component.
   @include mat.table-overrides((

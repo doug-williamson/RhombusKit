@@ -19,6 +19,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'input', label: 'Input' },
   { slug: 'textarea', label: 'Textarea' },
   { slug: 'select', label: 'Select' },
+  { slug: 'date-picker', label: 'Date Picker' },
   { slug: 'data-table', label: 'Data Table' },
   { slug: 'overflow-menu', label: 'Overflow Menu' },
   { slug: 'tooltip', label: 'Tooltip' },
