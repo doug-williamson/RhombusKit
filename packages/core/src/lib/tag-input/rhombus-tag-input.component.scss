@@ -1,0 +1,25 @@
+// RhombusKit tag-input — the chip-grid tag editor reuses the shared
+// .rhombus-form-field theming (label / outline / hint / error subscript) loaded
+// from @rhombuskit/core/scss, and each tag is coloured by the [rhombusChip]
+// bridge keyed off its data-variant. This file carries only the few layout
+// nudges specific to the editor; every value flows through the
+// @rhombuskit/tokens CONTRACT — no hard-coded colour literals.
+
+.rhombus-tag-input {
+  // The per-tag remove control: a centred, comfortable hit target. Its colour is
+  // inherited from the chip label (set by the rhombusChip bridge), so themed
+  // tags keep a legible glyph in both light and dark.
+  .rhombus-tag-input__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .rhombus-tag-input__remove mat-icon {
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+    line-height: 1;
+  }
+}

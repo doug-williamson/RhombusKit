@@ -311,6 +311,147 @@ describe('rhombus-nav-list', () => {
     });
   });
 
+  describe('nested children', () => {
+    it('renders a navigable parent: a link row PLUS a disclosure toggle wired to the nested group', () => {
+      const { el } = setup([
+        {
+          items: [
+            {
+              label: 'AppShell',
+              routerLink: '/dashboard',
+              children: [
+                { label: 'API Reference', routerLink: '/settings' },
+              ],
+            },
+          ],
+        },
+      ]);
+      // The parent still navigates as a real anchor.
+      const parentLink = el.querySelector<HTMLAnchorElement>(
+        '.rhombus-nav-list__parent > a.rhombus-nav-list__item'
+      );
+      expect(parentLink?.getAttribute('href')).toBe('/dashboard');
+      expect(parentLink?.textContent).toContain('AppShell');
+
+      // And it carries an adjacent disclosure toggle wired to the child group.
+      const toggle = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__disclosure'
+      );
+      expect(toggle).toBeTruthy();
+      expect(toggle?.getAttribute('aria-expanded')).toBe('true');
+      const controls = toggle?.getAttribute('aria-controls');
+      const group = el.querySelector<HTMLElement>(
+        'ul.rhombus-nav-list__group--nested'
+      );
+      expect(group?.id).toBe(controls);
+      expect(group?.hidden).toBe(false);
+
+      // The child renders as an indented routed row.
+      const childLink = group?.querySelector<HTMLAnchorElement>(
+        'a.rhombus-nav-list__item'
+      );
+      expect(childLink?.getAttribute('href')).toBe('/settings');
+      expect(childLink?.textContent).toContain('API Reference');
+    });
+
+    it('honours expanded: false and toggles the nested group on click', () => {
+      const { fixture, el } = setup([
+        {
+          items: [
+            {
+              label: 'Tokens',
+              routerLink: '/dashboard',
+              expanded: false,
+              children: [{ label: 'SHELL_CONFIG', routerLink: '/settings' }],
+            },
+          ],
+        },
+      ]);
+      const toggle = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__disclosure'
+      );
+      const group = el.querySelector<HTMLElement>(
+        'ul.rhombus-nav-list__group--nested'
+      );
+      expect(toggle?.getAttribute('aria-expanded')).toBe('false');
+      expect(group?.hidden).toBe(true);
+
+      toggle?.click();
+      fixture.detectChanges();
+      expect(toggle?.getAttribute('aria-expanded')).toBe('true');
+      expect(group?.hidden).toBe(false);
+    });
+
+    it('renders a pure parent (no link target) as a disclosure button for the whole row', () => {
+      const { el } = setup([
+        {
+          items: [
+            {
+              label: 'Reference',
+              children: [{ label: 'Settings', routerLink: '/settings' }],
+            },
+          ],
+        },
+      ]);
+      const parentToggle = el.querySelector<HTMLButtonElement>(
+        'button.rhombus-nav-list__item--parent'
+      );
+      expect(parentToggle).toBeTruthy();
+      expect(parentToggle?.getAttribute('aria-expanded')).toBe('true');
+      expect(parentToggle?.textContent).toContain('Reference');
+      // No separate link row for a parent without a route.
+      expect(el.querySelector('.rhombus-nav-list__parent')).toBeNull();
+      expect(
+        el.querySelector('ul.rhombus-nav-list__group--nested a')?.getAttribute('href')
+      ).toBe('/settings');
+    });
+
+    it('marks the active child with aria-current', async () => {
+      const { fixture, el } = setup([
+        {
+          items: [
+            {
+              label: 'AppShell',
+              routerLink: '/dashboard',
+              children: [{ label: 'Theming', routerLink: '/settings' }],
+            },
+          ],
+        },
+      ]);
+      await TestBed.inject(Router).navigateByUrl('/settings');
+      fixture.detectChanges();
+      const active = el.querySelector(
+        'ul.rhombus-nav-list__group--nested .rhombus-nav-list__item--active'
+      );
+      expect(active?.textContent).toContain('Theming');
+      expect(active?.getAttribute('aria-current')).toBe('page');
+    });
+
+    it('has no accessibility violations with a navigable nested tree', async () => {
+      const { el } = setup([
+        {
+          heading: 'Docs',
+          items: [
+            {
+              label: 'AppShell',
+              routerLink: '/dashboard',
+              icon: 'dashboard',
+              children: [
+                { label: 'API Reference', routerLink: '/settings' },
+                { label: 'Theming', routerLink: '/' },
+              ],
+            },
+            {
+              label: 'Reference',
+              children: [{ label: 'Settings', routerLink: '/settings' }],
+            },
+          ],
+        },
+      ]);
+      expect(await axe(el)).toHaveNoViolations();
+    });
+  });
+
   describe('list appearance', () => {
     it('adds the list modifier and preserves active-state styling', async () => {
       const { fixture, host, el } = setup([
