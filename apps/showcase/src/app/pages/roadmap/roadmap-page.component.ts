@@ -29,9 +29,9 @@ interface Column {
           watch it move. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          v1.8 recently shipped the new <strong>Tag</strong> pill, Nav List
-          locking and collapsible sections, extra Avatar sizes, icon-only Buttons,
-          and theme-invariant ink tokens.
+          v1.9 recently shipped the <strong>Date Picker</strong> and
+          <strong>Accordion</strong>, an app-shell footer slot, and an opt-in
+          Material bridge mixin.
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>

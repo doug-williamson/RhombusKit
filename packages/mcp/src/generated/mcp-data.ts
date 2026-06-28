@@ -277,6 +277,11 @@ export const MCP_DATA = {
       "path": "/accessibility",
       "label": "Accessibility",
       "url": "https://rhombuskit.online/accessibility"
+    },
+    {
+      "path": "/support",
+      "label": "Support",
+      "url": "https://rhombuskit.online/support"
     }
   ],
   "api": {
