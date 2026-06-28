@@ -54,6 +54,13 @@ export type {
 // (replaces the pre-1.0 `slot="error"` convention).
 export { RhombusErrorDirective } from './lib/form-field/rhombus-error.directive';
 
+// Tag input — editable free-text chip editor (type + Enter to add, × to remove)
+// bound to a string[]. Inlines <mat-chip-grid> + matChipInput and themes each
+// tag via the [rhombusChip] bridge; same control model as the form primitives
+// above (`[control]` for reactive forms, `[(tags)]` otherwise). The editor
+// counterpart to the selection-oriented [rhombusChipGroup].
+export { RhombusTagInputComponent } from './lib/tag-input/rhombus-tag-input.component';
+
 // Selection control. Wraps <mat-checkbox>; same control model as the form
 // primitives above (`[control]` for reactive forms, `[(checked)]` otherwise).
 export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.component';

@@ -9,7 +9,7 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Params, RouterLink } from '@angular/router';
 
 /**
  * Visual variant — picks the colour role applied to the button.
@@ -48,6 +48,8 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'text';
         [class]="hostClasses()"
         [disabled]="disabled()"
         [routerLink]="disabled() ? null : routerLink()"
+        [queryParams]="queryParams()"
+        [fragment]="fragment() ?? undefined"
         [attr.target]="disabled() ? null : target()"
         [attr.rel]="computedRel()"
         [attr.aria-label]="ariaLabel()"
@@ -127,6 +129,19 @@ export class RhombusButtonComponent {
    * Takes precedence over `href`. `null` (default) renders a `<button>`.
    */
   readonly routerLink = input<string | unknown[] | null>(null);
+  /**
+   * Router query params merged into the `routerLink` target, mirroring Angular's
+   * `RouterLink.queryParams` — e.g. `{ tab: 'billing' }` → `/settings?tab=billing`.
+   * Applies only to the `routerLink` anchor (ignored for `href`). `null` (default)
+   * adds none, preserving the real anchor semantics (middle-click / open-in-new-tab).
+   */
+  readonly queryParams = input<Params | null>(null);
+  /**
+   * Router fragment appended to the `routerLink` target, mirroring Angular's
+   * `RouterLink.fragment` — e.g. `'billing'` → `/settings#billing`. Applies only to
+   * the `routerLink` anchor (ignored for `href`). `null` (default) adds none.
+   */
+  readonly fragment = input<string | null>(null);
   /**
    * Plain anchor destination. When set (and `routerLink` is not), the button
    * renders as `<a href>`. `null` (default) renders a `<button>`.

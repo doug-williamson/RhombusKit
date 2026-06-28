@@ -484,6 +484,16 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Router destination. When set, the button renders as a real `<a>` (with\n`routerLink`) carrying identical styling — for nav CTAs, \"back to home\", etc.\nTakes precedence over `href`. `null` (default) renders a `<button>`."
       },
       {
+        "name": "queryParams",
+        "type": "Params",
+        "description": "Router query params merged into the `routerLink` target, mirroring Angular's\n`RouterLink.queryParams` — e.g. `{ tab: 'billing' }` → `/settings?tab=billing`.\nApplies only to the `routerLink` anchor (ignored for `href`). `null` (default)\nadds none, preserving the real anchor semantics (middle-click / open-in-new-tab)."
+      },
+      {
+        "name": "fragment",
+        "type": "string",
+        "description": "Router fragment appended to the `routerLink` target, mirroring Angular's\n`RouterLink.fragment` — e.g. `'billing'` → `/settings#billing`. Applies only to\nthe `routerLink` anchor (ignored for `href`). `null` (default) adds none."
+      },
+      {
         "name": "href",
         "type": "string",
         "description": "Plain anchor destination. When set (and `routerLink` is not), the button\nrenders as `<a href>`. `null` (default) renders a `<button>`."
@@ -1403,6 +1413,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "description": "Trailing badge — a count, a short string, or `'dot'` for a marker."
           },
           {
+            "name": "children",
+            "type": "RhombusNavItem[]",
+            "description": "One level of nested navigation. When present and non-empty, the item becomes\na **navigable parent**: if it also carries a `routerLink` / `href` it renders\nas the usual link row *plus* an adjacent disclosure toggle (so the row both\nnavigates and expands its children); a parent with no link target renders as\na pure disclosure toggle (like a {@link RhombusNavSection} `collapsible`\nheading, but at the item level). The children render as indented routed rows\nwith `aria-expanded` / `aria-controls` wired to the toggle.\n\nOnly one level is supported — a child's own `children` is ignored. Use a\n{@link RhombusNavSection} for top-level grouping and this for a navigable\nsub-tree (e.g. a docs sidebar where \"AppShell\" both routes to `/docs/app-shell`\nand expands to its API / Theming / Examples pages)."
+          },
+          {
             "name": "disabled",
             "type": "boolean",
             "description": "Renders the item inert: not focusable, not activatable."
@@ -1411,6 +1426,11 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "name": "exact",
             "type": "boolean",
             "description": "Exact-match active state for `routerLink` (RouterLinkActive `exact`)."
+          },
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "description": "Initial expanded state for a parent item with `children`. Defaults to `true`\n(expanded), matching {@link RhombusNavSection.expanded}. The toggle is\nuncontrolled — the component tracks the state after first interaction."
           },
           {
             "name": "href",
@@ -2162,6 +2182,116 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "methods": [],
     "slots": [
       "*"
+    ]
+  },
+  "RhombusTagInputComponent": {
+    "name": "RhombusTagInputComponent",
+    "kind": "class",
+    "selector": "rhombus-tag-input",
+    "description": "`<rhombus-tag-input>` — a first-class, editable **tag input** bound to a\n`string[]`: type a value and press Enter (or a separator key) to add a chip,\nclick its `×` to remove it. Wraps `<mat-form-field>` + `<mat-chip-grid>` +\n`matChipInput`, so it gains the form-field chrome (floating label, hint, error\nsubscript) of the other RhombusKit form primitives, and each chip is themed by\nthe same `[rhombusChip]` bridge as the selectable Chip.\n\nThis is the editor counterpart to the selection-oriented `[rhombusChipGroup]`\n(which decorates `<mat-chip-listbox>`): reach for the tag input when the user\n*authors* a free-text list (labels, recipients, keywords) rather than picking\nfrom a fixed set. It owns the add-on-enter / separator-key / removable-chip\nplumbing so consumers never touch Material's chip-grid internals.\n\nTwo usage modes, mirroring the other RhombusKit form controls:\n  • reactive forms — pass a `FormControl<string[]>` via `[control]`\n  • lightweight    — `[(tags)]` (or `[tags]` + `(tagsChange)`)\n\nNo ControlValueAccessor is implemented (an explicit `control` input sidesteps\nthe CVA lifecycle, as on `<rhombus-input>` / `<rhombus-select>`). The component\nrenders the chips itself from the active value source — `MatChipGrid` never\nholds the array — so the `[control]` binding carries only disabled / error /\ntouched state through to the form field.\n\n```html\n<rhombus-tag-input label=\"Tags\" [(tags)]=\"keywords\" />\n<rhombus-tag-input label=\"Recipients\" [control]=\"recipientsCtrl\" variant=\"primary\" />\n```\n\nProjected slot (found by Material's descendants:true query):\n  <span rhombusError>…</span>            error subscript text",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown in the text field when empty. Defaults to `''`."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "variant",
+        "type": "ChipVariant",
+        "description": "Chip colour role applied to every tag via `[rhombusChip]`; defaults to `default`.",
+        "enumValues": [
+          "default",
+          "primary",
+          "success",
+          "warning",
+          "danger"
+        ]
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name for the chip grid. Falls back to `label`, then `'Tags'`.\n`null` (default) defers to that fallback."
+      },
+      {
+        "name": "maxTags",
+        "type": "number",
+        "description": "Optional cap on the number of tags; further additions are ignored. `null` (default) is unlimited."
+      },
+      {
+        "name": "addOnBlur",
+        "type": "boolean",
+        "description": "Commit the pending text as a tag when the field loses focus. Defaults to `false`."
+      },
+      {
+        "name": "separatorKeyCodes",
+        "type": "number[]",
+        "description": "Key codes that commit the pending text (Material `matChipInputSeparatorKeyCodes`). Defaults to Enter + comma."
+      },
+      {
+        "name": "tags",
+        "type": "string[]",
+        "description": "Tags in lightweight (`[(tags)]`) mode; ignored when `control` is set. Defaults to `[]`."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<string[]>",
+        "description": "Reactive-forms `FormControl<string[]>`; when set, the standalone `tags`/`disabled` inputs are ignored."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "tagsChange",
+        "type": "string[]",
+        "description": "Emits the new tag array whenever a tag is added or removed (lightweight mode)."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[rhombusError]"
     ]
   },
   "RhombusTextareaComponent": {

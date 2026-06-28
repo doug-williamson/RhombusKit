@@ -110,6 +110,7 @@ import { ExampleComponent } from '../../shared/example.component';
             <li><code>locked</code> keeps the row focusable but non-navigating: it fires the item's <code>action</code> and the list's <code>(itemAction)</code> output (for plan/feature gates) and shows a trailing lock. <code>disabled</code> takes precedence over <code>locked</code>.</li>
             <li><code>trailingIcon</code> adds a glyph after the label (e.g. a <code>chevron_right</code> for link rows).</li>
             <li>On a <code>RhombusNavSection</code>, <code>collapsible</code> makes the heading a disclosure toggle (seed with <code>expanded</code>).</li>
+            <li>Give an item <code>children</code> for one level of nesting — a navigable parent (with <code>routerLink</code>) gets a row plus a disclosure toggle for its indented child rows; a parent without a link target toggles from its whole row (seed with <code>expanded</code>).</li>
             <li>Set <code>appearance="list"</code> on the component for full-width "link-row" cells; the default is <code>"sidebar"</code>.</li>
           </ul>
         </section>
@@ -190,6 +191,21 @@ import { ExampleComponent } from '../../shared/example.component';
         </section>
 
         <section class="showcase-section">
+          <h2>Navigable nested tree</h2>
+          <p class="showcase-section__lead">
+            Give an item <code>children</code> to make it a navigable parent: a
+            row that both routes (a real anchor) <em>and</em> carries a
+            disclosure toggle for its indented child rows
+            (<code>aria-expanded</code> + <code>aria-controls</code>). A parent
+            with no link target toggles from its whole row. Seed each parent with
+            <code>expanded</code>; one level of nesting is supported.
+          </p>
+          <div class="nav-list-frame">
+            <rhombus-nav-list [sections]="tree" ariaLabel="Docs" />
+          </div>
+        </section>
+
+        <section class="showcase-section">
           <h2>List appearance (link-in-bio)</h2>
           <p class="showcase-section__lead">
             <code>appearance="list"</code> renders full-width, prominent rows
@@ -266,6 +282,44 @@ export default class NavListPageComponent {
       expanded: false,
       items: [
         { label: 'Old project', icon: 'folder', routerLink: '/components/card' },
+      ],
+    },
+  ];
+
+  protected readonly tree: RhombusNavSection[] = [
+    {
+      heading: 'Documentation',
+      items: [
+        // Navigable parent: routes to its own page AND expands to children.
+        {
+          label: 'AppShell',
+          icon: 'web_asset',
+          routerLink: '/components/app-shell',
+          children: [
+            { label: 'API Reference', routerLink: '/components/app-shell' },
+            { label: 'Theming', routerLink: '/theming' },
+            { label: 'Examples', routerLink: '/components/app-shell' },
+          ],
+        },
+        {
+          label: 'Token Contracts',
+          icon: 'palette',
+          routerLink: '/tokens',
+          expanded: false,
+          children: [
+            { label: 'SHELL_CONFIG', routerLink: '/tokens' },
+            { label: 'SeoMeta', routerLink: '/tokens' },
+          ],
+        },
+        // Pure parent (no route): the whole row is the disclosure toggle.
+        {
+          label: 'Reference',
+          icon: 'menu_book',
+          children: [
+            { label: 'Changelog', routerLink: '/roadmap' },
+            { label: 'Migration', routerLink: '/migrate' },
+          ],
+        },
       ],
     },
   ];
