@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RhombusIconComponent } from '@rhombuskit/core';
+import { RhombusAvatarComponent, RhombusIconComponent } from '@rhombuskit/core';
+import { SPONSORS } from './sponsors-data';
 
 const REPO = 'https://github.com/doug-williamson/RhombusKit';
 
@@ -16,7 +17,7 @@ const REPO = 'https://github.com/doug-williamson/RhombusKit';
   selector: 'app-support-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RhombusIconComponent],
+  imports: [RouterLink, RhombusIconComponent, RhombusAvatarComponent],
   template: `
     <div class="showcase-page support">
       <header class="showcase-page__header">
@@ -54,6 +55,36 @@ const REPO = 'https://github.com/doug-williamson/RhombusKit';
             you request and upvote.
           </li>
         </ul>
+      </section>
+
+      <section class="support__section support__sponsors" aria-labelledby="sponsors">
+        <h2 id="sponsors">Sponsors</h2>
+        @if (sponsors.length) {
+          <p>Thank you to the people and teams keeping RhombusKit independent:</p>
+          <ul class="support__sponsor-list">
+            @for (s of sponsors; track s.name) {
+              <li>
+                <a
+                  class="support__sponsor-card"
+                  [href]="s.url"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <rhombus-avatar [name]="s.name" [src]="s.imageUrl ?? null" size="md" />
+                  <span class="support__sponsor-name">{{ s.name }}</span>
+                  @if (s.tier) {
+                    <span class="support__sponsor-tier">{{ s.tier }}</span>
+                  }
+                </a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="support__sponsors-empty">
+            No sponsors yet — this is where they'll be credited.
+            <a [href]="sponsorsUrl" target="_blank" rel="noopener">Be the first →</a>
+          </p>
+        }
       </section>
 
       <section class="support__section" aria-labelledby="free">
@@ -147,10 +178,49 @@ const REPO = 'https://github.com/doug-williamson/RhombusKit';
       color: var(--text-muted);
       font-size: 0.875rem;
     }
+    .support__sponsor-list {
+      list-style: none;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .support__sponsor-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.85rem 0.5rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-1);
+      text-decoration: none;
+      transition: border-color 150ms ease;
+    }
+    .support__sponsor-card:hover {
+      border-color: var(--border-strong);
+    }
+    .support__sponsor-name {
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .support__sponsor-tier {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+    .support__sponsors-empty {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    .support__sponsors-empty a {
+      white-space: nowrap;
+    }
   `,
 })
 export default class SupportPageComponent {
   protected readonly sponsorsUrl = 'https://github.com/sponsors/doug-williamson';
   protected readonly repoUrl = REPO;
   protected readonly issuesUrl = `${REPO}/issues/new/choose`;
+  protected readonly sponsors = SPONSORS;
 }

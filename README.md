@@ -49,6 +49,15 @@ behind the release cadence).
 - **Sponsor** — [github.com/sponsors/doug-williamson](https://github.com/sponsors/doug-williamson) (monthly or one-time), or see [Support](https://rhombuskit.online/support).
 - **Free ways to help** — star the repo, [propose or upvote a component](https://rhombuskit.online/roadmap), or report an accessibility gap. All credited.
 
+### Sponsors
+
+Thank you to everyone funding independent, accessible open source. Sponsors are
+credited here and on the [Support page](https://rhombuskit.online/support).
+
+<!-- sponsors --><!-- sponsors -->
+
+<sub>No sponsors yet — [be the first](https://github.com/sponsors/doug-williamson). The list between the markers above is regenerated from GitHub Sponsors.</sub>
+
 ## Contributors
 
 Every contribution counts — code, docs, design, accessibility audits, and ideas

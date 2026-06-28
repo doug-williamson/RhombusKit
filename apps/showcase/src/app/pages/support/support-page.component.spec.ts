@@ -31,4 +31,11 @@ describe('SupportPageComponent', () => {
     const el = render();
     expect(el.textContent).toContain('Not in a position to sponsor');
   });
+
+  it('shows the sponsors invitation state when there are no sponsors', () => {
+    const el = render();
+    const sponsors = el.querySelector('.support__sponsors') as HTMLElement;
+    expect(sponsors).toBeTruthy();
+    expect(sponsors.textContent).toContain('No sponsors yet');
+  });
 });
