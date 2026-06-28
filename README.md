@@ -54,9 +54,11 @@ behind the release cadence).
 Thank you to everyone funding independent, accessible open source. Sponsors are
 credited here and on the [Support page](https://rhombuskit.online/support).
 
-<!-- sponsors --><!-- sponsors -->
-
-<sub>No sponsors yet — [be the first](https://github.com/sponsors/doug-williamson). The list between the markers above is regenerated from GitHub Sponsors.</sub>
+<!-- The block between the markers is auto-generated from GitHub Sponsors by
+     .github/workflows/sponsors.yml — edit the workflow's `fallback`, not here. -->
+<!-- sponsors -->
+<sub>No sponsors yet — <a href="https://github.com/sponsors/doug-williamson">be the first</a>.</sub>
+<!-- sponsors -->
 
 ## Contributors
 

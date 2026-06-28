@@ -2,6 +2,10 @@
 // comes in (GitHub Sponsors does not expose a public list without an API token,
 // so this stays a simple committed array). An empty list renders the invitation
 // state. Order is by tier then arrival; keep it short and tasteful.
+//
+// This curated list is deliberately separate from the README sponsors wall,
+// which `.github/workflows/sponsors.yml` auto-syncs from GitHub Sponsors. Keeping
+// the showcase list by hand lets logos and tier labels stay intentional.
 
 export interface Sponsor {
   /** Display name (person or company). Used for the avatar label + initials. */

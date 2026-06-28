@@ -1,0 +1,56 @@
+name: sponsors
+
+# Refreshes the sponsor list in README.md (between the <!-- sponsors --> markers)
+# from GitHub Sponsors — weekly and on demand. The /support page strip is kept
+# hand-curated in apps/showcase/.../support/sponsors-data.ts (so logos and tiers
+# stay intentional), so this workflow only touches the README.
+#
+# Requires a repo secret SPONSORS_TOKEN: a classic Personal Access Token owned by
+# @doug-williamson with the `read:user` and `read:org` scopes. The default
+# GITHUB_TOKEN cannot read Sponsors data. Until that secret exists the job
+# no-ops (guarded below), so this is safe to merge before enrolling in Sponsors.
+#
+# Note: the commit is pushed directly to `main`. If branch protection later
+# requires a pull request for `main`, allow this workflow to bypass it or switch
+# the final step to a PR-based commit (e.g. peter-evans/create-pull-request).
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sponsors
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      SPONSORS_TOKEN: ${{ secrets.SPONSORS_TOKEN }}
+    steps:
+      - name: Skip when no token is configured
+        if: ${{ env.SPONSORS_TOKEN == '' }}
+        run: echo "::notice::SPONSORS_TOKEN not set — skipping. Add a PAT (read:user, read:org) named SPONSORS_TOKEN to enable sponsor syncing."
+
+      - name: Checkout
+        if: ${{ env.SPONSORS_TOKEN != '' }}
+        uses: actions/checkout@v4
+
+      - name: Update README sponsors
+        if: ${{ env.SPONSORS_TOKEN != '' }}
+        uses: JamesIves/github-sponsors-readme-action@v1
+        with:
+          token: ${{ env.SPONSORS_TOKEN }}
+          file: README.md
+          fallback: '<sub>No sponsors yet — <a href="https://github.com/sponsors/doug-williamson">be the first</a>.</sub>'
+
+      - name: Commit if changed
+        if: ${{ env.SPONSORS_TOKEN != '' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(sponsors): refresh README sponsors list [skip ci]'
+          file_pattern: README.md
