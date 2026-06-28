@@ -47,6 +47,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/input', label: 'Input' },
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/select', label: 'Select' },
+      { path: '/components/date-picker', label: 'Date Picker' },
     ],
   },
   {
@@ -90,6 +91,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Content',
     items: [
+      { path: '/components/accordion', label: 'Accordion' },
       { path: '/components/page-header', label: 'Page Header' },
       { path: '/components/empty-state', label: 'Empty State' },
       { path: '/components/code-block', label: 'Code Block' },

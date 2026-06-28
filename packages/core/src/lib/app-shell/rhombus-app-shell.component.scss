@@ -149,6 +149,19 @@ rhombus-app-shell .rhombus-app-shell__sidenav {
   }
 }
 
+// ─── Footer (slotted [shellFooter]) ──────────────────────────────────────────
+// A flex-0-0-auto sibling AFTER the scrolling `.__body`, inside the flex-column
+// content region — so it pins below the main scroll area (it never scrolls away)
+// and spans the content column: right of the sidenav in 'sidenav' mode, above
+// the bottom-nav in 'bottom' mode. Replaces the workaround of styling the
+// private `.__main` to anchor a footer. Surface colour inherits the content
+// background; the divider uses CONTRACT names.
+.rhombus-app-shell__footer {
+  flex: 0 0 auto;
+  border-top: var(--border-width) solid var(--border);
+  padding: 12px 16px;
+}
+
 // ─── Bottom-nav frame (navMode="bottom") ────────────────────────────────────
 // A flex-0-0-auto sibling below the sidenav container, so the content region
 // keeps scrolling. Background/border come from the projected <rhombus-bottom-nav>.

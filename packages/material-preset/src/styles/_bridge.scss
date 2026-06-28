@@ -3,18 +3,26 @@
 // CONTRACT names so that [data-theme="rhombus-*"] switches automatically
 // reach every Material component.
 //
-// Phase 2 coverage: button, badge, card, chip.
-// Form field, dialog, table tokens land in Phase 3.
-// App-shell surfaces (sidenav, toolbar) are bridged alongside the shell.
+// OPT-IN: this bridge no longer auto-applies. Emit it by including the
+// `material-bridge()` mixin at the element that carries `data-theme`
+// (`:root` / `html`) so every value re-resolves per active theme + palette:
+//
+//   @use '@rhombuskit/material-preset/scss' as rhombus;
+//   :root { @include rhombus.material-bridge(); }
+//
+// Include it on a scoped selector instead to theme a Material subtree
+// (note: components rendered in the body-level CDK overlay — menu, tooltip,
+// toast, datepicker, select panels — are only reached by a :root/html include).
 
 @use '@angular/material' as mat;
+@use 'compat';
 
-// --- M3 system token bridge ---------------------------------------------
-// Every value is a var() reference into the @rhombuskit/tokens CONTRACT.
-// Do NOT introduce hard-coded colour/shadow/radius values here, and do NOT
-// reference --slate-*, --violet-*, or any primitive name directly.
-
-:root {
+/// Emit the full --mat-sys-* → CONTRACT bridge plus the component-level
+/// overrides and reset shims, at whatever selector the caller includes it under.
+/// Every value is a var() reference into the @rhombuskit/tokens CONTRACT — do
+/// NOT introduce hard-coded colour/shadow/radius values here, and do NOT
+/// reference --slate-*, --violet-*, or any primitive name directly.
+@mixin material-bridge() {
   // Primary role — filled button bg, chip selected bg, badge bg
   --mat-sys-primary:                var(--btn-primary-bg);
   --mat-sys-on-primary:             var(--btn-primary-text);
@@ -127,14 +135,12 @@
   --mat-sys-title-medium-size:      1rem;
   --mat-sys-title-medium-tracking:  0.009rem;
   --mat-sys-title-medium-weight:    500;
-}
 
-// --- Component-level overrides (Phase 2) --------------------------------
-// Use the official mat.*-overrides() mixins for shape / radius / behaviour
-// tokens not covered by --mat-sys-* mapping. Never target .mat-mdc-* class
-// selectors directly — that breaks across Material upgrades.
+  // --- Component-level overrides ----------------------------------------
+  // Use the official mat.*-overrides() mixins for shape / radius / behaviour
+  // tokens not covered by --mat-sys-* mapping. Never target .mat-mdc-* class
+  // selectors directly — that breaks across Material upgrades.
 
-:root {
   // Corner radius + outline width flow through @rhombuskit/tokens geometry
   // primitives (--radius-* / --border-width) so overriding a token re-themes the
   // control. The default token values equal the current literals (8px = --radius-lg,
@@ -179,6 +185,30 @@
   @include mat.select-overrides((
     focused-arrow-color: var(--focus-ring),
     enabled-arrow-color: var(--text-secondary),
+  ));
+
+  // Date picker — calendar colours + toggle. The calendar panel renders in the
+  // CDK overlay, so rhombus-date-picker.component.scss also scopes the panel
+  // background (a non-inheriting token) via its panelClass.
+  @include mat.datepicker-overrides((
+    calendar-container-background-color:            var(--surface-0),
+    calendar-container-text-color:                  var(--text-primary),
+    calendar-container-shape:                       var(--radius-xl),
+    calendar-date-text-color:                       var(--text-primary),
+    calendar-date-selected-state-background-color:  var(--btn-primary-bg),
+    calendar-date-selected-state-text-color:        var(--btn-primary-text),
+    calendar-date-today-outline-color:              var(--text-accent),
+    calendar-date-hover-state-background-color:     var(--surface-1),
+    calendar-date-focus-state-background-color:     var(--surface-2),
+    calendar-date-in-range-state-background-color:  var(--surface-1),
+    calendar-header-text-color:                     var(--text-secondary),
+    calendar-header-divider-color:                  var(--border),
+    calendar-body-label-text-color:                 var(--text-secondary),
+    calendar-period-button-text-color:              var(--text-primary),
+    calendar-period-button-icon-color:              var(--text-secondary),
+    calendar-navigation-button-icon-color:          var(--text-secondary),
+    toggle-icon-color:                              var(--text-secondary),
+    toggle-active-state-icon-color:                 var(--text-accent),
   ));
 
   // Data table (Phase 3b) — global defaults for any direct mat-table consumer.
@@ -290,4 +320,8 @@
     container-background-color: var(--surface-1),
     container-text-color:       var(--text-primary),
   ));
+
+  // Reset compatibility shims for Material components (emitted last so they win
+  // on source order over @rhombuskit/tokens' base reset). See _compat.scss.
+  @include compat.material-compat();
 }

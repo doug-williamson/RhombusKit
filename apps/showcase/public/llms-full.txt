@@ -31,6 +31,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 - Input: https://rhombuskit.online/components/input
 - Textarea: https://rhombuskit.online/components/textarea
 - Select: https://rhombuskit.online/components/select
+- Date Picker: https://rhombuskit.online/components/date-picker
 - Data Table: https://rhombuskit.online/components/data-table
 - Overflow Menu: https://rhombuskit.online/components/overflow-menu
 - Tooltip: https://rhombuskit.online/components/tooltip
@@ -49,6 +50,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 - Alert: https://rhombuskit.online/components/alert
 - App Shell: https://rhombuskit.online/components/app-shell
 - Theme Controls: https://rhombuskit.online/components/theme-toggle
+- Accordion: https://rhombuskit.online/components/accordion
 - Page Header: https://rhombuskit.online/components/page-header
 - Empty State: https://rhombuskit.online/components/empty-state
 - Code Block: https://rhombuskit.online/components/code-block
@@ -158,6 +160,24 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   label: string
   value: T
 
+### RhombusAccordionComponent (class)
+  readonly multi: _angular_core.InputSignalWithTransform<boolean, unknown>
+
+### RhombusAccordionDescriptionDirective (class)
+  // (no public members)
+
+### RhombusAccordionPanelComponent (class)
+  focusHeader: () => void
+  headerElement: () => HTMLButtonElement
+  readonly description: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly expanded: _angular_core.ModelSignal<boolean>
+  readonly title: _angular_core.InputSignal<string>
+  toggle: () => void
+
+### RhombusAccordionTitleDirective (class)
+  // (no public members)
+
 ### RhombusAlertComponent (class)
   readonly dismissed: _angular_core.OutputEmitterRef<void>
   readonly dismissible: _angular_core.InputSignalWithTransform<boolean, unknown>
@@ -266,6 +286,20 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   readonly sortStart: _angular_core.InputSignal<"asc" | "desc">
   readonly sortState: _angular_core.InputSignal<SortState>
   readonly totalCount: _angular_core.InputSignal<number>
+
+### RhombusDatePickerComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<FormControl<string>>
+  readonly dateChange: _angular_core.OutputEmitterRef<string>
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<string>
+  readonly min: _angular_core.InputSignal<string>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly required: _angular_core.InputSignal<boolean>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
 ### RhombusDialogActionsDirective (class)
   // (no public members)
@@ -442,6 +476,9 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   // (no public members)
 
 ### RhombusShellBottomNavDirective (class)
+  // (no public members)
+
+### RhombusShellFooterDirective (class)
   // (no public members)
 
 ### RhombusShellNavFooterDirective (class)
@@ -693,7 +730,17 @@ custom properties they declare):
 @use '@rhombuskit/tokens/scss' as tokens;          // declares the CONTRACT vars
 @use '@rhombuskit/material-preset/scss' as preset; // maps Material → CONTRACT
 @use '@rhombuskit/core/scss' as core;              // RhombusKit component/directive globals
+
+// Opt in to the Material bridge on the element that carries data-theme (here
+// :root) so every --mat-sys-* re-resolves per active theme + palette.
+:root {
+  @include preset.material-bridge();
+}
 ```
+
+> **Breaking change in v1.9:** `@use '@rhombuskit/material-preset/scss'` no longer
+> auto-applies the bridge at `:root`. Add the `@include preset.material-bridge();`
+> line above. This makes the bridge opt-in and lets you scope it to a Material subtree.
 
 Register the theme runtime in your app providers:
 
@@ -837,8 +884,27 @@ WCAG 2.1 AA in both themes.
 [`@rhombuskit/material-preset`](https://www.npmjs.com/package/@rhombuskit/material-preset)
 maps Angular Material's M3 system tokens (`--mat-sys-*`) onto the RhombusKit CONTRACT —
 e.g. `--mat-sys-primary: var(--btn-primary-bg)`, `--mat-sys-surface: var(--surface-0)`.
-With the bridge imported, Material components inherit the active theme automatically; no
-`.mat-mdc-*` overrides and no hard-coded colours.
+With the bridge included, Material components inherit the active theme automatically; no
+`.mat-mdc-*` overrides, no hard-coded colours, and no hand-maintained `mat.theme()` →
+`--mat-sys-*` mapping to keep in sync.
+
+**Opt-in (v1.9):** include the bridge once on the element that carries `data-theme`:
+
+```scss
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+:root {
+  @include rhombus.material-bridge();
+}
+```
+
+Because every value is a `var(--contract-token)`, the bridge tracks light/dark and every
+registered palette with no per-theme configuration — so you can delete any local
+`mat.theme()` bridge SCSS. Include it on a scoped selector instead to theme a Material
+subtree; note that components rendered in the body-level CDK overlay (menu, tooltip,
+toast, datepicker and select panels) are only reached by a `:root` / `html` include.
+Before v1.9 the bridge auto-applied at `:root` on import; that auto-apply was removed, so
+existing consumers must add the `@include` line above.
 
 **Support model:** the bridge tracks Angular Material **21.x** and uses the official
 `mat.*-overrides()` mixins for shape/typography that `--mat-sys-*` can't express.

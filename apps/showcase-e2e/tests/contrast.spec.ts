@@ -31,6 +31,7 @@ const COMPONENTS = [
   '/components/input',
   '/components/textarea',
   '/components/select',
+  '/components/date-picker',
   '/components/data-table',
   '/components/overflow-menu',
   '/components/tooltip',
@@ -50,6 +51,7 @@ const COMPONENTS = [
   '/components/page-header',
   '/components/empty-state',
   '/components/code-block',
+  '/components/accordion',
 ] as const;
 
 // Each component page splits content across Overview / Examples / API tabs; the

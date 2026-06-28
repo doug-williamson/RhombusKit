@@ -49,7 +49,7 @@ describe('STACKBLITZ_STARTER', () => {
     expect(pkg.dependencies['highlight.js']).toBe('^11.0.0');
   });
 
-  it('imports the SCSS layers in the required order', () => {
+  it('imports the SCSS layers in the required order and opts into the bridge', () => {
     const styles = STACKBLITZ_STARTER.files['src/styles.scss'];
     const tokens = styles.indexOf('@rhombuskit/tokens/scss');
     const preset = styles.indexOf('@rhombuskit/material-preset/scss');
@@ -57,5 +57,7 @@ describe('STACKBLITZ_STARTER', () => {
     expect(tokens).toBeGreaterThanOrEqual(0);
     expect(tokens).toBeLessThan(preset);
     expect(preset).toBeLessThan(core);
+    // v1.9: the bridge is opt-in, so the starter must include the mixin.
+    expect(styles).toMatch(/@include\s+preset\.material-bridge\(\)/);
   });
 });

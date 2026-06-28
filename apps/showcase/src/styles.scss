@@ -6,6 +6,13 @@
 @use '@rhombuskit/material-preset/scss' as material-preset;
 @use '@rhombuskit/core/scss' as core;
 
+// As of v1.9 the Material bridge is opt-in: include it on the element that
+// carries `data-theme` (here :root) so every --mat-sys-* re-resolves per active
+// theme + palette. This is the canonical setup consumers copy.
+:root {
+  @include material-preset.material-bridge();
+}
+
 html, body {
   margin: 0;
   padding: 0;
