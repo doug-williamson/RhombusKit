@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.0](https://github.com/doug-williamson/RhombusKit/compare/v1.8.0...v1.9.0) (2026-06-28)
+
+
+### Features
+
+* refresh showcase for v1.8 and gate the StackBlitz starter build ([#108](https://github.com/doug-williamson/RhombusKit/issues/108)) ([2b89bac](https://github.com/doug-williamson/RhombusKit/commit/2b89bacbe8cc52ce926e97fdd23b0d3451501dc4))
+* v1.9 downstream-adoption gaps (app-shell footer, date picker, accordion, opt-in Material bridge) ([#110](https://github.com/doug-williamson/RhombusKit/issues/110)) ([1a8f4f4](https://github.com/doug-williamson/RhombusKit/commit/1a8f4f4686df4e0604c447515224334a2707900c))
+
 ## [1.8.0](https://github.com/doug-williamson/RhombusKit/compare/v1.7.2...v1.8.0) (2026-06-27)
 
 
