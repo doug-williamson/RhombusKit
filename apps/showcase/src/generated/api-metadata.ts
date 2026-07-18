@@ -1769,6 +1769,121 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusNumberInputComponent": {
+    "name": "RhombusNumberInputComponent",
+    "kind": "class",
+    "selector": "rhombus-number-input",
+    "description": "`<rhombus-number-input>` — a numeric spinbox: Material's `<mat-form-field>` +\n`<input matInput type=\"number\">` for the field chrome, plus a bespoke ± / step\n/ clamp / keyboard layer Material doesn't ship (**D7**).\n\nThe native `type=\"number\"` input is an implicit ARIA `spinbutton` and derives\n`aria-valuemin/max/now` for free from the reflected `min` / `max` / `step`\nattributes, so no manual `role`/`aria-*` is added. The public `[control]` /\n`[(value)]` is mirrored to a private `FormControl<number | null>` bound to the\ninput via the shared {@link mirrorControl } helper (identity mapping) — a spinbox\nmust read the current value to clamp and write the stepped one back, so a single\ninternal control is the natural home for that. Clamping runs on blur and on a\nstep, never per keystroke.\n\n  <rhombus-number-input label=\"Quantity\" [min]=\"0\" [max]=\"99\" [(value)]=\"qty\" />\n\nProjected slots: `[rhombusError]` (error subscript), `[matTextPrefix]` /\n`[matIconPrefix]` (unit / currency — the ± live in the trailing region).",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown when the field is empty."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Minimum value; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Maximum value; `null` (default) for no upper bound."
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "description": "Increment for the ± buttons and arrow keys. Defaults to `1`."
+      },
+      {
+        "name": "largeStep",
+        "type": "number",
+        "description": "Increment for PageUp / PageDown; `null` (default) uses `step * 10`."
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "description": "Value in lightweight (`[(value)]`) mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<number>",
+        "description": "Reactive-forms `FormControl<number | null>`; when set, `value`/`disabled` are ignored."
+      },
+      {
+        "name": "showButtons",
+        "type": "boolean",
+        "description": "Show the ± spinner buttons. Defaults to `true`."
+      },
+      {
+        "name": "incrementLabel",
+        "type": "string",
+        "description": "Accessible name for the increment button. Defaults to `'Increment'`."
+      },
+      {
+        "name": "decrementLabel",
+        "type": "string",
+        "description": "Accessible name for the decrement button. Defaults to `'Decrement'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "number",
+        "description": "Emits on each user change in lightweight mode (completes `[(value)]`)."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[matTextPrefix]",
+      "[matIconPrefix]",
+      "[rhombusError]"
+    ]
+  },
   "RhombusOverflowMenuComponent": {
     "name": "RhombusOverflowMenuComponent",
     "kind": "class",

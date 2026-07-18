@@ -104,6 +104,12 @@ export const appRoutes: Route[] = [
           import('./pages/selection-list/selection-list-page.component'),
       },
       {
+        path: 'number-input',
+        title: 'Number Input',
+        loadComponent: () =>
+          import('./pages/number-input/number-input-page.component'),
+      },
+      {
         path: 'tag-input',
         title: 'Tag Input',
         loadComponent: () =>

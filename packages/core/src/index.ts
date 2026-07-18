@@ -90,6 +90,14 @@ export type {
   SelectionListMode,
 } from './lib/selection-list/selection-list.types';
 
+// Number input — a numeric spinbox: mat-form-field chrome + a bespoke ± / step /
+// clamp / keyboard layer over a native <input type=number> (an implicit ARIA
+// spinbutton). [control]/[(value)] control model via the internal mirrorControl
+// helper; min/max/step/largeStep, clamp-on-blur, and inline ± glyphs. Exposes no
+// new public type (reuses FormFieldAppearance/FormFieldSize). Distinct from Slider
+// (a draggable bounded range) and a plain Input type=number (unbounded free text).
+export { RhombusNumberInputComponent } from './lib/number-input/rhombus-number-input.component';
+
 export type {
   FormFieldAppearance,
   FormFieldSize,

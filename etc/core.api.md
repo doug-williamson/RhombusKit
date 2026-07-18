@@ -413,6 +413,26 @@
   heading?: string
   items: RhombusNavItem[]
 
+### RhombusNumberInputComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<FormControl<number>>
+  readonly decrementLabel: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly incrementLabel: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly largeStep: _angular_core.InputSignal<number>
+  readonly max: _angular_core.InputSignal<number>
+  readonly min: _angular_core.InputSignal<number>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly required: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly showButtons: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly step: _angular_core.InputSignal<number>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+  readonly value: _angular_core.ModelSignal<number>
+  readonly valueChange: _angular_core.OutputEmitterRef<number>
+
 ### RhombusOverflowMenuComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly items: _angular_core.InputSignal<MenuItem[]>

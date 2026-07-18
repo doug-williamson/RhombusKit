@@ -36,6 +36,7 @@ const COMPONENTS = [
   '/components/select',
   '/components/autocomplete',
   '/components/selection-list',
+  '/components/number-input',
   '/components/date-picker',
   '/components/date-range-picker',
   '/components/tag-input',

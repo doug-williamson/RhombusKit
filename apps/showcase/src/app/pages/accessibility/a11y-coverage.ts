@@ -24,6 +24,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'select', label: 'Select' },
   { slug: 'autocomplete', label: 'Autocomplete' },
   { slug: 'selection-list', label: 'Selection List' },
+  { slug: 'number-input', label: 'Number Input' },
   { slug: 'date-picker', label: 'Date Picker' },
   { slug: 'date-range-picker', label: 'Date Range Picker' },
   { slug: 'data-table', label: 'Data Table' },
