@@ -37,6 +37,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/chip', label: 'Chip' },
       { path: '/components/tag', label: 'Tag' },
       { path: '/components/icon', label: 'Icon' },
+      { path: '/components/divider', label: 'Divider' },
     ],
   },
   {
@@ -44,11 +45,14 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/components/checkbox', label: 'Checkbox' },
       { path: '/components/radio', label: 'Radio Group' },
+      { path: '/components/segmented', label: 'Segmented' },
       { path: '/components/switch', label: 'Switch' },
+      { path: '/components/slider', label: 'Slider' },
       { path: '/components/input', label: 'Input' },
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/select', label: 'Select' },
       { path: '/components/date-picker', label: 'Date Picker' },
+      { path: '/components/date-range-picker', label: 'Date Range Picker' },
       { path: '/components/tag-input', label: 'Tag Input' },
     ],
   },

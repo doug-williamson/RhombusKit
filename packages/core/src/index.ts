@@ -30,6 +30,13 @@ export type { ChipGroupSelection } from './lib/chip/rhombus-chip-group.directive
 export { RhombusTagComponent } from './lib/tag/rhombus-tag.component';
 export type { TagVariant, TagSize } from './lib/tag/rhombus-tag.component';
 
+// Divider — a bespoke role=separator rule (horizontal / vertical, inset, accent,
+// and labelled text-divider variants). No Material, no new tokens: the rule is
+// drawn from the existing --border / --border-accent contract tokens. Replaces
+// mat-divider.
+export { RhombusDividerComponent } from './lib/divider/rhombus-divider.component';
+export type { DividerOrientation } from './lib/divider/rhombus-divider.component';
+
 // Phase 3a — form primitives. Each component inlines its own
 // <mat-form-field>; shared styling ships via @rhombuskit/core/scss.
 export { RhombusInputComponent } from './lib/input/rhombus-input.component';
@@ -44,6 +51,17 @@ export type {
 } from './lib/select/rhombus-select.component';
 
 export { RhombusDatePickerComponent } from './lib/date-picker/rhombus-date-picker.component';
+
+// Date range picker — two-field start/end calendar over mat-date-range-input.
+// Public value is a { start, end } pair of ISO strings (a typed FormGroup for
+// [control]), mirrored to a private Date group via the internal mirrorControl
+// helper (sharing the Date Picker's isoToDate/dateToIso). Closes the last
+// Datepicker migration gap.
+export { RhombusDateRangePickerComponent } from './lib/date-range-picker/rhombus-date-range-picker.component';
+export type {
+  DateRange,
+  DateRangeControl,
+} from './lib/date-range-picker/rhombus-date-range-picker.component';
 
 export type {
   FormFieldAppearance,
@@ -70,9 +88,28 @@ export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.compon
 export { RhombusRadioGroupComponent } from './lib/radio/rhombus-radio-group.component';
 export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
 
+// Segmented control. Wraps <mat-button-toggle-group>; options-array API, single
+// or multiple selection, [control]/[(value)] model. The active segment uses the
+// --nav-active-* contract pair (its first reuse outside nav-list). For inline
+// view/unit switching — distinct from Radio (a form input) and Chip (removable
+// filters). Replaces the Material button-toggle.
+export { RhombusSegmentedComponent } from './lib/segmented/rhombus-segmented.component';
+export type {
+  SegmentOption,
+  SegmentedSize,
+} from './lib/segmented/rhombus-segmented.component';
+
 // Switch. Wraps <mat-slide-toggle>; same control model as checkbox. Track colour
 // is driven by the --switch-track-on/off contract tokens.
 export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
+
+// Slider. Wraps <mat-slider>; single value or a {start, end} range, with the
+// [control]/[(value)] (and rangeControl/[(rangeValue)]) control model. Active
+// track/handle read --text-accent; the value bubble borrows --tooltip-*. Range
+// reactive-forms mode uses the internal mirrorControl helper to bind a
+// FormControl<SliderRange> to Material's two thumbs.
+export { RhombusSliderComponent } from './lib/slider/rhombus-slider.component';
+export type { SliderRange } from './lib/slider/rhombus-slider.component';
 
 // Tooltip. Directive composing MatTooltip via hostDirectives (badge pattern);
 // surface themed via --tooltip-bg/text.

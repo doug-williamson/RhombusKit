@@ -61,6 +61,16 @@
   sortable?: boolean
   width?: string
 
+### DateRange (interface)
+  end: string
+  start: string
+
+### DateRangeControl (type)
+  type DateRangeControl = FormGroup<{
+    start: FormControl<string | null>;
+    end: FormControl<string | null>;
+}>
+
 ### DisplayColumn (interface)
   align?: "start" | "center" | "end"
   cellTemplate: _angular_core.TemplateRef<{ $implicit: T; index: number; }>
@@ -70,6 +80,9 @@
   minWidth?: string
   sortable?: never
   width?: string
+
+### DividerOrientation (type)
+  type DividerOrientation = 'horizontal' | 'vertical'
 
 ### FormFieldAppearance (type)
   type FormFieldAppearance = 'outline' | 'fill'
@@ -248,6 +261,22 @@
   readonly size: _angular_core.InputSignal<FormFieldSize>
   readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
+### RhombusDateRangePickerComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<DateRangeControl>
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly endPlaceholder: _angular_core.InputSignal<string>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<string>
+  readonly min: _angular_core.InputSignal<string>
+  readonly rangeChange: _angular_core.OutputEmitterRef<DateRange>
+  readonly required: _angular_core.InputSignal<boolean>
+  readonly separator: _angular_core.InputSignal<string>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly startPlaceholder: _angular_core.InputSignal<string>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+
 ### RhombusDialogActionsDirective (class)
   // (no public members)
 
@@ -268,6 +297,12 @@
 
 ### RhombusDialogService (class)
   open: <R = unknown, D = unknown>(component: ComponentType<unknown>, config?: RhombusDialogConfig<D>) => RhombusDialogRef<R>
+
+### RhombusDividerComponent (class)
+  readonly accent: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly inset: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly label: _angular_core.InputSignal<string>
+  readonly orientation: _angular_core.InputSignal<DividerOrientation>
 
 ### RhombusEmptyStateComponent (class)
   readonly body: _angular_core.InputSignal<string>
@@ -403,6 +438,19 @@
   readonly value: _angular_core.InputSignal<T>
   readonly valueChange: _angular_core.OutputEmitterRef<T>
 
+### RhombusSegmentedComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly control: _angular_core.InputSignal<FormControl<any>>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly fullWidth: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly label: _angular_core.InputSignal<string>
+  readonly multiple: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly options: _angular_core.InputSignal<SegmentOption<T>[]>
+  readonly size: _angular_core.InputSignal<SegmentedSize>
+  readonly value: _angular_core.InputSignal<T | T[]>
+  readonly valueChange: _angular_core.OutputEmitterRef<T | T[]>
+  readonly vertical: _angular_core.InputSignalWithTransform<boolean, unknown>
+
 ### RhombusSelectComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
   readonly control: _angular_core.InputSignal<FormControl<any>>
@@ -432,6 +480,25 @@
 
 ### RhombusShellNavFooterDirective (class)
   // (no public members)
+
+### RhombusSliderComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly control: _angular_core.InputSignal<FormControl<number>>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly discrete: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly displayWith: _angular_core.InputSignal<(value: number) => string>
+  readonly endAriaLabel: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<number>
+  readonly min: _angular_core.InputSignal<number>
+  readonly mode: _angular_core.InputSignal<"single" | "range">
+  readonly rangeControl: _angular_core.InputSignal<FormControl<SliderRange>>
+  readonly rangeValue: _angular_core.InputSignal<SliderRange>
+  readonly rangeValueChange: _angular_core.OutputEmitterRef<SliderRange>
+  readonly showTickMarks: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly startAriaLabel: _angular_core.InputSignal<string>
+  readonly step: _angular_core.InputSignal<number>
+  readonly value: _angular_core.InputSignal<number>
+  readonly valueChange: _angular_core.OutputEmitterRef<number>
 
 ### RhombusSpinnerComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
@@ -520,6 +587,16 @@
   readonly position: _angular_core.InputSignal<i1$1.TooltipPosition>
   readonly showDelay: _angular_core.InputSignal<number>
 
+### SegmentOption (interface)
+  ariaLabel?: string
+  disabled?: boolean
+  icon?: string
+  label: string
+  value: T
+
+### SegmentedSize (type)
+  type SegmentedSize = 'sm' | 'md' | 'lg'
+
 ### SelectOption (interface)
   disabled?: boolean
   label: string
@@ -528,6 +605,10 @@
 ### SelectOptionGroup (interface)
   groupLabel: string
   options: SelectOption<T>[]
+
+### SliderRange (interface)
+  end: number
+  start: number
 
 ### SortState (interface)
   active: string

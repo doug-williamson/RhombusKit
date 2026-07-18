@@ -35,6 +35,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/icon/icon-page.component'),
       },
       {
+        path: 'divider',
+        title: 'Divider',
+        loadComponent: () => import('./pages/divider/divider-page.component'),
+      },
+      {
         path: 'checkbox',
         title: 'Checkbox',
         loadComponent: () => import('./pages/checkbox/checkbox-page.component'),
@@ -45,9 +50,19 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/radio/radio-page.component'),
       },
       {
+        path: 'segmented',
+        title: 'Segmented',
+        loadComponent: () => import('./pages/segmented/segmented-page.component'),
+      },
+      {
         path: 'switch',
         title: 'Switch',
         loadComponent: () => import('./pages/switch/switch-page.component'),
+      },
+      {
+        path: 'slider',
+        title: 'Slider',
+        loadComponent: () => import('./pages/slider/slider-page.component'),
       },
       {
         path: 'input',
@@ -69,6 +84,12 @@ export const appRoutes: Route[] = [
         title: 'Date Picker',
         loadComponent: () =>
           import('./pages/date-picker/date-picker-page.component'),
+      },
+      {
+        path: 'date-range-picker',
+        title: 'Date Range Picker',
+        loadComponent: () =>
+          import('./pages/date-range-picker/date-range-picker-page.component'),
       },
       {
         path: 'tag-input',

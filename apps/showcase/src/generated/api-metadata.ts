@@ -1003,6 +1003,119 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[rhombusError]"
     ]
   },
+  "RhombusDateRangePickerComponent": {
+    "name": "RhombusDateRangePickerComponent",
+    "kind": "class",
+    "selector": "rhombus-date-range-picker",
+    "description": "`<rhombus-date-range-picker>` — a two-field start/end calendar over Material's\n`<mat-date-range-input>` + `<mat-date-range-picker>`, in the same form-field\nshell as Input / Select / Date Picker. Its public value is a plain\n`{ start, end }` pair of ISO `YYYY-MM-DD` strings, so it drops straight into a\nreactive form. Material works in `Date`, so the public group is mirrored to a\nprivate Date-typed group (local-midnight, sharing the Date Picker's\n`isoToDate` / `dateToIso`) via the shared `mirrorControl` helper. No\nControlValueAccessor. Self-provides `provideNativeDateAdapter()`.\n\n```html\n<rhombus-date-range-picker label=\"Reporting window\" [control]=\"rangeGroup\" />\n```",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; the field group's accessible name — always supply one."
+      },
+      {
+        "name": "startPlaceholder",
+        "type": "string",
+        "description": "Placeholder for the start input. Defaults to `'Start date'`."
+      },
+      {
+        "name": "endPlaceholder",
+        "type": "string",
+        "description": "Placeholder for the end input. Defaults to `'End date'`."
+      },
+      {
+        "name": "separator",
+        "type": "string",
+        "description": "Visual separator rendered between the two inputs. Defaults to an en dash."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables both endpoints in lightweight mode; ignored when `control` is set."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "min",
+        "type": "string",
+        "description": "Earliest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "string",
+        "description": "Latest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no upper bound."
+      },
+      {
+        "name": "control",
+        "type": "DateRangeControl",
+        "description": "Reactive-forms group of ISO start/end strings; when set, `disabled` is ignored."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "rangeChange",
+        "type": "DateRange",
+        "description": "Emits the current `{ start, end }` ISO pair on every user change to either endpoint."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[rhombusError]"
+    ],
+    "types": [
+      {
+        "name": "DateRange",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "end",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusDialogActionsDirective": {
     "name": "RhombusDialogActionsDirective",
     "kind": "class",
@@ -1045,6 +1158,40 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "description": "Open `component` as a dialog. `R` is the close-result type, `D` the data type."
       }
     ]
+  },
+  "RhombusDividerComponent": {
+    "name": "RhombusDividerComponent",
+    "kind": "class",
+    "selector": "rhombus-divider",
+    "description": "`<rhombus-divider>` — a semantic `role=\"separator\"` rule that visually and\nstructurally separates content. Bespoke (no Material primitive, no new\ntokens): the rule is drawn from the existing `--border` contract token, or\n`--border-accent` with the `accent` flag, so it re-skins with the theme.\n\nRuns `horizontal` (default) or `vertical`, can be `inset` from the container\nedges, and can carry a short `label` to become a text divider (e.g. \"OR\").\nThe label is a string, not projected content: `role=\"separator\"` makes its\nchildren presentational, so the label is exposed to assistive tech through\n`aria-label` — the only reliable accessible name. A labelled vertical divider\nis not supported; the label is ignored when `orientation` is `vertical`.\n\n```html\n<rhombus-divider />\n<rhombus-divider orientation=\"vertical\" />\n<rhombus-divider inset accent />\n<rhombus-divider label=\"OR\" />\n```",
+    "inputs": [
+      {
+        "name": "orientation",
+        "type": "DividerOrientation",
+        "description": "Layout axis, reflected to `data-orientation`. Defaults to `'horizontal'`.",
+        "enumValues": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      {
+        "name": "inset",
+        "type": "boolean",
+        "description": "Indent the rule from the container edges. Accepts a bare attribute (`inset`)."
+      },
+      {
+        "name": "accent",
+        "type": "boolean",
+        "description": "Emphasise the rule with `--border-accent`. Accepts a bare attribute (`accent`)."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Optional text-divider label (e.g. \"OR\"). When set on a horizontal divider it\nrenders a rule — label — rule layout and becomes the separator's `aria-label`.\nIgnored on a vertical divider."
+      }
+    ],
+    "outputs": [],
+    "methods": []
   },
   "RhombusEmptyStateComponent": {
     "name": "RhombusEmptyStateComponent",
@@ -1877,6 +2024,112 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusSegmentedComponent": {
+    "name": "RhombusSegmentedComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-segmented>` — a connected group of mutually-exclusive toggle buttons\nfor switching a view, unit, or mode inline (List / Grid / Board, °C / °F).\nWraps `<mat-button-toggle-group>`, driven by an `options` array like Select and\nRadio Group, with the same `[control]` / `[(value)]` control model. Opt into\n`multiple` for a small toggle-button toolbar. No ControlValueAccessor.\n\nThe active segment uses the `--nav-active-*` contract pair, so it re-skins with\nthe theme. Unlike a Radio Group it is a compact inline switcher; unlike a Chip\ngroup it is not a set of removable filters.\n\n```html\n<rhombus-segmented [options]=\"views\" [(value)]=\"view\" ariaLabel=\"Layout\" />\n```",
+    "inputs": [
+      {
+        "name": "options",
+        "type": "SegmentOption<T>[]",
+        "description": "Segments to render: `{ value, label, disabled?, icon?, ariaLabel? }`. Defaults to `[]`."
+      },
+      {
+        "name": "value",
+        "type": "T | T[]",
+        "description": "Selected value (single) or values (multiple) in lightweight mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<any>",
+        "description": "Reactive-forms control; when set, `value`/`disabled` are ignored. Loosely typed (single carries `T`, multiple `T[]`)."
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "Multi-select toolbar mode: `value` becomes an array. Bare attribute (`multiple`)."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the whole group in lightweight mode; ignored when `control` is set. Bare attribute."
+      },
+      {
+        "name": "size",
+        "type": "SegmentedSize",
+        "description": "Density preset applied via host class. Defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "description": "Stretch segments to equal widths filling the container. Bare attribute (`fullWidth`)."
+      },
+      {
+        "name": "vertical",
+        "type": "boolean",
+        "description": "Stack segments vertically (Material passthrough). Bare attribute (`vertical`)."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible group label, linked via `aria-labelledby`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name when no visible `label` is provided."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "T | T[]",
+        "description": "Emits the newly selected value (single) or values (multiple) on user change (lightweight mode)."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SegmentOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "ariaLabel",
+            "type": "string",
+            "description": "Accessible name for an icon-only segment (required when `label` is empty)."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "A `provideRhombusIcons()` registry name rendered before the label."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusSelectComponent": {
     "name": "RhombusSelectComponent",
     "kind": "class",
@@ -2049,6 +2302,122 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "inputs": [],
     "outputs": [],
     "methods": []
+  },
+  "RhombusSliderComponent": {
+    "name": "RhombusSliderComponent",
+    "kind": "class",
+    "selector": "rhombus-slider",
+    "description": "`<rhombus-slider>` — wrapper over `<mat-slider>`. Two modes: `single` (one\nvalue) and `range` (a `{start, end}` pair). Same control model as the other\nform controls — `[control]` / `[rangeControl]` for reactive forms, or\n`[(value)]` / `[(rangeValue)]` otherwise. No ControlValueAccessor.\n\nThe active track, handle, and value bubble are driven by the `--text-accent`\nand `--tooltip-*` contract tokens (see the SCSS), so the slider re-skins with\nthe theme. Because two native range thumbs can't bind a single\n`FormControl<SliderRange>`, range reactive-forms mode mirrors the public\ncontrol to a private two-thumb group via the shared `mirrorControl` helper.\n\n```html\n<rhombus-slider [(value)]=\"volume\" ariaLabel=\"Volume\" />\n<rhombus-slider mode=\"range\" [(rangeValue)]=\"price\" [min]=\"0\" [max]=\"500\" />\n```",
+    "inputs": [
+      {
+        "name": "mode",
+        "type": "\"single\" | \"range\"",
+        "description": "`single` (one value) or `range` (a `{start, end}` pair). Defaults to `single`."
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Lower bound of the track. Defaults to `0`."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Upper bound of the track. Defaults to `100`."
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "description": "Increment between selectable values (and arrow-key step). Defaults to `1`."
+      },
+      {
+        "name": "discrete",
+        "type": "boolean",
+        "description": "Show the value-indicator bubble on drag/focus. Bare attribute (`discrete`)."
+      },
+      {
+        "name": "showTickMarks",
+        "type": "boolean",
+        "description": "Render tick marks at each step. Bare attribute (`showTickMarks`)."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the slider in lightweight mode; ignored when a control is set. Bare attribute."
+      },
+      {
+        "name": "displayWith",
+        "type": "(value: number) => string",
+        "description": "Formats the value-indicator label (e.g. currency, percent)."
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "description": "Value in lightweight (`[(value)]`) mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<number>",
+        "description": "Reactive-forms `FormControl<number>` for single mode; when set, `value`/`disabled` are ignored."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name for the single thumb."
+      },
+      {
+        "name": "rangeValue",
+        "type": "SliderRange",
+        "description": "Range value in lightweight (`[(rangeValue)]`) mode; ignored when `rangeControl` is set."
+      },
+      {
+        "name": "rangeControl",
+        "type": "FormControl<SliderRange>",
+        "description": "Reactive-forms `FormControl<SliderRange>` for range mode; when set, `rangeValue`/`disabled` are ignored."
+      },
+      {
+        "name": "startAriaLabel",
+        "type": "string",
+        "description": "Accessible name for the range start thumb. Defaults to `'Start'`."
+      },
+      {
+        "name": "endAriaLabel",
+        "type": "string",
+        "description": "Accessible name for the range end thumb. Defaults to `'End'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "number",
+        "description": "Emits on each user change in single lightweight mode (completes `[(value)]`)."
+      },
+      {
+        "name": "rangeValueChange",
+        "type": "SliderRange",
+        "description": "Emits the composed range on each user change in range mode (completes `[(rangeValue)]`)."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SliderRange",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "end",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "number",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
   },
   "RhombusSpinnerComponent": {
     "name": "RhombusSpinnerComponent",

@@ -3,11 +3,9 @@ import {
   Component,
   ViewEncapsulation,
   computed,
-  effect,
   input,
   output,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -17,6 +15,7 @@ import {
   FormFieldAppearance,
   FormFieldSize,
 } from '../form-field/form-field.types';
+import { mirrorControl } from '../forms/mirror-control';
 
 /**
  * Parse a strict ISO calendar date (`YYYY-MM-DD`) into a **local-midnight** Date.
@@ -150,9 +149,6 @@ export class RhombusDatePickerComponent {
   /** The Date-typed control bound to Material's datepicker; mirrors {@link control}. */
   protected readonly internal = new FormControl<Date | null>(null);
 
-  /** Guards the internal↔public sync so a programmatic write can't echo back. */
-  private syncing = false;
-
   protected readonly minDate = computed(() => isoToDate(this.min()));
   protected readonly maxDate = computed(() => isoToDate(this.max()));
 
@@ -165,61 +161,16 @@ export class RhombusDatePickerComponent {
   );
 
   constructor() {
-    // Internal → public: the user picked/typed/cleared a date. Convert to ISO,
-    // push it to the bound control (emitEvent so validators + consumers react),
-    // and emit dateChange. Skipped while we're seeding the internal control.
-    this.internal.valueChanges.pipe(takeUntilDestroyed()).subscribe((date) => {
-      if (this.syncing) return;
-      const iso = dateToIso(date);
-      const ctrl = this.control();
-      if (ctrl && ctrl.value !== iso) {
-        ctrl.setValue(iso);
-      }
-      this.dateChange.emit(iso);
+    // Mirror the public ISO-string control to the private Date-typed control
+    // Material binds to, converting at the boundary (local-midnight). The shared
+    // helper owns the sync guard + re-subscribe-on-swap machinery.
+    mirrorControl<string, Date>({
+      external: this.control,
+      internal: this.internal,
+      toInternal: (iso) => isoToDate(iso),
+      toExternal: (date) => dateToIso(date),
+      onExternalChange: (iso) => this.dateChange.emit(iso),
+      disabled: this.disabled,
     });
-
-    // Public → internal: seed from the bound control and follow its external
-    // value / disabled changes. Re-runs when the control instance is swapped.
-    effect((onCleanup) => {
-      const ctrl = this.control();
-      if (!ctrl) return;
-      this.writeInternal(isoToDate(ctrl.value), ctrl.disabled);
-      const valueSub = ctrl.valueChanges.subscribe((v) =>
-        this.writeInternal(isoToDate(v), ctrl.disabled)
-      );
-      const statusSub = ctrl.statusChanges.subscribe(() =>
-        this.setInternalDisabled(ctrl.disabled)
-      );
-      onCleanup(() => {
-        valueSub.unsubscribe();
-        statusSub.unsubscribe();
-      });
-    });
-
-    // Lightweight mode (no control): mirror the `disabled` input.
-    effect(() => {
-      if (this.control()) return;
-      this.setInternalDisabled(this.disabled());
-    });
-  }
-
-  /** Seed the internal control's value + disabled state without echoing back. */
-  private writeInternal(date: Date | null, disabled: boolean): void {
-    this.syncing = true;
-    this.internal.setValue(date, { emitEvent: false });
-    this.setInternalDisabled(disabled);
-    this.syncing = false;
-  }
-
-  /** Toggle the internal control's disabled state without emitting events. */
-  private setInternalDisabled(disabled: boolean): void {
-    const wasSyncing = this.syncing;
-    this.syncing = true;
-    if (disabled && !this.internal.disabled) {
-      this.internal.disable({ emitEvent: false });
-    } else if (!disabled && this.internal.disabled) {
-      this.internal.enable({ emitEvent: false });
-    }
-    this.syncing = wasSyncing;
   }
 }

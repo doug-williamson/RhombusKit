@@ -1,0 +1,61 @@
+// RhombusKit divider — a bespoke role=separator rule. Colour flows through the
+// @rhombuskit/tokens CONTRACT (--border, or --border-accent with [data-accent]);
+// no hard-coded colour literals, no .mat-* selectors. Orientation / inset /
+// accent / labelled are keyed off the host data-* attributes (the tag pattern).
+// Logical properties (block/inline) keep inset + vertical correct under RTL.
+
+.rhombus-divider {
+  --rhombus-divider-color: var(--border);
+  display: block;
+
+  &[data-accent] {
+    --rhombus-divider-color: var(--border-accent);
+  }
+
+  // --- Plain horizontal rule (default) ---
+  &[data-orientation='horizontal']:not([data-labelled]) {
+    block-size: 0;
+    border-block-start: var(--border-width) solid var(--rhombus-divider-color);
+  }
+
+  &[data-orientation='horizontal'][data-inset] {
+    margin-inline: 1rem;
+  }
+
+  // --- Vertical rule (takes its length from a flex/grid parent) ---
+  &[data-orientation='vertical'] {
+    display: inline-block;
+    align-self: stretch;
+    inline-size: 0;
+    min-block-size: 1em;
+    border-inline-start: var(--border-width) solid var(--rhombus-divider-color);
+  }
+
+  &[data-orientation='vertical'][data-inset] {
+    margin-block: 0.5rem;
+  }
+
+  // --- Labelled text divider (rule — label — rule; horizontal only) ---
+  &[data-labelled] {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 0;
+  }
+}
+
+.rhombus-divider__line {
+  flex: 1 1 0;
+  block-size: 0;
+  border-block-start: var(--border-width) solid var(--rhombus-divider-color);
+}
+
+.rhombus-divider__label {
+  flex: 0 0 auto;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
