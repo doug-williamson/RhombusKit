@@ -46,6 +46,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/checkbox', label: 'Checkbox' },
       { path: '/components/radio', label: 'Radio Group' },
       { path: '/components/switch', label: 'Switch' },
+      { path: '/components/slider', label: 'Slider' },
       { path: '/components/input', label: 'Input' },
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/select', label: 'Select' },

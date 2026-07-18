@@ -442,6 +442,25 @@
 ### RhombusShellNavFooterDirective (class)
   // (no public members)
 
+### RhombusSliderComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly control: _angular_core.InputSignal<FormControl<number>>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly discrete: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly displayWith: _angular_core.InputSignal<(value: number) => string>
+  readonly endAriaLabel: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<number>
+  readonly min: _angular_core.InputSignal<number>
+  readonly mode: _angular_core.InputSignal<"single" | "range">
+  readonly rangeControl: _angular_core.InputSignal<FormControl<SliderRange>>
+  readonly rangeValue: _angular_core.InputSignal<SliderRange>
+  readonly rangeValueChange: _angular_core.OutputEmitterRef<SliderRange>
+  readonly showTickMarks: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly startAriaLabel: _angular_core.InputSignal<string>
+  readonly step: _angular_core.InputSignal<number>
+  readonly value: _angular_core.InputSignal<number>
+  readonly valueChange: _angular_core.OutputEmitterRef<number>
+
 ### RhombusSpinnerComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly diameter: _angular_core.InputSignal<number>
@@ -537,6 +556,10 @@
 ### SelectOptionGroup (interface)
   groupLabel: string
   options: SelectOption<T>[]
+
+### SliderRange (interface)
+  end: number
+  start: number
 
 ### SortState (interface)
   active: string

@@ -81,6 +81,14 @@ export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
 // is driven by the --switch-track-on/off contract tokens.
 export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
 
+// Slider. Wraps <mat-slider>; single value or a {start, end} range, with the
+// [control]/[(value)] (and rangeControl/[(rangeValue)]) control model. Active
+// track/handle read --text-accent; the value bubble borrows --tooltip-*. Range
+// reactive-forms mode uses the internal mirrorControl helper to bind a
+// FormControl<SliderRange> to Material's two thumbs.
+export { RhombusSliderComponent } from './lib/slider/rhombus-slider.component';
+export type { SliderRange } from './lib/slider/rhombus-slider.component';
+
 // Tooltip. Directive composing MatTooltip via hostDirectives (badge pattern);
 // surface themed via --tooltip-bg/text.
 export { RhombusTooltipDirective } from './lib/tooltip/rhombus-tooltip.directive';

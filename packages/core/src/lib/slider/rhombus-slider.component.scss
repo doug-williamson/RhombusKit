@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+// The slider's active track, handle, value-indicator bubble, and tick marks have
+// no clean --mat-sys-* analog, so use Material's documented slider-overrides mixin
+// to point them at the RhombusKit contract tokens (the switch pattern). The active
+// track/handle read --text-accent; the value bubble borrows the --tooltip-* pair.
+.rhombus-slider {
+  font-family: var(--font-sans);
+
+  @include mat.slider-overrides(
+    (
+      active-track-color: var(--text-accent),
+      inactive-track-color: var(--border-strong),
+      handle-color: var(--text-accent),
+      focus-handle-color: var(--text-accent),
+      hover-handle-color: var(--text-accent),
+      ripple-color: var(--text-accent),
+      label-container-color: var(--tooltip-bg),
+      label-label-text-color: var(--tooltip-text),
+      with-tick-marks-active-container-color: var(--text-on-accent),
+      with-tick-marks-inactive-container-color: var(--surface-0),
+    )
+  );
+}

@@ -2084,6 +2084,122 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "outputs": [],
     "methods": []
   },
+  "RhombusSliderComponent": {
+    "name": "RhombusSliderComponent",
+    "kind": "class",
+    "selector": "rhombus-slider",
+    "description": "`<rhombus-slider>` — wrapper over `<mat-slider>`. Two modes: `single` (one\nvalue) and `range` (a `{start, end}` pair). Same control model as the other\nform controls — `[control]` / `[rangeControl]` for reactive forms, or\n`[(value)]` / `[(rangeValue)]` otherwise. No ControlValueAccessor.\n\nThe active track, handle, and value bubble are driven by the `--text-accent`\nand `--tooltip-*` contract tokens (see the SCSS), so the slider re-skins with\nthe theme. Because two native range thumbs can't bind a single\n`FormControl<SliderRange>`, range reactive-forms mode mirrors the public\ncontrol to a private two-thumb group via the shared `mirrorControl` helper.\n\n```html\n<rhombus-slider [(value)]=\"volume\" ariaLabel=\"Volume\" />\n<rhombus-slider mode=\"range\" [(rangeValue)]=\"price\" [min]=\"0\" [max]=\"500\" />\n```",
+    "inputs": [
+      {
+        "name": "mode",
+        "type": "\"single\" | \"range\"",
+        "description": "`single` (one value) or `range` (a `{start, end}` pair). Defaults to `single`."
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Lower bound of the track. Defaults to `0`."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Upper bound of the track. Defaults to `100`."
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "description": "Increment between selectable values (and arrow-key step). Defaults to `1`."
+      },
+      {
+        "name": "discrete",
+        "type": "boolean",
+        "description": "Show the value-indicator bubble on drag/focus. Bare attribute (`discrete`)."
+      },
+      {
+        "name": "showTickMarks",
+        "type": "boolean",
+        "description": "Render tick marks at each step. Bare attribute (`showTickMarks`)."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the slider in lightweight mode; ignored when a control is set. Bare attribute."
+      },
+      {
+        "name": "displayWith",
+        "type": "(value: number) => string",
+        "description": "Formats the value-indicator label (e.g. currency, percent)."
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "description": "Value in lightweight (`[(value)]`) mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<number>",
+        "description": "Reactive-forms `FormControl<number>` for single mode; when set, `value`/`disabled` are ignored."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name for the single thumb."
+      },
+      {
+        "name": "rangeValue",
+        "type": "SliderRange",
+        "description": "Range value in lightweight (`[(rangeValue)]`) mode; ignored when `rangeControl` is set."
+      },
+      {
+        "name": "rangeControl",
+        "type": "FormControl<SliderRange>",
+        "description": "Reactive-forms `FormControl<SliderRange>` for range mode; when set, `rangeValue`/`disabled` are ignored."
+      },
+      {
+        "name": "startAriaLabel",
+        "type": "string",
+        "description": "Accessible name for the range start thumb. Defaults to `'Start'`."
+      },
+      {
+        "name": "endAriaLabel",
+        "type": "string",
+        "description": "Accessible name for the range end thumb. Defaults to `'End'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "number",
+        "description": "Emits on each user change in single lightweight mode (completes `[(value)]`)."
+      },
+      {
+        "name": "rangeValueChange",
+        "type": "SliderRange",
+        "description": "Emits the composed range on each user change in range mode (completes `[(rangeValue)]`)."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SliderRange",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "end",
+            "type": "number",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "number",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusSpinnerComponent": {
     "name": "RhombusSpinnerComponent",
     "kind": "class",

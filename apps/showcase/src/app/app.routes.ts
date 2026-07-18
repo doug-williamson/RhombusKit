@@ -55,6 +55,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/switch/switch-page.component'),
       },
       {
+        path: 'slider',
+        title: 'Slider',
+        loadComponent: () => import('./pages/slider/slider-page.component'),
+      },
+      {
         path: 'input',
         title: 'Input',
         loadComponent: () => import('./pages/input/input-page.component'),

@@ -17,6 +17,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'checkbox', label: 'Checkbox' },
   { slug: 'radio', label: 'Radio Group' },
   { slug: 'switch', label: 'Switch' },
+  { slug: 'slider', label: 'Slider' },
   { slug: 'input', label: 'Input' },
   { slug: 'textarea', label: 'Textarea' },
   { slug: 'select', label: 'Select' },

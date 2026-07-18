@@ -29,6 +29,7 @@ const COMPONENTS = [
   '/components/checkbox',
   '/components/radio',
   '/components/switch',
+  '/components/slider',
   '/components/input',
   '/components/textarea',
   '/components/select',

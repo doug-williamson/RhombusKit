@@ -49,7 +49,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Select', api: 'mat-select', pkg: 'material', rk: 'Select', match: 'full', note: 'Single/multi option selection in a form field.' },
   { material: 'Sidenav', api: 'mat-sidenav', pkg: 'material', rk: 'App Shell', match: 'partial', note: 'App Shell gives a collapsible sidenav layout, but is an opinionated shell, not a standalone drawer.' },
   { material: 'Slide Toggle', api: 'mat-slide-toggle', pkg: 'material', rk: 'Switch', match: 'full', note: 'rhombus-switch is a direct boolean on/off equivalent.' },
-  { material: 'Slider', api: 'mat-slider', pkg: 'material', rk: '', match: 'gap', note: 'No numeric slider / range-thumb control.' },
+  { material: 'Slider', api: 'mat-slider', pkg: 'material', rk: 'Slider', match: 'full', note: 'rhombus-slider wraps mat-slider with single-value and {start, end} range modes, min/max/step/discrete/tick marks, and the [control]/[(value)] control model.' },
   { material: 'Snack Bar', api: 'MatSnackBar', pkg: 'material', rk: 'Toast', match: 'full', note: 'RhombusToastService wraps MatSnackBar.' },
   { material: 'Sort Header', api: 'matSort', pkg: 'material', rk: 'Data Table', match: 'full', note: 'Data Table provides controlled sortable column headers.' },
   { material: 'Stepper', api: 'mat-stepper', pkg: 'material', rk: '', match: 'gap', note: 'No wizard/stepper component.' },
