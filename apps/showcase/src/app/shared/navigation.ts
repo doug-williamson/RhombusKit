@@ -52,6 +52,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/select', label: 'Select' },
       { path: '/components/autocomplete', label: 'Autocomplete' },
+      { path: '/components/selection-list', label: 'Selection List' },
       { path: '/components/date-picker', label: 'Date Picker' },
       { path: '/components/date-range-picker', label: 'Date Range Picker' },
       { path: '/components/tag-input', label: 'Tag Input' },

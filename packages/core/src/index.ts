@@ -77,6 +77,19 @@ export type {
   AutocompleteDisplayFn,
 } from './lib/autocomplete/rhombus-autocomplete.component';
 
+// Selection list — a data-driven list over @angular/material/list in two modes:
+// a multi/single-select listbox (mat-selection-list; value is always T[], D6) or
+// an action-button list (mat-action-list). Options-array API; [control] binds
+// Material's native CVA directly, or [(value)] for lightweight use. Distinct from
+// Nav List (navigation via anchors/routerLink — a listbox can't hold interactive
+// children) and from Select (a collapsed dropdown vs an always-visible list). The
+// selected tint reuses the --nav-active-* contract pair.
+export { RhombusSelectionListComponent } from './lib/selection-list/rhombus-selection-list.component';
+export type {
+  SelectionListOption,
+  SelectionListMode,
+} from './lib/selection-list/selection-list.types';
+
 export type {
   FormFieldAppearance,
   FormFieldSize,

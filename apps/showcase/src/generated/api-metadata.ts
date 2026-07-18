@@ -2403,6 +2403,131 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusSelectionListComponent": {
+    "name": "RhombusSelectionListComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-selection-list>` — a data-driven list over Angular Material's list\npackage, in two modes (**D5**):\n\n- `mode=\"selection\"` (default) — a **listbox** over `<mat-selection-list>`:\n  multi-select by default (**D6**, `multiple` = `true`), or single-select. The\n  value is **always `T[]`** (single-select is a 0/1-length array). Drive it from\n  reactive forms with `[control]` (binds Material's native CVA directly), or use\n  the two-way `[(value)]` for lightweight use.\n- `mode=\"action\"` — a list of buttons over `<mat-action-list>` that fire\n  `(itemAction)` instead of selecting (menus, navigation-free command rows).\n\nBoundary: unlike **Nav List** (navigation — anchors / `routerLink`, one\n`aria-current` item) this is a *form* control (a listbox of selectable options,\nor a set of action buttons); Material forbids interactive children inside\nlistbox options, so the two can't be merged. Unlike **Select** (a collapsed\ndropdown) every option is always visible.\n\n```html\n<rhombus-selection-list label=\"Toppings\" [options]=\"opts\" [(value)]=\"picked\" />\n```",
+    "inputs": [
+      {
+        "name": "options",
+        "type": "SelectionListOption<T>[]",
+        "description": "Rows to render: `{ value, label, description?, icon?, disabled?, danger? }`. Defaults to `[]`."
+      },
+      {
+        "name": "mode",
+        "type": "SelectionListMode",
+        "description": "`'selection'` (a listbox, default) or `'action'` (a button list). **D5**.",
+        "enumValues": [
+          "selection",
+          "action"
+        ]
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "Allow multiple selection (selection mode). Defaults to `true` (**D6**). Set once — Material forbids changing it after init."
+      },
+      {
+        "name": "value",
+        "type": "T[]",
+        "description": "Two-way selected values (lightweight mode); **always `T[]`** (single = 0/1-length). Ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<T[]>",
+        "description": "Reactive-forms control (selection mode); binds Material's native CVA directly. Disables the standalone `value`/`disabled`."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the whole list in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Reflects `aria-required` on the listbox. Defaults to `false`."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible list label, linked via `aria-labelledby`; empty (default) for none."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name used when no visible `label` is provided (a listbox must be named)."
+      },
+      {
+        "name": "compareWith",
+        "type": "(a: T, b: T) => boolean",
+        "description": "Value equality used to match selected values to options. Defaults to `===`."
+      },
+      {
+        "name": "togglePosition",
+        "type": "\"before\" | \"after\"",
+        "description": "Checkbox/radio side within each row. Defaults to `'after'`."
+      },
+      {
+        "name": "hideSingleSelectionIndicator",
+        "type": "boolean",
+        "description": "Hide the single-select indicator (radio dot). Defaults to `false`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "selectionChange",
+        "type": "T[]",
+        "description": "Emits the selected values on every change (both control and lightweight modes)."
+      },
+      {
+        "name": "itemAction",
+        "type": "SelectionListOption<T>",
+        "description": "Emits the clicked option in `action` mode."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SelectionListOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "danger",
+            "type": "boolean",
+            "description": "Action mode only — styles the row as a destructive action (`--error`)."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "Optional secondary line, rendered in `--text-secondary`."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the row inert (not selectable / not actionable)."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "Optional leading `provideRhombusIcons()` glyph name."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Primary line — the option's visible text and accessible name.",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "The value committed to the selection (selection mode) or passed to `(itemAction)` (action mode).",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusShellAsideDirective": {
     "name": "RhombusShellAsideDirective",
     "kind": "class",

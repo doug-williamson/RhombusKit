@@ -98,6 +98,12 @@ export const appRoutes: Route[] = [
           import('./pages/autocomplete/autocomplete-page.component'),
       },
       {
+        path: 'selection-list',
+        title: 'Selection List',
+        loadComponent: () =>
+          import('./pages/selection-list/selection-list-page.component'),
+      },
+      {
         path: 'tag-input',
         title: 'Tag Input',
         loadComponent: () =>
