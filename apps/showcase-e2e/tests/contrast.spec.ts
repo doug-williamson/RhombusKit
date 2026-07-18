@@ -28,6 +28,7 @@ const COMPONENTS = [
   '/components/divider',
   '/components/checkbox',
   '/components/radio',
+  '/components/segmented',
   '/components/switch',
   '/components/slider',
   '/components/input',

@@ -2024,6 +2024,112 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusSegmentedComponent": {
+    "name": "RhombusSegmentedComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-segmented>` — a connected group of mutually-exclusive toggle buttons\nfor switching a view, unit, or mode inline (List / Grid / Board, °C / °F).\nWraps `<mat-button-toggle-group>`, driven by an `options` array like Select and\nRadio Group, with the same `[control]` / `[(value)]` control model. Opt into\n`multiple` for a small toggle-button toolbar. No ControlValueAccessor.\n\nThe active segment uses the `--nav-active-*` contract pair, so it re-skins with\nthe theme. Unlike a Radio Group it is a compact inline switcher; unlike a Chip\ngroup it is not a set of removable filters.\n\n```html\n<rhombus-segmented [options]=\"views\" [(value)]=\"view\" ariaLabel=\"Layout\" />\n```",
+    "inputs": [
+      {
+        "name": "options",
+        "type": "SegmentOption<T>[]",
+        "description": "Segments to render: `{ value, label, disabled?, icon?, ariaLabel? }`. Defaults to `[]`."
+      },
+      {
+        "name": "value",
+        "type": "T | T[]",
+        "description": "Selected value (single) or values (multiple) in lightweight mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<any>",
+        "description": "Reactive-forms control; when set, `value`/`disabled` are ignored. Loosely typed (single carries `T`, multiple `T[]`)."
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "Multi-select toolbar mode: `value` becomes an array. Bare attribute (`multiple`)."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the whole group in lightweight mode; ignored when `control` is set. Bare attribute."
+      },
+      {
+        "name": "size",
+        "type": "SegmentedSize",
+        "description": "Density preset applied via host class. Defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "description": "Stretch segments to equal widths filling the container. Bare attribute (`fullWidth`)."
+      },
+      {
+        "name": "vertical",
+        "type": "boolean",
+        "description": "Stack segments vertically (Material passthrough). Bare attribute (`vertical`)."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible group label, linked via `aria-labelledby`."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name when no visible `label` is provided."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "T | T[]",
+        "description": "Emits the newly selected value (single) or values (multiple) on user change (lightweight mode)."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SegmentOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "ariaLabel",
+            "type": "string",
+            "description": "Accessible name for an icon-only segment (required when `label` is empty)."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "A `provideRhombusIcons()` registry name rendered before the label."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusSelectComponent": {
     "name": "RhombusSelectComponent",
     "kind": "class",

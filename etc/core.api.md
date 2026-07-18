@@ -438,6 +438,19 @@
   readonly value: _angular_core.InputSignal<T>
   readonly valueChange: _angular_core.OutputEmitterRef<T>
 
+### RhombusSegmentedComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly control: _angular_core.InputSignal<FormControl<any>>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly fullWidth: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly label: _angular_core.InputSignal<string>
+  readonly multiple: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly options: _angular_core.InputSignal<SegmentOption<T>[]>
+  readonly size: _angular_core.InputSignal<SegmentedSize>
+  readonly value: _angular_core.InputSignal<T | T[]>
+  readonly valueChange: _angular_core.OutputEmitterRef<T | T[]>
+  readonly vertical: _angular_core.InputSignalWithTransform<boolean, unknown>
+
 ### RhombusSelectComponent (class)
   readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
   readonly control: _angular_core.InputSignal<FormControl<any>>
@@ -573,6 +586,16 @@
   readonly message: _angular_core.InputSignal<string>
   readonly position: _angular_core.InputSignal<i1$1.TooltipPosition>
   readonly showDelay: _angular_core.InputSignal<number>
+
+### SegmentOption (interface)
+  ariaLabel?: string
+  disabled?: boolean
+  icon?: string
+  label: string
+  value: T
+
+### SegmentedSize (type)
+  type SegmentedSize = 'sm' | 'md' | 'lg'
 
 ### SelectOption (interface)
   disabled?: boolean

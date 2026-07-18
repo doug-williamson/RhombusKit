@@ -30,6 +30,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Divider](https://rhombuskit.online/components/divider)
 - [Checkbox](https://rhombuskit.online/components/checkbox)
 - [Radio Group](https://rhombuskit.online/components/radio)
+- [Segmented](https://rhombuskit.online/components/segmented)
 - [Switch](https://rhombuskit.online/components/switch)
 - [Slider](https://rhombuskit.online/components/slider)
 - [Input](https://rhombuskit.online/components/input)

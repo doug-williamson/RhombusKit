@@ -50,6 +50,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/radio/radio-page.component'),
       },
       {
+        path: 'segmented',
+        title: 'Segmented',
+        loadComponent: () => import('./pages/segmented/segmented-page.component'),
+      },
+      {
         path: 'switch',
         title: 'Switch',
         loadComponent: () => import('./pages/switch/switch-page.component'),

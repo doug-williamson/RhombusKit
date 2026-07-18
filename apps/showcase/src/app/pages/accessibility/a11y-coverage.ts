@@ -16,6 +16,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'divider', label: 'Divider' },
   { slug: 'checkbox', label: 'Checkbox' },
   { slug: 'radio', label: 'Radio Group' },
+  { slug: 'segmented', label: 'Segmented' },
   { slug: 'switch', label: 'Switch' },
   { slug: 'slider', label: 'Slider' },
   { slug: 'input', label: 'Input' },

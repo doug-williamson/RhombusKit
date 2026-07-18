@@ -28,7 +28,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Badge', api: 'matBadge', pkg: 'material', rk: 'Badge', match: 'full', note: 'rhombus-badge is a direct count/status overlay equivalent.' },
   { material: 'Bottom Sheet', api: 'MatBottomSheet', pkg: 'material', rk: '', match: 'gap', note: 'No bottom-slide modal panel; Dialog/Popover do not cover it.' },
   { material: 'Button', api: 'matButton', pkg: 'material', rk: 'Button', match: 'full', note: 'Covers the button variants; verify FAB/mini-FAB styling.' },
-  { material: 'Button Toggle', api: 'mat-button-toggle', pkg: 'material', rk: '', match: 'gap', note: 'No segmented on/off toggle-button group.' },
+  { material: 'Button Toggle', api: 'mat-button-toggle', pkg: 'material', rk: 'Segmented', match: 'full', note: 'rhombus-segmented is a connected single- or multi-select toggle-button group (options-array API) for inline view/unit switching — distinct from Radio Group (a form input) and Chip (removable filters).' },
   { material: 'Card', api: 'mat-card', pkg: 'material', rk: 'Card', match: 'full', note: 'rhombus-card is a direct content-surface equivalent.' },
   { material: 'Checkbox', api: 'mat-checkbox', pkg: 'material', rk: 'Checkbox', match: 'full', note: 'Binary + indeterminate, form-bound.' },
   { material: 'Chips', api: 'mat-chip', pkg: 'material', rk: 'Chip', match: 'partial', note: 'Display/filter/selection chips map; chip-grid text entry is not covered.' },

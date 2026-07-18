@@ -88,6 +88,17 @@ export { RhombusCheckboxComponent } from './lib/checkbox/rhombus-checkbox.compon
 export { RhombusRadioGroupComponent } from './lib/radio/rhombus-radio-group.component';
 export type { RadioOption } from './lib/radio/rhombus-radio-group.component';
 
+// Segmented control. Wraps <mat-button-toggle-group>; options-array API, single
+// or multiple selection, [control]/[(value)] model. The active segment uses the
+// --nav-active-* contract pair (its first reuse outside nav-list). For inline
+// view/unit switching — distinct from Radio (a form input) and Chip (removable
+// filters). Replaces the Material button-toggle.
+export { RhombusSegmentedComponent } from './lib/segmented/rhombus-segmented.component';
+export type {
+  SegmentOption,
+  SegmentedSize,
+} from './lib/segmented/rhombus-segmented.component';
+
 // Switch. Wraps <mat-slide-toggle>; same control model as checkbox. Track colour
 // is driven by the --switch-track-on/off contract tokens.
 export { RhombusSwitchComponent } from './lib/switch/rhombus-switch.component';
