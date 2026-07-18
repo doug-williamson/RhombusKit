@@ -1,0 +1,55 @@
+// Selection list — renders in the component host (not an overlay), so the
+// Material list design tokens are rebound to the CONTRACT here, keyed off the
+// component's host class. No --mat-sys-*, no ::ng-deep for the common case.
+
+:host {
+  display: block;
+}
+
+.rhombus-selection-list__label {
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem 0.75rem;
+}
+
+.rhombus-selection-list.mat-mdc-list {
+  --mat-list-list-item-label-text-color: var(--text-primary);
+  // Description line stays at --text-secondary (not --text-muted): the AA
+  // small-text trap nav-list hit.
+  --mat-list-list-item-supporting-text-color: var(--text-secondary);
+  --mat-list-list-item-hover-label-text-color: var(--text-primary);
+  --mat-list-list-item-hover-state-layer-color: var(--surface-2);
+  --mat-list-list-item-focus-label-text-color: var(--text-primary);
+  --mat-list-list-item-focus-state-layer-color: var(--surface-2);
+  --mat-list-list-item-leading-icon-color: var(--text-secondary);
+  --mat-list-list-item-selected-container-color: var(--nav-active-bg);
+  font-family: var(--font-sans);
+}
+
+// Selected-row text pairs with the nav-active background — set BOTH so text is
+// never left on the tint at --text-primary (the pair is AA-verified by nav-list).
+.rhombus-selection-list .mat-mdc-list-option.mdc-list-item--selected {
+  .mdc-list-item__primary-text,
+  .rhombus-selection-list__description {
+    color: var(--nav-active-text);
+  }
+}
+
+// Keyboard focus ring.
+.rhombus-selection-list .mat-mdc-list-item.cdk-keyboard-focused::before,
+.rhombus-selection-list .mat-mdc-list-option.cdk-keyboard-focused::before {
+  outline: 2px solid var(--focus-border);
+  outline-offset: -2px;
+}
+
+// Danger action row (action mode).
+.rhombus-selection-list__danger.mat-mdc-list-item {
+  --mat-list-list-item-label-text-color: var(--error);
+  --mat-list-list-item-leading-icon-color: var(--error);
+  --mat-list-list-item-hover-state-layer-color: var(--error-bg);
+  --mat-list-list-item-focus-state-layer-color: var(--error-bg);
+}

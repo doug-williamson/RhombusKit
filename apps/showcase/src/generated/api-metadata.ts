@@ -212,6 +212,151 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[shellBottomNav]"
     ]
   },
+  "RhombusAutocompleteComponent": {
+    "name": "RhombusAutocompleteComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-autocomplete>` — wrapper over `<mat-form-field>` + `<input matInput>`\n+ `<mat-autocomplete>`, consistent with `<rhombus-input>` / `<rhombus-select>`.\n\nGeneric over the option value type `T`. Feed it an `options` array; it filters\nclient-side with the built-in label-substring `filterWith` (override it, or set\n`filterWith` to `null` and drive the panel from `queryChange` for server-side\nsearch). With `requireSelection=false` (the default, **D4**) it is a free-text\ncombobox — the bound control holds either a picked `T` or the typed `string`, so\nits type is `FormControl<T | string | null>`. No ControlValueAccessor: pass a\n`FormControl` via `control`, like the other form primitives.\n\nThe component owns an internal control bound to the input; the public `control`\nis mirrored to it via the shared {@link mirrorControl } helper (identity mapping —\nthe public and Material-bound value types are the same), which supplies the\nsync guard, disabled mirroring, and re-subscribe-on-swap machinery.\n\n  <rhombus-autocomplete label=\"Fruit\" [options]=\"fruits\" [control]=\"fruitCtrl\" />\n\nProjected slots (found by Material's descendants:true queries):\n  <mat-icon matIconPrefix>…</mat-icon>   leading affordance\n  <button matIconSuffix>…</button>       trailing affordance\n  <span rhombusError>…</span>            error subscript text",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown when the field is empty."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "options",
+        "type": "AutocompleteOption<T>[]",
+        "description": "Options to render; filtered by `filterWith`. Defaults to `[]`."
+      },
+      {
+        "name": "filterWith",
+        "type": "AutocompleteFilterFn<T>",
+        "description": "Predicate used to filter `options` against the typed query. Defaults to a\ncase-insensitive label-substring match. Set to `null` to disable local\nfiltering and treat `options` as already filtered (server-side search via\n`queryChange`)."
+      },
+      {
+        "name": "displayWith",
+        "type": "AutocompleteDisplayFn<T>",
+        "description": "Maps the control value to the input's display text; required for object-valued `T`."
+      },
+      {
+        "name": "autoActiveFirstOption",
+        "type": "boolean",
+        "description": "Highlight the first option so Enter selects it. Defaults to `true`."
+      },
+      {
+        "name": "requireSelection",
+        "type": "boolean",
+        "description": "Force a selection from the list (clears free text on blur). Defaults to `false` (**D4**)."
+      },
+      {
+        "name": "minChars",
+        "type": "number",
+        "description": "Minimum query length before the panel filters / `queryChange` fires. Defaults to `0`."
+      },
+      {
+        "name": "debounceMs",
+        "type": "number",
+        "description": "Debounce applied to `queryChange`, in ms. Defaults to `0`."
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "description": "Shows a themed loading option in the panel. Defaults to `false`."
+      },
+      {
+        "name": "noResultsText",
+        "type": "string",
+        "description": "Text of the empty-state option shown when nothing matches. Defaults to `'No results'`."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<string | T>",
+        "description": "Reactive-forms control (a picked `T` or free-text `string`); disables the standalone `disabled`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "optionSelected",
+        "type": "T",
+        "description": "Emits the picked option's value when the user selects from the list."
+      },
+      {
+        "name": "queryChange",
+        "type": "string",
+        "description": "Emits the debounced query text as the user types — the server-search hook."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "AutocompleteOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusAvatarComponent": {
     "name": "RhombusAvatarComponent",
     "kind": "class",
@@ -1624,6 +1769,121 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusNumberInputComponent": {
+    "name": "RhombusNumberInputComponent",
+    "kind": "class",
+    "selector": "rhombus-number-input",
+    "description": "`<rhombus-number-input>` — a numeric spinbox: Material's `<mat-form-field>` +\n`<input matInput type=\"number\">` for the field chrome, plus a bespoke ± / step\n/ clamp / keyboard layer Material doesn't ship (**D7**).\n\nThe native `type=\"number\"` input is an implicit ARIA `spinbutton` and derives\n`aria-valuemin/max/now` for free from the reflected `min` / `max` / `step`\nattributes, so no manual `role`/`aria-*` is added. The public `[control]` /\n`[(value)]` is mirrored to a private `FormControl<number | null>` bound to the\ninput via the shared {@link mirrorControl } helper (identity mapping) — a spinbox\nmust read the current value to clamp and write the stepped one back, so a single\ninternal control is the natural home for that. Clamping runs on blur and on a\nstep, never per keystroke.\n\n  <rhombus-number-input label=\"Quantity\" [min]=\"0\" [max]=\"99\" [(value)]=\"qty\" />\n\nProjected slots: `[rhombusError]` (error subscript), `[matTextPrefix]` /\n`[matIconPrefix]` (unit / currency — the ± live in the trailing region).",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown when the field is empty."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Minimum value; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Maximum value; `null` (default) for no upper bound."
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "description": "Increment for the ± buttons and arrow keys. Defaults to `1`."
+      },
+      {
+        "name": "largeStep",
+        "type": "number",
+        "description": "Increment for PageUp / PageDown; `null` (default) uses `step * 10`."
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "description": "Value in lightweight (`[(value)]`) mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<number>",
+        "description": "Reactive-forms `FormControl<number | null>`; when set, `value`/`disabled` are ignored."
+      },
+      {
+        "name": "showButtons",
+        "type": "boolean",
+        "description": "Show the ± spinner buttons. Defaults to `true`."
+      },
+      {
+        "name": "incrementLabel",
+        "type": "string",
+        "description": "Accessible name for the increment button. Defaults to `'Increment'`."
+      },
+      {
+        "name": "decrementLabel",
+        "type": "string",
+        "description": "Accessible name for the decrement button. Defaults to `'Decrement'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "number",
+        "description": "Emits on each user change in lightweight mode (completes `[(value)]`)."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[matTextPrefix]",
+      "[matIconPrefix]",
+      "[rhombusError]"
+    ]
+  },
   "RhombusOverflowMenuComponent": {
     "name": "RhombusOverflowMenuComponent",
     "kind": "class",
@@ -2252,6 +2512,131 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "name": "options",
             "type": "SelectOption<T>[]",
             "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "RhombusSelectionListComponent": {
+    "name": "RhombusSelectionListComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-selection-list>` — a data-driven list over Angular Material's list\npackage, in two modes (**D5**):\n\n- `mode=\"selection\"` (default) — a **listbox** over `<mat-selection-list>`:\n  multi-select by default (**D6**, `multiple` = `true`), or single-select. The\n  value is **always `T[]`** (single-select is a 0/1-length array). Drive it from\n  reactive forms with `[control]` (binds Material's native CVA directly), or use\n  the two-way `[(value)]` for lightweight use.\n- `mode=\"action\"` — a list of buttons over `<mat-action-list>` that fire\n  `(itemAction)` instead of selecting (menus, navigation-free command rows).\n\nBoundary: unlike **Nav List** (navigation — anchors / `routerLink`, one\n`aria-current` item) this is a *form* control (a listbox of selectable options,\nor a set of action buttons); Material forbids interactive children inside\nlistbox options, so the two can't be merged. Unlike **Select** (a collapsed\ndropdown) every option is always visible.\n\n```html\n<rhombus-selection-list label=\"Toppings\" [options]=\"opts\" [(value)]=\"picked\" />\n```",
+    "inputs": [
+      {
+        "name": "options",
+        "type": "SelectionListOption<T>[]",
+        "description": "Rows to render: `{ value, label, description?, icon?, disabled?, danger? }`. Defaults to `[]`."
+      },
+      {
+        "name": "mode",
+        "type": "SelectionListMode",
+        "description": "`'selection'` (a listbox, default) or `'action'` (a button list). **D5**.",
+        "enumValues": [
+          "selection",
+          "action"
+        ]
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "description": "Allow multiple selection (selection mode). Defaults to `true` (**D6**). Set once — Material forbids changing it after init."
+      },
+      {
+        "name": "value",
+        "type": "T[]",
+        "description": "Two-way selected values (lightweight mode); **always `T[]`** (single = 0/1-length). Ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<T[]>",
+        "description": "Reactive-forms control (selection mode); binds Material's native CVA directly. Disables the standalone `value`/`disabled`."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the whole list in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Reflects `aria-required` on the listbox. Defaults to `false`."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible list label, linked via `aria-labelledby`; empty (default) for none."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name used when no visible `label` is provided (a listbox must be named)."
+      },
+      {
+        "name": "compareWith",
+        "type": "(a: T, b: T) => boolean",
+        "description": "Value equality used to match selected values to options. Defaults to `===`."
+      },
+      {
+        "name": "togglePosition",
+        "type": "\"before\" | \"after\"",
+        "description": "Checkbox/radio side within each row. Defaults to `'after'`."
+      },
+      {
+        "name": "hideSingleSelectionIndicator",
+        "type": "boolean",
+        "description": "Hide the single-select indicator (radio dot). Defaults to `false`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "selectionChange",
+        "type": "T[]",
+        "description": "Emits the selected values on every change (both control and lightweight modes)."
+      },
+      {
+        "name": "itemAction",
+        "type": "SelectionListOption<T>",
+        "description": "Emits the clicked option in `action` mode."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "SelectionListOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "danger",
+            "type": "boolean",
+            "description": "Action mode only — styles the row as a destructive action (`--error`)."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "Optional secondary line, rendered in `--text-secondary`."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Renders the row inert (not selectable / not actionable)."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "description": "Optional leading `provideRhombusIcons()` glyph name."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Primary line — the option's visible text and accessible name.",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "The value committed to the selection (selection mode) or passed to `(itemAction)` (action mode).",
             "required": true
           }
         ]

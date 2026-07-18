@@ -7,6 +7,17 @@
 ### AlertVariant (type)
   type AlertVariant = 'info' | 'success' | 'warning' | 'error'
 
+### AutocompleteDisplayFn (type)
+  type AutocompleteDisplayFn<T = string> = (value: T | string | null) => string
+
+### AutocompleteFilterFn (type)
+  type AutocompleteFilterFn<T = string> = (option: AutocompleteOption<T>, query: string) => boolean
+
+### AutocompleteOption (interface)
+  disabled?: boolean
+  label: string
+  value: T
+
 ### AvatarSize (type)
   type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | number
 
@@ -150,6 +161,28 @@
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
   readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
   readonly phoneMaxWidth: _angular_core.InputSignal<number>
+
+### RhombusAutocompleteComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly autoActiveFirstOption: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly control: _angular_core.InputSignal<FormControl<string | T>>
+  readonly debounceMs: _angular_core.InputSignal<number>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly displayWith: _angular_core.InputSignal<AutocompleteDisplayFn<T>>
+  readonly filterWith: _angular_core.InputSignal<AutocompleteFilterFn<T>>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly loading: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly minChars: _angular_core.InputSignal<number>
+  readonly noResultsText: _angular_core.InputSignal<string>
+  readonly optionSelected: _angular_core.OutputEmitterRef<T>
+  readonly options: _angular_core.InputSignal<AutocompleteOption<T>[]>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly queryChange: _angular_core.OutputEmitterRef<string>
+  readonly requireSelection: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly required: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
 ### RhombusAvatarComponent (class)
   readonly name: _angular_core.InputSignal<string>
@@ -380,6 +413,26 @@
   heading?: string
   items: RhombusNavItem[]
 
+### RhombusNumberInputComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<FormControl<number>>
+  readonly decrementLabel: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly incrementLabel: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly largeStep: _angular_core.InputSignal<number>
+  readonly max: _angular_core.InputSignal<number>
+  readonly min: _angular_core.InputSignal<number>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly required: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly showButtons: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly step: _angular_core.InputSignal<number>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+  readonly value: _angular_core.ModelSignal<number>
+  readonly valueChange: _angular_core.OutputEmitterRef<number>
+
 ### RhombusOverflowMenuComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly items: _angular_core.InputSignal<MenuItem[]>
@@ -465,6 +518,22 @@
   readonly selectionChange: _angular_core.OutputEmitterRef<T | T[]>
   readonly size: _angular_core.InputSignal<FormFieldSize>
   readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+
+### RhombusSelectionListComponent (class)
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly compareWith: _angular_core.InputSignal<(a: T, b: T) => boolean>
+  readonly control: _angular_core.InputSignal<FormControl<T[]>>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly hideSingleSelectionIndicator: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly itemAction: _angular_core.OutputEmitterRef<SelectionListOption<T>>
+  readonly label: _angular_core.InputSignal<string>
+  readonly mode: _angular_core.InputSignal<SelectionListMode>
+  readonly multiple: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly options: _angular_core.InputSignal<SelectionListOption<T>[]>
+  readonly required: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly selectionChange: _angular_core.OutputEmitterRef<T[]>
+  readonly togglePosition: _angular_core.InputSignal<"before" | "after">
+  readonly value: _angular_core.ModelSignal<T[]>
 
 ### RhombusShellAsideDirective (class)
   // (no public members)
@@ -605,6 +674,17 @@
 ### SelectOptionGroup (interface)
   groupLabel: string
   options: SelectOption<T>[]
+
+### SelectionListMode (type)
+  type SelectionListMode = 'selection' | 'action'
+
+### SelectionListOption (interface)
+  danger?: boolean
+  description?: string
+  disabled?: boolean
+  icon?: string
+  label: string
+  value: T
 
 ### SliderRange (interface)
   end: number

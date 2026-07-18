@@ -92,6 +92,24 @@ export const appRoutes: Route[] = [
           import('./pages/date-range-picker/date-range-picker-page.component'),
       },
       {
+        path: 'autocomplete',
+        title: 'Autocomplete',
+        loadComponent: () =>
+          import('./pages/autocomplete/autocomplete-page.component'),
+      },
+      {
+        path: 'selection-list',
+        title: 'Selection List',
+        loadComponent: () =>
+          import('./pages/selection-list/selection-list-page.component'),
+      },
+      {
+        path: 'number-input',
+        title: 'Number Input',
+        loadComponent: () =>
+          import('./pages/number-input/number-input-page.component'),
+      },
+      {
         path: 'tag-input',
         title: 'Tag Input',
         loadComponent: () =>
