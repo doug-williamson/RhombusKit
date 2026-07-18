@@ -24,7 +24,7 @@ export interface MigrationRow {
 
 export const MATERIAL_MAP: MigrationRow[] = [
   // ── Angular Material (visible components) ──────────────────────────────────
-  { material: 'Autocomplete', api: 'mat-autocomplete', pkg: 'material', rk: '', match: 'gap', note: 'Select is a fixed-list dropdown; no type-ahead filtering panel yet.' },
+  { material: 'Autocomplete', api: 'mat-autocomplete', pkg: 'material', rk: 'Autocomplete', match: 'full', note: 'rhombus-autocomplete is a type-ahead combobox: options-array with client-side filterWith (or null + queryChange for server-side search), free-text by default, loading and no-results states, and the [control] model.' },
   { material: 'Badge', api: 'matBadge', pkg: 'material', rk: 'Badge', match: 'full', note: 'rhombus-badge is a direct count/status overlay equivalent.' },
   { material: 'Bottom Sheet', api: 'MatBottomSheet', pkg: 'material', rk: '', match: 'gap', note: 'No bottom-slide modal panel; Dialog/Popover do not cover it.' },
   { material: 'Button', api: 'matButton', pkg: 'material', rk: 'Button', match: 'full', note: 'Covers the button variants; verify FAB/mini-FAB styling.' },

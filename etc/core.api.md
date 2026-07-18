@@ -7,6 +7,17 @@
 ### AlertVariant (type)
   type AlertVariant = 'info' | 'success' | 'warning' | 'error'
 
+### AutocompleteDisplayFn (type)
+  type AutocompleteDisplayFn<T = string> = (value: T | string | null) => string
+
+### AutocompleteFilterFn (type)
+  type AutocompleteFilterFn<T = string> = (option: AutocompleteOption<T>, query: string) => boolean
+
+### AutocompleteOption (interface)
+  disabled?: boolean
+  label: string
+  value: T
+
 ### AvatarSize (type)
   type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | number
 
@@ -150,6 +161,28 @@
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
   readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
   readonly phoneMaxWidth: _angular_core.InputSignal<number>
+
+### RhombusAutocompleteComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly autoActiveFirstOption: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly control: _angular_core.InputSignal<FormControl<string | T>>
+  readonly debounceMs: _angular_core.InputSignal<number>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly displayWith: _angular_core.InputSignal<AutocompleteDisplayFn<T>>
+  readonly filterWith: _angular_core.InputSignal<AutocompleteFilterFn<T>>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly loading: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly minChars: _angular_core.InputSignal<number>
+  readonly noResultsText: _angular_core.InputSignal<string>
+  readonly optionSelected: _angular_core.OutputEmitterRef<T>
+  readonly options: _angular_core.InputSignal<AutocompleteOption<T>[]>
+  readonly placeholder: _angular_core.InputSignal<string>
+  readonly queryChange: _angular_core.OutputEmitterRef<string>
+  readonly requireSelection: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly required: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
 ### RhombusAvatarComponent (class)
   readonly name: _angular_core.InputSignal<string>

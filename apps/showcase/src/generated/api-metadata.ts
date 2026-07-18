@@ -212,6 +212,151 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[shellBottomNav]"
     ]
   },
+  "RhombusAutocompleteComponent": {
+    "name": "RhombusAutocompleteComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-autocomplete>` — wrapper over `<mat-form-field>` + `<input matInput>`\n+ `<mat-autocomplete>`, consistent with `<rhombus-input>` / `<rhombus-select>`.\n\nGeneric over the option value type `T`. Feed it an `options` array; it filters\nclient-side with the built-in label-substring `filterWith` (override it, or set\n`filterWith` to `null` and drive the panel from `queryChange` for server-side\nsearch). With `requireSelection=false` (the default, **D4**) it is a free-text\ncombobox — the bound control holds either a picked `T` or the typed `string`, so\nits type is `FormControl<T | string | null>`. No ControlValueAccessor: pass a\n`FormControl` via `control`, like the other form primitives.\n\nThe component owns an internal control bound to the input; the public `control`\nis mirrored to it via the shared {@link mirrorControl } helper (identity mapping —\nthe public and Material-bound value types are the same), which supplies the\nsync guard, disabled mirroring, and re-subscribe-on-swap machinery.\n\n  <rhombus-autocomplete label=\"Fruit\" [options]=\"fruits\" [control]=\"fruitCtrl\" />\n\nProjected slots (found by Material's descendants:true queries):\n  <mat-icon matIconPrefix>…</mat-icon>   leading affordance\n  <button matIconSuffix>…</button>       trailing affordance\n  <span rhombusError>…</span>            error subscript text",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; empty (default) for no label."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "description": "Placeholder shown when the field is empty."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the field in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text shown below the field; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "options",
+        "type": "AutocompleteOption<T>[]",
+        "description": "Options to render; filtered by `filterWith`. Defaults to `[]`."
+      },
+      {
+        "name": "filterWith",
+        "type": "AutocompleteFilterFn<T>",
+        "description": "Predicate used to filter `options` against the typed query. Defaults to a\ncase-insensitive label-substring match. Set to `null` to disable local\nfiltering and treat `options` as already filtered (server-side search via\n`queryChange`)."
+      },
+      {
+        "name": "displayWith",
+        "type": "AutocompleteDisplayFn<T>",
+        "description": "Maps the control value to the input's display text; required for object-valued `T`."
+      },
+      {
+        "name": "autoActiveFirstOption",
+        "type": "boolean",
+        "description": "Highlight the first option so Enter selects it. Defaults to `true`."
+      },
+      {
+        "name": "requireSelection",
+        "type": "boolean",
+        "description": "Force a selection from the list (clears free text on blur). Defaults to `false` (**D4**)."
+      },
+      {
+        "name": "minChars",
+        "type": "number",
+        "description": "Minimum query length before the panel filters / `queryChange` fires. Defaults to `0`."
+      },
+      {
+        "name": "debounceMs",
+        "type": "number",
+        "description": "Debounce applied to `queryChange`, in ms. Defaults to `0`."
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "description": "Shows a themed loading option in the panel. Defaults to `false`."
+      },
+      {
+        "name": "noResultsText",
+        "type": "string",
+        "description": "Text of the empty-state option shown when nothing matches. Defaults to `'No results'`."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<string | T>",
+        "description": "Reactive-forms control (a picked `T` or free-text `string`); disables the standalone `disabled`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "optionSelected",
+        "type": "T",
+        "description": "Emits the picked option's value when the user selects from the list."
+      },
+      {
+        "name": "queryChange",
+        "type": "string",
+        "description": "Emits the debounced query text as the user types — the server-search hook."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "AutocompleteOption",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusAvatarComponent": {
     "name": "RhombusAvatarComponent",
     "kind": "class",

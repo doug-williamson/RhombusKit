@@ -36,6 +36,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Input](https://rhombuskit.online/components/input)
 - [Textarea](https://rhombuskit.online/components/textarea)
 - [Select](https://rhombuskit.online/components/select)
+- [Autocomplete](https://rhombuskit.online/components/autocomplete)
 - [Date Picker](https://rhombuskit.online/components/date-picker)
 - [Date Range Picker](https://rhombuskit.online/components/date-range-picker)
 - [Tag Input](https://rhombuskit.online/components/tag-input)

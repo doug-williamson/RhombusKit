@@ -34,6 +34,7 @@ const COMPONENTS = [
   '/components/input',
   '/components/textarea',
   '/components/select',
+  '/components/autocomplete',
   '/components/date-picker',
   '/components/date-range-picker',
   '/components/tag-input',

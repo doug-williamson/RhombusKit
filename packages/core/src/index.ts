@@ -63,6 +63,20 @@ export type {
   DateRangeControl,
 } from './lib/date-range-picker/rhombus-date-range-picker.component';
 
+// Autocomplete — a type-ahead combobox over mat-autocomplete: an options array
+// filtered client-side by the built-in label-substring filterWith (or null +
+// queryChange for server-side search), with loading and themed no-results states.
+// Free-text by default (requireSelection=false), so the bound control holds a
+// picked T or the typed string (FormControl<T | string | null>); reuses the
+// internal mirrorControl helper. Unlike Select (a fixed-list dropdown) it filters
+// as you type; unlike a plain Input it offers a curated suggestion list.
+export { RhombusAutocompleteComponent } from './lib/autocomplete/rhombus-autocomplete.component';
+export type {
+  AutocompleteOption,
+  AutocompleteFilterFn,
+  AutocompleteDisplayFn,
+} from './lib/autocomplete/rhombus-autocomplete.component';
+
 export type {
   FormFieldAppearance,
   FormFieldSize,
