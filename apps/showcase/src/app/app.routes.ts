@@ -81,6 +81,12 @@ export const appRoutes: Route[] = [
           import('./pages/date-picker/date-picker-page.component'),
       },
       {
+        path: 'date-range-picker',
+        title: 'Date Range Picker',
+        loadComponent: () =>
+          import('./pages/date-range-picker/date-range-picker-page.component'),
+      },
+      {
         path: 'tag-input',
         title: 'Tag Input',
         loadComponent: () =>

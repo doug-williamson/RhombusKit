@@ -1003,6 +1003,119 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[rhombusError]"
     ]
   },
+  "RhombusDateRangePickerComponent": {
+    "name": "RhombusDateRangePickerComponent",
+    "kind": "class",
+    "selector": "rhombus-date-range-picker",
+    "description": "`<rhombus-date-range-picker>` — a two-field start/end calendar over Material's\n`<mat-date-range-input>` + `<mat-date-range-picker>`, in the same form-field\nshell as Input / Select / Date Picker. Its public value is a plain\n`{ start, end }` pair of ISO `YYYY-MM-DD` strings, so it drops straight into a\nreactive form. Material works in `Date`, so the public group is mirrored to a\nprivate Date-typed group (local-midnight, sharing the Date Picker's\n`isoToDate` / `dateToIso`) via the shared `mirrorControl` helper. No\nControlValueAccessor. Self-provides `provideNativeDateAdapter()`.\n\n```html\n<rhombus-date-range-picker label=\"Reporting window\" [control]=\"rangeGroup\" />\n```",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Floating `<mat-label>` text; the field group's accessible name — always supply one."
+      },
+      {
+        "name": "startPlaceholder",
+        "type": "string",
+        "description": "Placeholder for the start input. Defaults to `'Start date'`."
+      },
+      {
+        "name": "endPlaceholder",
+        "type": "string",
+        "description": "Placeholder for the end input. Defaults to `'End date'`."
+      },
+      {
+        "name": "separator",
+        "type": "string",
+        "description": "Visual separator rendered between the two inputs. Defaults to an en dash."
+      },
+      {
+        "name": "appearance",
+        "type": "FormFieldAppearance",
+        "description": "Form-field appearance, mapped to Material's `outline` (default) or `fill`.",
+        "enumValues": [
+          "outline",
+          "fill"
+        ]
+      },
+      {
+        "name": "size",
+        "type": "FormFieldSize",
+        "description": "Density scale applied via host classes; defaults to `md`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables both endpoints in lightweight mode; ignored when `control` is set."
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "description": "Marks the field required for validation/ARIA. Defaults to `false`."
+      },
+      {
+        "name": "hint",
+        "type": "string",
+        "description": "Subscript hint text; `null` (default) hides the hint."
+      },
+      {
+        "name": "subscriptSizing",
+        "type": "\"fixed\" | \"dynamic\"",
+        "description": "Whether subscript space is reserved (`fixed`) or collapses (`dynamic`, default)."
+      },
+      {
+        "name": "min",
+        "type": "string",
+        "description": "Earliest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "string",
+        "description": "Latest selectable date as ISO `YYYY-MM-DD`; `null` (default) for no upper bound."
+      },
+      {
+        "name": "control",
+        "type": "DateRangeControl",
+        "description": "Reactive-forms group of ISO start/end strings; when set, `disabled` is ignored."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "rangeChange",
+        "type": "DateRange",
+        "description": "Emits the current `{ start, end }` ISO pair on every user change to either endpoint."
+      }
+    ],
+    "methods": [],
+    "slots": [
+      "[rhombusError]"
+    ],
+    "types": [
+      {
+        "name": "DateRange",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "end",
+            "type": "string",
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "description": "",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusDialogActionsDirective": {
     "name": "RhombusDialogActionsDirective",
     "kind": "class",

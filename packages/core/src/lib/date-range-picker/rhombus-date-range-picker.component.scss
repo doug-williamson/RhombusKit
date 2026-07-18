@@ -1,0 +1,26 @@
+// Date-range calendar panel — like the single Date Picker, the calendar renders
+// in the body-level CDK overlay (.cdk-overlay-container), outside the component
+// host, so its tokens are re-declared here (a fallback for when a consumer scopes
+// the material-preset bridge to a subtree the overlay never lives in). Every value
+// flows through CONTRACT vars — no --mat-sys-* writes, no ::ng-deep. The one delta
+// over the single picker is the in-range fill token.
+//
+// TODO(v1.x): extract packages/core/scss/_datepicker-overlay.scss and @use it from
+// both the Date Picker and the Date Range Picker (see spec 2026-07-18 §3.6).
+.cdk-overlay-container {
+  --mat-datepicker-calendar-container-background-color: var(--surface-0);
+  --mat-datepicker-calendar-container-text-color: var(--text-primary);
+  --mat-datepicker-calendar-container-shape: var(--radius-xl);
+  --mat-datepicker-calendar-date-text-color: var(--text-primary);
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--btn-primary-bg);
+  --mat-datepicker-calendar-date-selected-state-text-color: var(--btn-primary-text);
+  --mat-datepicker-calendar-date-today-outline-color: var(--text-accent);
+  --mat-datepicker-calendar-date-hover-state-background-color: var(--surface-1);
+  --mat-datepicker-calendar-date-focus-state-background-color: var(--surface-2);
+  --mat-datepicker-calendar-date-in-range-state-background-color: var(--surface-2);
+  --mat-datepicker-calendar-header-text-color: var(--text-secondary);
+  --mat-datepicker-calendar-body-label-text-color: var(--text-secondary);
+  --mat-datepicker-calendar-period-button-text-color: var(--text-primary);
+  --mat-datepicker-calendar-period-button-icon-color: var(--text-secondary);
+  --mat-datepicker-calendar-navigation-button-icon-color: var(--text-secondary);
+}

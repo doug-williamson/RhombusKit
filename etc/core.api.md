@@ -61,6 +61,16 @@
   sortable?: boolean
   width?: string
 
+### DateRange (interface)
+  end: string
+  start: string
+
+### DateRangeControl (type)
+  type DateRangeControl = FormGroup<{
+    start: FormControl<string | null>;
+    end: FormControl<string | null>;
+}>
+
 ### DisplayColumn (interface)
   align?: "start" | "center" | "end"
   cellTemplate: _angular_core.TemplateRef<{ $implicit: T; index: number; }>
@@ -249,6 +259,22 @@
   readonly placeholder: _angular_core.InputSignal<string>
   readonly required: _angular_core.InputSignal<boolean>
   readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
+
+### RhombusDateRangePickerComponent (class)
+  readonly appearance: _angular_core.InputSignal<FormFieldAppearance>
+  readonly control: _angular_core.InputSignal<DateRangeControl>
+  readonly disabled: _angular_core.InputSignal<boolean>
+  readonly endPlaceholder: _angular_core.InputSignal<string>
+  readonly hint: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly max: _angular_core.InputSignal<string>
+  readonly min: _angular_core.InputSignal<string>
+  readonly rangeChange: _angular_core.OutputEmitterRef<DateRange>
+  readonly required: _angular_core.InputSignal<boolean>
+  readonly separator: _angular_core.InputSignal<string>
+  readonly size: _angular_core.InputSignal<FormFieldSize>
+  readonly startPlaceholder: _angular_core.InputSignal<string>
   readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
 ### RhombusDialogActionsDirective (class)

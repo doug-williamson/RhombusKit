@@ -76,8 +76,8 @@ import { ExampleComponent } from '../../shared/example.component';
               <a routerLink="/components/select">Select</a> may be simpler.
             </li>
             <li>
-              Date <em>ranges</em> are not covered yet — pick start and end with
-              two pickers, or use Material's range input directly.
+              For a start/end <em>range</em>, use the
+              <a routerLink="/components/date-range-picker">Date Range Picker</a>.
             </li>
           </ul>
         </section>

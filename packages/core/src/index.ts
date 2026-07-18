@@ -52,6 +52,17 @@ export type {
 
 export { RhombusDatePickerComponent } from './lib/date-picker/rhombus-date-picker.component';
 
+// Date range picker — two-field start/end calendar over mat-date-range-input.
+// Public value is a { start, end } pair of ISO strings (a typed FormGroup for
+// [control]), mirrored to a private Date group via the internal mirrorControl
+// helper (sharing the Date Picker's isoToDate/dateToIso). Closes the last
+// Datepicker migration gap.
+export { RhombusDateRangePickerComponent } from './lib/date-range-picker/rhombus-date-range-picker.component';
+export type {
+  DateRange,
+  DateRangeControl,
+} from './lib/date-range-picker/rhombus-date-range-picker.component';
+
 export type {
   FormFieldAppearance,
   FormFieldSize,
