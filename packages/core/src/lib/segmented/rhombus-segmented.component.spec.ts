@@ -18,6 +18,7 @@ import { RhombusSegmentedComponent, SegmentOption } from './rhombus-segmented.co
       [control]="control"
       [multiple]="multiple"
       [disabled]="disabled"
+      [fullWidth]="fullWidth"
       [label]="label"
       [ariaLabel]="ariaLabel"
       (valueChange)="lastValue = $event"
@@ -34,6 +35,7 @@ class HostComponent {
   control: FormControl | null = null;
   multiple = false;
   disabled = false;
+  fullWidth = false;
   label = '';
   ariaLabel = 'View';
   lastValue: string | string[] | null = null;
@@ -131,6 +133,14 @@ describe('rhombus-segmented', () => {
     ];
     fixture.detectChanges();
     expect(buttons(el)[1].disabled).toBe(true);
+  });
+
+  it('applies the full-width modifier class', () => {
+    const { fixture, host, el } = setup();
+    host.fullWidth = true;
+    fixture.detectChanges();
+    const g = el.querySelector('mat-button-toggle-group') as HTMLElement;
+    expect(g.classList).toContain('rhombus-segmented--full-width');
   });
 
   it('renders a per-option icon', () => {

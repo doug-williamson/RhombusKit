@@ -133,15 +133,25 @@ export class RhombusDateRangePickerComponent {
 
   constructor() {
     // Mirror the public ISO group to the private Date group, converting each
-    // endpoint at the boundary (local-midnight, via the shared helpers).
+    // endpoint at the boundary (local-midnight, via the shared helpers). isoToDate
+    // / dateToIso already handle null/undefined, so the converters stay branch-lean;
+    // the default `===` equality is correct — the mirror's sync guard suppresses echo.
+    // Both the external and internal controls are FormGroups, so their `.value`
+    // is always an object (never null — only the endpoints are nullable); the
+    // `as` casts document that invariant, and isoToDate/dateToIso handle the
+    // nullable endpoints.
     mirrorControl<DateRange, { start: Date | null; end: Date | null }>({
       external: this.control,
       internal: this.internal,
-      toInternal: (v) => ({ start: isoToDate(v?.start), end: isoToDate(v?.end) }),
-      toExternal: (v) => ({ start: dateToIso(v?.start ?? null), end: dateToIso(v?.end ?? null) }),
-      equal: (a, b) =>
-        (a?.start ?? null) === (b?.start ?? null) && (a?.end ?? null) === (b?.end ?? null),
-      onExternalChange: (v) => this.rangeChange.emit({ start: v?.start ?? null, end: v?.end ?? null }),
+      toInternal: (v) => {
+        const iso = v as DateRange;
+        return { start: isoToDate(iso.start), end: isoToDate(iso.end) };
+      },
+      toExternal: (v) => {
+        const dates = v as { start: Date | null; end: Date | null };
+        return { start: dateToIso(dates.start), end: dateToIso(dates.end) };
+      },
+      onExternalChange: (v) => this.rangeChange.emit(v as DateRange),
       disabled: this.disabled,
     });
   }

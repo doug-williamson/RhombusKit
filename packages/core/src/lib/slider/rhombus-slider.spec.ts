@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { axe } from '../../testing/axe';
 import { RhombusSliderComponent, SliderRange } from './rhombus-slider.component';
+
+type InternalRange = FormGroup<{ start: FormControl<number>; end: FormControl<number> }>;
 
 @Component({
   standalone: true,
@@ -155,11 +158,51 @@ describe('rhombus-slider', () => {
     expect(end.value).toBe('60');
   });
 
+  it('pushes range-thumb changes back to the reactive control and emits', () => {
+    const { fixture, host } = setup();
+    host.mode = 'range';
+    const rc = new FormControl<SliderRange>({ start: 25, end: 75 }, { nonNullable: true });
+    host.rangeControl = rc;
+    fixture.detectChanges();
+    const cmp = fixture.debugElement.query(By.directive(RhombusSliderComponent))
+      .componentInstance as unknown as { internalRange: InternalRange };
+    cmp.internalRange.controls.start.setValue(40); // simulate a thumb drag
+    fixture.detectChanges();
+    expect(rc.value).toEqual({ start: 40, end: 75 });
+    expect(host.lastRange).toEqual({ start: 40, end: 75 });
+  });
+
+  it('emits rangeValueChange when a thumb moves in lightweight range mode', () => {
+    const { fixture, host, el } = setup();
+    host.mode = 'range';
+    host.rangeValue = { start: 20, end: 80 };
+    fixture.detectChanges();
+    const start = thumbs(el)[0];
+    start.value = '35';
+    start.dispatchEvent(new Event('input'));
+    start.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(host.lastRange).toEqual({ start: 35, end: 80 });
+  });
+
   it('labels the thumbs for assistive tech', () => {
     const { fixture, host, el } = setup();
     host.ariaLabel = 'Volume';
     fixture.detectChanges();
     expect(thumbs(el)[0].getAttribute('aria-label')).toBe('Volume');
+  });
+
+  it('falls back to the min/max range when the range control is reset to null', () => {
+    const { fixture, host } = setup();
+    host.mode = 'range';
+    const rc = new FormControl<SliderRange>({ start: 25, end: 75 });
+    host.rangeControl = rc as FormControl<SliderRange>;
+    fixture.detectChanges();
+    rc.reset(); // value → null, exercises the toInternal fallback
+    fixture.detectChanges();
+    const cmp = fixture.debugElement.query(By.directive(RhombusSliderComponent))
+      .componentInstance as unknown as { internalRange: InternalRange };
+    expect(cmp.internalRange.value).toEqual({ start: 0, end: 100 });
   });
 
   it('has no accessibility violations (single)', async () => {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { axe } from '../../testing/axe';
 import {
@@ -117,6 +118,21 @@ describe('rhombus-date-range-picker', () => {
     fixture.detectChanges();
     expect(startInput(el).disabled).toBe(true);
     expect(endInput(el).disabled).toBe(true);
+  });
+
+  it('emits rangeChange and writes ISO back to the control when a date is picked', () => {
+    const { fixture, host } = setup();
+    const ctrl = makeControl(null, null);
+    host.control = ctrl;
+    fixture.detectChanges();
+    const cmp = fixture.debugElement.query(By.directive(RhombusDateRangePickerComponent))
+      .componentInstance as unknown as {
+      internal: FormGroup<{ start: FormControl<Date | null>; end: FormControl<Date | null> }>;
+    };
+    cmp.internal.controls.start.setValue(new Date(2026, 0, 10)); // local-midnight 2026-01-10
+    fixture.detectChanges();
+    expect(ctrl.value.start).toBe('2026-01-10');
+    expect(host.lastEmitted?.start).toBe('2026-01-10');
   });
 
   it('has no accessibility violations', async () => {

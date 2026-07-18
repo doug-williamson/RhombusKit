@@ -152,16 +152,26 @@ export class RhombusSliderComponent {
   constructor() {
     // Range reactive-forms: mirror the public FormControl<SliderRange> onto the
     // two-thumb internal group. (Single mode binds [formControl] directly; the
-    // mirror is inert when rangeControl is null.)
+    // mirror is inert when rangeControl is null.) The internal group's value and
+    // the public control are always full ranges in practice; the `?? fullRange()`
+    // fallbacks only guard a null reset. The default `===` equality is correct —
+    // the mirror's sync guard already suppresses echo.
     mirrorControl<SliderRange, { start: number; end: number }>({
       external: this.rangeControl,
       internal: this.internalRange,
-      toInternal: (r) => (r ? { start: r.start, end: r.end } : { start: this.min(), end: this.max() }),
-      toExternal: (v) => ({ start: v?.start ?? this.min(), end: v?.end ?? this.max() }),
-      equal: (a, b) => a?.start === b?.start && a?.end === b?.end,
-      onExternalChange: (r) => this.rangeValueChange.emit(r ?? { start: this.min(), end: this.max() }),
+      // `toInternal`'s input is the public FormControl value, which may be null
+      // (a reset); the internal group's value is always a full range, so the
+      // `as SliderRange` casts document that invariant on the write-back side.
+      toInternal: (r) => r ?? this.fullRange(),
+      toExternal: (v) => v as SliderRange,
+      onExternalChange: (r) => this.rangeValueChange.emit(r as SliderRange),
       disabled: this.disabled,
     });
+  }
+
+  /** The full [min, max] range — the fallback used when a range value is absent. */
+  private fullRange(): SliderRange {
+    return { start: this.min(), end: this.max() };
   }
 
   protected onRangeStart(start: number): void {
