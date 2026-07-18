@@ -14,12 +14,22 @@ describe('RoadmapPageComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders the three Now / Next / Considering columns', () => {
+  it('renders the Components and Foundations tracks', () => {
     const el = render();
-    const titles = Array.from(el.querySelectorAll('.board__title')).map((t) =>
+    const trackTitles = Array.from(el.querySelectorAll('.track__title')).map((t) =>
       t.textContent?.trim(),
     );
-    expect(titles).toEqual(['Shipping now', 'Up next', 'Considering']);
+    expect(trackTitles).toEqual(['Components', 'Foundations']);
+  });
+
+  it('renders Now / Next / Considering columns in every track', () => {
+    const el = render();
+    for (const track of Array.from(el.querySelectorAll('.track'))) {
+      const titles = Array.from(track.querySelectorAll('.board__title')).map((t) =>
+        t.textContent?.trim(),
+      );
+      expect(titles).toEqual(['Shipping now', 'Up next', 'Considering']);
+    }
   });
 
   it('renders roadmap cards with content', () => {
@@ -27,9 +37,18 @@ describe('RoadmapPageComponent', () => {
     expect(el.querySelectorAll('.card').length).toBeGreaterThan(5);
   });
 
-  it('links a Considering gap to a prefilled component proposal', () => {
+  it('gives every column header a unique id (no duplicate ids across tracks)', () => {
     const el = render();
-    const considering = el.querySelector('.board__col[data-col="considering"]') as HTMLElement;
+    const ids = Array.from(el.querySelectorAll('.board__title')).map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('links a component Considering gap to a prefilled component proposal', () => {
+    const el = render();
+    const components = el.querySelector('.track[data-track="components"]') as HTMLElement;
+    const considering = components.querySelector(
+      '.board__col[data-col="considering"]',
+    ) as HTMLElement;
     const link = considering.querySelector('.card__link') as HTMLAnchorElement;
     expect(link.href).toContain('template=3-new-component-proposal.yml');
   });

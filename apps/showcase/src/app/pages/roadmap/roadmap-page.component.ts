@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ROADMAP, type RoadmapItem } from './roadmap-data';
+import { ROADMAP, type RoadmapItem, type RoadmapTrack } from './roadmap-data';
 
 interface Column {
   id: 'now' | 'next' | 'considering';
@@ -8,12 +8,21 @@ interface Column {
   items: RoadmapItem[];
 }
 
+interface Track {
+  id: 'components' | 'foundations';
+  label: string;
+  blurb: string;
+  columns: Column[];
+}
+
 /**
- * `/roadmap` — a public Now / Next / Considering board. The "Considering"
- * column is explicitly community-shaped: requests and upvotes move items up,
- * and each gap links to a prefilled proposal. Tied to release trains, not
- * dates. Data is committed in roadmap-data.ts (a launch-time Action can
- * regenerate it from a Projects board + top-voted Discussions).
+ * `/roadmap` — a public Now / Next / Considering board across two parallel
+ * tracks: the component library (shipped in themed release-train "packs") and
+ * the non-component Foundations work (system depth, theming, DX). The
+ * "Considering" columns are explicitly community-shaped: requests and upvotes
+ * move items up, and each component gap links to a prefilled proposal. Tied to
+ * release trains, not dates. Data is committed in roadmap-data.ts (a launch-time
+ * Action can regenerate it from a Projects board + top-voted Discussions).
  */
 @Component({
   selector: 'app-roadmap-page',
@@ -24,43 +33,63 @@ interface Column {
       <header class="showcase-page__header">
         <h1>Roadmap</h1>
         <p class="roadmap__lead">
-          You help build this roadmap. <strong>Considering</strong> is shaped by
-          what the community requests and upvotes — see a gap, request it, and
-          watch it move. Items track release trains, not calendar dates.
+          You help build this roadmap. It runs on two tracks —
+          <strong>Components</strong> (shipped in themed release-train packs) and
+          <strong>Foundations</strong> (density, theming, RTL, and tooling). The
+          <strong>Considering</strong> columns are shaped by what the community
+          requests and upvotes. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          v1.9 recently shipped the <strong>Date Picker</strong> and
-          <strong>Accordion</strong>, an app-shell footer slot, and an opt-in
-          Material bridge mixin.
+          Recently shipped the <strong>Date Picker</strong>,
+          <strong>Accordion</strong>, and an opt-in Material bridge (v1.9), plus a
+          nested Nav List tree and Tag input.
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>
         </p>
       </header>
 
-      <div class="board">
-        @for (col of columns; track col.id) {
-          <section class="board__col" [attr.data-col]="col.id" aria-labelledby="col-{{ col.id }}">
-            <header class="board__head">
-              <h2 id="col-{{ col.id }}" class="board__title">{{ col.label }}</h2>
-              <p class="board__blurb">{{ col.blurb }}</p>
-            </header>
-            <ul class="board__list">
-              @for (item of col.items; track item.title) {
-                <li class="card">
-                  <h3 class="card__title">{{ item.title }}</h3>
-                  <p class="card__detail">{{ item.detail }}</p>
-                  @if (item.link) {
-                    <a class="card__link" [href]="item.link.url" target="_blank" rel="noopener">
-                      {{ item.link.label }}
-                    </a>
+      @for (track of tracks; track track.id) {
+        <section class="track" [attr.data-track]="track.id" aria-labelledby="track-{{ track.id }}">
+          <header class="track__head">
+            <h2 id="track-{{ track.id }}" class="track__title">{{ track.label }}</h2>
+            <p class="track__blurb">{{ track.blurb }}</p>
+          </header>
+
+          <div class="board">
+            @for (col of track.columns; track col.id) {
+              <section
+                class="board__col"
+                [attr.data-col]="col.id"
+                aria-labelledby="col-{{ track.id }}-{{ col.id }}"
+              >
+                <header class="board__head">
+                  <h3 id="col-{{ track.id }}-{{ col.id }}" class="board__title">{{ col.label }}</h3>
+                  <p class="board__blurb">{{ col.blurb }}</p>
+                </header>
+                <ul class="board__list">
+                  @for (item of col.items; track item.title) {
+                    <li class="card">
+                      <div class="card__head">
+                        <h4 class="card__title">{{ item.title }}</h4>
+                        @if (item.tag) {
+                          <span class="card__tag">{{ item.tag }}</span>
+                        }
+                      </div>
+                      <p class="card__detail">{{ item.detail }}</p>
+                      @if (item.link) {
+                        <a class="card__link" [href]="item.link.url" target="_blank" rel="noopener">
+                          {{ item.link.label }}
+                        </a>
+                      }
+                    </li>
                   }
-                </li>
-              }
-            </ul>
-          </section>
-        }
-      </div>
+                </ul>
+              </section>
+            }
+          </div>
+        </section>
+      }
     </div>
   `,
   styles: `
@@ -84,11 +113,22 @@ interface Column {
       font-weight: 600;
       font-size: 0.9rem;
     }
+    .track { margin-top: 2.5rem; }
+    .track__head { margin-bottom: 0.5rem; }
+    .track__title {
+      font-size: 1.35rem;
+      margin: 0;
+    }
+    .track__blurb {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0.25rem 0 0;
+    }
     .board {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.5rem;
-      margin-top: 2rem;
+      margin-top: 1.25rem;
     }
     @media (max-width: 880px) {
       .board { grid-template-columns: 1fr; }
@@ -122,7 +162,24 @@ interface Column {
       padding: 1rem;
       background-color: var(--surface-1);
     }
+    .card__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
     .card__title { font-size: 0.95rem; font-weight: 600; margin: 0; color: var(--text-primary); }
+    .card__tag {
+      flex: none;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background-color: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.1rem 0.45rem;
+      white-space: nowrap;
+    }
     .card__detail {
       color: var(--text-secondary);
       font-size: 0.875rem;
@@ -135,14 +192,37 @@ export default class RoadmapPageComponent {
   protected readonly suggestUrl =
     'https://github.com/doug-williamson/RhombusKit/issues/new/choose';
 
-  protected readonly columns: Column[] = [
-    { id: 'now', label: 'Shipping now', blurb: 'In the current release train.', items: ROADMAP.now },
-    { id: 'next', label: 'Up next', blurb: 'Accepted; not yet scheduled.', items: ROADMAP.next },
+  protected readonly tracks: Track[] = [
     {
-      id: 'considering',
-      label: 'Considering',
-      blurb: 'Community-shaped — you decide.',
-      items: ROADMAP.considering,
+      id: 'components',
+      label: 'Components',
+      blurb: 'The component library, shipped in themed release-train packs.',
+      columns: this.columnsFor(ROADMAP.components, {
+        now: 'In the current release train (v1.11).',
+        next: 'Accepted; the next train (v1.12).',
+        considering: 'Community-shaped — you decide.',
+      }),
+    },
+    {
+      id: 'foundations',
+      label: 'Foundations',
+      blurb: 'System depth, theming, and DX that advance in parallel with the components.',
+      columns: this.columnsFor(ROADMAP.foundations, {
+        now: 'Active foundation work.',
+        next: 'Accepted; scheduled next.',
+        considering: 'Under exploration.',
+      }),
     },
   ];
+
+  private columnsFor(
+    track: RoadmapTrack,
+    blurbs: Record<'now' | 'next' | 'considering', string>,
+  ): Column[] {
+    return [
+      { id: 'now', label: 'Shipping now', blurb: blurbs.now, items: track.now },
+      { id: 'next', label: 'Up next', blurb: blurbs.next, items: track.next },
+      { id: 'considering', label: 'Considering', blurb: blurbs.considering, items: track.considering },
+    ];
+  }
 }
