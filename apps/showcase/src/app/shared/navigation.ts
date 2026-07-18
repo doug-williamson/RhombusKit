@@ -37,6 +37,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/chip', label: 'Chip' },
       { path: '/components/tag', label: 'Tag' },
       { path: '/components/icon', label: 'Icon' },
+      { path: '/components/divider', label: 'Divider' },
     ],
   },
   {

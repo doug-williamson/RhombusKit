@@ -34,7 +34,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Chips', api: 'mat-chip', pkg: 'material', rk: 'Chip', match: 'partial', note: 'Display/filter/selection chips map; chip-grid text entry is not covered.' },
   { material: 'Datepicker', api: 'mat-datepicker', pkg: 'material', rk: 'Date Picker', match: 'partial', note: 'rhombus-date-picker covers single-date selection (ISO string value); date ranges are not covered yet.' },
   { material: 'Dialog', api: 'MatDialog', pkg: 'material', rk: 'Dialog', match: 'full', note: 'RhombusDialogService + Confirm Dialog wrap MatDialog.' },
-  { material: 'Divider', api: 'mat-divider', pkg: 'material', rk: '', match: 'gap', note: 'No dedicated divider/rule component.' },
+  { material: 'Divider', api: 'mat-divider', pkg: 'material', rk: 'Divider', match: 'full', note: 'rhombus-divider — role=separator rule; horizontal/vertical, inset, accent, and labelled text-divider variants.' },
   { material: 'Expansion Panel / Accordion', api: 'mat-expansion-panel', pkg: 'material', rk: 'Accordion', match: 'full', note: 'rhombus-accordion + rhombus-accordion-panel cover single/multi-expand collapsible sections.' },
   { material: 'Form Field', api: 'mat-form-field', pkg: 'material', rk: 'Input', match: 'full', note: 'Form-field wrapper provides label/hint/error/affixes around Input/Textarea/Select.' },
   { material: 'Grid List', api: 'mat-grid-list', pkg: 'material', rk: '', match: 'gap', note: 'No tile grid-layout component.' },

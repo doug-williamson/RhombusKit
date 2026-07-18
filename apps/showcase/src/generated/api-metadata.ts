@@ -1046,6 +1046,40 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusDividerComponent": {
+    "name": "RhombusDividerComponent",
+    "kind": "class",
+    "selector": "rhombus-divider",
+    "description": "`<rhombus-divider>` — a semantic `role=\"separator\"` rule that visually and\nstructurally separates content. Bespoke (no Material primitive, no new\ntokens): the rule is drawn from the existing `--border` contract token, or\n`--border-accent` with the `accent` flag, so it re-skins with the theme.\n\nRuns `horizontal` (default) or `vertical`, can be `inset` from the container\nedges, and can carry a short `label` to become a text divider (e.g. \"OR\").\nThe label is a string, not projected content: `role=\"separator\"` makes its\nchildren presentational, so the label is exposed to assistive tech through\n`aria-label` — the only reliable accessible name. A labelled vertical divider\nis not supported; the label is ignored when `orientation` is `vertical`.\n\n```html\n<rhombus-divider />\n<rhombus-divider orientation=\"vertical\" />\n<rhombus-divider inset accent />\n<rhombus-divider label=\"OR\" />\n```",
+    "inputs": [
+      {
+        "name": "orientation",
+        "type": "DividerOrientation",
+        "description": "Layout axis, reflected to `data-orientation`. Defaults to `'horizontal'`.",
+        "enumValues": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      {
+        "name": "inset",
+        "type": "boolean",
+        "description": "Indent the rule from the container edges. Accepts a bare attribute (`inset`)."
+      },
+      {
+        "name": "accent",
+        "type": "boolean",
+        "description": "Emphasise the rule with `--border-accent`. Accepts a bare attribute (`accent`)."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Optional text-divider label (e.g. \"OR\"). When set on a horizontal divider it\nrenders a rule — label — rule layout and becomes the separator's `aria-label`.\nIgnored on a vertical divider."
+      }
+    ],
+    "outputs": [],
+    "methods": []
+  },
   "RhombusEmptyStateComponent": {
     "name": "RhombusEmptyStateComponent",
     "kind": "class",

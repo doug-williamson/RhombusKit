@@ -13,6 +13,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'badge', label: 'Badge' },
   { slug: 'card', label: 'Card' },
   { slug: 'chip', label: 'Chip' },
+  { slug: 'divider', label: 'Divider' },
   { slug: 'checkbox', label: 'Checkbox' },
   { slug: 'radio', label: 'Radio Group' },
   { slug: 'switch', label: 'Switch' },

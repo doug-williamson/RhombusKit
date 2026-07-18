@@ -25,6 +25,7 @@ const COMPONENTS = [
   '/components/card',
   '/components/chip',
   '/components/tag',
+  '/components/divider',
   '/components/checkbox',
   '/components/radio',
   '/components/switch',

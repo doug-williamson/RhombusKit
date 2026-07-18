@@ -30,6 +30,13 @@ export type { ChipGroupSelection } from './lib/chip/rhombus-chip-group.directive
 export { RhombusTagComponent } from './lib/tag/rhombus-tag.component';
 export type { TagVariant, TagSize } from './lib/tag/rhombus-tag.component';
 
+// Divider — a bespoke role=separator rule (horizontal / vertical, inset, accent,
+// and labelled text-divider variants). No Material, no new tokens: the rule is
+// drawn from the existing --border / --border-accent contract tokens. Replaces
+// mat-divider.
+export { RhombusDividerComponent } from './lib/divider/rhombus-divider.component';
+export type { DividerOrientation } from './lib/divider/rhombus-divider.component';
+
 // Phase 3a — form primitives. Each component inlines its own
 // <mat-form-field>; shared styling ships via @rhombuskit/core/scss.
 export { RhombusInputComponent } from './lib/input/rhombus-input.component';

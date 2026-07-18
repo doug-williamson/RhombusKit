@@ -71,6 +71,9 @@
   sortable?: never
   width?: string
 
+### DividerOrientation (type)
+  type DividerOrientation = 'horizontal' | 'vertical'
+
 ### FormFieldAppearance (type)
   type FormFieldAppearance = 'outline' | 'fill'
 
@@ -268,6 +271,12 @@
 
 ### RhombusDialogService (class)
   open: <R = unknown, D = unknown>(component: ComponentType<unknown>, config?: RhombusDialogConfig<D>) => RhombusDialogRef<R>
+
+### RhombusDividerComponent (class)
+  readonly accent: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly inset: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly label: _angular_core.InputSignal<string>
+  readonly orientation: _angular_core.InputSignal<DividerOrientation>
 
 ### RhombusEmptyStateComponent (class)
   readonly body: _angular_core.InputSignal<string>

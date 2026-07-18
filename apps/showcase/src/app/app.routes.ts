@@ -35,6 +35,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./pages/icon/icon-page.component'),
       },
       {
+        path: 'divider',
+        title: 'Divider',
+        loadComponent: () => import('./pages/divider/divider-page.component'),
+      },
+      {
         path: 'checkbox',
         title: 'Checkbox',
         loadComponent: () => import('./pages/checkbox/checkbox-page.component'),
