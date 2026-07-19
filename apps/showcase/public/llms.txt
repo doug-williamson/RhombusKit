@@ -56,6 +56,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Breadcrumbs](https://rhombuskit.online/components/breadcrumbs)
 - [Pagination](https://rhombuskit.online/components/pagination)
 - [Progress](https://rhombuskit.online/components/progress)
+- [Skeleton](https://rhombuskit.online/components/skeleton)
 - [Avatar](https://rhombuskit.online/components/avatar)
 - [Alert](https://rhombuskit.online/components/alert)
 - [App Shell](https://rhombuskit.online/components/app-shell)

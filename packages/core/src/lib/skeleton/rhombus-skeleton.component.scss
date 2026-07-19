@@ -1,0 +1,87 @@
+// RhombusKit skeleton — bespoke, pure CSS. No Material, no hard-coded colours:
+// the block fill (--surface-2) and shimmer highlight (--surface-3) flow through
+// the @rhombuskit/tokens CONTRACT. The shimmer is a compositor-only translateX
+// sweep and is dropped under prefers-reduced-motion (the base block stays a
+// visible surface — never blank). Sizing rides the --rhombus-skeleton-w/h/radius
+// custom props the component sets from its width/height/radius inputs (the
+// avatar size-var pattern); each has a per-variant CSS default.
+
+.rhombus-skeleton {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.rhombus-skeleton__block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+// Vertical rhythm between repeated blocks (count > 1).
+.rhombus-skeleton__block + .rhombus-skeleton__block {
+  margin-top: 1rem;
+}
+
+.rhombus-skeleton__bar,
+.rhombus-skeleton__shape {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--surface-2);
+}
+
+// --- Text bars ---
+.rhombus-skeleton__bar {
+  width: var(--rhombus-skeleton-w, 100%);
+  height: var(--rhombus-skeleton-h, 0.75rem);
+  border-radius: var(--rhombus-skeleton-radius, var(--radius-xs));
+}
+
+// --- Circle (round media placeholder) ---
+// Height defaults to the width so a lone `width` yields a true circle.
+.rhombus-skeleton[data-variant='circle'] .rhombus-skeleton__shape {
+  width: var(--rhombus-skeleton-w, 2.5rem);
+  height: var(--rhombus-skeleton-h, var(--rhombus-skeleton-w, 2.5rem));
+  border-radius: var(--rhombus-skeleton-radius, var(--radius-full));
+}
+
+// --- Rect (image / card block) ---
+.rhombus-skeleton[data-variant='rect'] .rhombus-skeleton__shape {
+  width: var(--rhombus-skeleton-w, 100%);
+  height: var(--rhombus-skeleton-h, 8rem);
+  border-radius: var(--rhombus-skeleton-radius, var(--radius-md));
+}
+
+// --- Shimmer sweep (opt-in via `animated`, compositor-only transform) ---
+.rhombus-skeleton--animated .rhombus-skeleton__bar::after,
+.rhombus-skeleton--animated .rhombus-skeleton__shape::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--surface-3),
+    transparent
+  );
+  // --motion-duration-slow (240ms) is tuned for UI transitions; a shimmer wants
+  // a slower, ambient sweep, so scale it up rather than introduce a new token.
+  animation: rhombus-skeleton-shimmer calc(var(--motion-duration-slow) * 6)
+    var(--motion-ease-standard) infinite;
+}
+
+@keyframes rhombus-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Reduced motion: drop the sweep entirely; the static --surface-2 block remains.
+@media (prefers-reduced-motion: reduce) {
+  .rhombus-skeleton--animated .rhombus-skeleton__bar::after,
+  .rhombus-skeleton--animated .rhombus-skeleton__shape::after {
+    display: none;
+    animation: none;
+  }
+}

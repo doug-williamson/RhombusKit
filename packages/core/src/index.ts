@@ -304,3 +304,12 @@ export type { RhombusIconSize } from './lib/icon/rhombus-icon.component';
 export { RhombusIconRegistry } from './lib/icon/rhombus-icon-registry';
 export { provideRhombusIcons } from './lib/icon/rhombus-icon.providers';
 export type { RhombusIconSet } from './lib/icon/rhombus-icon.providers';
+
+// Skeleton — a pure-CSS loading placeholder (bespoke, no Material, no new
+// tokens). Renders a --surface-2 block with an optional compositor-only shimmer,
+// dropped under prefers-reduced-motion (never blank). Decorative by default
+// (aria-hidden); pass a label for a role=status busy region. Distinct from
+// Progress (an indeterminate spinner/bar for a discrete wait) and Empty State
+// (genuinely no data): Skeleton mimics the *shape* of content that's still loading.
+export { RhombusSkeletonComponent } from './lib/skeleton/rhombus-skeleton.component';
+export type { SkeletonVariant } from './lib/skeleton/rhombus-skeleton.component';

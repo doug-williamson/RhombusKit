@@ -238,6 +238,12 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/accordion/accordion-page.component'),
       },
+      {
+        path: 'skeleton',
+        title: 'Skeleton',
+        loadComponent: () =>
+          import('./pages/skeleton/skeleton-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

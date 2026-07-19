@@ -550,6 +550,17 @@
 ### RhombusShellNavFooterDirective (class)
   // (no public members)
 
+### RhombusSkeletonComponent (class)
+  readonly animated: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly count: _angular_core.InputSignalWithTransform<number, unknown>
+  readonly height: _angular_core.InputSignal<string | number>
+  readonly label: _angular_core.InputSignal<string>
+  readonly lastLineWidth: _angular_core.InputSignal<string>
+  readonly lines: _angular_core.InputSignalWithTransform<number, unknown>
+  readonly radius: _angular_core.InputSignal<string | number>
+  readonly variant: _angular_core.InputSignal<SkeletonVariant>
+  readonly width: _angular_core.InputSignal<string | number>
+
 ### RhombusSliderComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly control: _angular_core.InputSignal<FormControl<number>>
@@ -685,6 +696,9 @@
   icon?: string
   label: string
   value: T
+
+### SkeletonVariant (type)
+  type SkeletonVariant = 'text' | 'circle' | 'rect'
 
 ### SliderRange (interface)
   end: number

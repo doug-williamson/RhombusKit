@@ -2688,6 +2688,66 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "outputs": [],
     "methods": []
   },
+  "RhombusSkeletonComponent": {
+    "name": "RhombusSkeletonComponent",
+    "kind": "class",
+    "selector": "rhombus-skeleton",
+    "description": "`<rhombus-skeleton>` — a pure-CSS loading placeholder. Bespoke (no Material,\nno new tokens): a `--surface-2` block with an optional compositor-only shimmer\n(`--surface-3` sweep via `transform: translateX`). Under\n`prefers-reduced-motion` the sweep is dropped and the block stays a **static,\nnever-blank** surface.\n\nTwo a11y modes. By default the skeleton is **decorative** (`aria-hidden`) — the\nconsumer owns the `aria-busy`/live-region wiring on the surrounding region.\nPass a `label` to make the skeleton itself a labelled `role=\"status\"` busy\nregion (its inner bars stay hidden from assistive tech).\n\n`lines` repeats bars *within* one text block; `count` repeats the *whole*\nblock (e.g. a list of placeholder rows).\n\n```html\n<!-- three text lines, last one shortened -->\n<rhombus-skeleton [lines]=\"3\" />\n\n<!-- avatar + two lines, announced to assistive tech -->\n<rhombus-skeleton variant=\"circle\" [width]=\"40\" label=\"Loading profile\" />\n\n<!-- a list of five placeholder rows -->\n<rhombus-skeleton variant=\"rect\" [height]=\"48\" [count]=\"5\" />\n```",
+    "inputs": [
+      {
+        "name": "variant",
+        "type": "SkeletonVariant",
+        "description": "Shape. Defaults to `'text'`.",
+        "enumValues": [
+          "text",
+          "circle",
+          "rect"
+        ]
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "description": "Block width (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "height",
+        "type": "string | number",
+        "description": "Block height (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "radius",
+        "type": "string | number",
+        "description": "Corner radius (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "lines",
+        "type": "number",
+        "description": "Number of line bars in a text block. Ignored for circle/rect."
+      },
+      {
+        "name": "lastLineWidth",
+        "type": "string",
+        "description": "Width of the final line when `lines > 1` (a ragged paragraph edge)."
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "description": "How many times to repeat the whole block."
+      },
+      {
+        "name": "animated",
+        "type": "boolean",
+        "description": "Show the shimmer sweep. Disabled under `prefers-reduced-motion`."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible label. `null`/empty → decorative (`aria-hidden`); a string →\n`role=\"status\"` + `aria-busy` + `aria-label`."
+      }
+    ],
+    "outputs": [],
+    "methods": []
+  },
   "RhombusSliderComponent": {
     "name": "RhombusSliderComponent",
     "kind": "class",

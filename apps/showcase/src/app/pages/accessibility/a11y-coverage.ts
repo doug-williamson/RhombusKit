@@ -38,6 +38,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'breadcrumbs', label: 'Breadcrumbs' },
   { slug: 'pagination', label: 'Pagination' },
   { slug: 'progress', label: 'Progress' },
+  { slug: 'skeleton', label: 'Skeleton' },
   { slug: 'avatar', label: 'Avatar' },
   { slug: 'alert', label: 'Alert' },
   { slug: 'theme-toggle', label: 'Theme Controls' },
