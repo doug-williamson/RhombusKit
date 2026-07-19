@@ -64,6 +64,7 @@ const COMPONENTS = [
   '/components/code-block',
   '/components/accordion',
   '/components/stepper',
+  '/components/reorder-list',
 ] as const;
 
 // Each component page splits content across Overview / Examples / API tabs; the

@@ -259,6 +259,12 @@ export const appRoutes: Route[] = [
         title: 'Stepper',
         loadComponent: () => import('./pages/stepper/stepper-page.component'),
       },
+      {
+        path: 'reorder-list',
+        title: 'Reorder List',
+        loadComponent: () =>
+          import('./pages/reorder-list/reorder-list-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

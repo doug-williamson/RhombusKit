@@ -366,3 +366,20 @@ export type {
   StepperLabelPosition,
   RhombusStepState,
 } from './lib/stepper/stepper.types';
+
+// Reorder list — a keyboard-first reorderable list. @angular/cdk/drag-drop gives
+// the pointer drag, but cdkDrag is invisible to assistive tech, so the component
+// *is* the keyboard grab-mode (space to pick up, arrows to move, escape to
+// cancel) + LiveAnnouncer layer — plus explicit move buttons. `reordered` fires
+// once per committed reorder. Boundary: a Reorder list *changes the order* of
+// items — use a Nav list to navigate between destinations, and the Data table's
+// sort headers to sort a grid by a column.
+export { RhombusReorderListComponent } from './lib/reorder-list/rhombus-reorder-list.component';
+export { RhombusReorderItemDirective } from './lib/reorder-list/rhombus-reorder-item.directive';
+export type { RhombusReorderItemContext } from './lib/reorder-list/rhombus-reorder-item.directive';
+export { RhombusReorderEmptyDirective } from './lib/reorder-list/rhombus-reorder-empty.directive';
+export type {
+  ReorderEvent,
+  ReorderListOrientation,
+  ReorderAnnounceContext,
+} from './lib/reorder-list/reorder-list.types';

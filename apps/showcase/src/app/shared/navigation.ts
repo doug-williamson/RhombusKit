@@ -69,6 +69,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/dialog', label: 'Dialog' },
       { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
       { path: '/components/sheet', label: 'Sheet' },
+      { path: '/components/reorder-list', label: 'Reorder List' },
     ],
   },
   {

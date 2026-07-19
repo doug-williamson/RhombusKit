@@ -61,7 +61,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Tree', api: 'mat-tree', pkg: 'material', rk: '', match: 'gap', note: 'No hierarchical tree-view component.' },
 
   // ── Angular CDK (utilities / primitives) ───────────────────────────────────
-  { material: 'Drag and Drop', api: 'cdkDrag', pkg: 'cdk', rk: '', match: 'gap', note: 'No drag/drop wrapper — use @angular/cdk directly.' },
+  { material: 'Drag and Drop', api: 'cdkDrag', pkg: 'cdk', rk: 'Reorder List', match: 'partial', note: 'rhombus-reorder-list wraps cdkDrag for single-list reordering with a full keyboard + LiveAnnouncer a11y layer; connected/cross-list drag-drop still uses @angular/cdk directly.' },
   { material: 'Overlay', api: 'OverlayModule', pkg: 'cdk', rk: 'Popover', match: 'partial', note: 'Used internally (Popover/Menu/Tooltip/Dialog); no general positioning service is exposed.' },
   { material: 'Portal', api: 'CdkPortal', pkg: 'cdk', rk: '', match: 'gap', note: 'Low-level primitive; not re-exported.' },
   { material: 'Tree (CDK)', api: 'cdk-tree', pkg: 'cdk', rk: '', match: 'gap', note: 'Unstyled tree primitive; no RhombusKit tree.' },

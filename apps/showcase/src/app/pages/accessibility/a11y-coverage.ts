@@ -50,4 +50,5 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'code-block', label: 'Code Block' },
   { slug: 'accordion', label: 'Accordion' },
   { slug: 'stepper', label: 'Stepper' },
+  { slug: 'reorder-list', label: 'Reorder List' },
 ];
