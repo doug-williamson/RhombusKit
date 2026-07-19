@@ -265,6 +265,11 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/reorder-list/reorder-list-page.component'),
       },
+      {
+        path: 'carousel',
+        title: 'Carousel',
+        loadComponent: () => import('./pages/carousel/carousel-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

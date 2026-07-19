@@ -51,4 +51,5 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'accordion', label: 'Accordion' },
   { slug: 'stepper', label: 'Stepper' },
   { slug: 'reorder-list', label: 'Reorder List' },
+  { slug: 'carousel', label: 'Carousel' },
 ];

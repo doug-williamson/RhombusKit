@@ -383,3 +383,14 @@ export type {
   ReorderListOrientation,
   ReorderAnnounceContext,
 } from './lib/reorder-list/reorder-list.types';
+
+// Carousel — a bespoke APG auto-rotating carousel (region + slide groups, CSS-only
+// transitions, no @angular/animations). SSR-safe: the autoplay timer, reduced-motion
+// query, and pointer swiping are all gated behind afterNextRender + isPlatformBrowser.
+// Autoplay never starts under prefers-reduced-motion or with ≤1 slide. Boundary: a
+// carousel cycles equivalent, browsable content — never put a critical, one-time CTA
+// on an auto-rotating slide; use Tabs or an Accordion when each section must stay
+// individually reachable.
+export { RhombusCarouselComponent } from './lib/carousel/rhombus-carousel.component';
+export { RhombusCarouselSlideComponent } from './lib/carousel/rhombus-carousel-slide.component';
+export type { RhombusCarouselTransition } from './lib/carousel/carousel.types';
