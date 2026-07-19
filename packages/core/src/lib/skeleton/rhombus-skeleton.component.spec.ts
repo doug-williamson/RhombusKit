@@ -69,26 +69,32 @@ describe('rhombus-skeleton', () => {
     expect(root().getAttribute('aria-busy')).toBeNull();
   });
 
-  it('becomes a labelled live region when label is set', () => {
+  it('becomes a polite live region announcing visually-hidden text', () => {
     const { fixture, host, root, el } = setup();
     host.label = 'Loading profile';
     fixture.detectChanges();
     expect(root().getAttribute('role')).toBe('status');
-    expect(root().getAttribute('aria-busy')).toBe('true');
-    expect(root().getAttribute('aria-label')).toBe('Loading profile');
     expect(root().getAttribute('aria-hidden')).toBeNull();
-    // Inner bars stay hidden from AT — the label names the whole region.
+    // A live region announces its text content, not an aria-label (which it
+    // wouldn't speak) — and no aria-busy (which would suppress the announcement).
+    expect(root().getAttribute('aria-label')).toBeNull();
+    expect(root().getAttribute('aria-busy')).toBeNull();
+    expect(
+      el.querySelector('.rhombus-skeleton__sr')?.textContent?.trim()
+    ).toBe('Loading profile');
+    // Inner bars stay hidden from AT — the sr text carries the announcement.
     expect(
       el.querySelector('.rhombus-skeleton__block')?.getAttribute('aria-hidden')
     ).toBe('true');
   });
 
   it('treats an empty-string label as decorative', () => {
-    const { fixture, host, root } = setup();
+    const { fixture, host, root, el } = setup();
     host.label = '';
     fixture.detectChanges();
     expect(root().getAttribute('aria-hidden')).toBe('true');
     expect(root().getAttribute('role')).toBeNull();
+    expect(el.querySelector('.rhombus-skeleton__sr')).toBeNull();
   });
 
   it('renders `lines` bars and shortens only the last line', () => {
@@ -175,6 +181,16 @@ describe('rhombus-skeleton', () => {
     host.count = 3;
     fixture.detectChanges();
     expect(el.querySelectorAll('.rhombus-skeleton__block').length).toBe(3);
+  });
+
+  it('never renders blank when count/lines resolve to NaN', () => {
+    // e.g. [count]="rows?.length" while rows is still undefined → NaN.
+    const { fixture, host, el } = setup();
+    host.count = NaN;
+    host.lines = NaN;
+    fixture.detectChanges();
+    expect(el.querySelectorAll('.rhombus-skeleton__block').length).toBe(1);
+    expect(el.querySelectorAll('.rhombus-skeleton__bar').length).toBe(1);
   });
 
   it('toggles the shimmer class with `animated`', () => {

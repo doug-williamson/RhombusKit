@@ -135,13 +135,13 @@ import { ExampleComponent } from '../../shared/example.component';
           </p>
           <p>
             If instead you want the skeleton to <strong>announce the load itself</strong>,
-            pass a <code>label</code>: the host becomes a
-            <code>role="status"</code> region with <code>aria-busy="true"</code>
-            and the label as its accessible name, and the inner bars stay hidden.
-            Either way the shimmer is a compositor-only
-            <code>transform</code> sweep, dropped under
-            <code>prefers-reduced-motion</code> — leaving a static, never-blank
-            block.
+            pass a <code>label</code>: the host becomes a polite
+            <code>role="status"</code> region that announces the label (rendered
+            as visually-hidden text so the live region has real content to speak),
+            while the inner bars stay hidden from assistive tech. Either way the
+            shimmer is a compositor-only <code>transform</code> sweep, dropped
+            under <code>prefers-reduced-motion</code> — leaving a static,
+            never-blank block.
           </p>
         </section>
       </div>

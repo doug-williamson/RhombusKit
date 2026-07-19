@@ -85,7 +85,9 @@ export class RhombusSheetRef<R = unknown> {
    * to run the slide-in. Idempotent. Also enforces the accessible-name contract.
    */
   _activate(): void {
-    if (this.activated || !this.paneEl) return;
+    // Skip if already open, or if a close() raced in before activation (else a
+    // pre-activation close would still slide the sheet fully open first).
+    if (this.activated || this.closing || !this.paneEl) return;
     this.activated = true;
     this.containerEl =
       this.paneEl.querySelector<HTMLElement>('.cdk-dialog-container') ??
@@ -126,7 +128,9 @@ export class RhombusSheetRef<R = unknown> {
     this.closing = true;
 
     const pane = this.paneEl;
-    if (!pane) {
+    // Never slid in (closed before activation, or no pane) — nothing to animate
+    // out; close the CDK dialog straight away.
+    if (!pane || !this.activated) {
       this.cdkRef.close(result);
       return;
     }

@@ -183,6 +183,17 @@ describe('RhombusSheetService', () => {
     expect(dialog()).toBeNull();
   }));
 
+  it('closes cleanly when close() races before activation (no slide-open)', fakeAsync(() => {
+    const { service, dialog } = setup();
+    const ref = service.open(BareComponent, { ariaLabel: 'X' });
+    // Abort the open synchronously, before the deferred activation runs.
+    ref.close();
+    flush();
+    // Activation was skipped (never slid in) and the dialog is gone.
+    expect((ref as unknown as { activated: boolean }).activated).toBe(false);
+    expect(dialog()).toBeNull();
+  }));
+
   it('is idempotent: a second close() does not throw', fakeAsync(() => {
     const { service } = setup();
     const ref = service.open(BareComponent, { ariaLabel: 'X' });

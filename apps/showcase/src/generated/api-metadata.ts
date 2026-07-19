@@ -2769,7 +2769,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusSkeletonComponent",
     "kind": "class",
     "selector": "rhombus-skeleton",
-    "description": "`<rhombus-skeleton>` — a pure-CSS loading placeholder. Bespoke (no Material,\nno new tokens): a `--surface-2` block with an optional compositor-only shimmer\n(`--surface-3` sweep via `transform: translateX`). Under\n`prefers-reduced-motion` the sweep is dropped and the block stays a **static,\nnever-blank** surface.\n\nTwo a11y modes. By default the skeleton is **decorative** (`aria-hidden`) — the\nconsumer owns the `aria-busy`/live-region wiring on the surrounding region.\nPass a `label` to make the skeleton itself a labelled `role=\"status\"` busy\nregion (its inner bars stay hidden from assistive tech).\n\n`lines` repeats bars *within* one text block; `count` repeats the *whole*\nblock (e.g. a list of placeholder rows).\n\n```html\n<!-- three text lines, last one shortened -->\n<rhombus-skeleton [lines]=\"3\" />\n\n<!-- avatar + two lines, announced to assistive tech -->\n<rhombus-skeleton variant=\"circle\" [width]=\"40\" label=\"Loading profile\" />\n\n<!-- a list of five placeholder rows -->\n<rhombus-skeleton variant=\"rect\" [height]=\"48\" [count]=\"5\" />\n```",
+    "description": "`<rhombus-skeleton>` — a pure-CSS loading placeholder. Bespoke (no Material,\nno new tokens): a `--surface-2` block with an optional compositor-only shimmer\n(`--surface-3` sweep via `transform: translateX`). Under\n`prefers-reduced-motion` the sweep is dropped and the block stays a **static,\nnever-blank** surface.\n\nTwo a11y modes. By default the skeleton is **decorative** (`aria-hidden`) — the\nconsumer owns the `aria-busy`/live-region wiring on the surrounding region.\nPass a `label` to make the skeleton a polite `role=\"status\"` region that\nannounces the label (rendered as visually-hidden text so a live region has\nreal content to speak); its inner bars stay hidden from assistive tech.\n\n`lines` repeats bars *within* one text block; `count` repeats the *whole*\nblock (e.g. a list of placeholder rows).\n\n```html\n<!-- three text lines, last one shortened -->\n<rhombus-skeleton [lines]=\"3\" />\n\n<!-- avatar + two lines, announced to assistive tech -->\n<rhombus-skeleton variant=\"circle\" [width]=\"40\" label=\"Loading profile\" />\n\n<!-- a list of five placeholder rows -->\n<rhombus-skeleton variant=\"rect\" [height]=\"48\" [count]=\"5\" />\n```",
     "inputs": [
       {
         "name": "variant",
@@ -2819,7 +2819,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "label",
         "type": "string",
-        "description": "Accessible label. `null`/empty → decorative (`aria-hidden`); a string →\n`role=\"status\"` + `aria-busy` + `aria-label`."
+        "description": "Accessible label. `null`/empty → decorative (`aria-hidden`); a string → a\npolite `role=\"status\"` region that announces the label."
       }
     ],
     "outputs": [],

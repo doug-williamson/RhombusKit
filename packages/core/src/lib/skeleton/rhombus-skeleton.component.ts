@@ -21,6 +21,15 @@ function toCss(value: string | number | null): string | null {
 }
 
 /**
+ * Clamp a repeat count to a whole number ≥ 1, treating a non-finite value
+ * (`NaN` from `numberAttribute` on an unresolved binding like `[count]="rows?.length"`)
+ * as 1 so the skeleton never renders blank.
+ */
+function atLeastOne(value: number): number {
+  return Number.isFinite(value) ? Math.max(1, Math.floor(value)) : 1;
+}
+
+/**
  * `<rhombus-skeleton>` — a pure-CSS loading placeholder. Bespoke (no Material,
  * no new tokens): a `--surface-2` block with an optional compositor-only shimmer
  * (`--surface-3` sweep via `transform: translateX`). Under
@@ -29,8 +38,9 @@ function toCss(value: string | number | null): string | null {
  *
  * Two a11y modes. By default the skeleton is **decorative** (`aria-hidden`) — the
  * consumer owns the `aria-busy`/live-region wiring on the surrounding region.
- * Pass a `label` to make the skeleton itself a labelled `role="status"` busy
- * region (its inner bars stay hidden from assistive tech).
+ * Pass a `label` to make the skeleton a polite `role="status"` region that
+ * announces the label (rendered as visually-hidden text so a live region has
+ * real content to speak); its inner bars stay hidden from assistive tech.
  *
  * `lines` repeats bars *within* one text block; `count` repeats the *whole*
  * block (e.g. a list of placeholder rows).
@@ -59,13 +69,15 @@ function toCss(value: string | number | null): string | null {
     '[style.--rhombus-skeleton-w]': 'cssWidth()',
     '[style.--rhombus-skeleton-h]': 'cssHeight()',
     '[style.--rhombus-skeleton-radius]': 'cssRadius()',
-    // Labelled → a busy live region; decorative (default) → hidden from AT.
+    // Labelled → a polite live region; the visually-hidden text below is what it
+    // announces (aria-hidden bars carry no text). Decorative → hidden from AT.
     '[attr.role]': "hasLabel() ? 'status' : null",
-    '[attr.aria-busy]': "hasLabel() ? 'true' : null",
-    '[attr.aria-label]': 'hasLabel() ? label() : null',
     '[attr.aria-hidden]': "hasLabel() ? null : 'true'",
   },
   template: `
+    @if (hasLabel()) {
+      <span class="rhombus-skeleton__sr">{{ label() }}</span>
+    }
     @for (block of blocks(); track $index) {
       <div class="rhombus-skeleton__block" aria-hidden="true">
         @if (variant() === 'text') {
@@ -98,8 +110,8 @@ export class RhombusSkeletonComponent {
   /** Show the shimmer sweep. Disabled under `prefers-reduced-motion`. */
   readonly animated = input(true, { transform: booleanAttribute });
   /**
-   * Accessible label. `null`/empty → decorative (`aria-hidden`); a string →
-   * `role="status"` + `aria-busy` + `aria-label`.
+   * Accessible label. `null`/empty → decorative (`aria-hidden`); a string → a
+   * polite `role="status"` region that announces the label.
    */
   readonly label = input<string | null>(null);
 
@@ -107,11 +119,11 @@ export class RhombusSkeletonComponent {
 
   /** Repeat markers for `count` blocks. */
   protected readonly blocks = computed(() =>
-    Array.from({ length: Math.max(1, this.count()) })
+    Array.from({ length: atLeastOne(this.count()) })
   );
   /** Repeat markers for the `lines` bars in a text block. */
   protected readonly lineIndices = computed(() =>
-    Array.from({ length: Math.max(1, this.lines()) })
+    Array.from({ length: atLeastOne(this.lines()) })
   );
 
   protected readonly cssWidth = computed(() => toCss(this.width()));
@@ -120,7 +132,7 @@ export class RhombusSkeletonComponent {
 
   /** Inline width for a text bar: only the last of several lines is shortened. */
   protected barWidth(index: number): string | null {
-    const lines = Math.max(1, this.lines());
+    const lines = atLeastOne(this.lines());
     return lines > 1 && index === lines - 1 ? this.lastLineWidth() : null;
   }
 }
