@@ -54,6 +54,8 @@ let nextId = 0;
     role: 'region',
     'aria-roledescription': 'carousel',
     '[attr.aria-label]': 'label()',
+    '(focusin)': 'onFocusIn()',
+    '(focusout)': 'onFocusOut($event)',
   },
   template: `
     <div
@@ -181,7 +183,10 @@ export class RhombusCarouselComponent {
   private readonly injector = inject(Injector);
   private readonly host = inject(ElementRef<HTMLElement>);
   private timer: ReturnType<typeof setInterval> | null = null;
-  private resumeAfterHover = false;
+  private hovered = false;
+  private focused = false;
+  /** Whether auto-rotation was running when the current hover/focus began. */
+  private wasPlayingBeforeInteraction = false;
   private pointerStartX: number | null = null;
 
   constructor() {
@@ -279,15 +284,47 @@ export class RhombusCarouselComponent {
   // ---- Interaction handlers --------------------------------------------------
 
   protected onMouseEnter(): void {
-    if (this.pauseOnHover() && this._playing()) {
-      this.resumeAfterHover = true;
+    if (!this.pauseOnHover()) return;
+    this.hovered = true;
+    this.pauseForInteraction();
+  }
+
+  protected onMouseLeave(): void {
+    if (!this.pauseOnHover()) return;
+    this.hovered = false;
+    this.resumeIfIdle();
+  }
+
+  /**
+   * APG Auto-Rotating Carousel: pause rotation whenever keyboard focus is inside
+   * the carousel, so a control never shifts under the user. Bound at the host,
+   * so focusing any control (arrow, dot, play/pause, or slide content) pauses.
+   */
+  protected onFocusIn(): void {
+    this.focused = true;
+    this.pauseForInteraction();
+  }
+
+  protected onFocusOut(event: FocusEvent): void {
+    const related = event.relatedTarget as Node | null;
+    // Ignore focus moves that stay inside the carousel (e.g. dot to dot).
+    if (related && this.host.nativeElement.contains(related)) return;
+    this.focused = false;
+    this.resumeIfIdle();
+  }
+
+  /** Pause for a hover/focus interaction, remembering whether it was rotating. */
+  private pauseForInteraction(): void {
+    if (this._playing()) {
+      this.wasPlayingBeforeInteraction = true;
       this.pause();
     }
   }
 
-  protected onMouseLeave(): void {
-    if (this.resumeAfterHover) {
-      this.resumeAfterHover = false;
+  /** Resume only once neither hover nor focus is holding the carousel. */
+  private resumeIfIdle(): void {
+    if (!this.hovered && !this.focused && this.wasPlayingBeforeInteraction) {
+      this.wasPlayingBeforeInteraction = false;
       this.play();
     }
   }

@@ -427,6 +427,63 @@ describe('rhombus-carousel autoplay', () => {
     expect(api.playing()).toBe(true);
   });
 
+  it('pauses auto-rotation when keyboard focus enters and resumes when it leaves', () => {
+    // APG Auto-Rotating Carousel: rotation must stop while keyboard focus is
+    // inside the carousel (a control could shift under the user otherwise).
+    const { fixture, el, api } = setup();
+    api.play();
+    fixture.detectChanges();
+    const carousel = el.querySelector('rhombus-carousel')!;
+    carousel.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    fixture.detectChanges();
+    expect(api.playing()).toBe(false);
+    // Focus leaves the carousel entirely → rotation resumes.
+    carousel.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body })
+    );
+    fixture.detectChanges();
+    expect(api.playing()).toBe(true);
+  });
+
+  it('stays paused while focus moves between controls inside the carousel', () => {
+    const { fixture, el, api } = setup();
+    api.play();
+    fixture.detectChanges();
+    const carousel = el.querySelector('rhombus-carousel')!;
+    const dot = el.querySelector('.rhombus-carousel__dot')!;
+    carousel.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    fixture.detectChanges();
+    expect(api.playing()).toBe(false);
+    // Focus moves to another control still inside the carousel → do not resume.
+    carousel.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: dot })
+    );
+    fixture.detectChanges();
+    expect(api.playing()).toBe(false);
+  });
+
+  it('does not resume on focus-leave while the pointer is still hovering', () => {
+    const { fixture, el, api } = setup();
+    api.play();
+    fixture.detectChanges();
+    const carousel = el.querySelector('rhombus-carousel')!;
+    const viewport = el.querySelector('.rhombus-carousel__viewport')!;
+    viewport.dispatchEvent(new MouseEvent('mouseenter'));
+    carousel.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    fixture.detectChanges();
+    expect(api.playing()).toBe(false);
+    // Focus leaves but the pointer is still over the carousel → stay paused.
+    carousel.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body })
+    );
+    fixture.detectChanges();
+    expect(api.playing()).toBe(false);
+    // Pointer leaves too → now it resumes.
+    viewport.dispatchEvent(new MouseEvent('mouseleave'));
+    fixture.detectChanges();
+    expect(api.playing()).toBe(true);
+  });
+
   it('play() is idempotent while already rotating', () => {
     const { fixture, host, api } = setup();
     api.play();

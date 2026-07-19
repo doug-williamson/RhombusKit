@@ -70,6 +70,7 @@ let nextId = 0;
   host: {
     class: 'rhombus-reorder-list-host',
     '[class.rhombus-reorder-list-host--disabled]': 'disabled()',
+    '(focusout)': 'onFocusOut($event)',
   },
   template: `
     <ul
@@ -96,10 +97,10 @@ let nextId = 0;
               class="rhombus-reorder-list__handle"
               cdkDragHandle
               [attr.aria-label]="handleLabel(item, i)"
+              [attr.aria-describedby]="instructionsId"
               [attr.aria-pressed]="grabbedIndex() === i"
               [disabled]="disabled()"
               (keydown)="onHandleKeydown($event, i)"
-              (blur)="onHandleBlur($event)"
             >
               <rhombus-icon name="drag_indicator" />
             </button>
@@ -307,8 +308,14 @@ export class RhombusReorderListComponent<T> {
     }
   }
 
-  /** Commit an in-progress grab if focus leaves the list entirely. */
-  protected onHandleBlur(event: FocusEvent): void {
+  /**
+   * Commit an in-progress grab when focus leaves the list entirely. Bound at the
+   * host so it fires whichever control focus departs from — the handle, a move
+   * button, or the row — not only the handle's own blur (with the default move
+   * buttons a natural Tab from a grabbed handle lands on a same-row button
+   * first, so a handle-only blur listener would never see the exit).
+   */
+  protected onFocusOut(event: FocusEvent): void {
     const grabbed = this.grabbedIndex();
     if (grabbed === null) return;
     const related = event.relatedTarget as Node | null;

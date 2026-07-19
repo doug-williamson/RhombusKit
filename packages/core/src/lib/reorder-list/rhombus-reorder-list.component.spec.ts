@@ -99,6 +99,18 @@ describe('rhombus-reorder-list', () => {
     expect(instructions?.textContent?.toLowerCase()).toContain('space');
   });
 
+  it('describes each drag handle with the grab-mode instructions so AT announces them', () => {
+    const { el } = setup();
+    const list = el.querySelector('[role="list"]')!;
+    const instructionsId = list.getAttribute('aria-describedby')!;
+    // aria-describedby on the non-focusable <ul> is never announced; the
+    // focusable grab entry point (the handle) must carry it so a screen-reader
+    // user hears how to enter grab mode on Tab.
+    handles(el).forEach((h) =>
+      expect(h.getAttribute('aria-describedby')).toBe(instructionsId)
+    );
+  });
+
   it('gives each row a drag handle labelled for assistive tech', () => {
     const { el } = setup();
     const hs = handles(el);
@@ -194,7 +206,7 @@ describe('rhombus-reorder-list', () => {
     expect(host.events.length).toBe(0);
   });
 
-  it('commits an in-progress grab when focus leaves the list (grab-on-blur)', () => {
+  it('commits an in-progress grab when focus leaves the list (grab-on-focusout)', () => {
     const { fixture, host, el } = setup();
     const outside = document.createElement('button');
     document.body.appendChild(outside);
@@ -203,7 +215,9 @@ describe('rhombus-reorder-list', () => {
     handle.dispatchEvent(key(' ')); // grab
     handle.dispatchEvent(key('ArrowDown'));
     fixture.detectChanges();
-    handle.dispatchEvent(new FocusEvent('blur', { relatedTarget: outside }));
+    handle.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: outside })
+    );
     fixture.detectChanges();
     expect(host.events.length).toBe(1);
     expect(host.events[0]).toMatchObject({ item: 'Alpha', currentIndex: 1 });
@@ -312,25 +326,56 @@ describe('rhombus-reorder-list', () => {
     expect(rowText(el)).toEqual(['1: Alpha', '2: Bravo', '3: Charlie']);
   });
 
-  it('blur without an active grab does nothing', () => {
+  it('focus leaving without an active grab does nothing', () => {
     const { fixture, host, el } = setup();
-    const handle = handles(el)[0];
-    handle.dispatchEvent(new FocusEvent('blur', { relatedTarget: document.body }));
+    const rlHost = el.querySelector('rhombus-reorder-list')!;
+    rlHost.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body })
+    );
     fixture.detectChanges();
     expect(host.events.length).toBe(0);
   });
 
-  it('blur to another control inside the list keeps the grab active', () => {
+  it('focus moving to another control inside the list keeps the grab active', () => {
     const { fixture, host, el } = setup();
     const handle = handles(el)[0];
     handle.focus();
     handle.dispatchEvent(key(' ')); // grab
     handle.dispatchEvent(key('ArrowDown'));
     fixture.detectChanges();
-    // Focus moves to a sibling handle still inside the list → not a commit.
-    handle.dispatchEvent(new FocusEvent('blur', { relatedTarget: handles(el)[1] }));
+    // Focus moves to a sibling control still inside the list → not a commit.
+    handle.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: handles(el)[1] })
+    );
     fixture.detectChanges();
     expect(host.events.length).toBe(0);
+    expect(handles(el).some((h) => h.getAttribute('aria-pressed') === 'true')).toBe(true);
+  });
+
+  it('commits an in-progress grab when focus leaves the list from any control', () => {
+    // Regression: with the default move buttons, a natural Tab from a grabbed
+    // handle lands on a same-row move button, then out of the list. The commit
+    // must fire from that focus-leave — not only from the handle's own blur.
+    const { fixture, host, el } = setup();
+    const handle = handles(el)[0];
+    handle.focus();
+    handle.dispatchEvent(key(' ')); // grab Alpha at 0
+    handle.dispatchEvent(key('ArrowDown')); // model reorders to index 1; not yet emitted
+    fixture.detectChanges();
+    expect(host.events.length).toBe(0);
+    const downBtn = rows(el)[1].querySelector<HTMLButtonElement>('[data-dir="down"]')!;
+    downBtn.dispatchEvent(
+      new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body })
+    );
+    fixture.detectChanges();
+    expect(host.events.length).toBe(1);
+    expect(host.events[0]).toMatchObject({
+      item: 'Alpha',
+      previousIndex: 0,
+      currentIndex: 1,
+    });
+    // The grab is released — no handle left stuck in the pressed state.
+    expect(handles(el).some((h) => h.getAttribute('aria-pressed') === 'true')).toBe(false);
   });
 
   it('cancels cleanly when Escape is pressed without moving', () => {
