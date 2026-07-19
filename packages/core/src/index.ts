@@ -345,3 +345,24 @@ export type {
   SheetSide,
   SheetSize,
 } from './lib/sheet/sheet.types';
+
+// Stepper — an accessible wizard that *extends* CdkStepper (D10): the CDK
+// supplies linear gating, stepControl validation, and roving-focus keyboard,
+// while the chrome (role=tablist headers + role=tabpanel content, manual
+// activation, horizontal + vertical) is themed off the contract — no
+// @angular/material, no --mat-sys-*, no new peer. Boundary: a Stepper is a
+// *sequential* flow that gates progress step-to-step — use Tabs for peer
+// sections visited in any order, and an Accordion for independent collapsible
+// disclosure.
+export { RhombusStepperComponent } from './lib/stepper/rhombus-stepper.component';
+export { RhombusStepComponent } from './lib/stepper/rhombus-step.component';
+export { RhombusStepLabelDirective } from './lib/stepper/rhombus-step-label.directive';
+export {
+  RhombusStepperNextDirective,
+  RhombusStepperPreviousDirective,
+} from './lib/stepper/rhombus-stepper-buttons.directive';
+export type {
+  StepperOrientation,
+  StepperLabelPosition,
+  RhombusStepState,
+} from './lib/stepper/stepper.types';

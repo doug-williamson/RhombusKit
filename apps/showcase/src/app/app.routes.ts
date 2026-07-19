@@ -254,6 +254,11 @@ export const appRoutes: Route[] = [
         title: 'Sheet',
         loadComponent: () => import('./pages/sheet/sheet-page.component'),
       },
+      {
+        path: 'stepper',
+        title: 'Stepper',
+        loadComponent: () => import('./pages/stepper/stepper-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
