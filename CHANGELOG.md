@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/doug-williamson/RhombusKit/compare/v1.11.0...v1.12.0) (2026-07-19)
+
+
+### Features
+
+* **core:** v1.13 Dashboard & surfaces — Skeleton, Stat, Sheet/Drawer ([#118](https://github.com/doug-williamson/RhombusKit/issues/118)) ([210d2ea](https://github.com/doug-williamson/RhombusKit/commit/210d2ea7932de777c7ca1c4d1b35a6e80e9f3f13))
+
 ## [1.11.0](https://github.com/doug-williamson/RhombusKit/compare/v1.10.0...v1.11.0) (2026-07-18)
 
 
