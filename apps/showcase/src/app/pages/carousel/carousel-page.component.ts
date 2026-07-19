@@ -154,7 +154,11 @@ import { ExampleComponent } from '../../shared/example.component';
       font-weight: 600;
       color: var(--text-on-accent);
     }
-    .slide--a { background: var(--text-accent); }
+    /* Each demo slide pairs a contract fill with a foreground that clears WCAG
+       AA (4.5:1) in BOTH themes. --text-accent is a *text* token that inverts
+       lightness across themes, so it can't back white text in dark (2.72:1) —
+       use theme-stable fills instead. */
+    .slide--a { background: var(--surface-2); color: var(--text-primary); }
     .slide--b { background: var(--btn-primary-bg); }
     .slide--c { background: var(--border-strong); color: var(--text-primary); }
     .showcase-section__lead {
