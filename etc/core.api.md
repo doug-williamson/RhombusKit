@@ -162,7 +162,7 @@
   readonly hasNav: _angular_core.InputSignal<boolean>
   readonly iconRail: _angular_core.InputSignal<boolean>
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
-  readonly navMode: _angular_core.InputSignal<"bottom" | "sidenav">
+  readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
   readonly phoneMaxWidth: _angular_core.InputSignal<number>
 
 ### RhombusAutocompleteComponent (class)
@@ -279,7 +279,7 @@
   readonly rowClick: _angular_core.OutputEmitterRef<T>
   readonly sortChange: _angular_core.OutputEmitterRef<SortState>
   readonly sortMode: _angular_core.InputSignal<"internal" | "controlled">
-  readonly sortStart: _angular_core.InputSignal<"desc" | "asc">
+  readonly sortStart: _angular_core.InputSignal<"asc" | "desc">
   readonly sortState: _angular_core.InputSignal<SortState>
   readonly totalCount: _angular_core.InputSignal<number>
 
@@ -755,7 +755,7 @@
 
 ### SortState (interface)
   active: string
-  direction: "" | "desc" | "asc"
+  direction: "" | "asc" | "desc"
 
 ### StatSentiment (type)
   type StatSentiment = 'positive' | 'negative' | 'neutral' | 'auto'
