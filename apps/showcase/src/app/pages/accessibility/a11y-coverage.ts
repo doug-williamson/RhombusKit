@@ -33,6 +33,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'toast', label: 'Toast' },
   { slug: 'dialog', label: 'Dialog' },
   { slug: 'confirm-dialog', label: 'Confirm Dialog' },
+  { slug: 'sheet', label: 'Sheet' },
   { slug: 'tabs', label: 'Tabs' },
   { slug: 'menu', label: 'Menu' },
   { slug: 'breadcrumbs', label: 'Breadcrumbs' },

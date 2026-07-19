@@ -124,6 +124,9 @@
   pageIndex: number
   pageSize: number
 
+### RHOMBUS_SHEET_DATA (const)
+  RHOMBUS_SHEET_DATA: _angular_core.InjectionToken<unknown>
+
 ### RadioOption (interface)
   disabled?: boolean
   label: string
@@ -159,7 +162,7 @@
   readonly hasNav: _angular_core.InputSignal<boolean>
   readonly iconRail: _angular_core.InputSignal<boolean>
   readonly mobileBreakpoint: _angular_core.InputSignal<number>
-  readonly navMode: _angular_core.InputSignal<"sidenav" | "bottom">
+  readonly navMode: _angular_core.InputSignal<"bottom" | "sidenav">
   readonly phoneMaxWidth: _angular_core.InputSignal<number>
 
 ### RhombusAutocompleteComponent (class)
@@ -276,7 +279,7 @@
   readonly rowClick: _angular_core.OutputEmitterRef<T>
   readonly sortChange: _angular_core.OutputEmitterRef<SortState>
   readonly sortMode: _angular_core.InputSignal<"internal" | "controlled">
-  readonly sortStart: _angular_core.InputSignal<"asc" | "desc">
+  readonly sortStart: _angular_core.InputSignal<"desc" | "asc">
   readonly sortState: _angular_core.InputSignal<SortState>
   readonly totalCount: _angular_core.InputSignal<number>
 
@@ -535,6 +538,35 @@
   readonly togglePosition: _angular_core.InputSignal<"before" | "after">
   readonly value: _angular_core.ModelSignal<T[]>
 
+### RhombusSheetActionsDirective (class)
+  // (no public members)
+
+### RhombusSheetCloseDirective (class)
+  // (no public members)
+
+### RhombusSheetComponent (class)
+  readonly dismissible: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly title: _angular_core.InputSignal<string>
+
+### RhombusSheetConfig (interface)
+  ariaLabel?: string
+  autoFocus?: string
+  data?: D
+  disableClose?: boolean
+  hasBackdrop?: boolean
+  panelClass?: string | string[]
+  restoreFocus?: boolean
+  side?: SheetSide
+  size?: string
+
+### RhombusSheetRef (class)
+  afterClosed: () => Observable<R | undefined>
+  close: (result?: R) => void
+  readonly side: SheetSide
+
+### RhombusSheetService (class)
+  open: <R = unknown, D = unknown>(content: ComponentType<unknown> | TemplateRef<unknown>, config?: RhombusSheetConfig<D>) => RhombusSheetRef<R>
+
 ### RhombusShellAsideDirective (class)
   // (no public members)
 
@@ -708,6 +740,12 @@
   label: string
   value: T
 
+### SheetSide (type)
+  type SheetSide = 'left' | 'right' | 'bottom'
+
+### SheetSize (type)
+  type SheetSize = 'sm' | 'md' | 'lg'
+
 ### SkeletonVariant (type)
   type SkeletonVariant = 'text' | 'circle' | 'rect'
 
@@ -717,7 +755,7 @@
 
 ### SortState (interface)
   active: string
-  direction: "" | "asc" | "desc"
+  direction: "" | "desc" | "asc"
 
 ### StatSentiment (type)
   type StatSentiment = 'positive' | 'negative' | 'neutral' | 'auto'

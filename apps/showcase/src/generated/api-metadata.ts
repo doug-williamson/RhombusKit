@@ -184,7 +184,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       },
       {
         "name": "navMode",
-        "type": "\"sidenav\" | \"bottom\"",
+        "type": "\"bottom\" | \"sidenav\"",
         "description": "`'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar.\nThe drawer-scoped inputs (mobileBreakpoint, iconRail, closeOnNavigate) apply only to 'sidenav' mode."
       },
       {
@@ -2640,6 +2640,83 @@ export const API_METADATA: Record<string, ApiEntry> = {
             "required": true
           }
         ]
+      }
+    ]
+  },
+  "RhombusSheetActionsDirective": {
+    "name": "RhombusSheetActionsDirective",
+    "kind": "class",
+    "selector": "[rhombusSheetActions]",
+    "description": "`[rhombusSheetActions]` — marks the footer action row projected into\n`<rhombus-sheet>`. A semantic slot marker (mirrors `[rhombusDialogActions]`);\nit carries no behaviour of its own.\n\n```html\n<rhombus-sheet title=\"Filters\">\n  <!-- body -->\n  <div rhombusSheetActions>\n    <rhombus-button appearance=\"text\" rhombusSheetClose>Cancel</rhombus-button>\n    <rhombus-button (click)=\"apply()\">Apply</rhombus-button>\n  </div>\n</rhombus-sheet>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusSheetCloseDirective": {
+    "name": "RhombusSheetCloseDirective",
+    "kind": "class",
+    "selector": "[rhombusSheetClose]",
+    "description": "Closes the enclosing sheet when the host element is clicked (running the\nslide-out animation via the ref). Usage: `<button rhombusSheetClose>Cancel</button>`.\nMust be used inside a sheet opened by {@link RhombusSheetService}; injecting\nthe {@link RhombusSheetRef} throws if it is absent.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusSheetComponent": {
+    "name": "RhombusSheetComponent",
+    "kind": "class",
+    "selector": "rhombus-sheet",
+    "description": "`<rhombus-sheet>` — the standard chrome for a sheet opened with\n{@link RhombusSheetService}: an optional heading, a scrollable body, and a\nfooter action row. Drop it as the root of the component you open to get\nconsistent padding, the slide-in surface, and accessible-name wiring.\n\nWhen `title` is set it drives the sheet's `aria-labelledby` (via the ref);\notherwise supply a `config.ariaLabel` at open time. A sheet with neither\nfails loud. The chrome does **not** re-declare `role=\"dialog\"` / `aria-modal`\n— the CDK dialog container already owns those.\n\nProject the body as default content and the buttons via `[rhombusSheetActions]`.\n\n```html\n<rhombus-sheet title=\"Filters\">\n  <rhombus-select ... />\n  <div rhombusSheetActions>\n    <rhombus-button appearance=\"text\" rhombusSheetClose>Cancel</rhombus-button>\n    <rhombus-button (click)=\"apply()\">Apply</rhombus-button>\n  </div>\n</rhombus-sheet>\n```",
+    "inputs": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Heading; when set it becomes the sheet's accessible name (`aria-labelledby`)."
+      },
+      {
+        "name": "dismissible",
+        "type": "boolean",
+        "description": "Show the header close (×) button. Accepts a bare attribute. Defaults to `true`."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "*",
+      "[rhombusSheetActions]"
+    ]
+  },
+  "RhombusSheetRef": {
+    "name": "RhombusSheetRef",
+    "kind": "class",
+    "selector": null,
+    "description": "Handle to an open sheet. Wraps CDK's `DialogRef` so consumers never touch\nAngular CDK types, and — per decision **D9** — **owns the exit animation**:\n`close()` removes the panel's `--open` class to run the slide-out transition,\nawaits `transitionend` (with a fallback timeout), then closes the underlying\nCDK dialog. The service sets `disableClose: true` on CDK so Escape / backdrop\ndismissals route through here and animate too.",
+    "inputs": [],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "close",
+        "type": "(result?: R) => void",
+        "description": "Close the sheet, optionally returning a result. Runs the slide-out\nanimation first, then closes the CDK dialog. Safe to call more than once."
+      },
+      {
+        "name": "afterClosed",
+        "type": "() => Observable<R | undefined>",
+        "description": "Emits the close result (or `undefined` on Escape/backdrop) then completes."
+      }
+    ]
+  },
+  "RhombusSheetService": {
+    "name": "RhombusSheetService",
+    "kind": "class",
+    "selector": null,
+    "description": "`RhombusSheetService` — opens a component (or template) as an edge-anchored\nslide-over sheet / drawer.\n\nBuilt on `@angular/cdk/dialog` `Dialog` (scrim, focus-trap, focus-restore,\nscroll-block, `role=\"dialog\"` + `aria-modal`) plus a\n`GlobalPositionStrategy` to pin the panel to an edge — **not** `MatDialog`,\nwhich centres its panel and hard-codes an `@angular/animations` transition.\nNo new peer dependency. The returned {@link RhombusSheetRef} owns the\nCSS-only exit animation (see D9). Pair it with the `<rhombus-sheet>` chrome.\n\n```ts\nprivate sheet = inject(RhombusSheetService);\n\nconst ref = this.sheet.open<Filters>(FilterSheetComponent, {\n  side: 'right',\n  data: { applied },\n});\nref.afterClosed().subscribe((filters) => { ... });\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "open",
+        "type": "<R = unknown, D = unknown>(content: ComponentType<unknown> | TemplateRef<unknown>, config?: RhombusSheetConfig<D>) => RhombusSheetRef<R>",
+        "description": "Open `content` as a sheet. `R` is the close-result type, `D` the data type."
       }
     ]
   },

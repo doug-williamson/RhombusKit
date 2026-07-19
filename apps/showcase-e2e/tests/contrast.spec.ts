@@ -46,6 +46,7 @@ const COMPONENTS = [
   '/components/toast',
   '/components/dialog',
   '/components/confirm-dialog',
+  '/components/sheet',
   '/components/tabs',
   '/components/menu',
   '/components/nav-list',

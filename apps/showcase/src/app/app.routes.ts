@@ -249,6 +249,11 @@ export const appRoutes: Route[] = [
         title: 'Stat',
         loadComponent: () => import('./pages/stat/stat-page.component'),
       },
+      {
+        path: 'sheet',
+        title: 'Sheet',
+        loadComponent: () => import('./pages/sheet/sheet-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },

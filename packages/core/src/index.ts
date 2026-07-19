@@ -325,3 +325,23 @@ export type {
   StatSentiment,
   StatSize,
 } from './lib/stat/rhombus-stat.component';
+
+// Sheet / Drawer — a modal edge slide-over opened imperatively via
+// RhombusSheetService, built on @angular/cdk/dialog + overlay (NOT MatDialog).
+// The RhombusSheetRef owns the CSS-only exit animation (D9). Boundary: a Sheet
+// is a *temporary* modal panel (scrim + focus-trap) anchored to an edge — use
+// the App Shell sidenav for a *persistent* layout frame, a Dialog for a centred
+// modal, and a Popover for a small, non-modal, trigger-anchored panel.
+export { RhombusSheetService } from './lib/sheet/rhombus-sheet.service';
+export {
+  RhombusSheetRef,
+  RHOMBUS_SHEET_DATA,
+} from './lib/sheet/rhombus-sheet-ref';
+export { RhombusSheetComponent } from './lib/sheet/rhombus-sheet.component';
+export { RhombusSheetActionsDirective } from './lib/sheet/rhombus-sheet-actions.directive';
+export { RhombusSheetCloseDirective } from './lib/sheet/rhombus-sheet-close.directive';
+export type {
+  RhombusSheetConfig,
+  SheetSide,
+  SheetSize,
+} from './lib/sheet/sheet.types';
