@@ -68,6 +68,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/toast', label: 'Toast' },
       { path: '/components/dialog', label: 'Dialog' },
       { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
+      { path: '/components/sheet', label: 'Sheet' },
     ],
   },
   {
@@ -86,6 +87,8 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Status & layout',
     items: [
       { path: '/components/progress', label: 'Progress' },
+      { path: '/components/skeleton', label: 'Skeleton' },
+      { path: '/components/stat', label: 'Stat' },
       { path: '/components/avatar', label: 'Avatar' },
       { path: '/components/alert', label: 'Alert' },
     ],

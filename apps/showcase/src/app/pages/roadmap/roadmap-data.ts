@@ -43,100 +43,52 @@ export interface Roadmap {
 
 export const ROADMAP: Roadmap = {
   components: {
-    // Pack 1 — Parity primitives (v1.11): the thinnest wrappers that close the
-    // last-cited Material parity gaps.
+    // Pack 3 — Dashboard & surfaces (v1.13): the current release train.
     now: [
-      {
-        title: 'Divider',
-        detail:
-          'A semantic horizontal or vertical rule with inset, accent, and labelled text-divider variants — replaces mat-divider.',
-        tag: 'v1.11',
-      },
-      {
-        title: 'Slider',
-        detail:
-          'Numeric single-value and {start, end} range control (min/max/step, discrete, tick marks) — wraps mat-slider.',
-        tag: 'v1.11',
-      },
-      {
-        title: 'Date range picker',
-        detail:
-          'Two-field start/end calendar with range highlighting and an ISO {start, end} value — closes the last Datepicker migration gap.',
-        tag: 'v1.11',
-      },
-      {
-        title: 'Segmented control',
-        detail:
-          'A connected group of mutually-exclusive toggle buttons for inline view or unit switching — replaces the Material button-toggle.',
-        tag: 'v1.11',
-      },
-    ],
-    // Pack 2 — Selection & entry (v1.12): richer input beyond the fixed-list Select.
-    next: [
-      {
-        title: 'Autocomplete',
-        detail:
-          'Type-ahead filtering input with client-side or async filtering and a themed no-results state — beyond the fixed-list Select.',
-        tag: 'v1.12',
-      },
-      {
-        title: 'Selection list',
-        detail:
-          'An inline single- or multi-select list (role=listbox) plus a persistent action list — the mat-list slice the sidebar Nav List leaves open.',
-        tag: 'v1.12',
-      },
-      {
-        title: 'Number input',
-        detail:
-          'A compact numeric spinbox with increment/decrement buttons and min/max/step clamping for fast touch entry — Material ships no spinbox.',
-        tag: 'v1.12',
-      },
-    ],
-    // Pack 3 (v1.13, Dashboard & surfaces) + Pack 4 (v1.14, Rich interaction),
-    // then the app-level Composite tier. All community-shaped.
-    considering: [
       {
         title: 'Skeleton',
         detail:
-          'Shimmer placeholder blocks for text, avatars, and cards while async content loads — a dashboard staple Material has no equivalent for.',
+          'Pure-CSS shimmer placeholder blocks for text, avatars, and cards while async content loads — decorative by default, or an announced role="status" busy region. Material ships no equivalent.',
         tag: 'v1.13',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Skeleton') },
       },
       {
         title: 'Stat / Metric card',
         detail:
-          'A KPI tile — label, large value, and an up/down delta — composed inside Card for dashboard headers.',
+          'A KPI tile — label, large value, and a delta pill whose arrow (trend) and colour (sentiment) are decoupled, so an inverted metric like churn keeps its true direction — built to sit inside Card.',
         tag: 'v1.13',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Stat / Metric card') },
       },
       {
         title: 'Sheet / Drawer',
         detail:
-          'An edge-anchored slide-over panel (left, right, or bottom) with focus trap and scrim — a standalone drawer beyond the app-shell sidenav.',
+          'An edge-anchored modal slide-over (left, right, or bottom) on CDK dialog + overlay — focus trap, scrim, and a CSS-only slide with no @angular/animations. Replaces MatBottomSheet.',
         tag: 'v1.13',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Sheet / Drawer') },
       },
+    ],
+    // Pack 4 — Rich interaction (v1.14): the next train.
+    next: [
       {
         title: 'Stepper',
         detail:
           'Wizard-style sequential steps with linear gating and per-step validation — a common migration blocker.',
         tag: 'v1.14',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Stepper') },
       },
       {
         title: 'Drag-and-drop list',
         detail:
           'A keyboard-accessible wrapper over CDK drag-and-drop for reorderable lists, with move buttons and live-region announcements.',
         tag: 'v1.14',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Drag-and-drop list') },
       },
       {
         title: 'Carousel',
         detail:
           'A swipeable slide carousel with autoplay, pagination, and keyboard navigation — for galleries and onboarding tours, beyond anything Material ships.',
         tag: 'v1.14',
-        link: { label: 'Request / upvote', url: requestComponentUrl('Carousel') },
       },
+    ],
+    // The app-level Composite tier — community-shaped. Requests and upvotes move
+    // items up; each links to a prefilled proposal. (Packs 3 & 4 have graduated
+    // to Shipping now / Up next above.)
+    considering: [
       {
         title: 'Command palette',
         detail:

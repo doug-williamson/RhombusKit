@@ -124,6 +124,9 @@
   pageIndex: number
   pageSize: number
 
+### RHOMBUS_SHEET_DATA (const)
+  RHOMBUS_SHEET_DATA: _angular_core.InjectionToken<unknown>
+
 ### RadioOption (interface)
   disabled?: boolean
   label: string
@@ -535,6 +538,35 @@
   readonly togglePosition: _angular_core.InputSignal<"before" | "after">
   readonly value: _angular_core.ModelSignal<T[]>
 
+### RhombusSheetActionsDirective (class)
+  // (no public members)
+
+### RhombusSheetCloseDirective (class)
+  // (no public members)
+
+### RhombusSheetComponent (class)
+  readonly dismissible: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly title: _angular_core.InputSignal<string>
+
+### RhombusSheetConfig (interface)
+  ariaLabel?: string
+  autoFocus?: string
+  data?: D
+  disableClose?: boolean
+  hasBackdrop?: boolean
+  panelClass?: string | string[]
+  restoreFocus?: boolean
+  side?: SheetSide
+  size?: string
+
+### RhombusSheetRef (class)
+  afterClosed: () => Observable<R | undefined>
+  close: (result?: R) => void
+  readonly side: SheetSide
+
+### RhombusSheetService (class)
+  open: <R = unknown, D = unknown>(content: ComponentType<unknown> | TemplateRef<unknown>, config?: RhombusSheetConfig<D>) => RhombusSheetRef<R>
+
 ### RhombusShellAsideDirective (class)
   // (no public members)
 
@@ -549,6 +581,17 @@
 
 ### RhombusShellNavFooterDirective (class)
   // (no public members)
+
+### RhombusSkeletonComponent (class)
+  readonly animated: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly count: _angular_core.InputSignalWithTransform<number, unknown>
+  readonly height: _angular_core.InputSignal<string | number>
+  readonly label: _angular_core.InputSignal<string>
+  readonly lastLineWidth: _angular_core.InputSignal<string>
+  readonly lines: _angular_core.InputSignalWithTransform<number, unknown>
+  readonly radius: _angular_core.InputSignal<string | number>
+  readonly variant: _angular_core.InputSignal<SkeletonVariant>
+  readonly width: _angular_core.InputSignal<string | number>
 
 ### RhombusSliderComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
@@ -575,6 +618,17 @@
   readonly mode: _angular_core.InputSignal<ProgressSpinnerMode>
   readonly strokeWidth: _angular_core.InputSignal<number>
   readonly value: _angular_core.InputSignal<number>
+
+### RhombusStatComponent (class)
+  readonly caption: _angular_core.InputSignal<string>
+  readonly delta: _angular_core.InputSignal<string | number>
+  readonly deltaLabel: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly live: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly sentiment: _angular_core.InputSignal<StatSentiment>
+  readonly size: _angular_core.InputSignal<StatSize>
+  readonly trend: _angular_core.InputSignal<StatTrend>
+  readonly value: _angular_core.InputSignal<string | number>
 
 ### RhombusSwitchComponent (class)
   readonly checked: _angular_core.InputSignal<boolean>
@@ -686,6 +740,15 @@
   label: string
   value: T
 
+### SheetSide (type)
+  type SheetSide = 'left' | 'right' | 'bottom'
+
+### SheetSize (type)
+  type SheetSize = 'sm' | 'md' | 'lg'
+
+### SkeletonVariant (type)
+  type SkeletonVariant = 'text' | 'circle' | 'rect'
+
 ### SliderRange (interface)
   end: number
   start: number
@@ -693,6 +756,15 @@
 ### SortState (interface)
   active: string
   direction: "" | "asc" | "desc"
+
+### StatSentiment (type)
+  type StatSentiment = 'positive' | 'negative' | 'neutral' | 'auto'
+
+### StatSize (type)
+  type StatSize = 'sm' | 'md' | 'lg'
+
+### StatTrend (type)
+  type StatTrend = 'up' | 'down' | 'neutral' | 'auto'
 
 ### TagSize (type)
   type TagSize = 'sm' | 'md'

@@ -40,9 +40,10 @@ interface Track {
           requests and upvotes. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          Recently shipped the <strong>Date Picker</strong>,
-          <strong>Accordion</strong>, and an opt-in Material bridge (v1.9), plus a
-          nested Nav List tree and Tag input.
+          Recently shipped <strong>Parity primitives</strong> — Divider, Slider,
+          Date Range Picker, and Segmented (v1.11) — and
+          <strong>Selection &amp; entry</strong> — Autocomplete, Selection List,
+          and Number Input (v1.12).
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>
@@ -198,8 +199,8 @@ export default class RoadmapPageComponent {
       label: 'Components',
       blurb: 'The component library, shipped in themed release-train packs.',
       columns: this.columnsFor(ROADMAP.components, {
-        now: 'In the current release train (v1.11).',
-        next: 'Accepted; the next train (v1.12).',
+        now: 'In the current release train (v1.13).',
+        next: 'Accepted; the next train (v1.14).',
         considering: 'Community-shaped — you decide.',
       }),
     },

@@ -184,7 +184,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       },
       {
         "name": "navMode",
-        "type": "\"sidenav\" | \"bottom\"",
+        "type": "\"bottom\" | \"sidenav\"",
         "description": "`'sidenav'` (default) keeps the existing shell; `'bottom'` hosts a bottom nav bar.\nThe drawer-scoped inputs (mobileBreakpoint, iconRail, closeOnNavigate) apply only to 'sidenav' mode."
       },
       {
@@ -2643,6 +2643,83 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusSheetActionsDirective": {
+    "name": "RhombusSheetActionsDirective",
+    "kind": "class",
+    "selector": "[rhombusSheetActions]",
+    "description": "`[rhombusSheetActions]` — marks the footer action row projected into\n`<rhombus-sheet>`. A semantic slot marker (mirrors `[rhombusDialogActions]`);\nit carries no behaviour of its own.\n\n```html\n<rhombus-sheet title=\"Filters\">\n  <!-- body -->\n  <div rhombusSheetActions>\n    <rhombus-button appearance=\"text\" rhombusSheetClose>Cancel</rhombus-button>\n    <rhombus-button (click)=\"apply()\">Apply</rhombus-button>\n  </div>\n</rhombus-sheet>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusSheetCloseDirective": {
+    "name": "RhombusSheetCloseDirective",
+    "kind": "class",
+    "selector": "[rhombusSheetClose]",
+    "description": "Closes the enclosing sheet when the host element is clicked (running the\nslide-out animation via the ref). Usage: `<button rhombusSheetClose>Cancel</button>`.\nMust be used inside a sheet opened by {@link RhombusSheetService}; injecting\nthe {@link RhombusSheetRef} throws if it is absent.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusSheetComponent": {
+    "name": "RhombusSheetComponent",
+    "kind": "class",
+    "selector": "rhombus-sheet",
+    "description": "`<rhombus-sheet>` — the standard chrome for a sheet opened with\n{@link RhombusSheetService}: an optional heading, a scrollable body, and a\nfooter action row. Drop it as the root of the component you open to get\nconsistent padding, the slide-in surface, and accessible-name wiring.\n\nWhen `title` is set it drives the sheet's `aria-labelledby` (via the ref);\notherwise supply a `config.ariaLabel` at open time. A sheet with neither\nfails loud. The chrome does **not** re-declare `role=\"dialog\"` / `aria-modal`\n— the CDK dialog container already owns those.\n\nProject the body as default content and the buttons via `[rhombusSheetActions]`.\n\n```html\n<rhombus-sheet title=\"Filters\">\n  <rhombus-select ... />\n  <div rhombusSheetActions>\n    <rhombus-button appearance=\"text\" rhombusSheetClose>Cancel</rhombus-button>\n    <rhombus-button (click)=\"apply()\">Apply</rhombus-button>\n  </div>\n</rhombus-sheet>\n```",
+    "inputs": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Heading; when set it becomes the sheet's accessible name (`aria-labelledby`)."
+      },
+      {
+        "name": "dismissible",
+        "type": "boolean",
+        "description": "Show the header close (×) button. Accepts a bare attribute. Defaults to `true`."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "*",
+      "[rhombusSheetActions]"
+    ]
+  },
+  "RhombusSheetRef": {
+    "name": "RhombusSheetRef",
+    "kind": "class",
+    "selector": null,
+    "description": "Handle to an open sheet. Wraps CDK's `DialogRef` so consumers never touch\nAngular CDK types, and — per decision **D9** — **owns the exit animation**:\n`close()` removes the panel's `--open` class to run the slide-out transition,\nawaits `transitionend` (with a fallback timeout), then closes the underlying\nCDK dialog. The service sets `disableClose: true` on CDK so Escape / backdrop\ndismissals route through here and animate too.",
+    "inputs": [],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "close",
+        "type": "(result?: R) => void",
+        "description": "Close the sheet, optionally returning a result. Runs the slide-out\nanimation first, then closes the CDK dialog. Safe to call more than once."
+      },
+      {
+        "name": "afterClosed",
+        "type": "() => Observable<R | undefined>",
+        "description": "Emits the close result (or `undefined` on Escape/backdrop) then completes."
+      }
+    ]
+  },
+  "RhombusSheetService": {
+    "name": "RhombusSheetService",
+    "kind": "class",
+    "selector": null,
+    "description": "`RhombusSheetService` — opens a component (or template) as an edge-anchored\nslide-over sheet / drawer.\n\nBuilt on `@angular/cdk/dialog` `Dialog` (scrim, focus-trap, focus-restore,\nscroll-block, `role=\"dialog\"` + `aria-modal`) plus a\n`GlobalPositionStrategy` to pin the panel to an edge — **not** `MatDialog`,\nwhich centres its panel and hard-codes an `@angular/animations` transition.\nNo new peer dependency. The returned {@link RhombusSheetRef} owns the\nCSS-only exit animation (see D9). Pair it with the `<rhombus-sheet>` chrome.\n\n```ts\nprivate sheet = inject(RhombusSheetService);\n\nconst ref = this.sheet.open<Filters>(FilterSheetComponent, {\n  side: 'right',\n  data: { applied },\n});\nref.afterClosed().subscribe((filters) => { ... });\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": [
+      {
+        "name": "open",
+        "type": "<R = unknown, D = unknown>(content: ComponentType<unknown> | TemplateRef<unknown>, config?: RhombusSheetConfig<D>) => RhombusSheetRef<R>",
+        "description": "Open `content` as a sheet. `R` is the close-result type, `D` the data type."
+      }
+    ]
+  },
   "RhombusShellAsideDirective": {
     "name": "RhombusShellAsideDirective",
     "kind": "class",
@@ -2685,6 +2762,66 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "selector": "[shellNavFooter]",
     "description": "Marker for the sidenav footer slot. Apply it to the element you project, e.g.\n\n```html\n<rhombus-app-shell>\n  <nav shellNav>…</nav>\n  <div shellNavFooter>…sign-out / collapse control…</div>\n</rhombus-app-shell>\n```\n\nThe shell both selects this content (`ng-content select=\"[shellNavFooter]\"`)\nand detects its presence (`contentChild`) so the footer region only renders\nwhen something is projected into it.",
     "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusSkeletonComponent": {
+    "name": "RhombusSkeletonComponent",
+    "kind": "class",
+    "selector": "rhombus-skeleton",
+    "description": "`<rhombus-skeleton>` — a pure-CSS loading placeholder. Bespoke (no Material,\nno new tokens): a `--surface-2` block with an optional compositor-only shimmer\n(`--surface-3` sweep via `transform: translateX`). Under\n`prefers-reduced-motion` the sweep is dropped and the block stays a **static,\nnever-blank** surface.\n\nTwo a11y modes. By default the skeleton is **decorative** (`aria-hidden`) — the\nconsumer owns the `aria-busy`/live-region wiring on the surrounding region.\nPass a `label` to make the skeleton a polite `role=\"status\"` region that\nannounces the label (rendered as visually-hidden text so a live region has\nreal content to speak); its inner bars stay hidden from assistive tech.\n\n`lines` repeats bars *within* one text block; `count` repeats the *whole*\nblock (e.g. a list of placeholder rows).\n\n```html\n<!-- three text lines, last one shortened -->\n<rhombus-skeleton [lines]=\"3\" />\n\n<!-- avatar + two lines, announced to assistive tech -->\n<rhombus-skeleton variant=\"circle\" [width]=\"40\" label=\"Loading profile\" />\n\n<!-- a list of five placeholder rows -->\n<rhombus-skeleton variant=\"rect\" [height]=\"48\" [count]=\"5\" />\n```",
+    "inputs": [
+      {
+        "name": "variant",
+        "type": "SkeletonVariant",
+        "description": "Shape. Defaults to `'text'`.",
+        "enumValues": [
+          "text",
+          "circle",
+          "rect"
+        ]
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "description": "Block width (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "height",
+        "type": "string | number",
+        "description": "Block height (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "radius",
+        "type": "string | number",
+        "description": "Corner radius (number → px, string verbatim, null → variant default)."
+      },
+      {
+        "name": "lines",
+        "type": "number",
+        "description": "Number of line bars in a text block. Ignored for circle/rect."
+      },
+      {
+        "name": "lastLineWidth",
+        "type": "string",
+        "description": "Width of the final line when `lines > 1` (a ragged paragraph edge)."
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "description": "How many times to repeat the whole block."
+      },
+      {
+        "name": "animated",
+        "type": "boolean",
+        "description": "Show the shimmer sweep. Disabled under `prefers-reduced-motion`."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible label. `null`/empty → decorative (`aria-hidden`); a string → a\npolite `role=\"status\"` region that announces the label."
+      }
+    ],
     "outputs": [],
     "methods": []
   },
@@ -2838,6 +2975,82 @@ export const API_METADATA: Record<string, ApiEntry> = {
     ],
     "outputs": [],
     "methods": []
+  },
+  "RhombusStatComponent": {
+    "name": "RhombusStatComponent",
+    "kind": "class",
+    "selector": "rhombus-stat",
+    "description": "`<rhombus-stat>` — a display-only KPI tile designed to sit inside a\n`<rhombus-card>`. Bespoke (no Material, no new tokens): the delta pill reuses\nthe `--toast-success/error-*` tint pairs, the rest rides the surface/text\ncontract.\n\n**Two independent knobs (D8).** `trend` sets the arrow direction; `sentiment`\nsets the colour. They default to `auto` (derived from `delta`'s sign) but are\ndecoupled so an inverted metric keeps its true arrow — a falling churn rate\nshows a *down* arrow in a *positive* colour via `sentiment=\"positive\"`.\n\nDirection is conveyed **three ways** so it never rests on colour alone: the\nsentiment colour, a labelled arrow glyph, and a visually-hidden phrase\n(\"Increased\", overridable/translatable via `deltaLabel`).\n\nSemantics use `<dl><dt>label</dt><dd>value…</dd></dl>`. Project `[slot=icon]`\nfor leading media and default content (a sparkline / secondary line) after.\n\n```html\n<rhombus-card>\n  <rhombus-stat label=\"Revenue\" [value]=\"42800\" delta=\"+12%\" caption=\"vs. last month\" />\n</rhombus-card>\n\n<!-- inverted metric: down arrow, positive colour -->\n<rhombus-stat label=\"Churn\" value=\"2.1%\" delta=\"-0.4pt\" sentiment=\"positive\" />\n```",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Metric name (the `<dt>`)."
+      },
+      {
+        "name": "value",
+        "type": "string | number",
+        "description": "Primary value, rendered verbatim. `0` renders (guarded on `!= null`)."
+      },
+      {
+        "name": "delta",
+        "type": "string | number",
+        "description": "Change indicator. `null` → no pill."
+      },
+      {
+        "name": "trend",
+        "type": "StatTrend",
+        "description": "Arrow direction. `auto` (default) derives from `delta`'s sign.",
+        "enumValues": [
+          "up",
+          "down",
+          "neutral",
+          "auto"
+        ]
+      },
+      {
+        "name": "sentiment",
+        "type": "StatSentiment",
+        "description": "Colour role. `auto` (default) follows the resolved trend.",
+        "enumValues": [
+          "positive",
+          "negative",
+          "neutral",
+          "auto"
+        ]
+      },
+      {
+        "name": "caption",
+        "type": "string",
+        "description": "Secondary caption under the value (comparison period, context)."
+      },
+      {
+        "name": "size",
+        "type": "StatSize",
+        "description": "Tile scale, reflected to `data-size`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "deltaLabel",
+        "type": "string",
+        "description": "Screen-reader phrase for the change direction (default `Increased` /\n`Decreased` / `No change`). Override to translate or reword; the visible\n`delta` text supplies the magnitude."
+      },
+      {
+        "name": "live",
+        "type": "boolean",
+        "description": "Announce value changes to assistive tech (`aria-live=\"polite\"`)."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "[slot=icon]",
+      "*"
+    ]
   },
   "RhombusSwitchComponent": {
     "name": "RhombusSwitchComponent",

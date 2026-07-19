@@ -304,3 +304,44 @@ export type { RhombusIconSize } from './lib/icon/rhombus-icon.component';
 export { RhombusIconRegistry } from './lib/icon/rhombus-icon-registry';
 export { provideRhombusIcons } from './lib/icon/rhombus-icon.providers';
 export type { RhombusIconSet } from './lib/icon/rhombus-icon.providers';
+
+// Skeleton — a pure-CSS loading placeholder (bespoke, no Material, no new
+// tokens). Renders a --surface-2 block with an optional compositor-only shimmer,
+// dropped under prefers-reduced-motion (never blank). Decorative by default
+// (aria-hidden); pass a label for a role=status busy region. Distinct from
+// Progress (an indeterminate spinner/bar for a discrete wait) and Empty State
+// (genuinely no data): Skeleton mimics the *shape* of content that's still loading.
+export { RhombusSkeletonComponent } from './lib/skeleton/rhombus-skeleton.component';
+export type { SkeletonVariant } from './lib/skeleton/rhombus-skeleton.component';
+
+// Stat — a display-only KPI tile (bespoke, no Material, no new tokens) built to
+// sit inside a Card. Two decoupled knobs (D8): `trend` drives the arrow, and
+// `sentiment` drives the colour — so an inverted metric (falling churn) keeps a
+// down arrow in a positive colour. Direction is conveyed three ways (colour +
+// labelled arrow + visually-hidden phrase), never colour alone. Uses <dl>/<dt>/<dd>.
+export { RhombusStatComponent } from './lib/stat/rhombus-stat.component';
+export type {
+  StatTrend,
+  StatSentiment,
+  StatSize,
+} from './lib/stat/rhombus-stat.component';
+
+// Sheet / Drawer — a modal edge slide-over opened imperatively via
+// RhombusSheetService, built on @angular/cdk/dialog + overlay (NOT MatDialog).
+// The RhombusSheetRef owns the CSS-only exit animation (D9). Boundary: a Sheet
+// is a *temporary* modal panel (scrim + focus-trap) anchored to an edge — use
+// the App Shell sidenav for a *persistent* layout frame, a Dialog for a centred
+// modal, and a Popover for a small, non-modal, trigger-anchored panel.
+export { RhombusSheetService } from './lib/sheet/rhombus-sheet.service';
+export {
+  RhombusSheetRef,
+  RHOMBUS_SHEET_DATA,
+} from './lib/sheet/rhombus-sheet-ref';
+export { RhombusSheetComponent } from './lib/sheet/rhombus-sheet.component';
+export { RhombusSheetActionsDirective } from './lib/sheet/rhombus-sheet-actions.directive';
+export { RhombusSheetCloseDirective } from './lib/sheet/rhombus-sheet-close.directive';
+export type {
+  RhombusSheetConfig,
+  SheetSide,
+  SheetSize,
+} from './lib/sheet/sheet.types';
