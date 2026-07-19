@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.0](https://github.com/doug-williamson/RhombusKit/compare/v1.10.0...v1.11.0) (2026-07-18)
+
+
+### Features
+
+* **core:** v1.11 Parity primitives — Divider, Slider, Date Range Picker, Segmented ([#115](https://github.com/doug-williamson/RhombusKit/issues/115)) ([aabfdf4](https://github.com/doug-williamson/RhombusKit/commit/aabfdf41470f673ab6aafc7775fc6f39d256714f))
+* **core:** v1.12 Selection & entry — Autocomplete, Selection List, Number Input ([#117](https://github.com/doug-williamson/RhombusKit/issues/117)) ([ef22f89](https://github.com/doug-williamson/RhombusKit/commit/ef22f89b24def3f57f358c5c8c6b95abcd02c8f9))
+
 ## [1.10.0](https://github.com/doug-williamson/RhombusKit/compare/v1.9.0...v1.10.0) (2026-06-28)
 
 
