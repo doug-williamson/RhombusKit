@@ -12,6 +12,14 @@ const BUILT_INS = [
   'trending_up',
   'trending_down',
   'trending_flat',
+  // Stepper step-state indicators (number state renders text, not a glyph).
+  'edit',
+  'done',
+  'error',
+  // Reorder list functional affordances.
+  'drag_indicator',
+  'arrow_upward',
+  'arrow_downward',
 ];
 
 describe('RhombusIconRegistry', () => {
