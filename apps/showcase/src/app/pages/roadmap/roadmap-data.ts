@@ -43,52 +43,32 @@ export interface Roadmap {
 
 export const ROADMAP: Roadmap = {
   components: {
-    // Pack 3 — Dashboard & surfaces (v1.13): the current release train.
+    // Pack 4 — Rich interaction (v1.14): the current release train and the last
+    // of the four planned component packs (v1.11–v1.14).
     now: [
-      {
-        title: 'Skeleton',
-        detail:
-          'Pure-CSS shimmer placeholder blocks for text, avatars, and cards while async content loads — decorative by default, or an announced role="status" busy region. Material ships no equivalent.',
-        tag: 'v1.13',
-      },
-      {
-        title: 'Stat / Metric card',
-        detail:
-          'A KPI tile — label, large value, and a delta pill whose arrow (trend) and colour (sentiment) are decoupled, so an inverted metric like churn keeps its true direction — built to sit inside Card.',
-        tag: 'v1.13',
-      },
-      {
-        title: 'Sheet / Drawer',
-        detail:
-          'An edge-anchored modal slide-over (left, right, or bottom) on CDK dialog + overlay — focus trap, scrim, and a CSS-only slide with no @angular/animations. Replaces MatBottomSheet.',
-        tag: 'v1.13',
-      },
-    ],
-    // Pack 4 — Rich interaction (v1.14): the next train.
-    next: [
       {
         title: 'Stepper',
         detail:
-          'Wizard-style sequential steps with linear gating and per-step validation — a common migration blocker.',
+          'Wizard-style sequential steps that extend CdkStepper — linear gating, per-step stepControl validation, horizontal + vertical layouts, and a manual-activation tablist a11y model. A common Material migration blocker, closed.',
         tag: 'v1.14',
       },
       {
-        title: 'Drag-and-drop list',
+        title: 'Reorder list',
         detail:
-          'A keyboard-accessible wrapper over CDK drag-and-drop for reorderable lists, with move buttons and live-region announcements.',
+          'A keyboard-first reorderable list over CDK drag-and-drop: a full grab-mode (space to pick up, arrows to move, escape to cancel) plus move buttons and assertive LiveAnnouncer announcements — not just pointer dragging.',
         tag: 'v1.14',
       },
       {
         title: 'Carousel',
         detail:
-          'A swipeable slide carousel with autoplay, pagination, and keyboard navigation — for galleries and onboarding tours, beyond anything Material ships.',
+          'A bespoke APG auto-rotating carousel — slide/fade transitions, keyboard-navigable dots, autoplay that respects prefers-reduced-motion, and full SSR gating. For galleries and onboarding tours, beyond anything Material ships.',
         tag: 'v1.14',
       },
     ],
-    // The app-level Composite tier — community-shaped. Requests and upvotes move
-    // items up; each links to a prefilled proposal. (Packs 3 & 4 have graduated
-    // to Shipping now / Up next above.)
-    considering: [
+    // The app-level Composite tier — promoted to Up next now that all four
+    // component packs (v1.11–v1.14) have shipped. Still community-shaped:
+    // requests and upvotes reorder it; each links to a prefilled proposal.
+    next: [
       {
         title: 'Command palette',
         detail:
@@ -117,6 +97,9 @@ export const ROADMAP: Roadmap = {
         tag: 'Composite',
         link: { label: 'Request / upvote', url: requestComponentUrl('Data-viz primitives') },
       },
+    ],
+    // With the planned packs shipped, this column is now entirely community-shaped.
+    considering: [
       {
         title: 'Your idea here',
         detail:

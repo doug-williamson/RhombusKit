@@ -56,7 +56,7 @@ describe('MigratePageComponent', () => {
     const cmp = fixture.componentInstance as unknown as {
       toggle(api: string, checked: boolean): void;
     };
-    cmp.toggle('cdkDrag', true); // CDK gap → no request CTA
+    cmp.toggle('CdkPortal', true); // CDK gap → no request CTA
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;

@@ -43,13 +43,15 @@ describe('RoadmapPageComponent', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('links a component Considering gap to a prefilled component proposal', () => {
+  it('links a community-shaped Composite item to a prefilled component proposal', () => {
     const el = render();
     const components = el.querySelector('.track[data-track="components"]') as HTMLElement;
-    const considering = components.querySelector(
-      '.board__col[data-col="considering"]',
+    // The Composite tier (Command palette, Tree, …) is promoted to "Up next";
+    // each links to a prefilled proposal.
+    const next = components.querySelector(
+      '.board__col[data-col="next"]',
     ) as HTMLElement;
-    const link = considering.querySelector('.card__link') as HTMLAnchorElement;
+    const link = next.querySelector('.card__link') as HTMLAnchorElement;
     expect(link.href).toContain('template=3-new-component-proposal.yml');
   });
 });
