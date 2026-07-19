@@ -31,6 +31,20 @@ const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
     viewBox: '0 0 24 24',
     path: 'M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm1-17.93c3.94.49 7 3.85 7 7.93s-3.05 7.44-7 7.93V4.07z',
   },
+  // Trend arrows for the Stat KPI tile (decorative, but themed so they render on
+  // a font-less host). Reused by any future data-viz primitive.
+  trending_up: {
+    viewBox: '0 0 24 24',
+    path: 'M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z',
+  },
+  trending_down: {
+    viewBox: '0 0 24 24',
+    path: 'M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z',
+  },
+  trending_flat: {
+    viewBox: '0 0 24 24',
+    path: 'M22 12l-4-4v3H3v2h15v3z',
+  },
 };
 
 /**

@@ -2899,6 +2899,82 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "outputs": [],
     "methods": []
   },
+  "RhombusStatComponent": {
+    "name": "RhombusStatComponent",
+    "kind": "class",
+    "selector": "rhombus-stat",
+    "description": "`<rhombus-stat>` — a display-only KPI tile designed to sit inside a\n`<rhombus-card>`. Bespoke (no Material, no new tokens): the delta pill reuses\nthe `--toast-success/error-*` tint pairs, the rest rides the surface/text\ncontract.\n\n**Two independent knobs (D8).** `trend` sets the arrow direction; `sentiment`\nsets the colour. They default to `auto` (derived from `delta`'s sign) but are\ndecoupled so an inverted metric keeps its true arrow — a falling churn rate\nshows a *down* arrow in a *positive* colour via `sentiment=\"positive\"`.\n\nDirection is conveyed **three ways** so it never rests on colour alone: the\nsentiment colour, a labelled arrow glyph, and a visually-hidden phrase\n(\"Increased\", overridable/translatable via `deltaLabel`).\n\nSemantics use `<dl><dt>label</dt><dd>value…</dd></dl>`. Project `[slot=icon]`\nfor leading media and default content (a sparkline / secondary line) after.\n\n```html\n<rhombus-card>\n  <rhombus-stat label=\"Revenue\" [value]=\"42800\" delta=\"+12%\" caption=\"vs. last month\" />\n</rhombus-card>\n\n<!-- inverted metric: down arrow, positive colour -->\n<rhombus-stat label=\"Churn\" value=\"2.1%\" delta=\"-0.4pt\" sentiment=\"positive\" />\n```",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Metric name (the `<dt>`)."
+      },
+      {
+        "name": "value",
+        "type": "string | number",
+        "description": "Primary value, rendered verbatim. `0` renders (guarded on `!= null`)."
+      },
+      {
+        "name": "delta",
+        "type": "string | number",
+        "description": "Change indicator. `null` → no pill."
+      },
+      {
+        "name": "trend",
+        "type": "StatTrend",
+        "description": "Arrow direction. `auto` (default) derives from `delta`'s sign.",
+        "enumValues": [
+          "up",
+          "down",
+          "neutral",
+          "auto"
+        ]
+      },
+      {
+        "name": "sentiment",
+        "type": "StatSentiment",
+        "description": "Colour role. `auto` (default) follows the resolved trend.",
+        "enumValues": [
+          "positive",
+          "negative",
+          "neutral",
+          "auto"
+        ]
+      },
+      {
+        "name": "caption",
+        "type": "string",
+        "description": "Secondary caption under the value (comparison period, context)."
+      },
+      {
+        "name": "size",
+        "type": "StatSize",
+        "description": "Tile scale, reflected to `data-size`.",
+        "enumValues": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      {
+        "name": "deltaLabel",
+        "type": "string",
+        "description": "Screen-reader phrase for the change direction (default `Increased` /\n`Decreased` / `No change`). Override to translate or reword; the visible\n`delta` text supplies the magnitude."
+      },
+      {
+        "name": "live",
+        "type": "boolean",
+        "description": "Announce value changes to assistive tech (`aria-live=\"polite\"`)."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "[slot=icon]",
+      "*"
+    ]
+  },
   "RhombusSwitchComponent": {
     "name": "RhombusSwitchComponent",
     "kind": "class",

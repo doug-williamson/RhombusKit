@@ -4,7 +4,15 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RhombusIconRegistry } from './rhombus-icon-registry';
 import { provideRhombusIcons } from './rhombus-icon.providers';
 
-const BUILT_INS = ['more_vert', 'light_mode', 'dark_mode', 'contrast'];
+const BUILT_INS = [
+  'more_vert',
+  'light_mode',
+  'dark_mode',
+  'contrast',
+  'trending_up',
+  'trending_down',
+  'trending_flat',
+];
 
 describe('RhombusIconRegistry', () => {
   let registry: RhombusIconRegistry;

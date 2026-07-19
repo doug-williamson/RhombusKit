@@ -87,6 +87,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/components/progress', label: 'Progress' },
       { path: '/components/skeleton', label: 'Skeleton' },
+      { path: '/components/stat', label: 'Stat' },
       { path: '/components/avatar', label: 'Avatar' },
       { path: '/components/alert', label: 'Alert' },
     ],

@@ -313,3 +313,15 @@ export type { RhombusIconSet } from './lib/icon/rhombus-icon.providers';
 // (genuinely no data): Skeleton mimics the *shape* of content that's still loading.
 export { RhombusSkeletonComponent } from './lib/skeleton/rhombus-skeleton.component';
 export type { SkeletonVariant } from './lib/skeleton/rhombus-skeleton.component';
+
+// Stat — a display-only KPI tile (bespoke, no Material, no new tokens) built to
+// sit inside a Card. Two decoupled knobs (D8): `trend` drives the arrow, and
+// `sentiment` drives the colour — so an inverted metric (falling churn) keeps a
+// down arrow in a positive colour. Direction is conveyed three ways (colour +
+// labelled arrow + visually-hidden phrase), never colour alone. Uses <dl>/<dt>/<dd>.
+export { RhombusStatComponent } from './lib/stat/rhombus-stat.component';
+export type {
+  StatTrend,
+  StatSentiment,
+  StatSize,
+} from './lib/stat/rhombus-stat.component';

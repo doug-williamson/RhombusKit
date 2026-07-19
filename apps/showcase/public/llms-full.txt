@@ -55,6 +55,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 - Pagination: https://rhombuskit.online/components/pagination
 - Progress: https://rhombuskit.online/components/progress
 - Skeleton: https://rhombuskit.online/components/skeleton
+- Stat: https://rhombuskit.online/components/stat
 - Avatar: https://rhombuskit.online/components/avatar
 - Alert: https://rhombuskit.online/components/alert
 - App Shell: https://rhombuskit.online/components/app-shell
@@ -651,6 +652,17 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   readonly strokeWidth: _angular_core.InputSignal<number>
   readonly value: _angular_core.InputSignal<number>
 
+### RhombusStatComponent (class)
+  readonly caption: _angular_core.InputSignal<string>
+  readonly delta: _angular_core.InputSignal<string | number>
+  readonly deltaLabel: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly live: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly sentiment: _angular_core.InputSignal<StatSentiment>
+  readonly size: _angular_core.InputSignal<StatSize>
+  readonly trend: _angular_core.InputSignal<StatTrend>
+  readonly value: _angular_core.InputSignal<string | number>
+
 ### RhombusSwitchComponent (class)
   readonly checked: _angular_core.InputSignal<boolean>
   readonly checkedChange: _angular_core.OutputEmitterRef<boolean>
@@ -771,6 +783,15 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 ### SortState (interface)
   active: string
   direction: "" | "asc" | "desc"
+
+### StatSentiment (type)
+  type StatSentiment = 'positive' | 'negative' | 'neutral' | 'auto'
+
+### StatSize (type)
+  type StatSize = 'sm' | 'md' | 'lg'
+
+### StatTrend (type)
+  type StatTrend = 'up' | 'down' | 'neutral' | 'auto'
 
 ### TagSize (type)
   type TagSize = 'sm' | 'md'

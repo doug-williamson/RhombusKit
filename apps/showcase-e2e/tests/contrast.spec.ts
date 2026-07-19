@@ -53,6 +53,7 @@ const COMPONENTS = [
   '/components/pagination',
   '/components/progress',
   '/components/skeleton',
+  '/components/stat',
   '/components/avatar',
   '/components/alert',
   '/components/theme-toggle',

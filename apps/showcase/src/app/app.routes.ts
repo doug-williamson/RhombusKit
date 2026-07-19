@@ -244,6 +244,11 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./pages/skeleton/skeleton-page.component'),
       },
+      {
+        path: 'stat',
+        title: 'Stat',
+        loadComponent: () => import('./pages/stat/stat-page.component'),
+      },
       { path: '', redirectTo: 'button', pathMatch: 'full' },
     ],
   },
