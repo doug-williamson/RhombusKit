@@ -17,6 +17,35 @@
   --mat-button-toggle-label-text-font: var(--font-sans);
   --mat-button-toggle-label-text-weight: 500;
 
+  // Density (default-equal). Material sizes the segment with
+  //   .mat-button-toggle-appearance-standard .mat-button-toggle-label-content
+  //     { line-height: var(--mat-button-toggle-height, 40px) }
+  // — a LINE-HEIGHT, not a height, so the box is content-sized (it measures
+  // ~41.5px and is font-metric dependent; assert the line-height, never the box).
+  // RhombusKit never declared this token before, so today's rendering is
+  // Material's 40px fallback, and --control-height-md defaults to 2.5rem == 40px.
+  // Byte-identical at default.
+  //
+  // Declared HERE rather than via mat.button-toggle-overrides() in the bridge:
+  // .rhombus-segmented is bound on the GROUP element (rhombus-segmented.component.ts
+  // :58,:86), so it is already an ancestor of every mat-button-toggle. That makes
+  // the rebind bridge-independent and identical for global and scoped density.
+  //
+  // Applied UNIFORMLY — never per size variant. The sm/md/lg classes below are
+  // typography-only (all three render at 40px today), so binding them to
+  // --control-height-sm/lg would ship a -8px/+8px regression at DEFAULT density
+  // under a non-breaking headline. Growing segmented a real height ramp is a
+  // separate, breaking change.
+  //
+  // Compact resolves to 36px. That is Material's ramp index 4 (nominal -3), not
+  // -1, because button-toggle's ramp is FLAT at 40px across 0/-1/-2
+  // (button-toggle/_m3-button-toggle.scss:70) — a "true -1" would mean segmented
+  // has no compact step at all. Safe here and only here: button-toggle's density
+  // map has exactly ONE key and carries neither touch-target-display nor
+  // filled-label-display, so the -2 cliff that governs every other component
+  // does not exist for it. 36px clears SC 2.5.8 by 12px.
+  --mat-button-toggle-height: var(--control-height-md, 2.5rem);
+
   &.rhombus-segmented--sm {
     --mat-button-toggle-label-text-size: 0.8125rem;
   }
