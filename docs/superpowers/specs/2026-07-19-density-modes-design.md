@@ -1,7 +1,7 @@
 # RhombusKit — Density Modes: Design & Implementation Plan
 
 **Date:** 2026-07-20 — **revision v3.1** (v1 2026-07-19 → v2 2026-07-19 → v3 → v3.1 2026-07-20)
-**Status:** **Ready for implementation.** Architecture ratified with the maintainer and independently re-verified across three adversarial review rounds. v2's substitution inventory and non-breaking arithmetic survived unchanged; v2's three blocking defects (an inert provider, an impossible gate test, a default-density paginator regression) and v3's residual defects (a bridge-edit contradiction that would have broken PR 2, and five non-existent Material custom-property names that silently blinded the geometry gate) are all corrected. Full revision history in §1.2 — **read it before implementing**, since several corrections reverse a claim an earlier draft stated confidently. Residual questions are in the Open Decisions register (§13); **D6 and D7 must be answered before PR 2 begins.**
+**Status:** **Ready for implementation.** Architecture ratified with the maintainer and independently re-verified across three adversarial review rounds. v2's substitution inventory and non-breaking arithmetic survived unchanged; v2's three blocking defects (an inert provider, an impossible gate test, a default-density paginator regression) and v3's residual defects (a bridge-edit contradiction that would have broken PR 2, and five non-existent Material custom-property names that silently blinded the geometry gate) are all corrected. Full revision history in §1.2 — **read it before implementing**, since several corrections reverse a claim an earlier draft stated confidently. Residual questions are in the Open Decisions register (§13). **D6 and D7 — the two that gated PR 2 — were settled on 2026-07-20** (comfortable filled padding is **28/12**, and the content floor is stated per size), together with **D10**, a defect found while settling them: the line-height every form-field calculation depends on was holding by accident, and is now pinned. Nothing remaining in §13 blocks PR 1 or PR 2.
 **Scope:** The Foundations-track "Density modes" item — the sole entry in `foundations.next` (`apps/showcase/src/app/pages/roadmap/roadmap-data.ts:124-130`), described there as *"the highest-leverage gap enterprise Material migrators hit right after parity."*
 **Shape:** **Three MINOR releases**, not one train (§12). PR 1 is foundation-only and carries the non-breaking proof that gates PRs 2 and 3.
 
@@ -98,7 +98,7 @@ The v3 fix pass was itself reviewed by a closure lens and a fresh-eyes lens. Bot
 | **N2 / R17** | `ENVIRONMENT_INITIALIZER`'s deprecation cited as `core.d.ts:1861-1866`; R17 claimed the service imports `@angular/common`. | `:1857` (verified; `:384` for the function form was already exact). R17 corrected to core-only — `DOCUMENT` moved to `@angular/core` in v20. |
 | **N3** | *Reported but **rejected**.* The closure lens claimed button's display-companion range should be `:158-167`. | **Verified against source: `:159-168` is correct** — the five `*-touch-target-display` keys sit at `:159`, `:162`, `:163`, `:165`, `:168`. The original citation stands; only the mis-attribution to §8.3.1's table (which lists the `*-size` line, a different token) was reworded. *A "fix" that lands a wrong citation is a new defect — the same lesson as the api-snapshot union-order trap.* |
 
-**Carried into implementation, not fixed here** (fresh-eyes recommendations, recorded so they are decisions rather than oversights): PR 1 is releasable but large to *review* — the geometry-baseline harness has no dependency on the token work and can be split out if review drags. Rule T has no mechanical enforcement; the stylelint rule should land in PR 2 rather than as a follow-up. D6 and D7 must be answered **before** PR 2 authors §4.3's comfortable block. And §9.1 row 4b leans on `TestBed.createComponent` forcing the environment injector — prove it against a deliberately-broken provider before trusting it, since the prerender assertion is the only independent backstop.
+**Carried into implementation, not fixed here** (fresh-eyes recommendations, recorded so they are decisions rather than oversights): PR 1 is releasable but large to *review* — the geometry-baseline harness has no dependency on the token work and can be split out if review drags. Rule T has no mechanical enforcement; the stylelint rule should land in PR 2 rather than as a follow-up. ~~D6 and D7 must be answered **before** PR 2 authors §4.3's comfortable block.~~ **Both were settled on 2026-07-20** — see §13 D6/D7, and D10 for the pinned line-height they turned out to depend on; §3.3 and §7.2 carry the resolved numbers. And §9.1 row 4b leans on `TestBed.createComponent` forcing the environment injector — prove it against a deliberately-broken provider before trusting it, since the prerender assertion is the only independent backstop.
 
 ---
 
@@ -450,9 +450,10 @@ This is not a precedence rule — they touch **disjoint CSS properties**, which 
 /* packages/core/scss/_form-field.scss:26-28 — UNCHANGED by this epic */
 &--sm { font-size: 0.75rem; }                      /* type: 12px */
 
-/* packages/material-preset/src/styles/_bridge.scss — NEW, one key */
+/* packages/material-preset/src/styles/_bridge.scss — NEW, two keys */
 @include mat.form-field-overrides((
   container-height: var(--field-height, 3.5rem),   /* box; default 56 == shipped 56 */
+  container-text-line-height: 1.5em,               /* pins L; see below. No visual change. */
 ));
 
 /* packages/material-preset/src/styles/_density.scss — NEW, internal */
@@ -462,6 +463,18 @@ This is not a precedence rule — they touch **disjoint CSS properties**, which 
 ```
 
 Rendered: a **52px-tall** field with **12px** text (proof in §7.2). Before this epic the same markup gave a 56px field with 12px text. The `size` class did not change; only the app-wide box did, and only because the app opted in.
+
+**Why `container-text-line-height: 1.5em` is mandatory, not cosmetic.** Every height calculation in §7.2 and §8.4 uses `L = 1.5 × font-size`, and today that value holds **by accident**. Material declares
+
+```css
+line-height: var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height));
+```
+
+and `_bridge.scss` sets **neither** token — its typescale block (`:107-137`) declares `label-large/medium/small`, `body-medium` and `title-medium`, and stops short of `body-large`. Both `var()`s are therefore undefined, the declaration is invalid at computed-value time, `line-height` falls back to inheritance, and it picks up the unitless `line-height: 1.5` from `packages/tokens/src/styles/_reset.scss:20` — which multiplies each element's *own* font-size, i.e. the one the `size` class just set. Three coincidences in a row.
+
+`body-large` is the obvious missing entry in that typescale block. The moment anyone completes it — a plausible, well-intentioned tidy-up — the line-height becomes a fixed `rem`, stops tracking `size`, and **every D6/D7 number breaks silently**: no build error, no test failure, just fields that no longer centre their labels.
+
+`1.5em` resolves against the element's own font-size, so it is **byte-identical to what renders today** — the default-density baseline diff stays empty (§9.2) — while making the arithmetic load-bearing rather than accidental. **Add `--mat-form-field-container-text-line-height` to §9.2's `VARS`** so any future change to it fails the geometry gate loudly.
 
 **The nine misleading docstrings get corrected in PR 3.** All eight form-field components carry the identical string `/** Density scale applied via host classes; defaults to \`md\`. */` above `readonly size = input<FormFieldSize>('md');`:
 
@@ -1050,7 +1063,20 @@ Measured in headless Chromium against the real box, at a 16px root:
 | 44 (−3) | 10 | **50** ❌ | 44 ✅ |
 | 40 (−4) | 8 | **50** ❌ | 40 ✅ |
 
-The content floor is 32 + 18 = **50px**, so the height token binds down to 52 and clamps at 50 below. v1's 48px anchor was a genuine no-op downward; R3's recalibration to 52px rescues it — **by 2px**. That margin is not robust: under the SC 1.4.12 text-spacing stylesheet with a span-based trigger (`mat-select`, `mat-date-picker` — not every form-field child is an `<input>`), measured:
+**The content floor is per size, not a single number (D7, settled).** `L = 1.5 × font-size` and the `size` classes set 12/14/16px (`_form-field.scss:26-28`), so `L` = 18/21/24px and the floor is `padTop + padBottom + L`:
+
+| Padding sum | H | `sm` (L=18) | `md` (L=21) | `lg` (L=24) |
+|---|---|---|---|---|
+| compact **28** | 52 | 46 → slack **6** | 49 → slack **3** | 52 → slack **0** |
+| default **32** | 56 | 50 → slack **6** | 53 → slack **3** | 56 → slack **0** |
+| comfortable **40** | 64 | 58 → slack **6** | 61 → slack **3** | 64 → slack **0** |
+
+**Slack is uniform 6/3/0 across all three levels** — that is the real proof that moving padding in lockstep is mandatory and correctly calibrated. Two consequences an implementer must know:
+
+- **At `lg` the slack is zero at every level**, so the box is exactly content-sized and `min-height` never binds. Density at `lg` is delivered entirely by the padding. This is not a defect — under a text-spacing stylesheet the box *grows* rather than clips, which is the SC 1.4.12 behaviour we want — but a future level whose padding sum is not chosen against `L` will silently stop responding at `lg`.
+- Slack depends only on the padding **sum**, so D6's 28/12 split changes none of it.
+
+*(This replaces v2's "the content floor is 50px, so 52 rescues it by 2px" — true only at `sm`. At `md`, the default for all eight components, that framing implied headroom that does not exist. The lockstep conclusion was right; the proof was not reproducible.)* v1's 48px anchor was a genuine no-op downward. The remaining margin is thin at every size: under the SC 1.4.12 text-spacing stylesheet with a span-based trigger (`mat-select`, `mat-date-picker` — not every form-field child is an `<input>`), measured:
 
 | case | rendered |
 |---|---|
@@ -1068,7 +1094,22 @@ The content floor is 32 + 18 = **50px**, so the height token binds down to 52 an
 
 **Identical at all three levels.** At `--md` that is 1.5px low at every level — compact introduces **zero** new misalignment. Ship the height alone and the offset jumps to `(48 − 32 − 21)/2 = −2.5px` in the opposite direction while the box does not even shrink.
 
-**Comfortable must be (64, 20, 32, 8), not (64, 16, 24, 8).** Comfortable is authored, so the centring invariant is the thing to preserve: outlined needs 20/20 (`20+20+24 = 64`); keeping 16/16 gives offset `(64−32−24)/2 = 4px`, a visible drop. Filled preserves the 4:1 headroom ratio that reserves space for the floated label: 32/8 = 40, and `32+8+24 = 64`.
+**Comfortable must be (64, 20, 28, 12), not (64, 16, 24, 8) and not (64, 20, 32, 8).** Comfortable is authored, so the centring invariant is the thing to preserve: outlined needs 20/20 (`20+20+24 = 64`); keeping 16/16 gives offset `(64−32−24)/2 = 4px`, a visible drop.
+
+**The filled pair is 28/12 — forced, not chosen (D6, settled).** The resting label is anchored to the *container height*, `.mat-mdc-floating-label { top: calc(var(--mat-form-field-container-height, 56px) / 2) }`, so the residual offset is `H/2 − padTop − L/2`. Holding that constant across levels therefore requires only:
+
+> **Centring invariant: `H/2 − padTop = 4px` at every level.**
+
+This form is **size-independent** — `L` cancels — so it holds simultaneously at `sm`, `md` and `lg`, which the earlier per-size arithmetic did not:
+
+| Level | H/2 | filled padTop | `H/2 − padTop` | |
+|---|---|---|---|---|
+| compact | 26 | 22 | **4** | ✓ |
+| default *(shipped)* | 28 | 24 | **4** | ✓ |
+| comfortable — **28/12** | 32 | **28** | **4** | ✓ |
+| ~~comfortable — 32/8~~ | 32 | 32 | 0 | ✗ 4px label drop |
+
+`padTop = 28` is the only value that satisfies it. The rejected 32/8 optimised the 4:1 *headroom ratio*, which is the wrong quantity — only `padTop` moves the label. The padding **sum stays 40** either way, so §7.2's content-floor arithmetic is untouched: D6 and D7 are independent.
 
 **The −2 cliff is safe at compact, by two independent margins.** `form-field-filled-label-display` flips to `none` at index 3 = scale −2 = 48px (`_m3-form-field.scss:130`). Our compact is 52px = index 2 = `block`. Additionally we never emit that token at all.
 
@@ -1696,6 +1737,11 @@ export const FIXED_BOX = [
 // than the rendered box.
 export const VARS = [
   '--mat-form-field-container-height', '--mat-form-field-container-vertical-padding',
+  // Pinned to 1.5em by the bridge (§3.3). Every height calculation in §7.2/§8.4 uses
+  // L = 1.5 x font-size; before it was pinned that held only by inheritance from
+  // _reset.scss:20. Probed here so completing the bridge's typescale with `body-large`
+  // — which would break the arithmetic silently — fails this gate instead.
+  '--mat-form-field-container-text-line-height',
   '--mat-table-header-container-height', '--mat-table-row-item-container-height',
   '--mat-table-footer-container-height',
   // NOTE: the list family's custom properties carry the component prefix TWICE —
@@ -2364,10 +2410,11 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 | **D3** | **Reorder-list** is excluded (§6.3) only because it appeared in no tier, not for a principled reason. A user setting compact may reasonably expect it to track alongside selection-list and nav-list. | **Leave it excluded in this epic and revisit if asked.** Its 2rem drag handle is a SC 2.5.7 drag target that must not shrink, so a compact step would move padding only — low value, non-zero risk. | Add it to Tier 2 in PR 3. Additive and non-breaking either way. |
 | **D4** | **The app-shell 56px inert `min-height`** (§7.9) is a real pre-existing bug that this epic deliberately does not fix. | **File it now as a separate issue**, targeted at its own MINOR with its own changelog line, so it is not silently inherited. | Fix it inside PR 3 — rejected: it is a visible 8px breaking change under a non-breaking headline. |
 | **D5** | **Segmented's SC 1.4.12 line-height collapse** (§8.5) is pre-existing on `main`, and its only fix needs a `.mat-button-toggle` selector, against the repo's standing no-`.mat-*` rule. | **File as a standalone a11y bug, out of this epic.** Fixing it requires a deliberate decision to breach the styling convention, which deserves its own review. | Grant the exception and fix it in PR 2 — rejected for the reason in §8.5. |
-| **D6** *(new in v3)* | **§7.2's label-centring formula is wrong for the FILLED appearance.** The resting label is anchored to the container height — `.mat-mdc-floating-label { top: calc(var(--mat-form-field-container-height, 56px) / 2) }` — so residual offset is `H/2 − (padTop + L/2)`, which equals §7.2's `(H − padTop − padBottom − L)/2` **only when `padTop == padBottom`**. True for outlined (16/16, 14/14, 20/20); false for filled-with-label. At `--md` (L=21): default `(56, 24/8)` → −6.5px, compact `(52, 22/6)` → −6.5px ✅, **comfortable `(64, 32/8)` → −10.5px ✗** — a 4px drift. §7.2's justification for choosing 32/8 ("preserves the 4:1 headroom ratio") optimises the wrong quantity: only `padTop` moves the label. | **Change comfortable's filled pair to 28/12** — same sum (40), and it holds the invariant exactly (`32 − 28 − 10.5 = −6.5`). Raised in the v3 review pass but **outside this fix pass's mandate**, because it is a numeric change to a ratified calibration. Take the call before PR 2 authors §4.3's comfortable block, which currently carries 32/8. | Ship 32/8 and accept a 4px label drop in comfortable-filled, documented. Rejected on the face of it — comfortable is authored, so the centring invariant is the one thing it exists to preserve. |
-| **D7** *(new in v3)* | **§7.2's "content floor = 50px" arithmetic is only true at `size="sm"`.** `L = 1.5 × font-size` gives 18/21/24px for sm/md/lg (`_form-field.scss:26-28`), so with padding at 32 the floor is 50 / **53** / **56**. At `md` — the default for all eight components — there is **negative** margin at H=52, not the claimed 2px. The *conclusion* (lockstep is mandatory) survives and is strengthened; the stated proof is not reproducible at `md`/`lg`. Note also that at compact-lockstep, `lg` has exactly **zero** slack (28+24 = 52), not a uniform margin. | **Restate §7.2's arithmetic per size** and drop the "rescues it by 2px" framing, which reads as headroom that does not exist at the default size. No value changes — the lockstep decision is unaffected. Deferred here only because §7.2's measured tables would need re-running. | Leave as-is. Rejected: an implementer trusting "2px of headroom at compact" would mis-size a future level. |
+| **D6** ~~*(new in v3)*~~ **SETTLED 2026-07-20** | **§7.2 label-centring was wrong for the FILLED appearance.** The resting label anchors to the container height, so residual offset is `H/2 − padTop − L/2` — equal to v2's `(H − padTop − padBottom − L)/2` only when `padTop == padBottom` (true for outlined, false for filled-with-label). Comfortable `(64, 32/8)` drifted 4px. | **RESOLVED: comfortable filled = 28/12.** Restated size-independently as the **centring invariant `H/2 − padTop = 4px`** (§3.3) — `L` cancels, so it holds at `sm`/`md`/`lg` simultaneously. `padTop = 28` is the only satisfying value; the padding **sum stays 40**, so D7 is untouched. §3.3 and §7.2 updated. | ~~Ship 32/8~~ — rejected: comfortable is authored, so the centring invariant is the one thing it exists to preserve. |
+| **D7** ~~*(new in v3)*~~ **SETTLED 2026-07-20** | **§7.2's "content floor = 50px" held only at `size="sm"`.** `L = 1.5 × font-size` gives 18/21/24px, so the floor is 50/53/56 — at `md`, the default for all eight components, the claimed 2px margin was **negative**. | **RESOLVED: restated per size, no values change.** §7.2 now carries the full 3×3 table showing slack is a **uniform 6/3/0 across all three levels** — a stronger proof that lockstep is mandatory than the figure it replaces. Two consequences documented: at `lg` slack is **zero at every level** (the box is content-sized; density is delivered by padding, and `min-height` never binds), and slack depends only on the padding **sum**, so D6 does not disturb it. | ~~Leave as-is~~ — rejected: an implementer trusting "2px of headroom at compact" would mis-size a future level. |
 | **D8** *(new in v3)* | **The table-local `density="default"` escape does not cover the paginator.** §3.2 promises `'default'` restores default geometry inside a globally-compact app, and §7.3 emits real blocks for header/footer/row — but the only paginator rebinds are for `compact` and `dense`. Under a global compact, a table with `density="default"` gets 52px rows and a 56px header but a **52px paginator bar**; symmetrically `density="comfortable"` in a default app gives 60px rows and a 56px bar. | **Give `--mat-paginator-container-size` the same four-step treatment** the three table heights get in §7.3's SCSS (`default` 3.5rem / `comfortable` 3.75rem / `compact` 3.25rem / `dense` 3rem). It is four lines and it makes the escape actually complete. Deferred here because it adds emitted CSS in a pass whose mandate was to fix defects, not extend behaviour. | Document the paginator as outside the table-local escape. Rejected — §3.2's promise would then be false as written. |
 | **D9** *(new in v3)* | **`_density.scss`'s `&` nesting silently no-ops unless `material-bridge()` is included at `:root`/`html`.** `_bridge.scss:20-22` documents the include point as "whatever selector the caller includes it under", and `index.scss:5` as "the element that carries `data-theme`". A consumer including it at `.app` compiles `.app[data-density='compact']`, which never matches — the service writes the attribute on `documentElement` only. §11.4's caveat covers *whether* the bridge is included, never *where*. | **State it as a hard constraint** in §4.3 and §11.4: for density, `material-bridge()` MUST be included at `:root` or `html`. Optionally add a dev-mode assertion alongside the §11.5 probe — if `data-density` is set and `getComputedStyle(documentElement).getPropertyValue('--mat-form-field-container-height')` does not change between levels, warn. | Leave implicit. Rejected — this is a silent total no-op for a consumer who followed the bridge's own documentation. |
+| **D10** *(new, raised while settling D6/D7)* | **`L = 1.5 × font-size` held by accident.** Material reads `var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))`; `_bridge.scss` sets neither (its typescale at `:107-137` stops short of `body-large`), so the declaration is invalid at computed-value time, `line-height` inherits, and picks up the unitless `1.5` from `_reset.scss:20`. Completing the typescale with `body-large` — an obvious tidy-up — would turn it into a fixed `rem`, stop it tracking `size`, and break every D6/D7 number with no build error and no test failure. | **RESOLVED, applied: pin `container-text-line-height: 1.5em`** in the same `mat.form-field-overrides()` call that gains `container-height` (§3.3). `em` resolves against the element's own font-size, so it is **byte-identical to today** and the default baseline diff stays empty. `--mat-form-field-container-text-line-height` added to §9.2 `VARS` so a future change fails the geometry gate loudly. | Leave it inherited. Rejected: the entire form-field calibration rests on it, and nothing would catch the break. |
 
 **Closed by this revision (v3) — recorded so they are not reopened:**
 
