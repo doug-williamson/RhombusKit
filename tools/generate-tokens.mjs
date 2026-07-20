@@ -113,12 +113,18 @@ writeFileSync(resolve(generatedDir, 'theme-rhombus.css'), themeCSS);
 
 // --- Generate _primitives.scss ---
 
+// NOTE: `densityCSS` is appended here too, not only to primitives.css. The SCSS
+// entry point is what consumers actually pull in (`@use '@rhombuskit/tokens/scss'`),
+// so emitting the level blocks into the .css alone leaves density inert for every
+// real app — default resolves correctly and nothing else does. Both outputs are
+// built from the same `densityCSS` string so they cannot diverge again.
 const primitivesSCSS = [
   BANNER,
   '// Import via: @use \'@rhombuskit/tokens/scss/primitives\';\n\n',
   ':root {\n',
   ...Object.entries(flatPrimitives).map(([k, v]) => `  --${k}: ${v};\n`),
   '}\n',
+  densityCSS,
 ].join('');
 
 writeFileSync(resolve(generatedDir, '_primitives.scss'), primitivesSCSS);

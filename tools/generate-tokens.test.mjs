@@ -24,6 +24,22 @@ const css = readFileSync(
   resolve(root, 'packages/tokens/src/generated/primitives.css'),
   'utf8'
 );
+// The SCSS entry point is what consumers actually pull in
+// (`@use '@rhombuskit/tokens/scss'` — see apps/showcase/src/styles.scss:5), so
+// it must carry the level blocks too. Emitting them into primitives.css alone
+// left density INERT in every real app: default resolved correctly and
+// [data-density] did nothing, which no default-geometry gate can detect because
+// nothing about default is wrong. Caught by probing a live page, not by a test —
+// hence this assertion.
+const scss = readFileSync(
+  resolve(root, 'packages/tokens/src/generated/_primitives.scss'),
+  'utf8'
+);
+// Same for the batteries-included theme pack, which embeds the primitives.
+const themeCss = readFileSync(
+  resolve(root, 'packages/tokens/src/generated/theme-rhombus.css'),
+  'utf8'
+);
 const snapshot = JSON.parse(
   readFileSync(resolve(root, 'packages/tokens/primitives.snapshot.json'), 'utf8')
 );
@@ -224,7 +240,33 @@ assert.ok(
   'sanity: scoped blocks are expected to repeat names, which is why verify-tokens must dedupe'
 );
 
+// ---------------------------------------------------------------------------
+// A3 — every emitted artefact carries the level blocks, not just primitives.css.
+// ---------------------------------------------------------------------------
+
+for (const [label, source] of [
+  ['_primitives.scss', scss],
+  ['theme-rhombus.css', themeCss],
+]) {
+  const b = blocks(source);
+  for (const level of ['compact', 'comfortable']) {
+    const sel = `:root[data-density='${level}']`;
+    assert.ok(
+      b[sel],
+      `${label} is missing the ${sel} block — density would be inert for consumers ` +
+        `entering through this artefact, while default still resolves correctly`
+    );
+    for (const name of DENSITY_NAMES) {
+      assert.equal(
+        b[sel][name],
+        expected[sel][name],
+        `${label} ${sel} { ${name} } must match primitives.css`
+      );
+    }
+  }
+}
+
 console.log(
-  `generate-tokens: OK — 3 blocks, ${DENSITY_NAMES.length} density names, ` +
+  `generate-tokens: OK — 3 blocks × 3 artefacts, ${DENSITY_NAMES.length} density names, ` +
     `${new Set(published).size} published primitives`
 );

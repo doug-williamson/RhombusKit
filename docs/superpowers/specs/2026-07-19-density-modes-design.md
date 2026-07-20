@@ -1079,20 +1079,25 @@ Measured in headless Chromium against the real box, at a 16px root:
 | 44 (−3) | 10 | **50** ❌ | 44 ✅ |
 | 40 (−4) | 8 | **50** ❌ | 40 ✅ |
 
-**The content floor is per size, not a single number (D7, settled).** `L = 1.5 × font-size` and the `size` classes set 12/14/16px (`_form-field.scss:26-28`), so `L` = 18/21/24px and the floor is `padTop + padBottom + L`:
+**The content floor is a single number, and slack is zero (D7, settled — then corrected by measurement).**
 
-| Padding sum | H | `sm` (L=18) | `md` (L=21) | `lg` (L=24) |
-|---|---|---|---|---|
-| compact **28** | 52 | 46 → slack **6** | 49 → slack **3** | 52 → slack **0** |
-| default **32** | 56 | 50 → slack **6** | 53 → slack **3** | 56 → slack **0** |
-| comfortable **40** | 64 | 58 → slack **6** | 61 → slack **3** | 64 → slack **0** |
+`L` is **24px at every size**, and the floor is `padTop + padBottom + L`:
 
-**Slack is uniform 6/3/0 across all three levels** — that is the real proof that moving padding in lockstep is mandatory and correctly calibrated. Two consequences an implementer must know:
+| Padding sum | H | content floor | slack |
+|---|---|---|---|
+| compact **28** | 52 | 52 | **0** |
+| default **32** | 56 | 56 | **0** |
+| comfortable **40** | 64 | 64 | **0** |
 
-- **At `lg` the slack is zero at every level**, so the box is exactly content-sized and `min-height` never binds. Density at `lg` is delivered entirely by the padding. This is not a defect — under a text-spacing stylesheet the box *grows* rather than clips, which is the SC 1.4.12 behaviour we want — but a future level whose padding sum is not chosen against `L` will silently stop responding at `lg`.
-- Slack depends only on the padding **sum**, so D6's 28/12 split changes none of it.
+**The form field is exactly content-sized at every level, so `min-height` never binds and lockstep padding is not merely advisable — it is the only thing that moves the box.** That is a stronger proof than the per-size version this replaces, and it is measured rather than derived.
 
-*(This replaces v2's "the content floor is 50px, so 52 rescues it by 2px" — true only at `sm`. At `md`, the default for all eight components, that framing implied headroom that does not exist. The lockstep conclusion was right; the proof was not reproducible.)* v1's 48px anchor was a genuine no-op downward. The remaining margin is thin at every size: under the SC 1.4.12 text-spacing stylesheet with a span-based trigger (`mat-select`, `mat-date-picker` — not every form-field child is an `<input>`), measured:
+**Why `L` is constant, and the shipped bug behind it.** Two earlier drafts assumed `L = 1.5 × font-size` with the `size` classes supplying 12/14/16px (`_form-field.scss:26-28`), giving `L` = 18/21/24 and slack 6/3/0. Measured in a browser, all three variants are **identical**: wrapper font 16px, input font 16px, line-height 24px, infix 56px. The `size` input is **inert** — `.rhombus-form-field--sm` (specificity 0,1,0) and `.mat-mdc-form-field` (also 0,1,0) both set `font-size`, and Material injects its component CSS at runtime *after* `styles.css`, so Material wins on source order.
+
+This is the **same cascade trap the button hit** — its `size` input was silently dead in v1.0 until the variants were anchored on `.mdc-button` for (0,2,0). Form-field never received the equivalent fix. It is a real shipped bug affecting eight components, **and it is out of scope here**: fixing it changes rendering for every consumer using `size` today, which would violate the one invariant PR 1 exists to prove. Tracked as a standalone change.
+
+**Consequence for D-E.** "Density owns the box, `size` owns the type" describes the intended end state, not the current one — today `size` owns nothing. The non-breaking guarantee is unaffected (an inert input stays inert), but the division of labour only becomes true once the cascade fix lands. State it that way rather than implying it already holds.
+
+*(This supersedes both v2's "the content floor is 50px, so 52 rescues it by 2px" — true only at `sm` — and v3.1's 6/3/0 table, which was right to reject a single number but derived `L` from a `size` input that does not work.)* v1's 48px anchor was a genuine no-op downward. The remaining margin is thin at every size: under the SC 1.4.12 text-spacing stylesheet with a span-based trigger (`mat-select`, `mat-date-picker` — not every form-field child is an `<input>`), measured:
 
 | case | rendered |
 |---|---|
