@@ -312,6 +312,7 @@
 ### RhombusDataTableComponent (class)
   readonly columns: _angular_core.InputSignal<ColumnDef<T>[]>
   readonly data: _angular_core.InputSignal<DataSource<T> | T[]>
+  readonly density: _angular_core.InputSignal<RhombusDensity | "dense">
   readonly emptyMessage: _angular_core.InputSignal<string>
   readonly emptyTitle: _angular_core.InputSignal<string>
   readonly loading: _angular_core.InputSignal<boolean>
