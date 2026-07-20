@@ -79,11 +79,18 @@ export function provideRhombusDensity(mode: RhombusDensity): EnvironmentProvider
  * construction. Dev-mode only: one `getComputedStyle` read at app init.
  */
 function warnOnMaterialDensity(doc: Document): void {
-  // Injected DOCUMENT, never the `document` global: this runs at prerender.
-  // `doc.defaultView` is null there, which is a fact about the document rather
-  // than a guess about what exists in the global scope.
+  // Injected DOCUMENT, never the `document` global: this runs at prerender too.
+  //
+  // Note what `defaultView` does and does not tell you here. Under
+  // @angular/platform-server the document comes from domino, which DOES set
+  // `document.defaultView` and DOES provide `getComputedStyle` — but its
+  // implementation returns the element's inline style declaration, so the probe
+  // reads '' and the function falls out at the `!probe` check below. So this is
+  // a capability check, not a server/browser discriminator: it costs one cheap
+  // read on the server and correctly reports nothing, because a stylesheet-based
+  // Material density scale is not observable there in the first place.
   const view = doc.defaultView;
-  if (!view) return;
+  if (typeof view?.getComputedStyle !== 'function') return;
   const probe = view
     .getComputedStyle(doc.documentElement)
     .getPropertyValue('--mat-checkbox-state-layer-size')

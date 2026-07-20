@@ -480,7 +480,28 @@ This is not a precedence rule — they touch **disjoint CSS properties**, which 
 
 Rendered: a **52px-tall** field with **12px** text (proof in §7.2). Before this epic the same markup gave a 56px field with 12px text. The `size` class did not change; only the app-wide box did, and only because the app opted in.
 
-**Why `container-text-line-height: 1.5em` is mandatory, not cosmetic.** Every height calculation in §7.2 and §8.4 uses `L = 1.5 × font-size`, and today that value holds **by accident**. Material declares
+**Why the form field's line-height is deliberately NOT pinned (v3.2 reversal).** Every height
+calculation in §7.2 and §8.4 uses `L = 24px`, and that value arrives by **inheritance**: Material
+reads `var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))`,
+the bridge sets neither, so the declaration is invalid at computed-value time and `line-height`
+inherits.
+
+v3.1 pinned `container-text-line-height: 1.5em` here to make that load-bearing rather than
+accidental, on the reasoning that `em` resolves against the element's own font-size and so
+reproduces today's value. **That was measured in one context and is false in general.** An
+inherited value varies by ancestor and no fixed declaration can reproduce it: at the document root
+the inherited value is 24px and `1.5em` is also 24px, but inside `mat-dialog-content` or a
+`.mat-mdc-row` — ancestors this same bridge creates via `--mat-sys-body-medium-line-height` (`:129`)
+— the inherited value is **20px** while `1.5em` computes to **21px**. A `rows="3"` textarea in a
+dialog grows 92px → 95px at DEFAULT density, in an app that never opted in.
+
+So the pin is reverted and the hazard it was aimed at — someone completing the typescale with
+`body-large`, or re-adding the pin — is guarded **statically** instead, in
+`tools/verify-component-styles.mjs`. A rendered assertion provably cannot do it: at the root the
+pinned and inherited values coincide, and the showcase renders no form field under either
+divergent ancestor. `apps/showcase-e2e/tests/geometry.spec.ts` still asserts the root value of
+24px, which catches the `body-large` case, and says so precisely rather than implying it covers
+both.
 
 ```css
 line-height: var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height));
@@ -2056,18 +2077,20 @@ In dev mode `provideRhombusDensity()` probes `--mat-checkbox-state-layer-size` *
 
 Each is a **MINOR**. Each is independently shippable, independently verifiable, and independently revertible. v1 proposed all of this as one train 2–4× the size of any shipped component pack.
 
-### PR 1 — Foundation. **Zero component geometry change, and zero `packages/core` TypeScript.**
+### PR 1 — Foundation. **Zero component geometry change.**
+
+*(v3.2: this heading also said "and zero `packages/core` TypeScript", and §12 assigned the service/provider/type to PR 2. Both were wrong, and the adversarial review caught the contradiction against what shipped. A foundation whose entry point lands in a later PR is inert and untestable on its own — `provideRhombusDensity()` is what makes PR 1 independently verifiable and independently releasable. The service, provider, type, barrel entry and their two specs are PR 1. The invariant that matters is unchanged and unweakened: **zero component geometry change**.)*
 
 **Scope**
 
 - [ ] `densityDefaults` / `DensityScale` / typed `densityLevels` + the three default exports in `packages/tokens/src/spec/primitives.ts` (§5.1), including the floor comment.
-- [ ] `tools/generate-tokens.mjs` scoped emission + the `tokens.density` export (§5.2, §5.4).
+- [ ] `tools/generate-tokens.mjs` scoped emission into **all three** emitted artefacts — `primitives.css`, `_primitives.scss` and `theme-rhombus.css` (§5.2). *(The SCSS entry point is what consumers actually enter through; emitting into the CSS alone left density live at default and inert under `[data-density]`.)* **The `tokens.density` TS export moves to PR 3**, where `/density` is the first thing that reads it — shipping an unused generated export earlier is speculative.
 - [ ] Three prefix registrations: `verify-tokens.mjs:21`, `generate-mcp-data.mjs:121`, `generate-design-tokens.mjs:42-48` (§4.5).
 - [ ] The `verify-tokens` dedupe (§5.3) — **mandatory, not cosmetic**.
 - [ ] `packages/material-preset/src/styles/_density.scss` **created and wired but empty of per-component values** — `@use 'density'` from `_bridge.scss` (**not** `@forward` in `index.scss`: the file declares itself INTERNAL, and forwarding would publish `rhombus.density-levels()` as consumer-callable — §4.3), `'_density.scss'` added to `tools/copy-material-preset-assets.mjs:13`, `density-levels()` included from `material-bridge()` at `_bridge.scss:25` (§4.3).
 - [ ] The three **default-equal substitute-var keys** on existing bridge calls (§2.3): `mat.form-field-overrides()` `:168-180`, `mat.table-overrides()` `:216-221`, `mat.tabs-overrides()` `:248-260`. Each must be provably default-equal, so the baseline diff stays empty.
 - [ ] `tools/generate-tokens.test.mjs` + `"test:tokens"` script + CI step (§9.1 rows 1, 1b, 1c).
-- [ ] `'target-size': { enabled: false }` in `packages/core/src/testing/axe.ts` with the pointer comment (§8.8).
+- [ ] ~~`'target-size': { enabled: false }` in the axe helper~~ — **moves to PR 2**, with the components whose targets it concerns. jest-axe does not check target size by default, so in PR 1 it guards nothing (§8.8).
 - [ ] Regen chain (§10.3).
 
 **Explicitly NOT in PR 1:** any component SCSS change; any `mat.*-overrides()` geometry key; **any `packages/core` TypeScript — the service, provider, types, barrel entry and their specs all land in PR 2** (§1.2 M3); `provideRhombusDensity` in the showcase's `app.config.ts` (§10.1 item 3); the `/density` page.
@@ -2159,7 +2182,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 | **D7** ~~*(new in v3)*~~ **SETTLED 2026-07-20** | **§7.2's "content floor = 50px" held only at `size="sm"`.** `L = 1.5 × font-size` gives 18/21/24px, so the floor is 50/53/56 — at `md`, the default for all eight components, the claimed 2px margin was **negative**. | **RESOLVED: restated per size, no values change.** §7.2 now carries the full 3×3 table showing slack is a **uniform 6/3/0 across all three levels** — a stronger proof that lockstep is mandatory than the figure it replaces. Two consequences documented: at `lg` slack is **zero at every level** (the box is content-sized; density is delivered by padding, and `min-height` never binds), and slack depends only on the padding **sum**, so D6 does not disturb it. | ~~Leave as-is~~ — rejected: an implementer trusting "2px of headroom at compact" would mis-size a future level. |
 | **D8** *(new in v3)* | **The table-local `density="default"` escape does not cover the paginator.** §3.2 promises `'default'` restores default geometry inside a globally-compact app, and §7.3 emits real blocks for header/footer/row — but the only paginator rebinds are for `compact` and `dense`. Under a global compact, a table with `density="default"` gets 52px rows and a 56px header but a **52px paginator bar**; symmetrically `density="comfortable"` in a default app gives 60px rows and a 56px bar. | **Give `--mat-paginator-container-size` the same four-step treatment** the three table heights get in §7.3's SCSS (`default` 3.5rem / `comfortable` 3.75rem / `compact` 3.25rem / `dense` 3rem). It is four lines and it makes the escape actually complete. Deferred here because it adds emitted CSS in a pass whose mandate was to fix defects, not extend behaviour. | Document the paginator as outside the table-local escape. Rejected — §3.2's promise would then be false as written. |
 | **D9** *(new in v3)* | **`_density.scss`'s `&` nesting silently no-ops unless `material-bridge()` is included at `:root`/`html`.** `_bridge.scss:20-22` documents the include point as "whatever selector the caller includes it under", and `index.scss:5` as "the element that carries `data-theme`". A consumer including it at `.app` compiles `.app[data-density='compact']`, which never matches — the service writes the attribute on `documentElement` only. §11.4's caveat covers *whether* the bridge is included, never *where*. | **State it as a hard constraint** in §4.3 and §11.4: for density, `material-bridge()` MUST be included at `:root` or `html`. Optionally add a dev-mode assertion alongside the §11.5 probe — if `data-density` is set and `getComputedStyle(documentElement).getPropertyValue('--mat-form-field-container-height')` does not change between levels, warn. | Leave implicit. Rejected — this is a silent total no-op for a consumer who followed the bridge's own documentation. |
-| **D10** *(new, raised while settling D6/D7)* | **`L = 1.5 × font-size` held by accident.** Material reads `var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))`; `_bridge.scss` sets neither (its typescale at `:107-137` stops short of `body-large`), so the declaration is invalid at computed-value time, `line-height` inherits, and picks up the unitless `1.5` from `_reset.scss:20`. Completing the typescale with `body-large` — an obvious tidy-up — would turn it into a fixed `rem`, stop it tracking `size`, and break every D6/D7 number with no build error and no test failure. | **RESOLVED, applied: pin `container-text-line-height: 1.5em`** in the same `mat.form-field-overrides()` call that gains `container-height` (§3.3). `em` resolves against the element's own font-size, so it is **byte-identical to today** and the default baseline diff stays empty. `--mat-form-field-container-text-line-height` added to §9.2 `VARS` so a future change fails the geometry gate loudly. | Leave it inherited. Rejected: the entire form-field calibration rests on it, and nothing would catch the break. |
+| **D10** *(new, raised while settling D6/D7)* | **`L = 1.5 × font-size` held by accident.** Material reads `var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))`; `_bridge.scss` sets neither (its typescale at `:107-137` stops short of `body-large`), so the declaration is invalid at computed-value time, `line-height` inherits, and picks up the unitless `1.5` from `_reset.scss:20`. Completing the typescale with `body-large` — an obvious tidy-up — would turn it into a fixed `rem`, stop it tracking `size`, and break every D6/D7 number with no build error and no test failure. | **RESOLVED — but the fix was WRONG and is reverted (v3.2).** v3.1 pinned `container-text-line-height: 1.5em`, reasoning that `em` reproduces today's value. Measured in one context only. An inherited value varies by ancestor and **no fixed declaration can reproduce it**: 24px at the root (where pin and inheritance coincide), but 20px inside `mat-dialog-content` / `.mat-mdc-row` where `1.5em` gives 21px — growing a `rows="3"` textarea in a dialog 92px → 95px at DEFAULT density. Reverted. The hazard is guarded **statically** in `tools/verify-component-styles.mjs`, which fails if either token is ever declared; a rendered assertion provably cannot, since the values coincide exactly where the showcase measures. | Leave it inherited. Rejected: the entire form-field calibration rests on it, and nothing would catch the break. |
 
 **Closed by this revision (v3) — recorded so they are not reopened:**
 
@@ -2218,8 +2241,8 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 
 | PR | Contents | The gate that decides it |
 |---|---|---|
-| **1 — Foundation** | Token spec (typed) + generator scoped emission + three prefix registrations + `verify-tokens` dedupe + `_density.scss` wiring + the named-value geometry gate (§9.2). **Zero component geometry change and zero `packages/core` TypeScript.** | `geometry.spec.ts` green against untouched `main` (10/10, both failure modes exercised); `verify-tokens` reports **22**; §9.1 row 1's A1+A2 pair green; api-snapshot delta is `etc/tokens.api.md` only |
-| **2 — Tier 1** | service/provider/type + barrel + both specs · data-table (+ `density` input) · form-field family · selection-list · nav-list · button (padding ramp + Rule T) · segmented · chip | **Empty default-density baseline diff**; compact/comfortable deltas match §7 line by line; the Playwright a11y assertions; **the B1 jest gate** (row 4b); the Rule T leak gate (row 7b); branches ≥ 88%. *(The prerender assertion is PR 3 — its inputs land there; §12 PR 2 exit 5.)* |
+| **1 — Foundation** | Token spec (typed) + generator scoped emission (all three artefacts) + three prefix registrations + `verify-tokens` dedupe + service/provider/type/barrel + `_density.scss` wiring + the named-value geometry gate (§9.2). **Zero component geometry change and zero `packages/core` TypeScript.** | `geometry.spec.ts` green against untouched `main` (10/10, both failure modes exercised); `verify-tokens` reports **22**; §9.1 row 1's A1+A2 pair green; api-snapshot delta is `etc/tokens.api.md` only |
+| **2 — Tier 1** | data-table (+ `density` input) · form-field family · selection-list · nav-list · button (padding ramp + Rule T) · segmented · chip | **Empty default-density baseline diff**; compact/comfortable deltas match §7 line by line; the Playwright a11y assertions; **the B1 jest gate** (row 4b); the Rule T leak gate (row 7b); branches ≥ 88%. *(The prerender assertion is PR 3 — its inputs land there; §12 PR 2 exit 5.)* |
 | **3 — Tier 2 + surface** | tabs · toolbar · pagination · accordion · stepper · nine docstrings · `/density` page + route + nav · tokens-page prose · roadmap promote-and-refill · migrate row · docs · full regen | Nine `--check` gates; `/density` passes the contrast gate in both themes; roadmap `next` non-empty |
 
 ### Global invariants

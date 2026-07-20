@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRhombusDensity } from './rhombus-density.providers';
 
@@ -73,5 +73,60 @@ describe('provideRhombusDensity', () => {
     // because this is unconditional.
     bootstrap([provideRhombusDensity('default')]);
     expect(html().getAttribute('data-density')).toBe('default');
+  });
+
+  describe('dev-mode diagnostics', () => {
+    let warn: jest.SpyInstance;
+
+    beforeEach(() => {
+      warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    });
+
+    afterEach(() => warn.mockRestore());
+
+    it('does not warn for a correct bootstrap registration', () => {
+      bootstrap([provideRhombusDensity('compact')]);
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('warns when the level cannot reach the root service', () => {
+      // The real child-injector case, not a simulation of it. Registering the
+      // provider in a CHILD environment injector (a route's providers, or any
+      // lazily-created one) splits the two lookups: RHOMBUS_DENSITY resolves to
+      // the child's 'compact', while the service is providedIn:'root' and so is
+      // built from the ROOT injector, seeded 'default'. The level is silently
+      // ignored — which is exactly what the mismatch detects.
+      //
+      // Note this cannot be reproduced by stacking both providers in one array:
+      // they would resolve from the same injector and always agree.
+      bootstrap();
+      createEnvironmentInjector(
+        [provideRhombusDensity('compact')],
+        TestBed.inject(EnvironmentInjector)
+      );
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining('registered in a child')
+      );
+      // And the child's level is genuinely ignored: resolving the service from
+      // the child builds the ROOT one, seeded from the root token, so <html>
+      // carries 'default' — never the 'compact' that was asked for. That is the
+      // silent no-op the warning exists to surface.
+      expect(html().getAttribute('data-density')).toBe('default');
+    });
+
+    it('warns when a Material density scale is active alongside ours', () => {
+      // --mat-checkbox-state-layer-size is emitted by mat.theme((density: N))
+      // only when N !== 0, and RhombusKit declares it nowhere, so a non-empty
+      // value at the document root is proof of a competing scale.
+      html().style.setProperty('--mat-checkbox-state-layer-size', '40px');
+      try {
+        bootstrap([provideRhombusDensity('compact')]);
+        expect(warn).toHaveBeenCalledWith(
+          expect.stringContaining('Material density scale')
+        );
+      } finally {
+        html().style.removeProperty('--mat-checkbox-state-layer-size');
+      }
+    });
   });
 });

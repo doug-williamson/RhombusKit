@@ -404,6 +404,5 @@ export type { RhombusCarouselTransition } from './lib/carousel/carousel.types';
 // Material-backed components additionally need the opt-in `material-bridge()`
 // mixin; without it density moves only RhombusKit's bespoke components.
 export { provideRhombusDensity } from './lib/density/rhombus-density.providers';
-export { RhombusDensityService, DENSITY_ATTRIBUTE } from './lib/density/rhombus-density.service';
-export { RHOMBUS_DENSITY } from './lib/density/rhombus-density.tokens';
+export { RhombusDensityService } from './lib/density/rhombus-density.service';
 export type { RhombusDensity } from './lib/density/density.types';

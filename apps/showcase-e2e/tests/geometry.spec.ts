@@ -65,6 +65,27 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
         expect: '56px',
         why: '_m3-form-field.scss:129 default',
       },
+      // The form field's line-height is INHERITED, because Material reads two
+      // custom properties the bridge deliberately leaves unset and the
+      // declaration is therefore invalid at computed-value time. That
+      // inheritance is load-bearing: every height calculation in the density
+      // design assumes L = 24px here.
+      //
+      // SCOPE, stated precisely: this catches completing the bridge's typescale
+      // with `body-large` (which would resolve the declaration to a rem value
+      // and change this number). It does NOT catch re-pinning
+      // `container-text-line-height: 1.5em` — verified by trying it, and the
+      // suite stayed green, because at the document root 1.5em and the
+      // inherited 1.5 both compute to 24px. They diverge only under an ancestor
+      // with an absolute line-height (mat-dialog-content, .mat-mdc-row), and the
+      // showcase renders no form field in either. That hazard is guarded
+      // statically instead — see tools/verify-component-styles.mjs.
+      {
+        sel: '.mat-mdc-form-field',
+        prop: 'line-height',
+        expect: '24px',
+        why: 'inherited 1.5 x 16px; bridge must leave both tokens unset',
+      },
     ],
   },
   {
