@@ -259,6 +259,104 @@ test.describe('box/type orthogonality — density never touches font-size', () =
   });
 });
 
+test.describe('form field — the box moves and the label stays centred', () => {
+  // The form field is the component density could most easily get wrong, for two
+  // reasons the design had to discover the hard way:
+  //
+  //  1. `container-height` is a min-height on a BORDER-BOX infix, so content
+  //     (padding + line box) wins and a lower height NEVER BINDS. Moving the
+  //     height alone is a silent no-op downward — the box just does not shrink.
+  //     Only driving the vertical padding in lockstep moves it.
+  //  2. The resting label is `top: calc(container-height / 2)`, so ONLY padTop
+  //     moves it. The centring invariant is `H/2 - padTop = 4px`, and it is what
+  //     forced comfortable's filled padding to 28/12. The obvious-looking 32/8
+  //     (which optimises the headroom RATIO instead) drops the label 4px, and an
+  //     illustrative listing in the design still shows it.
+  //
+  // Both appearances are checked because they use DIFFERENT padding regimes that
+  // happen to total the same at every level — outlined/no-label is symmetric
+  // (16/16 at default), filled-with-label is asymmetric (24/8). Measuring only
+  // one would miss the regime the centring invariant actually constrains.
+  const LEVELS: ReadonlyArray<{ level: Density | null; infix: number; filledPadTop: string }> = [
+    { level: null, infix: 56, filledPadTop: '24px' },
+    { level: 'compact', infix: 52, filledPadTop: '22px' },
+    { level: 'comfortable', infix: 64, filledPadTop: '28px' },
+  ];
+
+  for (const { level, infix, filledPadTop } of LEVELS) {
+    test(`filled appearance at ${level ?? 'default'}: ${infix}px box, label centred`, async ({
+      page,
+    }) => {
+      await page.goto('/components/input?tab=examples', { waitUntil: 'networkidle' });
+      if (level === null) await clearDensity(page);
+      else await setDensity(page, level);
+
+      const m = await page.evaluate(() => {
+        const field = document.querySelector('.mdc-text-field--filled');
+        if (!field) return null;
+        const box = field.querySelector('.mat-mdc-form-field-infix');
+        const label = field.querySelector('.mat-mdc-floating-label');
+        // The INPUT is the reference, and choosing it is the whole point of this
+        // probe — see the comment on labelOffset below.
+        const input = field.querySelector('input, textarea');
+        if (!box || !label || !input) return null;
+        const br = box.getBoundingClientRect();
+        const lr = label.getBoundingClientRect();
+        const ir = input.getBoundingClientRect();
+        return {
+          infixHeight: br.height,
+          padTop: getComputedStyle(box).paddingTop,
+          labelDisplay: getComputedStyle(label).display,
+          // Signed distance between the resting label's optical centre and the
+          // text it labels.
+          labelOffset: (lr.top + lr.bottom) / 2 - (ir.top + ir.bottom) / 2,
+        };
+      });
+
+      expect(m, '.mdc-text-field--filled matched nothing').not.toBeNull();
+
+      // The box actually moved — this is what catches the "height alone is a
+      // no-op" trap, because a dropped padding key leaves this at 56px.
+      expect(m!.infixHeight, 'the infix box did not move with the level').toBeCloseTo(infix, 0);
+
+      // The label still exists. Material's filled label display flips to `none`
+      // at density -2 (48px); compact stops one step short at 52px, and we never
+      // emit that token. Goes red if either fact changes.
+      expect(m!.labelDisplay, 'the floating label disappeared — is compact past -2?').not.toBe(
+        'none'
+      );
+
+      // THE CENTRING GATE, asserted BEFORE padTop deliberately. Setting
+      // comfortable to 32/8 instead of 28/12 leaves the height, the padding sum
+      // and the content floor all still "correct" — the label's position
+      // relative to its text is the only thing that moves.
+      //
+      // THE REFERENCE MUST BE THE INPUT, NOT THE INFIX. This was measured wrong
+      // first and the mistake is worth recording, because the wrong version
+      // looked completely convincing: the resting label is
+      // `top: calc(container-height / 2)` and the infix's height IS the
+      // container height, so label-centre-vs-infix-centre is an IDENTITY — it
+      // reads 0.0 at every level whatever the padding is. Broken to 32/8 on
+      // purpose, that version stayed green while the label really had drifted
+      // 4px. Against the input's line box the same break reads -12 instead of
+      // -8, which is what makes this assertion able to fail at all.
+      //
+      // The invariant is CONSTANCY across levels, not a particular number: the
+      // residual is H/2 - padTop - L/2 and L cancels, so holding
+      // H/2 - padTop constant holds the label steady at every size at once.
+      expect(
+        m!.labelOffset,
+        `label sits ${m!.labelOffset}px from its text; every level must match ` +
+          'default (-8px). H/2 - padTop must be constant across levels.'
+      ).toBeCloseTo(-8, 0);
+
+      // Belt-and-braces only: pins the authored value so a reviewer sees the
+      // intended number in the diff. It is NOT the gate — see above.
+      expect(m!.padTop).toBe(filledPadTop);
+    });
+  }
+});
+
 test.describe('scoped density — a table-local level reaches its own subtree', () => {
   test('a compact-scoped table compacts its rows without touching the document', async ({
     page,
