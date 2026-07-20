@@ -43,6 +43,9 @@ function primitiveType(flatKey) {
   if (flatKey.startsWith('font-family-')) return 'fontFamily';
   if (flatKey.startsWith('radius-')) return 'dimension';
   if (flatKey.startsWith('border-width')) return 'dimension';
+  // Density scale — theme-invariant box geometry, authored in rem.
+  if (flatKey.startsWith('control-height-')) return 'dimension';
+  if (flatKey === 'field-height' || flatKey === 'row-height') return 'dimension';
   if (flatKey.startsWith('motion-duration-')) return 'duration';
   if (flatKey.startsWith('motion-ease-')) return 'cubicBezier';
   return 'color'; // slate / violet / green / amber / red scales

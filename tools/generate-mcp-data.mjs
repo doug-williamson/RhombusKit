@@ -118,7 +118,7 @@ export function buildMcpData({ apis, snapshot, navigationSource, theming, design
   // the themed CONTRACT, but they ARE a published part of the token API — so the
   // MCP server's list_tokens / get_token surface them too. The raw colour palette
   // and font-family primitives stay internal (not listed).
-  const PUBLISHED_PRIMITIVE_PREFIXES = ['radius-', 'motion-duration-', 'motion-ease-', 'border-width'];
+  const PUBLISHED_PRIMITIVE_PREFIXES = ['radius-', 'motion-duration-', 'motion-ease-', 'border-width', 'control-height-', 'field-height', 'row-height'];
   for (const key of Object.keys(primitives)) {
     if (!PUBLISHED_PRIMITIVE_PREFIXES.some((p) => key.startsWith(p))) continue;
     const value = primitives[key].$value;

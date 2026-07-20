@@ -19,7 +19,7 @@ const BANNER = '/* GENERATED — do not edit. Source: packages/tokens/src/spec/ 
 // --- Dynamic import of spec files via tsx (handles TS imports) ---
 // tsx is required as a workspace devDependency.
 
-const { primitives } = await import('../packages/tokens/src/spec/primitives.ts');
+const { primitives, densityLevels } = await import('../packages/tokens/src/spec/primitives.ts');
 const { CONTRACT } = await import('../packages/tokens/src/types.ts');
 const { rhombusLight } = await import('../packages/tokens/src/spec/themes/rhombus-light.ts');
 const { rhombusDark } = await import('../packages/tokens/src/spec/themes/rhombus-dark.ts');
@@ -51,11 +51,32 @@ function flattenPrimitives(obj, prefix = '') {
 // --- Generate primitives.css ---
 
 const flatPrimitives = flattenPrimitives(primitives);
+
+// Density levels are scoped re-declarations of names ALREADY in :root, emitted
+// through the same flattenPrimitives so the two can never drift — there is no
+// second name list. `default` is the :root block itself; no
+// [data-density='default'] block is emitted.
+//
+// `:root[data-density='x']` (specificity 0,2,0) rather than `[data-density='x']`
+// (0,1,0), so a level block beats the base :root block regardless of the order
+// the stylesheets happen to load in.
+const densityCSS = Object.entries(densityLevels)
+  .map(([level, scale]) => {
+    const flat = flattenPrimitives(scale);
+    return [
+      `\n:root[data-density='${level}'] {\n`,
+      ...Object.entries(flat).map(([k, v]) => `  --${k}: ${v};\n`),
+      '}\n',
+    ].join('');
+  })
+  .join('');
+
 const primitivesCSS = [
   BANNER,
   ':root {\n',
   ...Object.entries(flatPrimitives).map(([k, v]) => `  --${k}: ${v};\n`),
   '}\n',
+  densityCSS,
 ].join('');
 
 writeFileSync(resolve(generatedDir, 'primitives.css'), primitivesCSS);
@@ -92,12 +113,18 @@ writeFileSync(resolve(generatedDir, 'theme-rhombus.css'), themeCSS);
 
 // --- Generate _primitives.scss ---
 
+// NOTE: `densityCSS` is appended here too, not only to primitives.css. The SCSS
+// entry point is what consumers actually pull in (`@use '@rhombuskit/tokens/scss'`),
+// so emitting the level blocks into the .css alone leaves density inert for every
+// real app — default resolves correctly and nothing else does. Both outputs are
+// built from the same `densityCSS` string so they cannot diverge again.
 const primitivesSCSS = [
   BANNER,
   '// Import via: @use \'@rhombuskit/tokens/scss/primitives\';\n\n',
   ':root {\n',
   ...Object.entries(flatPrimitives).map(([k, v]) => `  --${k}: ${v};\n`),
   '}\n',
+  densityCSS,
 ].join('');
 
 writeFileSync(resolve(generatedDir, '_primitives.scss'), primitivesSCSS);

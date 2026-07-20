@@ -228,6 +228,26 @@
     "border-width-strong": {
       "$type": "dimension",
       "$value": "2px"
+    },
+    "control-height-sm": {
+      "$type": "dimension",
+      "$value": "2rem"
+    },
+    "control-height-md": {
+      "$type": "dimension",
+      "$value": "2.5rem"
+    },
+    "control-height-lg": {
+      "$type": "dimension",
+      "$value": "3rem"
+    },
+    "field-height": {
+      "$type": "dimension",
+      "$value": "3.5rem"
+    },
+    "row-height": {
+      "$type": "dimension",
+      "$value": "3.25rem"
     }
   },
   "light": {

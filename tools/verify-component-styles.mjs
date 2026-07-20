@@ -59,6 +59,42 @@ if (stylesScanned === 0) {
   );
 }
 
+// --- Bridge line-height guard -----------------------------------------------
+// The form field's line-height must stay INHERITED. Material reads
+//   line-height: var(--mat-form-field-container-text-line-height,
+//                    var(--mat-sys-body-large-line-height))
+// and _bridge.scss deliberately sets NEITHER, so the declaration is invalid at
+// computed-value time and the value inherits — 24px at the document root, but
+// 20px inside mat-dialog-content or a .mat-mdc-row, where an ancestor sets an
+// absolute line-height from --mat-sys-body-medium-line-height. Every height
+// calculation in the density design depends on that value.
+//
+// This is guarded STATICALLY because a rendered assertion provably cannot do it:
+// at the document root a pinned `1.5em` computes to the same 24px as the
+// inherited value, and the showcase renders no form field under either divergent
+// ancestor. Tried and confirmed — the e2e suite stayed green with the pin in
+// place. Declaring either token converts an inherited, context-dependent value
+// into a fixed one and silently changes rendering for nested form fields: it grew
+// a rows="3" textarea inside a dialog from 92px to 95px at DEFAULT density.
+const bridgePath = resolve(__dirname, '../packages/material-preset/src/styles/_bridge.scss');
+const bridgeLines = readFileSync(bridgePath, 'utf8').split(/\r?\n/);
+for (const banned of ['container-text-line-height', '--mat-sys-body-large-line-height']) {
+  // Comment lines name both deliberately, in the explanation above the override.
+  const declared = bridgeLines.some(
+    (line) => !line.trim().startsWith('//') && line.includes(banned)
+  );
+  if (declared) {
+    errors.push(
+      '✗ _bridge.scss declares `' +
+        banned +
+        "`. The form field's line-height must stay INHERITED — pinning it changes " +
+        'rendering for form fields nested under an ancestor with an absolute ' +
+        'line-height (dialog content, table rows), at DEFAULT density. See the ' +
+        'comment above mat.form-field-overrides() in _bridge.scss.'
+    );
+  }
+}
+
 if (errors.length > 0) {
   console.error('\nComponent style verification failed:\n');
   errors.forEach((e) => console.error(' ', e));

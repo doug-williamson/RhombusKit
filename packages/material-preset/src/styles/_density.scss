@@ -1,0 +1,58 @@
+// INTERNAL — not public API. `@use`d privately by _bridge.scss; deliberately NOT
+// `@forward`ed from index.scss, which would publish `density-levels()` as a
+// consumer-callable mixin and contradict this file's contract.
+//
+// Density's PUBLIC surface is five frozen primitives emitted by
+// @rhombuskit/tokens (--control-height-sm|md|lg, --field-height, --row-height)
+// plus provideRhombusDensity(). Everything in THIS file is per-component
+// precision — Material `--mat-*` tokens that must move in step with those five
+// but that no consumer should ever reference. It is unfrozen: names and values
+// here may change in any release.
+//
+// WHY IT EXISTS. Three of the five primitives are wired into _bridge.scss as
+// default-equal substitute-vars, which is enough to move a component's own
+// height. But several Material components need a SECOND token moved in lockstep
+// or the height change is a silent no-op — most importantly the form field,
+// where `container-height` is a `min-height` on a border-box infix, so content
+// (padding + line box) wins and a lower floor never binds. Those companion
+// values are per-level, so they cannot live in the bridge's unconditional body.
+//
+// SELECTOR FORM. `:root[data-density='x']` (specificity 0,2,0), never a bare
+// `[data-density='x']` (0,1,0) — the latter ties with `:root` and would then be
+// decided by stylesheet order.
+//
+// NO 'default' BLOCK. Default IS `:root`, emitted by the token generator. A
+// `[data-density='default']` block would shadow it with identical values and
+// break the geometry gate's precondition reasoning.
+//
+// SCOPED vs GLOBAL. This file handles the GLOBAL path only, where `:root` is
+// `<html>` and the cascade resolves normally. A component-scoped override (e.g.
+// a single dense data-table) CANNOT re-drive an already-substituted `--mat-*`
+// value from a descendant — custom properties substitute at computed-value time
+// on the declaring element — so scoped density must rebind the `--mat-*` token
+// itself, in that component's own SCSS. See the design spec §2.2.
+//
+// RULE T. Never rebind a `*-touch-target-size` or `*-touch-target-display`
+// token here. Those are per-component and must be scoped to the component's own
+// selector, or a rebind intended for one component silently shrinks the pointer
+// target of every checkbox and radio in the document.
+
+@use '@angular/material' as mat;
+
+/// Per-level Material companion values. Included once from `material-bridge()`,
+/// so it inherits whatever selector the consumer includes the bridge under.
+///
+/// PR 1 lands this wired but EMPTY of per-component values: the token layer and
+/// the plumbing ship first and provably move nothing, and the component values
+/// arrive in PR 2 alongside the components they belong to.
+@mixin density-levels() {
+  &[data-density='compact'] {
+    // PR 2: form-field vertical padding in lockstep with --field-height,
+    // table header/footer heights, list per-line-count heights, paginator,
+    // toolbar. Empty here by design.
+  }
+
+  &[data-density='comfortable'] {
+    // PR 2: as above.
+  }
+}

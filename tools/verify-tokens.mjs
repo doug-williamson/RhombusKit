@@ -18,15 +18,25 @@ const { CONTRACT } = await tsImport(typesUrl, import.meta.url);
 // internal (not frozen). Names are read from the generated primitives.css — the
 // same generated-artifact posture as the theme-pack check below (and avoids a
 // brittle tsx import of the multi-export primitives spec).
-const PUBLISHED_PRIMITIVE_PREFIXES = ['--radius-', '--motion-duration-', '--motion-ease-', '--border-width'];
+const PUBLISHED_PRIMITIVE_PREFIXES = ['--radius-', '--motion-duration-', '--motion-ease-', '--border-width', '--control-height-', '--field-height', '--row-height'];
 const primitivesCss = readFileSync(
   resolve(tokensRoot, 'src/generated/primitives.css'),
   'utf8'
 );
-const publishedPrimitives = [...primitivesCss.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gim)]
-  .map((m) => m[1])
-  .filter((n) => PUBLISHED_PRIMITIVE_PREFIXES.some((p) => n.startsWith(p)))
-  .sort();
+// NOTE the dedupe. This scrape is line-oriented and block-unaware, and since the
+// density scale landed, primitives.css re-declares the same five names inside
+// `:root[data-density='compact']` and `:root[data-density='comfortable']`. Without
+// `new Set` each would be written to the snapshot three times, the guard below
+// (which compares sorted arrays) would then demand those duplicates forever, and
+// the published-primitive count would read 32 instead of 22. Mandatory, not
+// cosmetic.
+const publishedPrimitives = [
+  ...new Set(
+    [...primitivesCss.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gim)]
+      .map((m) => m[1])
+      .filter((n) => PUBLISHED_PRIMITIVE_PREFIXES.some((p) => n.startsWith(p)))
+  ),
+].sort();
 const primitivesSnapshotPath = resolve(tokensRoot, 'primitives.snapshot.json');
 
 // --- CONTRACT freeze guard -------------------------------------------------

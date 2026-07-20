@@ -16,6 +16,7 @@
 
 @use '@angular/material' as mat;
 @use 'compat';
+@use 'density';
 
 /// Emit the full --mat-sys-* → CONTRACT bridge plus the component-level
 /// overrides and reset shims, at whatever selector the caller includes it under.
@@ -177,6 +178,28 @@
     // but not the M3 typography tokens, so this would otherwise inherit the 16px
     // root size. Body-small = 12px.
     subscript-text-size:             0.75rem,
+    // Density (default-equal — moves nothing until a consumer opts in).
+    // --field-height defaults to 3.5rem == Material's shipped 56px.
+    // DO NOT add `container-text-line-height` here, and DO NOT complete the M3
+    // typescale below with `body-large`. Material reads
+    //   line-height: var(--mat-form-field-container-text-line-height,
+    //                    var(--mat-sys-body-large-line-height))
+    // and this bridge sets NEITHER, so the declaration is invalid at
+    // computed-value time and line-height INHERITS. That inheritance is
+    // load-bearing and context-dependent: 24px at the document root (the
+    // unitless 1.5 from tokens' _reset.scss), but 20px inside
+    // mat-dialog-content or a .mat-mdc-row, where an ancestor sets an absolute
+    // line-height from --mat-sys-body-medium-line-height (:129 below).
+    //
+    // An earlier revision pinned `1.5em` here, reasoning that em resolves
+    // against the element's own font-size and so reproduces today's value. It
+    // does — but only at the root. Under those two ancestors it turns 20px into
+    // 21px, growing a rows="3" textarea in a dialog from 92px to 95px at
+    // DEFAULT density, in an app that never opted in. No fixed declaration can
+    // reproduce an inherited value, because the inherited value varies by
+    // ancestor. Guarded by a rendered-line-height row in
+    // apps/showcase-e2e/tests/geometry.spec.ts.
+    container-height:                var(--field-height, 3.5rem),
   ));
 
   // Select — arrow colours. Panel + option colours are overridden in
@@ -218,6 +241,11 @@
     header-headline-color:     var(--text-secondary),
     row-item-label-text-color: var(--text-primary),
     row-item-outline-color:    var(--border),
+    // Density (default-equal). --row-height defaults to 3.25rem == the 52px
+    // Material ships. Header/footer heights are separate tokens (56/52) and
+    // are per-level, so they land in _density.scss in PR 2 — binding them to
+    // --row-height here would shrink both at DEFAULT density.
+    row-item-container-height: var(--row-height, 3.25rem),
   ));
 
   @include mat.paginator-overrides((
@@ -255,6 +283,10 @@
     active-ripple-color:           var(--text-accent),
     inactive-label-text-color:     var(--text-secondary),
     inactive-ripple-color:         var(--text-secondary),
+    // Density (default-equal). --control-height-lg defaults to 3rem == the
+    // 48px Material ships, and tabs carry no RhombusKit SCSS at all, so this
+    // single key is the component's entire density story.
+    container-height:              var(--control-height-lg, 3rem),
     // Label size — without the M3 type tokens this inherits 16px. Title-small = 14px.
     label-text-size:               0.875rem,
   ));
@@ -323,5 +355,10 @@
 
   // Reset compatibility shims for Material components (emitted last so they win
   // on source order over @rhombuskit/tokens' base reset). See _compat.scss.
+  // Per-level Material companion values (INTERNAL, unfrozen). Emitted LAST so
+  // a level block wins over the unconditional defaults above. Wired but empty
+  // in PR 1 — component values arrive in PR 2.
+  @include density.density-levels();
+
   @include compat.material-compat();
 }

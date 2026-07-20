@@ -60,7 +60,12 @@ export const tokens = {
   "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)",
   "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)",
   "border-width": "1px",
-  "border-width-strong": "2px"
+  "border-width-strong": "2px",
+  "control-height-sm": "2rem",
+  "control-height-md": "2.5rem",
+  "control-height-lg": "3rem",
+  "field-height": "3.5rem",
+  "row-height": "3.25rem"
 } as const,
   themes: {
     'rhombus-light': {

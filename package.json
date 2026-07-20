@@ -13,6 +13,7 @@
     "release:credits": "node tools/release-credits.mjs",
     "new:component": "node tools/new-component.mjs",
     "test:schematics": "tsx packages/core/schematics/ng-add/ng-add.verify.ts",
+    "test:tokens": "tsx tools/generate-tokens.test.mjs",
     "test:design-tokens": "tsx tools/generate-design-tokens.test.mjs",
     "test:mcp": "tsx packages/mcp/test/mcp.verify.ts",
     "test:mcp-data": "node tools/generate-mcp-data.test.mjs",

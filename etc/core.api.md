@@ -356,6 +356,12 @@
   readonly startPlaceholder: _angular_core.InputSignal<string>
   readonly subscriptSizing: _angular_core.InputSignal<"fixed" | "dynamic">
 
+### RhombusDensity (type)
+  type RhombusDensity = 'compact' | 'default' | 'comfortable'
+
+### RhombusDensityService (class)
+  readonly density: _angular_core.WritableSignal<RhombusDensity>
+
 ### RhombusDialogActionsDirective (class)
   // (no public members)
 
@@ -921,6 +927,9 @@
 
 ### ToastVariant (type)
   type ToastVariant = 'info' | 'success' | 'warning' | 'error'
+
+### provideRhombusDensity (function)
+  provideRhombusDensity: (mode: RhombusDensity) => EnvironmentProviders
 
 ### provideRhombusIcons (function)
   provideRhombusIcons: (icons: RhombusIconSet) => EnvironmentProviders
