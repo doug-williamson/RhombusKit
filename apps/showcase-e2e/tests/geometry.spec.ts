@@ -51,6 +51,21 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
       { sel: '.rhombus-button--sm', prop: 'padding-left', expect: '12px', why: 'scss:36' },
       { sel: '.rhombus-button--md', prop: 'padding-left', expect: '16px', why: 'scss:37' },
       { sel: '.rhombus-button--lg', prop: 'padding-left', expect: '24px', why: 'scss:38' },
+      // The icon-only square takes the SAME primitive on both axes — that is what
+      // keeps it square as density moves, and why the preset needs no density
+      // rule of its own. An authored width, so the used value is deterministic.
+      {
+        sel: '.rhombus-button--icon-button.rhombus-button--sm',
+        prop: 'width',
+        expect: '32px',
+        why: 'scss:50 — var(--control-height-sm) default 2rem',
+      },
+      {
+        sel: '.rhombus-button--icon-button.rhombus-button--lg',
+        prop: 'height',
+        expect: '48px',
+        why: 'scss:52 — var(--control-height-lg) default 3rem',
+      },
     ],
   },
   {
@@ -106,6 +121,51 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
       { sel: '.rhombus-nav-list__item', prop: 'padding-left', expect: '12px', why: 'scss:81' },
       { sel: '.rhombus-nav-list__item', prop: 'padding-top', expect: '8px', why: 'scss:81' },
       { sel: '.rhombus-nav-list__item', prop: 'column-gap', expect: '10px', why: 'scss:80' },
+      // The root gap and the --list gap are a MATCHED PAIR: if their ramps ever
+      // invert, the two appearances swap density at some level. Pinning the root
+      // at default is what makes a future inversion visible.
+      { sel: '.rhombus-nav-list', prop: 'row-gap', expect: '4px', why: 'scss:9' },
+    ],
+  },
+  {
+    // The disclosure toggle renders ONLY for a navigable parent (an item with
+    // `children`), which the Overview hero does not build — verified by probing
+    // both tabs: 0 matches on the base route, 2 here. Its own route entry rather
+    // than a lucky selector.
+    route: '/components/nav-list?tab=examples',
+    rows: [
+      // The one substitute-var in this file. Every other nav-list value is
+      // per-level-override-only, so a default regression here is the only kind
+      // nav-list can produce.
+      {
+        sel: '.rhombus-nav-list__disclosure',
+        prop: 'width',
+        expect: '32px',
+        why: 'scss:151 — var(--control-height-sm) default 2rem',
+      },
+    ],
+  },
+  {
+    route: '/components/selection-list',
+    rows: [
+      // RhombusKit declares NO heights here — both values come straight from
+      // Material, and both line counts are reachable through the component's own
+      // API (a conditional matListItemLine for `description`). An earlier draft
+      // fed both from one 48px token, collapsing every described row by 16px at
+      // DEFAULT density with no opt-in. These two rows are what make that
+      // visible.
+      {
+        sel: '.mat-mdc-list-option:not(.mdc-list-item--with-two-lines)',
+        prop: 'height',
+        expect: '48px',
+        why: '_m3-list.scss:86-87 one-line default',
+      },
+      {
+        sel: '.mat-mdc-list-option.mdc-list-item--with-two-lines',
+        prop: 'height',
+        expect: '64px',
+        why: '_m3-list.scss:88-89 two-line default',
+      },
     ],
   },
   {
@@ -129,6 +189,14 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
     route: '/components/chip',
     rows: [
       { sel: '.mat-mdc-standard-chip', prop: 'height', expect: '32px', why: '_m3-chip.scss:79' },
+      // per-level-override-only. An earlier draft substituted a shared gap token
+      // whose default was 0.75rem — a silent +4px at default density.
+      {
+        sel: '.rhombus-chip-group',
+        prop: 'column-gap',
+        expect: '8px',
+        why: '_chip.scss:64 — literal 0.5rem, kept',
+      },
     ],
   },
   {
