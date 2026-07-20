@@ -345,3 +345,52 @@ export type {
   SheetSide,
   SheetSize,
 } from './lib/sheet/sheet.types';
+
+// Stepper — an accessible wizard that *extends* CdkStepper (D10): the CDK
+// supplies linear gating, stepControl validation, and roving-focus keyboard,
+// while the chrome (role=tablist headers + role=tabpanel content, manual
+// activation, horizontal + vertical) is themed off the contract — no
+// @angular/material, no --mat-sys-*, no new peer. Boundary: a Stepper is a
+// *sequential* flow that gates progress step-to-step — use Tabs for peer
+// sections visited in any order, and an Accordion for independent collapsible
+// disclosure.
+export { RhombusStepperComponent } from './lib/stepper/rhombus-stepper.component';
+export { RhombusStepComponent } from './lib/stepper/rhombus-step.component';
+export { RhombusStepLabelDirective } from './lib/stepper/rhombus-step-label.directive';
+export {
+  RhombusStepperNextDirective,
+  RhombusStepperPreviousDirective,
+} from './lib/stepper/rhombus-stepper-buttons.directive';
+export type {
+  StepperOrientation,
+  StepperLabelPosition,
+  RhombusStepState,
+} from './lib/stepper/stepper.types';
+
+// Reorder list — a keyboard-first reorderable list. @angular/cdk/drag-drop gives
+// the pointer drag, but cdkDrag is invisible to assistive tech, so the component
+// *is* the keyboard grab-mode (space to pick up, arrows to move, escape to
+// cancel) + LiveAnnouncer layer — plus explicit move buttons. `reordered` fires
+// once per committed reorder. Boundary: a Reorder list *changes the order* of
+// items — use a Nav list to navigate between destinations, and the Data table's
+// sort headers to sort a grid by a column.
+export { RhombusReorderListComponent } from './lib/reorder-list/rhombus-reorder-list.component';
+export { RhombusReorderItemDirective } from './lib/reorder-list/rhombus-reorder-item.directive';
+export type { RhombusReorderItemContext } from './lib/reorder-list/rhombus-reorder-item.directive';
+export { RhombusReorderEmptyDirective } from './lib/reorder-list/rhombus-reorder-empty.directive';
+export type {
+  ReorderEvent,
+  ReorderListOrientation,
+  ReorderAnnounceContext,
+} from './lib/reorder-list/reorder-list.types';
+
+// Carousel — a bespoke APG auto-rotating carousel (region + slide groups, CSS-only
+// transitions, no @angular/animations). SSR-safe: the autoplay timer, reduced-motion
+// query, and pointer swiping are all gated behind afterNextRender + isPlatformBrowser.
+// Autoplay never starts under prefers-reduced-motion or with ≤1 slide. Boundary: a
+// carousel cycles equivalent, browsable content — never put a critical, one-time CTA
+// on an auto-rotating slide; use Tabs or an Accordion when each section must stay
+// individually reachable.
+export { RhombusCarouselComponent } from './lib/carousel/rhombus-carousel.component';
+export { RhombusCarouselSlideComponent } from './lib/carousel/rhombus-carousel-slide.component';
+export type { RhombusCarouselTransition } from './lib/carousel/carousel.types';

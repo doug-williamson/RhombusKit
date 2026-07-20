@@ -63,6 +63,9 @@ const COMPONENTS = [
   '/components/empty-state',
   '/components/code-block',
   '/components/accordion',
+  '/components/stepper',
+  '/components/reorder-list',
+  '/components/carousel',
 ] as const;
 
 // Each component page splits content across Overview / Examples / API tabs; the

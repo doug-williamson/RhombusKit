@@ -40,10 +40,10 @@ interface Track {
           requests and upvotes. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          Recently shipped <strong>Parity primitives</strong> — Divider, Slider,
-          Date Range Picker, and Segmented (v1.11) — and
-          <strong>Selection &amp; entry</strong> — Autocomplete, Selection List,
-          and Number Input (v1.12).
+          Recently shipped <strong>Selection &amp; entry</strong> — Autocomplete,
+          Selection List, and Number Input (v1.12) — and
+          <strong>Dashboard &amp; surfaces</strong> — Skeleton, Stat, and Sheet
+          (v1.13). Rich interaction (v1.14) is shipping now below.
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>
@@ -199,8 +199,8 @@ export default class RoadmapPageComponent {
       label: 'Components',
       blurb: 'The component library, shipped in themed release-train packs.',
       columns: this.columnsFor(ROADMAP.components, {
-        now: 'In the current release train (v1.13).',
-        next: 'Accepted; the next train (v1.14).',
+        now: 'In the current release train (v1.14) — the last of the four packs.',
+        next: 'The app-level Composite tier, on deck — community-shaped.',
         considering: 'Community-shaped — you decide.',
       }),
     },

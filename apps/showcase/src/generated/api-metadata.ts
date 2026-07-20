@@ -702,6 +702,128 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[slot=actions]"
     ]
   },
+  "RhombusCarouselComponent": {
+    "name": "RhombusCarouselComponent",
+    "kind": "class",
+    "selector": "rhombus-carousel",
+    "description": "`<rhombus-carousel>` — a bespoke, accessible slide carousel following the APG\nAuto-Rotating Carousel pattern. The host is a `role=\"region\"` +\n`aria-roledescription=\"carousel\"`; projected `<rhombus-carousel-slide>`s are\ngroups (not tabpanels). Transitions are CSS-only (no `@angular/animations`).\n\n**SSR-safe:** every browser-only concern — the autoplay timer, the\nreduced-motion `matchMedia` query, and pointer swiping — is gated behind\n`afterNextRender` + `isPlatformBrowser`, so the component prerenders cleanly\nunder `outputMode: static`. Autoplay never starts under\n`prefers-reduced-motion` or with a single slide, and the live region flips to\n`off` only while auto-rotating.\n\nBoundary: a carousel cycles *equivalent, browsable* content — never put a\ncritical, one-time call to action on an auto-rotating slide; use Tabs or an\nAccordion when each section must be individually reachable and persistent.",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name for the carousel region."
+      },
+      {
+        "name": "autoplay",
+        "type": "boolean",
+        "description": "Auto-rotate the slides (never under reduced-motion or with ≤1 slide)."
+      },
+      {
+        "name": "interval",
+        "type": "number",
+        "description": "Auto-rotation interval in milliseconds."
+      },
+      {
+        "name": "loop",
+        "type": "boolean",
+        "description": "Whether next/previous wrap around the ends (index rewind)."
+      },
+      {
+        "name": "transition",
+        "type": "RhombusCarouselTransition",
+        "description": "Transition style between slides.",
+        "enumValues": [
+          "slide",
+          "fade"
+        ]
+      },
+      {
+        "name": "pauseOnHover",
+        "type": "boolean",
+        "description": "Pause auto-rotation while the pointer is over the carousel."
+      },
+      {
+        "name": "swipe",
+        "type": "boolean",
+        "description": "Enable pointer/touch swiping (no-op during SSR)."
+      },
+      {
+        "name": "showArrows",
+        "type": "boolean",
+        "description": "Show the previous/next arrow buttons."
+      },
+      {
+        "name": "showDots",
+        "type": "boolean",
+        "description": "Show the slide-picker dots."
+      },
+      {
+        "name": "selectedIndex",
+        "type": "number",
+        "description": "Two-way index of the shown slide (clamped to the slide count)."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "playingChange",
+        "type": "boolean",
+        "description": "Emitted when auto-rotation starts or stops."
+      }
+    ],
+    "methods": [
+      {
+        "name": "next",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "previous",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "select",
+        "type": "(index: number) => void",
+        "description": ""
+      },
+      {
+        "name": "play",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "pause",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "togglePlay",
+        "type": "() => void",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "*"
+    ]
+  },
+  "RhombusCarouselSlideComponent": {
+    "name": "RhombusCarouselSlideComponent",
+    "kind": "class",
+    "selector": "rhombus-carousel-slide",
+    "description": "`<rhombus-carousel-slide>` — one slide inside a `<rhombus-carousel>`. Its host\ncarries `role=\"group\"` + `aria-roledescription=\"slide\"` (APG Carousel: slides\nare groups, **not** tabpanels) and an accessible name — the `label` input, or\nan auto \"N of M\" fallback the parent supplies. Non-active slides are marked\n`aria-hidden` and `inert` so they're skipped by assistive tech and the tab\norder.",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name for the slide; overrides the default \"N of M\" phrasing."
+      }
+    ],
+    "outputs": [],
+    "methods": [],
+    "slots": [
+      "*"
+    ]
+  },
   "RhombusCheckboxComponent": {
     "name": "RhombusCheckboxComponent",
     "kind": "class",
@@ -2284,6 +2406,126 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusReorderEmptyDirective": {
+    "name": "RhombusReorderEmptyDirective",
+    "kind": "class",
+    "selector": "[rhombusReorderEmpty]",
+    "description": "`[rhombusReorderEmpty]` — an optional template shown by\n`<rhombus-reorder-list>` when it has no items. Apply it to an `<ng-template>`:\n\n```html\n<rhombus-reorder-list [(items)]=\"rows\">\n  <ng-template rhombusReorderItem let-item>{{ item }}</ng-template>\n  <ng-template rhombusReorderEmpty>Nothing to sort yet.</ng-template>\n</rhombus-reorder-list>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusReorderItemDirective": {
+    "name": "RhombusReorderItemDirective",
+    "kind": "class",
+    "selector": null,
+    "description": "`[rhombusReorderItem]` — the **required** per-row template of a\n`<rhombus-reorder-list>`. Apply it to an `<ng-template>`; the list renders it\nonce per item with the item as `$implicit` and its index as `index`:\n\n```html\n<rhombus-reorder-list [(items)]=\"rows\">\n  <ng-template rhombusReorderItem let-item let-i=\"index\">\n    {{ i + 1 }}. {{ item.name }}\n  </ng-template>\n</rhombus-reorder-list>\n```",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusReorderListComponent": {
+    "name": "RhombusReorderListComponent",
+    "kind": "class",
+    "selector": null,
+    "description": "`<rhombus-reorder-list>` — a keyboard-first, accessible reorderable list. The\n`@angular/cdk/drag-drop` layer supplies pointer dragging, but `cdkDrag` is\npointer-only and invisible to assistive tech, so the component *is* the\nkeyboard grab-mode + `LiveAnnouncer` layer that makes reordering usable\nwithout a mouse:\n\n- **Move buttons** (`showButtons`) do single-step reorders.\n- **Grab mode** — Space/Enter on a drag handle picks an item up, Arrow keys\n  (and Home/End) move it, Space/Enter drops it, Escape cancels, and moving\n  focus out of the list commits the in-progress move.\n\nEvery state change is announced assertively via `LiveAnnouncer`. `reordered`\nfires exactly once per committed reorder — never on an intermediate arrow\nmove, never on an escape-cancel. Themed off the token contract; no new peer\n(`@angular/cdk` is already one) and no `@angular/animations`.\n\nBoundary: use a Reorder list to let a user *change the order* of items. For\nnavigating between destinations use a Nav list; for sorting a data grid by a\ncolumn use the Data table's sort headers.",
+    "inputs": [
+      {
+        "name": "items",
+        "type": "T[]",
+        "description": "Two-way bound ordered list."
+      },
+      {
+        "name": "itemLabel",
+        "type": "(item: T, index: number) => string",
+        "description": "Resolves an item's spoken/label text for the handle + announcements."
+      },
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "description": "Accessible name for the list."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables all reordering (pointer, keyboard, and buttons)."
+      },
+      {
+        "name": "showHandle",
+        "type": "boolean",
+        "description": "Whether to render the drag handle (grab-mode entry point)."
+      },
+      {
+        "name": "showButtons",
+        "type": "boolean",
+        "description": "Whether to render the up/down move buttons."
+      },
+      {
+        "name": "orientation",
+        "type": "ReorderListOrientation",
+        "description": "Layout axis (vertical-only in v1; the input is reserved).",
+        "enumValues": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      {
+        "name": "trackBy",
+        "type": "TrackByFunction<T>",
+        "description": "`@for` track function; defaults to item reference so nodes move on reorder."
+      },
+      {
+        "name": "dragHandleLabel",
+        "type": "string",
+        "description": "Accessible-name suffix for the drag handle."
+      },
+      {
+        "name": "announce",
+        "type": "(ctx: ReorderAnnounceContext<T>) => string",
+        "description": "Optional formatter for the live-region announcements (i18n hook)."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "reordered",
+        "type": "ReorderEvent<T>",
+        "description": "Fires once per committed reorder."
+      }
+    ],
+    "methods": [],
+    "types": [
+      {
+        "name": "ReorderEvent",
+        "kind": "interface",
+        "members": [
+          {
+            "name": "currentIndex",
+            "type": "number",
+            "description": "Its index after the reorder.",
+            "required": true
+          },
+          {
+            "name": "item",
+            "type": "T",
+            "description": "The item that moved.",
+            "required": true
+          },
+          {
+            "name": "items",
+            "type": "T[]",
+            "description": "The full list in its new order (a fresh array).",
+            "required": true
+          },
+          {
+            "name": "previousIndex",
+            "type": "number",
+            "description": "Its index before the reorder.",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
   "RhombusSegmentedComponent": {
     "name": "RhombusSegmentedComponent",
     "kind": "class",
@@ -3051,6 +3293,182 @@ export const API_METADATA: Record<string, ApiEntry> = {
       "[slot=icon]",
       "*"
     ]
+  },
+  "RhombusStepComponent": {
+    "name": "RhombusStepComponent",
+    "kind": "class",
+    "selector": "rhombus-step",
+    "description": "`<rhombus-step>` — one step inside a `<rhombus-stepper>`. Extends `CdkStep`,\ninheriting its decorator inputs (`label`, `stepControl`, `optional`,\n`editable`, `completed`, `state`, `errorMessage`, `aria-label` /\n`aria-labelledby`) — a documented exception to the signal-inputs house rule,\nsince they are supplied by the CDK base.\n\nThe projected content is captured into `<ng-template>` (the CdkStep\ncontract) so the parent stepper renders it lazily in the matching panel.\n`useExisting` re-provides `CdkStep` so the stepper's inherited\n`@ContentChildren(CdkStep)` query resolves this subclass.",
+    "inputs": [
+      {
+        "name": "optionalLabel",
+        "type": "string",
+        "description": "Sub-label shown under an optional step's title."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "interactedStream",
+        "type": "CdkStep",
+        "description": "Emits when the user has attempted to move away from the step."
+      }
+    ],
+    "methods": [
+      {
+        "name": "select",
+        "type": "() => void",
+        "description": "Selects this step component."
+      },
+      {
+        "name": "reset",
+        "type": "() => void",
+        "description": "Resets the step to its initial state. Note that this includes resetting form data."
+      },
+      {
+        "name": "ngOnChanges",
+        "type": "() => void",
+        "description": "A callback method that is invoked immediately after the\ndefault change detector has checked data-bound properties\nif at least one has changed, and before the view and content\nchildren are checked."
+      },
+      {
+        "name": "_markAsInteracted",
+        "type": "() => void",
+        "description": ""
+      },
+      {
+        "name": "_showError",
+        "type": "() => boolean",
+        "description": "Determines whether the error state can be shown."
+      }
+    ],
+    "slots": [
+      "*"
+    ]
+  },
+  "RhombusStepLabelDirective": {
+    "name": "RhombusStepLabelDirective",
+    "kind": "class",
+    "selector": "[rhombusStepLabel]",
+    "description": "`[rhombusStepLabel]` — a rich (templated) label for a `<rhombus-step>` header.\nApply it to an `<ng-template>` inside the step to render markup in the step\nheader instead of the plain-text `label` input.\n\nExtends `CdkStepLabel` and re-provides it via `useExisting` so the inherited\n`@ContentChild(CdkStepLabel)` query on the step resolves this directive.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusStepperComponent": {
+    "name": "RhombusStepperComponent",
+    "kind": "class",
+    "selector": "rhombus-stepper",
+    "description": "`<rhombus-stepper>` — an accessible wizard that walks the user through a\nsequence of `<rhombus-step>`s. It **extends `CdkStepper`**, inheriting the\nCDK's linear gating, `stepControl` validation, selection state, and\nroving-focus keyboard model for free — no `@angular/material`, no\n`--mat-sys-*`, no new peer. The chrome (a `role=\"tablist\"` of step headers\nplus `role=\"tabpanel\"` content) is themed entirely off the\n`@rhombuskit/tokens` contract.\n\nA single DOM structure serves both orientations; CSS lays the tablist out as\na row above the content (`horizontal`) or a rail beside it (`vertical`).\nActivation is **manual** (arrows roam focus, Enter/Space commit), inherited\nfrom `CdkStepper._onKeydown`.\n\n`orientation`, `linear`, `[(selectedIndex)]`, and `selected` are **inherited\nCDK decorator inputs** — a documented exception to the signal-inputs house\nrule, since the base class owns them (and its `selectedIndex` setter already\nthrows on an out-of-range assignment). `useExisting` re-provides `CdkStepper`\nso `[rhombusStepperNext]`/`[rhombusStepperPrevious]` resolve this instance.\n\nBoundary: use a Stepper for a **sequential** flow that gates progress. For\npeer sections the user visits in any order use Tabs; for independent\ncollapsible disclosure use Accordion.",
+    "inputs": [
+      {
+        "name": "labelPosition",
+        "type": "StepperLabelPosition",
+        "description": "Where a horizontal stepper draws each step's label relative to its\nindicator. Ignored when vertical. (A new signal input; `orientation`,\n`linear`, `selectedIndex`, and `selected` are inherited from `CdkStepper`.)",
+        "enumValues": [
+          "end",
+          "bottom"
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "stepChange",
+        "type": "number",
+        "description": "Emits the newly selected step index whenever the selection changes."
+      },
+      {
+        "name": "selectionChange",
+        "type": "StepperSelectionEvent",
+        "description": "Event emitted when the selected step has changed."
+      },
+      {
+        "name": "selectedIndexChange",
+        "type": "number",
+        "description": "Output to support two-way binding on `[(selectedIndex)]`"
+      }
+    ],
+    "methods": [
+      {
+        "name": "ngAfterContentInit",
+        "type": "() => void",
+        "description": "A callback method that is invoked immediately after\nAngular has completed initialization of all of the directive's\ncontent.\nIt is invoked only once when the directive is instantiated."
+      },
+      {
+        "name": "ngAfterViewInit",
+        "type": "() => void",
+        "description": "A callback method that is invoked immediately after\nAngular has completed initialization of a component's view.\nIt is invoked only once when the view is instantiated."
+      },
+      {
+        "name": "ngOnDestroy",
+        "type": "() => void",
+        "description": "A callback method that performs custom clean-up, invoked immediately\nbefore a directive, pipe, or service instance is destroyed."
+      },
+      {
+        "name": "next",
+        "type": "() => void",
+        "description": "Selects and focuses the next step in list."
+      },
+      {
+        "name": "previous",
+        "type": "() => void",
+        "description": "Selects and focuses the previous step in list."
+      },
+      {
+        "name": "reset",
+        "type": "() => void",
+        "description": "Resets the stepper to its initial state. Note that this includes clearing form data."
+      },
+      {
+        "name": "_getStepLabelId",
+        "type": "(i: number) => string",
+        "description": "Returns a unique id for each step label element."
+      },
+      {
+        "name": "_getStepContentId",
+        "type": "(i: number) => string",
+        "description": "Returns unique id for each step content element."
+      },
+      {
+        "name": "_stateChanged",
+        "type": "() => void",
+        "description": "Marks the component to be change detected."
+      },
+      {
+        "name": "_getAnimationDirection",
+        "type": "(index: number) => StepContentPositionState",
+        "description": "Returns position state of the step with the given index."
+      },
+      {
+        "name": "_getFocusIndex",
+        "type": "() => number | null",
+        "description": "Returns the index of the currently-focused step header."
+      },
+      {
+        "name": "_onKeydown",
+        "type": "(event: KeyboardEvent) => void",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "*"
+    ]
+  },
+  "RhombusStepperNextDirective": {
+    "name": "RhombusStepperNextDirective",
+    "kind": "class",
+    "selector": "button[rhombusStepperNext]",
+    "description": "`button[rhombusStepperNext]` — advances the enclosing `<rhombus-stepper>` to\nthe next step. Extends `CdkStepperNext`, which injects the stepper (resolved\nto `RhombusStepperComponent` through its `useExisting` `CdkStepper` provider)\nand supplies the inherited `(click)` → `next()` and `[type]` host bindings.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
+  "RhombusStepperPreviousDirective": {
+    "name": "RhombusStepperPreviousDirective",
+    "kind": "class",
+    "selector": "button[rhombusStepperPrevious]",
+    "description": "`button[rhombusStepperPrevious]` — returns the enclosing `<rhombus-stepper>`\nto the previous step. Inherits `(click)` → `previous()` from\n`CdkStepperPrevious`.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
   },
   "RhombusSwitchComponent": {
     "name": "RhombusSwitchComponent",

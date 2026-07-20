@@ -63,7 +63,7 @@
   variant?: "default" | "danger"
 
 ### DataColumn (interface)
-  align?: "start" | "center" | "end"
+  align?: "end" | "start" | "center"
   cellTemplate?: _angular_core.TemplateRef<{ $implicit: T; index: number; }>
   header: string
   hideBelow?: "sm" | "md"
@@ -83,7 +83,7 @@
 }>
 
 ### DisplayColumn (interface)
-  align?: "start" | "center" | "end"
+  align?: "end" | "start" | "center"
   cellTemplate: _angular_core.TemplateRef<{ $implicit: T; index: number; }>
   header: string
   hideBelow?: "sm" | "md"
@@ -131,6 +131,22 @@
   disabled?: boolean
   label: string
   value: T
+
+### ReorderAnnounceContext (interface)
+  index: number
+  item: T
+  label: string
+  phase: "grabbed" | "moved" | "dropped" | "cancelled"
+  total: number
+
+### ReorderEvent (interface)
+  currentIndex: number
+  item: T
+  items: T[]
+  previousIndex: number
+
+### ReorderListOrientation (type)
+  type ReorderListOrientation = 'vertical' | 'horizontal'
 
 ### RhombusAccordionComponent (class)
   readonly multi: _angular_core.InputSignalWithTransform<boolean, unknown>
@@ -241,6 +257,33 @@
   readonly hasHeader: _angular_core.InputSignal<boolean>
   readonly padding: _angular_core.InputSignal<CardPadding>
   readonly variant: _angular_core.InputSignal<CardVariant>
+
+### RhombusCarouselComponent (class)
+  next: () => void
+  pause: () => void
+  play: () => void
+  previous: () => void
+  readonly autoplay: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly count: _angular_core.Signal<number>
+  readonly interval: _angular_core.InputSignalWithTransform<number, unknown>
+  readonly label: _angular_core.InputSignal<string>
+  readonly loop: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly pauseOnHover: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly playing: _angular_core.Signal<boolean>
+  readonly playingChange: _angular_core.OutputEmitterRef<boolean>
+  readonly selectedIndex: _angular_core.ModelSignal<number>
+  readonly showArrows: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly showDots: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly swipe: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly transition: _angular_core.InputSignal<RhombusCarouselTransition>
+  select: (index: number) => void
+  togglePlay: () => void
+
+### RhombusCarouselSlideComponent (class)
+  readonly label: _angular_core.InputSignal<string>
+
+### RhombusCarouselTransition (type)
+  type RhombusCarouselTransition = 'slide' | 'fade'
 
 ### RhombusCheckboxComponent (class)
   readonly checked: _angular_core.InputSignal<boolean>
@@ -494,6 +537,29 @@
   readonly value: _angular_core.InputSignal<T>
   readonly valueChange: _angular_core.OutputEmitterRef<T>
 
+### RhombusReorderEmptyDirective (class)
+  readonly template: _angular_core.TemplateRef<any>
+
+### RhombusReorderItemContext (interface)
+  $implicit: T
+  index: number
+
+### RhombusReorderItemDirective (class)
+  readonly template: _angular_core.TemplateRef<any>
+
+### RhombusReorderListComponent (class)
+  readonly announce: _angular_core.InputSignal<(ctx: ReorderAnnounceContext<T>) => string>
+  readonly ariaLabel: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly dragHandleLabel: _angular_core.InputSignal<string>
+  readonly itemLabel: _angular_core.InputSignal<(item: T, index: number) => string>
+  readonly items: _angular_core.ModelSignal<T[]>
+  readonly orientation: _angular_core.InputSignal<ReorderListOrientation>
+  readonly reordered: _angular_core.OutputEmitterRef<ReorderEvent<T>>
+  readonly showButtons: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly showHandle: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly trackBy: _angular_core.InputSignal<_angular_core.TrackByFunction<T>>
+
 ### RhombusSegmentedComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly control: _angular_core.InputSignal<FormControl<any>>
@@ -630,6 +696,74 @@
   readonly trend: _angular_core.InputSignal<StatTrend>
   readonly value: _angular_core.InputSignal<string | number>
 
+### RhombusStepComponent (class)
+  _completedOverride: i0.WritableSignal<boolean>
+  _displayDefaultIndicatorType: boolean
+  _markAsInteracted: () => void
+  _showError: () => boolean
+  _stepper: CdkStepper
+  ariaLabel: string
+  ariaLabelledby: string
+  completed: boolean
+  content: i0.TemplateRef<any>
+  editable: boolean
+  errorMessage: string
+  hasError: boolean
+  interacted: boolean
+  label: string
+  ngOnChanges: () => void
+  optional: boolean
+  readonly index: i0.WritableSignal<number>
+  readonly indicatorType: i0.Signal<string>
+  readonly interactedStream: i0.EventEmitter<CdkStep>
+  readonly isNavigable: i0.Signal<boolean>
+  readonly isSelected: i0.Signal<boolean>
+  readonly optionalLabel: _angular_core.InputSignal<string>
+  reset: () => void
+  select: () => void
+  state: string
+  stepControl: AbstractControl<any, any, any>
+  stepLabel: CdkStepLabel
+
+### RhombusStepLabelDirective (class)
+  template: i0.TemplateRef<any>
+
+### RhombusStepState (type)
+  type RhombusStepState = 'number' | 'edit' | 'done' | 'error'
+
+### RhombusStepperComponent (class)
+  _getAnimationDirection: (index: number) => StepContentPositionState
+  _getFocusIndex: () => number | null
+  _getStepContentId: (i: number) => string
+  _getStepLabelId: (i: number) => string
+  _onKeydown: (event: KeyboardEvent) => void
+  _stateChanged: () => void
+  _stepHeader: _angular_core.QueryList<CdkStepHeader>
+  _steps: i0.QueryList<CdkStep>
+  linear: boolean
+  next: () => void
+  ngAfterContentInit: () => void
+  ngAfterViewInit: () => void
+  ngOnDestroy: () => void
+  orientation: StepperOrientation
+  previous: () => void
+  readonly labelPosition: _angular_core.InputSignal<StepperLabelPosition>
+  readonly selectedIndexChange: i0.EventEmitter<number>
+  readonly selectionChange: i0.EventEmitter<StepperSelectionEvent>
+  readonly stepChange: _angular_core.OutputEmitterRef<number>
+  readonly steps: i0.QueryList<CdkStep>
+  reset: () => void
+  selected: CdkStep
+  selectedIndex: number
+
+### RhombusStepperNextDirective (class)
+  _stepper: CdkStepper
+  type: string
+
+### RhombusStepperPreviousDirective (class)
+  _stepper: CdkStepper
+  type: string
+
 ### RhombusSwitchComponent (class)
   readonly checked: _angular_core.InputSignal<boolean>
   readonly checkedChange: _angular_core.OutputEmitterRef<boolean>
@@ -765,6 +899,12 @@
 
 ### StatTrend (type)
   type StatTrend = 'up' | 'down' | 'neutral' | 'auto'
+
+### StepperLabelPosition (type)
+  type StepperLabelPosition = 'end' | 'bottom'
+
+### StepperOrientation (type)
+  type StepperOrientation = 'horizontal' | 'vertical'
 
 ### TagSize (type)
   type TagSize = 'sm' | 'md'

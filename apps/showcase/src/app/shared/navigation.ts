@@ -69,12 +69,14 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/components/dialog', label: 'Dialog' },
       { path: '/components/confirm-dialog', label: 'Confirm Dialog' },
       { path: '/components/sheet', label: 'Sheet' },
+      { path: '/components/reorder-list', label: 'Reorder List' },
     ],
   },
   {
     label: 'Navigation',
     items: [
       { path: '/components/tabs', label: 'Tabs' },
+      { path: '/components/stepper', label: 'Stepper' },
       { path: '/components/menu', label: 'Menu' },
       { path: '/components/popover', label: 'Popover' },
       { path: '/components/bottom-nav', label: 'Bottom Nav' },
@@ -104,6 +106,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Content',
     items: [
       { path: '/components/accordion', label: 'Accordion' },
+      { path: '/components/carousel', label: 'Carousel' },
       { path: '/components/page-header', label: 'Page Header' },
       { path: '/components/empty-state', label: 'Empty State' },
       { path: '/components/code-block', label: 'Code Block' },

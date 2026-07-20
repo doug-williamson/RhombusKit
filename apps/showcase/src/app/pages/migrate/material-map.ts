@@ -52,7 +52,7 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Slider', api: 'mat-slider', pkg: 'material', rk: 'Slider', match: 'full', note: 'rhombus-slider wraps mat-slider with single-value and {start, end} range modes, min/max/step/discrete/tick marks, and the [control]/[(value)] control model.' },
   { material: 'Snack Bar', api: 'MatSnackBar', pkg: 'material', rk: 'Toast', match: 'full', note: 'RhombusToastService wraps MatSnackBar.' },
   { material: 'Sort Header', api: 'matSort', pkg: 'material', rk: 'Data Table', match: 'full', note: 'Data Table provides controlled sortable column headers.' },
-  { material: 'Stepper', api: 'mat-stepper', pkg: 'material', rk: '', match: 'gap', note: 'No wizard/stepper component.' },
+  { material: 'Stepper', api: 'mat-stepper', pkg: 'material', rk: 'Stepper', match: 'full', note: 'rhombus-stepper extends CdkStepper (not mat-stepper): linear gating, stepControl validation, horizontal + vertical, manual-activation tablist a11y — themed off the contract with no --mat-sys-*.' },
   { material: 'Table', api: 'mat-table', pkg: 'material', rk: 'Data Table', match: 'full', note: 'Replaces mat-table with sort + responsive hints; verify advanced cell/footer templating.' },
   { material: 'Tabs', api: 'mat-tab-group', pkg: 'material', rk: 'Tabs', match: 'full', note: 'rhombusTabGroup wraps MatTabs.' },
   { material: 'Timepicker', api: 'mat-timepicker', pkg: 'material', rk: '', match: 'gap', note: 'No time-of-day selection component.' },
@@ -61,13 +61,13 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Tree', api: 'mat-tree', pkg: 'material', rk: '', match: 'gap', note: 'No hierarchical tree-view component.' },
 
   // ── Angular CDK (utilities / primitives) ───────────────────────────────────
-  { material: 'Drag and Drop', api: 'cdkDrag', pkg: 'cdk', rk: '', match: 'gap', note: 'No drag/drop wrapper — use @angular/cdk directly.' },
+  { material: 'Drag and Drop', api: 'cdkDrag', pkg: 'cdk', rk: 'Reorder List', match: 'partial', note: 'rhombus-reorder-list wraps cdkDrag for single-list reordering with a full keyboard + LiveAnnouncer a11y layer; connected/cross-list drag-drop still uses @angular/cdk directly.' },
   { material: 'Overlay', api: 'OverlayModule', pkg: 'cdk', rk: 'Popover', match: 'partial', note: 'Used internally (Popover/Menu/Tooltip/Dialog); no general positioning service is exposed.' },
   { material: 'Portal', api: 'CdkPortal', pkg: 'cdk', rk: '', match: 'gap', note: 'Low-level primitive; not re-exported.' },
   { material: 'Tree (CDK)', api: 'cdk-tree', pkg: 'cdk', rk: '', match: 'gap', note: 'Unstyled tree primitive; no RhombusKit tree.' },
   { material: 'Table (CDK)', api: 'cdk-table', pkg: 'cdk', rk: 'Data Table', match: 'partial', note: 'Data Table covers the styled case, not an unstyled fully-custom primitive.' },
   { material: 'Accordion (CDK)', api: 'CdkAccordion', pkg: 'cdk', rk: 'Accordion', match: 'partial', note: 'rhombus-accordion is a styled, opinionated accordion, not the unstyled CDK behaviour primitive.' },
-  { material: 'Stepper (CDK)', api: 'CdkStepper', pkg: 'cdk', rk: '', match: 'gap', note: 'No stepper logic/component.' },
+  { material: 'Stepper (CDK)', api: 'CdkStepper', pkg: 'cdk', rk: 'Stepper', match: 'full', note: 'rhombus-stepper *is* a themed CdkStepper subclass — you get the CDK behaviour plus contract-styled chrome and step-state indicators out of the box.' },
   { material: 'Dialog (CDK)', api: 'CdkDialog', pkg: 'cdk', rk: 'Dialog', match: 'partial', note: 'RhombusDialogService (centred) and RhombusSheetService (edge slide-over) both build on the CDK dialog, but are opinionated wrappers, not the low-level primitive.' },
   { material: 'Menu (CDK)', api: 'cdkMenu', pkg: 'cdk', rk: 'Menu', match: 'partial', note: 'Covers triggered menus, not the full WAI-ARIA menubar/context-menu surface.' },
   { material: 'Listbox (CDK)', api: 'cdkListbox', pkg: 'cdk', rk: 'Select', match: 'partial', note: 'Select covers dropdown choice, not a standalone inline listbox primitive.' },
@@ -122,7 +122,7 @@ export const COMPARISON: CompareRow[] = [
   },
   {
     feature: 'Components',
-    rhombuskit: '~43',
+    rhombuskit: '~46',
     material: '~35 + CDK',
     primeng: '80+',
     taiga: '130+',
