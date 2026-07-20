@@ -1,6 +1,10 @@
 [
   "--border-width",
   "--border-width-strong",
+  "--control-height-lg",
+  "--control-height-md",
+  "--control-height-sm",
+  "--field-height",
   "--motion-duration-base",
   "--motion-duration-fast",
   "--motion-duration-instant",
@@ -15,5 +19,6 @@
   "--radius-none",
   "--radius-sm",
   "--radius-xl",
-  "--radius-xs"
+  "--radius-xs",
+  "--row-height"
 ]

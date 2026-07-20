@@ -123,6 +123,8 @@ jobs:
       - run: pnpm exec nx run-many --target=build --all
       - name: Verify token CONTRACT (names + snapshot)
         run: node tools/verify-tokens.mjs
+      - name: Verify emitted token CSS (density blocks + additive-only :root)
+        run: pnpm test:tokens
       - name: Verify emitted component styles (no Sass `//` leaks)
         run: node tools/verify-component-styles.mjs
       - name: Verify public API surface (export snapshots)
