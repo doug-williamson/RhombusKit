@@ -259,6 +259,47 @@ test.describe('box/type orthogonality — density never touches font-size', () =
   });
 });
 
+test.describe('SC 2.5.8 — every control this PR shrinks clears 24x24 at compact', () => {
+  // Compact is the level that can breach the floor, so it is the one swept. The
+  // smallest box the system produces anywhere is --control-height-sm at compact
+  // (28px), which is why that primitive carries a floor comment forbidding it
+  // from ever dropping below 1.5rem.
+  //
+  // Each entry names its own selector: a selector that matches nothing FAILS
+  // here rather than skipping, so this cannot quietly measure an empty set.
+  const CONTROLS: ReadonlyArray<{ route: string; sel: string; what: string }> = [
+    { route: '/components/button?tab=examples', sel: '.rhombus-button--sm', what: 'button sm (28px — the system minimum)' },
+    { route: '/components/button?tab=examples', sel: '.rhombus-button--icon-button.rhombus-button--sm', what: 'icon-only button sm — min-width is zeroed, so the square IS the target' },
+    { route: '/components/chip', sel: '.mat-mdc-standard-chip', what: 'chip (28px at compact = Material -1)' },
+    { route: '/components/segmented', sel: '.mat-button-toggle-button', what: 'segmented toggle (36px)' },
+    { route: '/components/selection-list', sel: '.mat-mdc-list-option', what: 'selection-list option — the row IS the target' },
+    { route: '/components/nav-list', sel: '.rhombus-nav-list__item', what: 'nav-list item (content-derived)' },
+    { route: '/components/data-table', sel: '.mat-mdc-row', what: 'data-table row (48px at compact)' },
+  ];
+
+  for (const { route, sel, what } of CONTROLS) {
+    test(`${what}`, async ({ page }) => {
+      await page.goto(route, { waitUntil: 'networkidle' });
+      await setDensity(page, 'compact');
+
+      const box = await page.evaluate((s) => {
+        const el = document.querySelector(s);
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { w: r.width, h: r.height };
+      }, sel);
+
+      expect(box, `${sel} matched no element on ${route}`).not.toBeNull();
+      expect(box!.h, `${what}: height ${box!.h}px is below the 24px floor`).toBeGreaterThanOrEqual(
+        24
+      );
+      expect(box!.w, `${what}: width ${box!.w}px is below the 24px floor`).toBeGreaterThanOrEqual(
+        24
+      );
+    });
+  }
+});
+
 test.describe('form field — the box moves and the label stays centred', () => {
   // The form field is the component density could most easily get wrong, for two
   // reasons the design had to discover the hard way:
