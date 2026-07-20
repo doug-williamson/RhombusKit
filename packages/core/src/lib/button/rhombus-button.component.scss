@@ -27,15 +27,41 @@
   }
 
   // --- Size variants (height + padding + font scale) ---
-  // Material's .mdc-button pins the container to a fixed height (40px), zeroes
-  // vertical padding, and sets horizontal padding + label font-size — all at
-  // single-class specificity, so a plain .rhombus-button--<size> rule loses on
-  // source order and every size renders identically. Anchor each size on
-  // .mdc-button (specificity 0,2,0 beats Material's 0,1,0) and release the fixed
-  // height so the scale actually lands.
-  &--sm.mdc-button { height: auto; min-height: 2rem;   font-size: 0.8125rem; padding: 0.25rem  0.75rem; }
-  &--md.mdc-button { height: auto; min-height: 2.5rem; font-size: 0.875rem;  padding: 0.5rem   1rem;    }
-  &--lg.mdc-button { height: auto; min-height: 3rem;   font-size: 1rem;      padding: 0.625rem 1.5rem;  }
+  // Material pins the container to a fixed 40px height and sets the label
+  // font-size — but NOT on `.mdc-button`, which declares neither. Both live on
+  // the five APPEARANCE classes (.mat-mdc-button / .mat-mdc-unelevated-button /
+  // .mat-mdc-outlined-button / .mat-mdc-raised-button / .mat-tonal-button), each
+  // `height: var(--mat-button-<appearance>-container-height, 40px)` and
+  // `font-size: var(--mat-button-<appearance>-label-text-size, …)`. `.mdc-button`
+  // itself contributes `padding: 0 8px` — i.e. it is the one that zeroes the
+  // vertical padding and sets the horizontal.
+  //
+  // What matters is that ALL of those rules are single-class (0,1,0), so a plain
+  // .rhombus-button--<size> rule ties and loses on source order (Material injects
+  // its CSS at runtime, after styles.css) and every size renders identically —
+  // which is exactly what shipped in v1.0. Anchoring each size on .mdc-button
+  // gives (0,2,0) and beats all five order-independently; `height: auto` releases
+  // the five fixed heights so `min-height` can bind.
+  //
+  // Density never needs to rebind --mat-button-*-container-height: `height: auto`
+  // at (0,2,0) has already neutralised all five.
+  //
+  // Density (default-equal): min-height becomes --control-height-sm|md|lg, whose
+  // defaults are 2rem / 2.5rem / 3rem — identical token-for-token to the literals
+  // they replace, and each var() carries that same literal as its fallback, so
+  // the rendering is byte-identical at default density.
+  //
+  // `padding` and `font-size` are deliberately NOT substituted. Padding is a
+  // three-step ramp (inline 12/16/24, block 4/8/10) that no single scalar can
+  // express — flattening it onto one token would leave sm/md/lg differing only in
+  // height. It stays literal here and each non-default level gets an explicit
+  // rule at the bottom of this file. Font-size is out of scope entirely: the
+  // glyph is 1.25em and the label gap 0.5em OF THIS SIZE (:24, :20), so ramping
+  // type would silently rescale every button icon and invalidate the box
+  // assertion documented at :10-16. Density owns the box; size owns the type.
+  &--sm.mdc-button { height: auto; min-height: var(--control-height-sm, 2rem);   font-size: 0.8125rem; padding: 0.25rem  0.75rem; }
+  &--md.mdc-button { height: auto; min-height: var(--control-height-md, 2.5rem); font-size: 0.875rem;  padding: 0.5rem   1rem;    }
+  &--lg.mdc-button { height: auto; min-height: var(--control-height-lg, 3rem);   font-size: 1rem;      padding: 0.625rem 1.5rem;  }
 
   // --- Icon-only mode (compact square) ---
   // Material pins .mdc-button to min-width: 64px and horizontal padding at
@@ -46,10 +72,14 @@
   // left untouched so the variant fills, hover shadow, focus ring, and disabled
   // treatment all carry over and the shape matches the brand's other buttons.
   // The lone glyph is centred via the label flex.
+  // Both axes take the same primitive — that is what keeps the square square at
+  // every density level, and it is why the icon-button preset needs no density
+  // rule of its own: the level blocks move its box for free. Defaults are
+  // 2 / 2.5 / 3rem, identical to the literals replaced.
   &--icon-button.mdc-button { min-width: 0; padding: 0; }
-  &--icon-button.rhombus-button--sm.mdc-button { width: 2rem;   height: 2rem;   }
-  &--icon-button.rhombus-button--md.mdc-button { width: 2.5rem; height: 2.5rem; }
-  &--icon-button.rhombus-button--lg.mdc-button { width: 3rem;   height: 3rem;   }
+  &--icon-button.rhombus-button--sm.mdc-button { width: var(--control-height-sm, 2rem);   height: var(--control-height-sm, 2rem);   }
+  &--icon-button.rhombus-button--md.mdc-button { width: var(--control-height-md, 2.5rem); height: var(--control-height-md, 2.5rem); }
+  &--icon-button.rhombus-button--lg.mdc-button { width: var(--control-height-lg, 3rem);   height: var(--control-height-lg, 3rem);   }
   &--icon-button .mdc-button__label { gap: 0; justify-content: center; }
 
   // --- Colour variants ---
@@ -110,5 +140,110 @@
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
+  }
+}
+
+// ── Density: the sm/md/lg padding ramp (INTERNAL) ────────────────────────────
+// Shipped padding is a three-step ramp: inline 12/16/24px, block 4/8/10px. One
+// scalar cannot express three pairs, so density does NOT tokenize button padding
+// and no --control-pad-* name is frozen. The default rendering above keeps its
+// literals untouched, and each NON-default level is an explicit rule.
+//
+// Selector `[data-density='…'] .rhombus-button--sm.mdc-button:not(…)` is (0,4,0),
+// clearing the default rule's (0,2,0) and Material's .mdc-button (0,1,0) by
+// specificity, so it is source-order independent (same reasoning as :30-35). It
+// is ANCESTOR-matched, not :root-anchored — the :root form is needed only for the
+// TOKEN block, where the competitor sits on :root itself. Here the competitor is
+// a class rule, and the ancestor form additionally fires inside a scoped subtree,
+// which a :root-anchored rule never could.
+//
+// :not(.rhombus-button--icon-button) is MANDATORY — the icon-button preset zeroes
+// padding at (0,2,0) (:49). Icon-buttons need no density rule at all: their
+// square is already var(--control-height-*), which the level blocks move for free.
+//
+// The map is a private SCSS variable (leading hyphen = not @forward-able) and is
+// compiled away entirely: six flat rules, ZERO custom properties, so it is
+// invisible to /density, Figma, MCP and verify-tokens. That is what "internal
+// plumbing" means. The inline ramp keeps full precision — 10/14/20 at compact,
+// 16/20/32 at comfortable.
+$-rhombus-button-density-padding: (
+  compact: (
+    sm: 0.125rem 0.625rem,   //  2px / 10px
+    md: 0.375rem 0.875rem,   //  6px / 14px
+    lg: 0.5rem   1.25rem,    //  8px / 20px
+  ),
+  comfortable: (
+    sm: 0.375rem 1rem,       //  6px / 16px
+    md: 0.75rem  1.25rem,    // 12px / 20px
+    lg: 0.875rem 2rem,       // 14px / 32px
+  ),
+);
+
+@each $level, $sizes in $-rhombus-button-density-padding {
+  @each $size, $pad in $sizes {
+    [data-density='#{$level}']
+      .rhombus-button--#{$size}.mdc-button:not(.rhombus-button--icon-button) {
+      padding: $pad;
+    }
+  }
+}
+
+// ── Density: touch-target rebinds (INTERNAL — Rule T) ────────────────────────
+// Material renders <span class="mat-mdc-button-touch-target"> on every matButton
+// (fesm2022/button.mjs), styled per appearance as:
+//   position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);
+//   height: var(--mat-button-<appearance>-touch-target-size, 48px);
+// Being absolute and centred it only ADDS pointer area above and below the
+// button — the button box itself is always clickable — so binding the token to
+// the button's own box removes nothing reachable. It removes the OVERHANG, which
+// is what makes two stacked compact buttons' targets overlap so that a click in
+// the overlap band resolves by paint order to the WRONG button.
+//
+// Without this, compact's 28/36/44px boxes overhang a fixed 48px target by
+// 10/6/2px per side — 2px/side WORSE than main at every size — and two stacked
+// compact `sm` buttons would need 20px of gap to stay unambiguous. Nothing in the
+// system provides that gap (no stacking primitive exists; the chip-group's
+// compact gap is 6px), so the rebind is mandatory, not belt-and-braces.
+//
+// FIVE names because Material has no shared one (tokens at
+// button/_m3-button.scss:25,32,38,45,51; all five verified consumed in
+// fesm2022/button.mjs). <rhombus-button>'s ButtonAppearance is a CLOSED union of
+// text|filled|outlined — protected and tonal are supported by MatButton but are
+// deliberately not part of RhombusKit's public API, so those two declarations are
+// currently unreachable. They are declared anyway: the cost is two lines, and if
+// the union ever widens the rebind is already correct rather than silently
+// missing. (Stated precisely because the design doc claims all five appearances
+// are "accepted", which misreads the component's own docstring.)
+//
+// NOT --mat-icon-button-touch-target-size: icon-only mode is a RhombusKit class
+// on a [matButton], never matIconButton, so it keeps its appearance token and the
+// height-only (left:0/right:0) target — no horizontal overhang exists.
+//
+// SCOPED to .rhombus-button--<size>, never :root (Rule T2): these names are also
+// read by every bare matButton in a consumer app, whose height density does not
+// move. A :root rebind would shrink their targets 48 -> 28px undocumented.
+//
+// COMPACT ONLY (Rule T1: below 48px AND below the control's own default).
+// comfortable sm is 36px — under 48, but ABOVE default's 32px, so its overhang
+// (6px/side) is already better than main's (8px/side). Rule T fixes only what a
+// density level makes worse than main. Default-level overhang is pre-existing on
+// main and deliberately NOT fixed here: that is a rendered-geometry change at
+// default density and ships in its own MINOR.
+//
+// NEVER emit --mat-button-*-touch-target-display (Rule T3): `none` deletes the
+// span outright.
+$-rhombus-button-density-target: (
+  compact: (sm: 1.75rem, md: 2.25rem, lg: 2.75rem),   // 28 / 36 / 44px
+);
+
+@each $level, $sizes in $-rhombus-button-density-target {
+  @each $size, $h in $sizes {
+    [data-density='#{$level}'] .rhombus-button--#{$size} {
+      --mat-button-text-touch-target-size: #{$h};
+      --mat-button-filled-touch-target-size: #{$h};
+      --mat-button-outlined-touch-target-size: #{$h};
+      --mat-button-protected-touch-target-size: #{$h};
+      --mat-button-tonal-touch-target-size: #{$h};
+    }
   }
 }
