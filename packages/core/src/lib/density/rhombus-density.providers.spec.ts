@@ -5,9 +5,11 @@ import { provideRhombusDensity } from './rhombus-density.providers';
 /**
  * THE PROVIDER-WIRING GATE.
  *
- * This file must NEVER name `RhombusDensityService`. Not in an import, not in a
- * `TestBed.inject()`, not in a type annotation. A grep for it in the PR
- * checklist enforces that, and the reason is specific:
+ * This file must NEVER IMPORT OR INJECT `RhombusDensityService` — no import, no
+ * `TestBed.inject()`, no type annotation. (Prose mentions like this one are
+ * fine and unavoidable; the enforceable check is that the file's import list
+ * does not reference it, not a bare grep for the identifier.) The reason is
+ * specific:
  *
  * An earlier revision shipped `provideRhombusDensity()` as nothing but a token
  * provider, with the service `providedIn: 'root'`. Angular builds root services
