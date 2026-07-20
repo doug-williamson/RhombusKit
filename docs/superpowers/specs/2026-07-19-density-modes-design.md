@@ -1,6 +1,6 @@
 # RhombusKit — Density Modes: Design & Implementation Plan
 
-**Date:** 2026-07-20 — **revision v3.1** (v1 2026-07-19 → v2 2026-07-19 → v3 → v3.1 2026-07-20)
+**Date:** 2026-07-20 — **revision v3.2** (v1 → v2 → v3 → v3.1 → v3.2)
 **Status:** **Ready for implementation.** Architecture ratified with the maintainer and independently re-verified across three adversarial review rounds. v2's substitution inventory and non-breaking arithmetic survived unchanged; v2's three blocking defects (an inert provider, an impossible gate test, a default-density paginator regression) and v3's residual defects (a bridge-edit contradiction that would have broken PR 2, and five non-existent Material custom-property names that silently blinded the geometry gate) are all corrected. Full revision history in §1.2 — **read it before implementing**, since several corrections reverse a claim an earlier draft stated confidently. Residual questions are in the Open Decisions register (§13). **D6 and D7 — the two that gated PR 2 — were settled on 2026-07-20** (comfortable filled padding is **28/12**, and the content floor is stated per size), together with **D10**, a defect found while settling them: the line-height every form-field calculation depends on was holding by accident, and is now pinned. Nothing remaining in §13 blocks PR 1 or PR 2.
 **Scope:** The Foundations-track "Density modes" item — the sole entry in `foundations.next` (`apps/showcase/src/app/pages/roadmap/roadmap-data.ts:124-130`), described there as *"the highest-leverage gap enterprise Material migrators hit right after parity."*
 **Shape:** **Three MINOR releases**, not one train (§12). PR 1 is foundation-only and carries the non-breaking proof that gates PRs 2 and 3.
@@ -98,7 +98,23 @@ The v3 fix pass was itself reviewed by a closure lens and a fresh-eyes lens. Bot
 | **N2 / R17** | `ENVIRONMENT_INITIALIZER`'s deprecation cited as `core.d.ts:1861-1866`; R17 claimed the service imports `@angular/common`. | `:1857` (verified; `:384` for the function form was already exact). R17 corrected to core-only — `DOCUMENT` moved to `@angular/core` in v20. |
 | **N3** | *Reported but **rejected**.* The closure lens claimed button's display-companion range should be `:158-167`. | **Verified against source: `:159-168` is correct** — the five `*-touch-target-display` keys sit at `:159`, `:162`, `:163`, `:165`, `:168`. The original citation stands; only the mis-attribution to §8.3.1's table (which lists the `*-size` line, a different token) was reworded. *A "fix" that lands a wrong citation is a new defect — the same lesson as the api-snapshot union-order trap.* |
 
-**Carried into implementation, not fixed here** (fresh-eyes recommendations, recorded so they are decisions rather than oversights): PR 1 is releasable but large to *review* — the geometry-baseline harness has no dependency on the token work and can be split out if review drags. Rule T has no mechanical enforcement; the stylelint rule should land in PR 2 rather than as a follow-up. ~~D6 and D7 must be answered **before** PR 2 authors §4.3's comfortable block.~~ **Both were settled on 2026-07-20** — see §13 D6/D7, and D10 for the pinned line-height they turned out to depend on; §3.3 and §7.2 carry the resolved numbers. And §9.1 row 4b leans on `TestBed.createComponent` forcing the environment injector — prove it against a deliberately-broken provider before trusting it, since the prerender assertion is the only independent backstop.
+#### v3.1 → v3.2 — the golden baseline was dropped on contact with the code
+
+Implementation of PR 1 began with the geometry harness. It did not survive first contact, and the spec is corrected rather than the code bent to fit it.
+
+**What happened.** The `exampleId` sweep was the first task. Adding the input took minutes; wiring 54 usages was next. Before starting the sweep I checked what `<app-example>` actually wraps — and it wraps **only the Overview hero**, 54 times, one per component. The **Examples tab uses no wrapper at all**: raw markup under `.showcase-section` / `.showcase-row`, e.g. **31 `<rhombus-button>` instances** on `/components/button` carrying every size, variant and appearance. §9.2's collection root, `[data-example-id] .example__preview`, would have covered ~10% of the demos — and, because the record count would still have landed near the predicted ~2,200, **nothing would have looked wrong**. v3's §9.2 explicitly claimed `button sm/lg padding ✅` as caught; it would not have been.
+
+**The deeper problem.** Fixing the anchor was possible — section headings turn out to be a perfect free anchor (all 537 `.showcase-section` elements lead with an `<h2>`, and headings are unique within every one of the 53 page files). But fixing it would have preserved a design that was **disproportionate to its question**. The golden needed a signature-path key language, run-collapsing, in-scope ancestor hops, duplicate-id detection, 48 committed JSON files and a regenerator that worktrees, builds and serves `main` — nearly all of it solving problems *the approach itself created*, to answer "did any default geometry move?"
+
+**Replaced by** a named-value gate: ~20 rows of `{selector, property, expected, why}` asserted at default density, ~9s, no golden, no regenerator, no anchor. The expected values are transcribed from §7, which had already audited every one. Full rationale in the rewritten §9.2.
+
+**Dropped with it:** `exampleId` (implemented, then reverted — the gate needs no anchor, and 54 mechanical edits for unrelated deep-link value do not belong in an infrastructure PR); the `COMPONENTS` → `routes.ts` extraction (it existed so the golden could share the route list); and risks R19, R22, R23, R24, R28, which described failure modes of the golden design only.
+
+**One real finding survived the rewrite.** The gate initially failed on segmented, asserting 40px against a measured 41.5px. Cause: Material's rule is `line-height: var(--mat-button-toggle-height, 40px)`, so the token is a *line-height*, the box is content-sized, and 41.5px is font-metric dependent — it would have differed between a dev box and CI. §7.6's default-equality claim is fine; the *probe* was wrong. This produced a rule now recorded in §9.2: **assert the property density drives, never a rendered box that merely depends on it.**
+
+---
+
+**Carried into implementation, not fixed here** (fresh-eyes recommendations, recorded so they are decisions rather than oversights): ~~PR 1 is releasable but large to *review* — the geometry-baseline harness has no dependency on the token work and can be split out if review drags.~~ **Moot in v3.2** — with the harness gone, PR 1 is small enough to review in one sitting. Rule T has no mechanical enforcement; the stylelint rule should land in PR 2 rather than as a follow-up. ~~D6 and D7 must be answered **before** PR 2 authors §4.3's comfortable block.~~ **Both were settled on 2026-07-20** — see §13 D6/D7, and D10 for the pinned line-height they turned out to depend on; §3.3 and §7.2 carry the resolved numbers. And §9.1 row 4b leans on `TestBed.createComponent` forcing the environment injector — prove it against a deliberately-broken provider before trusting it, since the prerender assertion is the only independent backstop.
 
 ---
 
@@ -1680,7 +1696,7 @@ In forced-colors mode background colours are discarded, so the accordion's panel
 | 1c | same file | **B3 regression guard.** Compile `_density.scss` + `_bridge.scss` and assert the emitted `:root` block contains **no** `--mat-paginator-container-size` declaration, and that `:root[data-density='compact']` contains exactly one, at `3.25rem`. This is the assertion that would have caught the default-density paginator shrink (§1.2 B3). |
 | 2 | `tools/verify-tokens.mjs` · `generate-mcp-data.mjs` · `generate-design-tokens.mjs` | the five names appear as published primitives with `$type: 'dimension'`, **exactly once each** (the §5.3 dedupe), snapshot count is **22**, and none appear in the 60-name CONTRACT. |
 | 2b | `tools/generate-design-tokens.test.mjs` §7 + `tools/generate-mcp-data.test.mjs:69-76` | add a `--control-height-md` / `--row-height` case to each. Neither *breaks* without the `primitiveType()` edit — they just fail to cover the new family, which is exactly how the `'color'` fallback ships unnoticed. |
-| 3 | **`apps/showcase-e2e/tests/geometry-baseline.spec.ts`** (new) | §9.2. **This is the gate.** |
+| 3 | **`apps/showcase-e2e/tests/geometry.spec.ts`** (new) | §9.2. **This is the gate.** ~20 named-value rows, ~9s. |
 | 4 | `packages/core/src/lib/density/rhombus-density.service.spec.ts` (new) | the interaction tests in §9.4. |
 | **4b** | **`packages/core/src/lib/density/rhombus-density.providers.spec.ts` (new)** | **THE B1 GATE.** Bootstraps through the **public** path — `configureTestingModule({ providers: [provideRhombusDensity('compact')] })` plus `createComponent` of an **empty** host — and asserts `<html>` gains `data-density`. **This file must contain zero occurrences of `RhombusDensityService`**: injecting it would construct the service by hand and the test would pass against the broken implementation, which is exactly how v2's four service tests were blind (§1.2 B1). Also asserts the attribute is **absent** with no provider (the byte-identical promise), and that the dev-mode child-injector warning fires while the root attribute stays unchanged. Enforce the no-`RhombusDensityService` constraint with a one-line grep in the PR checklist so the file cannot rot back into the hole. |
 | **4c** | **`packages/core/src/lib/density/rhombus-density.providers.spec.ts`** | **H4 probe.** `--mat-checkbox-state-layer-size` set on `documentElement` → `provideRhombusDensity()` warns once; empty → it does not warn. jsdom is sufficient: this reads a custom property, not layout. |
@@ -1688,316 +1704,45 @@ In forced-colors mode background colours are discarded, so the accordion's panel
 | 6 | the 8 form-field specs (extend) | the `size` class is still applied and the `<mat-label>` element is still rendered — locks the non-breaking promise as far as jsdom can. |
 | 7 | `apps/showcase-e2e/tests/density.spec.ts` (new) | the browser-only a11y assertions from §8, the per-element 1.4.12 probes from §8.4, the toggle-wiring test, **and one assertion that a global compact leaves `--mat-paginator-form-field-container-height` at 40px** (§7.10). <br>**Plus, as the FIRST test in the file — the prerender assertion.** Fetch `/density` with Playwright's `APIRequestContext` (which executes **no** scripts) and expect the raw HTML to match `/<html[^>]*\sdata-density="default"/`. This is the only check that fails if the provider is inert, if the service reverts to the `document` global, or if a platform guard is reintroduced. Feasible as-is: `outputMode: static` emits per-route directories (`dist/apps/showcase/browser/{motion,theming,…}/index.html`) and `showcase:serve-static` serves that tree — no new job, no new browser, no config change. |
 | **7b** | same file | **Rule T gates (§8.3).** (a) At compact, for each of `.rhombus-button--sm/--md/--lg`, the `.mat-mdc-button-touch-target` span's `getBoundingClientRect().height` equals the button's own height (±0.5px) — goes red if §7.1's SCSS block is dropped or mis-scoped. (b) **The leak gate**, the assertion that would have caught the §7.4 defect: at `:root[data-density='compact']`, `getComputedStyle(document.documentElement).getPropertyValue('--mat-checkbox-touch-target-size')` is **empty**, and an out-of-scope `<rhombus-checkbox>` rendered outside any data-table still measures a 48px `.mat-mdc-checkbox-touch-target`. Both must be e2e, never jest — §8.8 records that jsdom returns zeroed rects and axe silently passes. |
-| 8 | `apps/showcase-e2e/tests/contrast.spec.ts` (edit) | add `'/density'` to `ROUTES`; extract `COMPONENTS` (`:22+`) to `apps/showcase-e2e/tests/routes.ts` so `geometry-baseline.spec.ts` imports the same array (§9.2, §9.5). Pure move, no behaviour change. |
+| 8 | `apps/showcase-e2e/tests/contrast.spec.ts` (edit) | add `'/density'` to `ROUTES`. *(The `COMPONENTS` extraction to `routes.ts` is dropped — it existed so the golden baseline could share the route list; the named-value gate names its own routes.)* |
 
 **jest vs Playwright.** jsdom has no layout engine (`packages/core/src/testing/axe.ts:10-12`, `apps/showcase-e2e/playwright.config.ts:3-13`), and jest specs never load `packages/core/scss` or `_bridge.scss` (`packages/core/jest.config.ts` has no CSS transform; `setupFilesAfterEnv` is only `src/test-setup.ts`, `:6`). **jest can verify the token data and the DI wiring; it cannot verify a single pixel.**
 
 An exhaustive grep for `height|offsetHeight|getBoundingClientRect|clientHeight` across all spec files returns hits in exactly one file (`rhombus-skeleton.component.spec.ts:15,27,142,145,159,172`), and every one is about the skeleton's explicit `[height]` *input* passed through to a CSS var, not measured layout. **Geometry changes break nothing in jest** — which is precisely why §9.2 exists.
 
-### 9.2 The non-breaking proof — a computed-style geometry baseline
+### 9.2 The non-breaking proof — a named-value geometry gate
+
+**Shipped: `apps/showcase-e2e/tests/geometry.spec.ts`.** A list of named selectors, properties, and the literal value that ships today, asserted at default density. ~10 routes, ~20 rows, one Playwright navigation per route, **~9s** in the existing `e2e` job. No golden file, no generated keys, no regenerator.
 
 **Why v1's proposed test could never work.** It inspected the generated `:root` custom-property block. Every one of the ~15 regressions originated in **component SCSS replacing a literal with a var whose default differed**. Inspecting a variable's value tells you nothing about whether some component's `padding: 8px 12px` became `var(--control-pad-x)` = 16px. Wrong layer entirely.
 
-**Options considered.** (a) A generated-CSS golden file is cheap and deterministic, and blind to exactly this defect class. (b) A Playwright `getBoundingClientRect` golden catches everything, but rects are font-metric- and subpixel-dependent, so the golden drifts between the CI runner and a Windows dev box and the suite becomes a flake generator that gets skipped.
+**Why the elaborate v2/v3 design was dropped.** Revisions 2 and 3 specified a full DOM-walking computed-style golden: a signature-path key language, run-collapsing for repeated siblings, in-scope ancestor hops, an authored `exampleId` on every demo (54 usages / 48 files), 48 committed JSON files, and a regenerator that `git worktree add`s the merge-base, builds it and serves it. It was **disproportionate to the question it answers** — "did any default geometry move?" — and its complexity was self-generated: most of the design existed to solve problems the approach itself created (key churn, duplicate-id merging, corpus size).
 
-**(c) A Playwright computed-style golden — chosen.** The insight: every v1 regression was a change to `padding`, `gap`, `min-height`, or a fixed `width`/`height` — properties whose **computed values are resolved absolute lengths independent of font rasterisation**. `getComputedStyle(el).paddingLeft` returns `"12px"` deterministically on every machine. Full coverage of the defect class, zero flakiness.
+It also rested on a **false premise, caught at first contact with the code**: it rooted collection at `[data-example-id] .example__preview`, assuming `<app-example>` wraps demos generally. It does not. `<app-example>` appears **54 times and only in the Overview tab** (one hero per component); the Examples tab — where every size, variant and appearance actually renders, e.g. **31 `<rhombus-button>` instances** on `/components/button` — uses raw markup under `.showcase-section` / `.showcase-row` with no wrapper at all. The golden would have watched 54 hero demos while the variant markup went unmeasured, and the record count would still have landed near the predicted ~2,200, so nothing would have looked wrong. §9.2 of v3 nonetheless listed `button sm/lg padding ✅` as caught. It would not have been.
 
-v2's collector had six holes (§1.2 H3) — the design below closes all of them. Five changes: **anchor** keys to authored example ids instead of position; **path** instead of ordinal; **widen** the filter to `mdc-`/`cdk-`; **narrow** the corpus to demo subtrees plus chrome-once; **replace** used-value `width`/`height` with specified-value probes. Themes stop being a data axis and become an assertion.
-
-#### The properties
+**What the gate asserts.** Each row is `{ selector, property, expected, why }`, with `why` carrying the source citation so a failure is diagnosable without opening the spec:
 
 ```ts
-export const PROPS = [
-  'min-height', 'min-width',
-  'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-  // margin-inline-start (rhombus-stepper.component.scss:191) resolves to
-  // physical margin-left in this LTR-only showcase. Revisit under RTL.
-  'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-  'row-gap', 'column-gap',
-] as const;
+{ sel: '.rhombus-button--sm', prop: 'min-height',  expect: '32px', why: 'scss:36' },
+{ sel: '.mat-mdc-row',        prop: 'height',      expect: '52px', why: '_m3-table.scss:50' },
+{ sel: '.rhombus-nav-list__item', prop: 'padding-left', expect: '12px', why: 'scss:81' },
 ```
 
-**`margin-*` added.** §7.5 ramps nav-list's section `margin-top` (`rhombus-nav-list.component.scss:14`) per level, so a substitute-var mistake there is exactly the v1 defect class and was invisible to v2's gate. Same blind spot covered `:175-176` and `rhombus-stepper.component.scss:191`. **`PROPS` is deliberately a SUPERSET of density's declared scope** — the gate's job is to prove *nothing moved*, including declarations §7 rules out-of-scope. Excluding a property because we promised not to touch it is how a promise goes unverified. False-positive risk is low: computed margin is the **specified** value, never the collapsed one, so margin collapsing cannot make it flake, and showcase layout margins live on `.example__*` / `.showcase-*` / plain elements that the filter excludes.
+The expected values are **transcribed from §7**, which already audited each one against source when it verified the substitutions were default-equal. The gate does not rediscover the inventory; it pins it.
 
-**Bare `width`/`height` removed.** §9.2's whole correctness argument is that computed values are resolved absolute lengths independent of font rasterisation. That is true of `padding-*`, `margin-*`, `row-gap`, `column-gap`, `min-height`, `min-width` — all specified-value-resolved. It is **false of `width`/`height`**, which `getComputedStyle` returns as **used** values: for any content-sized box (every text button, chip, tab label) the used width is text-metric dependent. And `apps/showcase/src/index.html:59` loads **only** the Material Icons stylesheet — Inter is never fetched, so `--font-family-sans` resolves to `system-ui`: Segoe UI on a Windows dev box, DejaVu/Liberation on the CI runner. Keeping them reproduces exactly the flakiness option (b) was rejected for. They are replaced by two targeted probes:
+**Two rules the implementation must keep.**
 
-```ts
-// Boxes whose size is AUTHORED, not content-derived. The used value equals the
-// specified value on every machine, so width/height are safe here and only here.
-// Membership requires an authored, non-content-derived box — see §14 R22.
-export const FIXED_BOX = [
-  '.rhombus-button--icon-button',
-  '.rhombus-nav-list__disclosure',   // §7.5 substitute-var → var(--control-height-sm, 2rem)
-  '.rhombus-stepper__indicator',     // §7.12 28px bubble
-  '.rhombus-avatar', '.rhombus-badge', '.rhombus-skeleton', '.rhombus-icon',
-].join(',');
+1. **A selector matching nothing is a FAILURE, never a skip.** Silent non-matching is how a gate reports green while measuring nothing — the defect class that shipped five non-existent `--mat-*` names in v3 (§1.2 F2) and rooted v3's collector at a wrapper that covers 10% of the demos. Verified by deliberately pointing a row at a bogus selector and confirming a hard failure.
+2. **Assert the property density *drives*, never a rendered box that merely depends on it.** Segmented is the worked example: Material's rule is `line-height: var(--mat-button-toggle-height, 40px)` on `.mat-button-toggle-label-content`, so the *rendered* box is **41.5px** (inline-block descender overflow) and is font-metric dependent — it would differ between a Windows dev box and the CI runner, reproducing exactly the flakiness that got `getBoundingClientRect` goldens rejected. Asserting the `line-height` is deterministic and is the value the substitute-var actually changes. Same reasoning applies to any content-sized box: prefer `min-height`, `padding-*`, `gap`, `line-height` and specified-value custom properties over used-value `width`/`height`.
 
-// Specified-value custom-property probes for the hard-`height: var(--mat-*)`
-// families (§7.2/7.3/7.4/7.8/7.10). Fully deterministic, and a BETTER instrument
-// than the rendered box.
-export const VARS = [
-  '--mat-form-field-container-height', '--mat-form-field-container-vertical-padding',
-  // Pinned to 1.5em by the bridge (§3.3). Every height calculation in §7.2/§8.4 uses
-  // L = 1.5 x font-size; before it was pinned that held only by inheritance from
-  // _reset.scss:20. Probed here so completing the bridge's typescale with `body-large`
-  // — which would break the arithmetic silently — fails this gate instead.
-  '--mat-form-field-container-text-line-height',
-  '--mat-table-header-container-height', '--mat-table-row-item-container-height',
-  '--mat-table-footer-container-height',
-  // NOTE: the list family's custom properties carry the component prefix TWICE —
-  // `--mat-list-list-item-*`, not `--mat-list-item-*` (`_m3-list.scss:84-89` emits
-  // `list-list-item-…` under namespace `list`). The *override keys* passed to
-  // `mat.list-overrides()` in §4.3 correctly drop it (Material strips the namespace);
-  // only these baseline probes carry the full name. Verified: each name below returns
-  // exactly one file from `grep -rl -- '<name>' node_modules/@angular/material/fesm2022/`,
-  // while the singly-prefixed forms return zero. A misspelt probe reads "" forever and
-  // the gate reports green while the family is entirely unmeasured.
-  '--mat-list-list-item-one-line-container-height',
-  '--mat-list-list-item-two-line-container-height',
-  '--mat-list-list-item-leading-icon-start-space',
-  '--mat-list-list-item-leading-icon-end-space',
-  // Tabs: `_m3-tabs.scss:56` is `tab-container-height`; `fesm2022/tabs.mjs` renders
-  // `.mat-mdc-tab { height: var(--mat-tab-container-height, 48px) }`. There is no
-  // `--mat-tab-header-container-height`.
-  '--mat-tab-container-height', '--mat-button-toggle-height',
-  '--mat-chip-container-height',
-  '--mat-paginator-container-size', '--mat-paginator-form-field-container-height',
-  '--mat-checkbox-touch-target-size', '--mat-radio-touch-target-size',
-  '--mat-button-text-touch-target-size',
-] as const;
-```
+**The precondition** is `expect([null, 'default']).toContain(<html data-density>)` — written as an assertion about the *level*, not "the attribute is absent", so it keeps biting once PR 3 registers `provideRhombusDensity('default')` in the showcase and the attribute is always present.
 
-`VARS` are recorded **once in full on `:root`**, and per-element **only where the value differs from `:root`** — i.e. only at rebind sites. That keeps the file tiny and catches two of this revision's own defects for free: **B3** (a per-level paginator value in the unconditional bridge call shows up as a root-level delta at default) and **H2's leak** (a checkbox touch-target rebind meant for list rows appearing on out-of-scope checkboxes).
+**Coverage, stated honestly.** This catches a regression **only in what is on the list**. That is accepted: §7 *is* the enumeration of what density touches, so a change outside it means someone went off-plan, which code review owns rather than CI. Adding a row when §7 grows is a one-line edit and should be part of any PR that adds a substitution.
 
-#### The corpus, and the arithmetic that forces it
+**And one thing it structurally cannot claim.** It proves *"default is unchanged"*. It proves nothing about whether compact and comfortable are **good** — §8's probes own that. The temptation once this ships will be to read a green gate as "density is verified". It is the non-breaking half only.
 
-v2 said "for each showcase route × each theme, walk every element". Nobody multiplied it out. `contrast.spec.ts:70-74` is **140 routes**; every one renders the showcase's own chrome, which dogfoods `<rhombus-app-shell>` with a **59-item** `<rhombus-nav-list>` (`app.component.ts:54-57`, `navigation.ts` = 59 `path:` entries). That is ~250 identical elements repeated **280 times** — roughly 96% of the corpus.
+**PR gates.** PR 1 lands the file green against untouched `main` (verified: 10/10). PRs 2 and 3 must keep it green — a row that legitimately changes means a substitution was *not* default-equal, which is a design question, not a test-maintenance chore.
 
-| | naive (v2) | chosen |
-|---|---|---|
-| routes × themes | 140 × 2 = 280 | **93 × 2 = 186** |
-| elements/route (with `mdc-`) | ~450 | ~30/demo |
-| records | ~126,000 | **~2,200** |
-| JSON | **60–100 MB** — unreviewable | **~250 KB / ~10k lines** |
-
-Three cuts: **(1) demo subtrees only** — collect inside `[data-example-id] .example__preview`, excluding prose, page headers, doc tab bars and code blocks, none of which is library geometry. **(2) chrome once** — collect `<rhombus-app-shell>` from `/` alone, under a `chrome/` key namespace; nav-list and app-shell *demo* geometry is still covered on their own component routes. **(3) drop `?tab=api`** — generated API tables contain no library geometry the other two tabs miss. Routes: `/` + 46 components × `{overview, examples}` = **93**.
-
-Two size levers inside the collector: **omit initial values** (`0px`, `auto`, `normal`) and drop all-initial elements — roughly 4× off the file, and a *new* `margin-top: 12px` still surfaces as a new key while a *removed* one surfaces as a deleted key; and **run-collapsing** — for ≥4 consecutive same-signature siblings under one parent (nav items, table rows, list options, chip sets), record indices 0, 1 and last plus one synthetic `{2..n-2}` entry carrying run length and a uniformity flag, with any divergent member recorded explicitly. Adding a 60th nav item becomes a **one-line** count diff.
-
-**Coverage given up, stated plainly:** page-chrome geometry on the other 92 routes (identical by construction — chrome is one component instance, and a route-specific chrome regression is not something density can cause); the `?tab=api` panels; any component with no `<app-example>` on its page; and library elements rendered only inside overlays that are closed at collection time (menu panels, dialogs, toasts, tooltips). That last one is a real hole — recorded at §14 R23.
-
-#### The key
-
-`ex:<exampleId>/<sig>[i]/<sig>[j]/…`, where `sig` = `tagName` + sorted library classes with interaction-state classes stripped (`cdk-*focused`, `mat-mdc-*-selected`, `mdc-ripple-upgraded*`, `ng-*` — otherwise hover or focus during collection rewrites keys run-to-run).
-
-**Anchor.** `<app-example>` gains a required `exampleId` input stamped as `data-example-id` on its root div. Keys then hang off a name the page author chose, not off DOM position, so reordering examples, inserting a paragraph, renaming a heading or adding a nav entry produce **zero** churn. It doubles as a deep-link anchor. Cost: one attribute per usage across ~48 page files (~100 mechanical lines), landing in PR 1 before the baseline is first generated (§10.1).
-
-**Path.** Two rules make it unambiguous *and* stable: hops are **in-scope ancestors only** (the chain skips non-library wrapper `<div>`s, so adding a demo wrapper does not reindex everything beneath it), and the index counts **only same-signature siblings under the same in-scope parent**, in document order (adding a *different* element never shifts an existing index). Two `.mdc-button__label`s under different button hosts now differ in their parent hop — closing v2's ambiguity, which was **silent under-coverage** precisely on the repeated elements (buttons, chips, rows) density touches most.
-
-**The stability tradeoff, explicitly.** A full `nth-child` chain from `documentElement` would be maximally unambiguous and maximally churny: one `<p>` added anywhere reindexes every later key, the golden turns over on unrelated PRs, and reviewers start approving diffs they have not read. **A rubber-stamped gate is indistinguishable from a green one** — a worse outcome than ambiguity. So churn resistance lives in the **anchor** and the **hop filter**, not in a coarse identity. Residual churn is confined to edits *inside a demo*, which are genuine geometry-relevant changes and *should* diff.
-
-#### Themes are an assertion, not an axis
-
-Density tokens are dimensions; themes are colour. So the collector runs in **every** registered theme and asserts **all of them** against the **one** theme-independent golden. This is strictly stronger than adding a theme axis: full per-theme coverage, the golden stays at 1× as the theme-registry epic adds presets, and any theme that ever moves a pixel fails loudly and must be justified rather than being quietly absorbed into a second data block. Without this, v2's two theme passes wrote colliding keys against one golden and half the matrix was dead weight or a spurious diff.
-
-#### The element filter
-
-```ts
-const LIB = /^(rhombus-|mat-|mdc-|cdk-)/;                      // tagName or class
-const NEVER = /^(cdk-visually-hidden|mat-ripple-element|mat-mdc-focus-indicator
-                |mat-mdc-button-persistent-ripple|mat-mdc-button-ripple)$/;
-```
-
-In scope if the tagName starts with `rhombus-`/`mat-` **or** any class matches `LIB`; excluded outright if any class matches `NEVER` (zero-size decorative overlays). Showcase-owned `app-*` / `example__*` / `showcase-*` never match, so demo scaffolding stays out.
-
-**`mdc-` is the load-bearing addition.** It is the only way the gate can see `.mdc-button__label` — whose `gap: 0.5em` (`rhombus-button.component.scss:20`) §7.1 explicitly rules out-of-scope, making that ruling verifiable rather than merely stated — plus `.mdc-button__touch-target` (Rule T), `.mdc-evolution-chip__action`, `.mdc-list-item__content` and `.mdc-form-field`. It roughly doubles raw element count per demo (~15 → ~30), which the scoping above more than pays for.
-
-#### The collector
-
-Lives at **`apps/showcase-e2e/tests/geometry-collector.ts`** and is imported **verbatim** by both `geometry-baseline.spec.ts` and `tools/geometry-baseline.mjs`, so the golden can never be produced by different logic than it is checked with. It is self-contained (no closure over module scope) so it can be handed to `page.evaluate`.
-
-```ts
-export type Rec = Record<string, string>;
-export interface Collected { density: string | null; map: Record<string, Rec>; }
-
-/** Runs IN THE PAGE. Must not reference anything outside its own body. */
-export function collectGeometry(args: {
-  props: readonly string[]; vars: readonly string[];
-  fixedBox: string; includeChrome: boolean;
-}): Collected {
-  const { props, vars, fixedBox, includeChrome } = args;
-
-  const LIB = /^(rhombus-|mat-|mdc-|cdk-)/;
-  const NEVER = /^(cdk-visually-hidden|mat-ripple-element|mat-mdc-focus-indicator|mat-mdc-button-persistent-ripple|mat-mdc-button-ripple)$/;
-  const VOLATILE = /^(cdk-(focused|mouse-focused|keyboard-focused|program-focused)|mat-mdc-\w+-selected|mdc-ripple-upgraded.*|mat-focus-indicator)$/;
-  const INITIAL = new Set(['0px', 'auto', 'normal', '']);
-
-  const inScope = (el: Element): boolean => {
-    const tag = el.tagName.toLowerCase();
-    let hit = tag.startsWith('rhombus-') || tag.startsWith('mat-');
-    for (const c of Array.from(el.classList)) {
-      if (NEVER.test(c)) return false;
-      if (LIB.test(c)) hit = true;
-    }
-    return hit;
-  };
-
-  const sigCache = new WeakMap<Element, string>();
-  const signature = (el: Element): string => {
-    const hit = sigCache.get(el);
-    if (hit !== undefined) return hit;
-    const cls = Array.from(el.classList)
-      .filter((c) => LIB.test(c) && !VOLATILE.test(c)).sort();
-    const sig = el.tagName.toLowerCase() + (cls.length ? '.' + cls.join('.') : '');
-    sigCache.set(el, sig);
-    return sig;
-  };
-
-  const rootCs = getComputedStyle(document.documentElement);
-  const rootVars: Rec = {};
-  for (const v of vars) rootVars[v] = rootCs.getPropertyValue(v).trim();
-
-  const read = (el: Element): Rec => {
-    const cs = getComputedStyle(el);
-    const rec: Rec = {};
-    for (const p of props) {
-      const val = cs.getPropertyValue(p);
-      if (!INITIAL.has(val)) rec[p] = val;        // initial values omitted
-    }
-    if (el.matches(fixedBox)) { rec['width'] = cs.width; rec['height'] = cs.height; }
-    for (const v of vars) {                        // rebind SITES only
-      const val = cs.getPropertyValue(v).trim();
-      if (val && val !== rootVars[v]) rec[v] = val;
-    }
-    return rec;
-  };
-
-  const map: Record<string, Rec> = { ':root': rootVars };
-
-  const roots: Array<{ prefix: string; el: Element }> = [];
-  const seen = new Set<string>();
-  for (const host of Array.from(document.querySelectorAll('[data-example-id]'))) {
-    const id = host.getAttribute('data-example-id')!;
-    // Duplicate ids inside one route would silently MERGE two demos' keys.
-    if (seen.has(id)) throw new Error(`duplicate data-example-id: ${id}`);
-    seen.add(id);
-    const preview = host.querySelector('.example__preview');
-    if (preview) roots.push({ prefix: 'ex:' + id, el: preview });
-  }
-  if (includeChrome) {
-    const shell = document.querySelector('rhombus-app-shell');
-    if (shell) roots.push({ prefix: 'chrome', el: shell });
-  }
-
-  for (const { prefix, el: root } of roots) {
-    const scoped = Array.from(root.querySelectorAll('*')).filter(inScope);
-
-    // Nearest IN-SCOPE ancestor, bounded by root: keys ignore showcase wrapper
-    // <div>s, so adding one does not reindex the subtree beneath it.
-    const parentOf = new Map<Element, Element>();
-    for (const el of scoped) {
-      let n: Element | null = el.parentElement;
-      while (n && n !== root && !inScope(n)) n = n.parentElement;
-      parentOf.set(el, (n as Element) ?? root);
-    }
-
-    // Index among SAME-signature siblings under the same in-scope parent, in
-    // document order. Adding a different element never shifts an existing key.
-    const counters = new Map<string, number>();
-    const pathOf = new Map<Element, string>();
-    const bucketOf = new Map<Element, string>();
-    for (const el of scoped) {                     // document order ⇒ parents first
-      const parentPath = pathOf.get(parentOf.get(el)!) ?? '';
-      const bucket = parentPath + '|' + signature(el);
-      const i = counters.get(bucket) ?? 0;
-      counters.set(bucket, i + 1);
-      bucketOf.set(el, bucket);
-      pathOf.set(el, (parentPath ? parentPath + '/' : '') + signature(el) + '[' + i + ']');
-    }
-
-    const runs = new Map<string, Element[]>();
-    for (const el of scoped) {
-      const b = bucketOf.get(el)!;
-      const arr = runs.get(b); if (arr) arr.push(el); else runs.set(b, [el]);
-    }
-
-    const emit = (el: Element, rec: Rec) => {
-      if (Object.keys(rec).length) map[prefix + '/' + pathOf.get(el)!] = rec;
-    };
-
-    for (const run of runs.values()) {
-      const recs = run.map(read);
-      if (run.length < 4) { run.forEach((el, i) => emit(el, recs[i])); continue; }
-      emit(run[0], recs[0]);                       // first-child rules differ
-      emit(run[1], recs[1]);
-      emit(run[run.length - 1], recs[run.length - 1]);
-      const ref = JSON.stringify(recs[1]);
-      let uniform = true;
-      for (let i = 2; i < run.length - 1; i++) {
-        if (JSON.stringify(recs[i]) !== ref) { emit(run[i], recs[i]); uniform = false; }
-      }
-      map[prefix + '/' + pathOf.get(run[1])! + '{2..' + (run.length - 2) + '}'] =
-        { 'run-length': String(run.length), 'uniform': String(uniform) };
-    }
-  }
-
-  return { density: document.documentElement.getAttribute('data-density'), map };
-}
-```
-
-#### The precondition — restated so it still bites
-
-v2's first check was `document.documentElement.hasAttribute('data-density') === false`. That **self-disables from PR 3 onward**: §10.1 item 3 adds `provideRhombusDensity('default')` to `app.config.ts` and §3.1 mandates an unconditional `setAttribute`. With B1 fixed this is no longer hypothetical — the attribute genuinely appears, including in the prerendered HTML.
-
-The invariant the check is *for* is **"this baseline was collected at default geometry"**, not "the attribute is absent". Enforce that directly, with two independent guards:
-
-```ts
-// GUARD 1 — the observed level matches what the golden was collected at.
-const level = await page.evaluate(() =>
-  document.documentElement.getAttribute('data-density'));
-expect(
-  golden.density === null ? level === null || level === 'default' : level === golden.density,
-  `geometry baseline must be collected at default density; observed "${level}"`,
-).toBe(true);
-
-// GUARD 2 — the REAL invariant, independent of guard 1: a [data-density='default']
-// block must not exist, so carrying data-density="default" cannot change geometry.
-const hasDefaultBlock = await page.evaluate(() =>
-  [...document.styleSheets].some((sheet) => {
-    try {
-      return [...sheet.cssRules].some((rule) =>
-        /\[data-density=["']default["']\]/.test(rule.cssText));
-    } catch { return false; }   // cross-origin sheet; none of ours are
-  }));
-expect(hasDefaultBlock,
-  "no [data-density='default'] block may exist — see §5.2").toBe(false);
-```
-
-**Guard 2 is what makes guard 1 safe**, and it is the one that catches a hand-written `&[data-density='default']` block in `_density.scss` that the generator test (row 1 A1) cannot see. Note the deliberate exception: §7.3's `.rhombus-data-table[data-density='default']` block is *component-scoped*, not a `:root` level block, and matches nothing unless the input is explicitly set — guard 2's regex is applied to `:root`-anchored rules only.
-
-Guard 1 accepts the `null` ↔ `'default'` transition because the regenerator builds the merge-base with `main`, where `provideRhombusDensity` does not exist: a freshly regenerated golden records `"density": null` while a PR 3 branch run observes `"default"`. That specific pair, and nothing else.
-
-#### File layout, regeneration, review
-
-| | |
-|---|---|
-| Golden | `apps/showcase-e2e/geometry-baseline/*.json` — **48 files: one per component (46) + `_home.json` + `_chrome.json`.** ~5 KB each, sorted keys, 2-space indent, one property per line for line-oriented diffs. Header: `{ "density": <string\|null>, "records": { … } }`. |
-
-**One file per *component*, not per route — and why that is safe.** The corpus is 93 routes, but a component's `?tab=overview` and `?tab=examples` passes merge into that component's single file. This is only correct because the record key is `ex:<exampleId>/<sig>[i]/…`, anchored on an authored `data-example-id` — and **`exampleId` must be unique within a component, across both tabs**, which PR 1 enforces when it introduces the attribute (50 files / 57 usages). Two examples sharing an id would silently merge two different DOM snapshots into one record. PR 1 exit criteria therefore include: *the regenerator fails loudly on a duplicate `exampleId` within a component rather than last-write-wins.* *(v3 correction: v2 stated "48 files (one per route)", which contradicted its own 93-route corpus and left the merge rule unstated — the regenerator was unwritable from the text.)*
-| Collector | `apps/showcase-e2e/tests/geometry-collector.ts`, shared verbatim by spec and regenerator. |
-| Assertion | `apps/showcase-e2e/tests/geometry-baseline.spec.ts`, in the existing CI `e2e` job (`.github/workflows/ci.yml:176-178`) against `showcase:serve-static`. **No new job, no new browser install, no new `webServer`.** |
-| Routes | `COMPONENTS` moves out of `contrast.spec.ts:22+` into `apps/showcase-e2e/tests/routes.ts`; both specs import it so the two suites cannot drift. |
-| Regeneration | `node tools/geometry-baseline.mjs --regenerate [--ref=<git-ref>]`. Default `--ref` is the merge-base with `main`: `git worktree add` a temp checkout, build + serve it, run the same collector, write the JSON **and** record whatever `data-density` it observed. **Never** hand-edited; **never** auto-written in CI — a missing file is a hard failure, not a silent create. |
-| Review | The same command emits `geometry-baseline.report.md` — component → property → old → new → affected-element count. *That* goes in the PR body and is what a human reads; the JSON is the artifact CI compares. `.gitattributes` marks the directory `linguist-generated=true` so GitHub collapses it while keeping it diffable. A legitimate PR-2 diff is ~300–800 lines. |
-| PR-1 gate | Regenerate from the merge-base, run against the branch, expect an **empty diff** — mechanically checkable. PRs 2 and 3 each carry an intentional, reviewed delta plus its report. |
-
-#### What this gate does and does not claim
-
-Against v1's regression table it catches: nav-list `8px 12px` → 8/16 ✅, nav-list `gap: 10px` → 12 ✅, nav-list section `margin-top` ✅ *(new in v3)*, accordion `0.875rem 1rem` → 0.5rem ✅, stepper `gap: 1.5rem` → 0.75rem ✅, button sm/lg padding ✅, `.mdc-button__label` gap ✅ *(new in v3)*, chip-group gap ✅, an added `min-height` where none existed ✅, table header 56 → 48 ✅, paginator inner field 40 → 56 ✅.
-
-**Strike v2's "all of them".** Not caught, enumerated: the three-line list ramp (now **dropped** rather than shipped unverified, §7.4); library elements that render only inside closed overlays; page chrome on non-`/` routes; `?tab=api` panels; components with no `<app-example>`.
-
-**And one thing it structurally cannot claim.** This gate proves *"default is unchanged"*. It proves nothing about whether compact and comfortable are **good** — §8's probes own that. The temptation once this ships will be to read a green baseline as "density is verified". It is the non-breaking half only.
 
 ### 9.3 The e2e density-setting mechanism
 
@@ -2041,9 +1786,9 @@ The gate is defined in exactly one place — `packages/core/jest.config.ts:23-30
 | `apps/showcase/src/app/pages/migrate/migrate-page.component.spec.ts:19-24` | asserts `boxes.length > 40` and `.finder__group` length **exactly 2** | safe **only if** the `mat.density` row keeps `pkg: 'material'` (§10.1). A third `pkg` value both fails this and renders nowhere |
 | `apps/showcase/src/app/pages/roadmap/roadmap-page.component.spec.ts:25-33` | asserts every track's columns are exactly `['Shipping now','Up next','Considering']` | stays green (columns render unconditionally by title) — but **add a non-emptiness assertion while in the file**, since this is the test that would catch an emptied Foundations `next` column |
 | `apps/showcase/src/app/pages/accessibility/accessibility-page.component.spec.ts:20,29-37` | `.a11y__grid li` count === `CONTRAST_VERIFIED.length`, and every slug must resolve to `/components/*` | **safe only if `a11y-coverage.ts` is left untouched** (§10.2) |
-| `apps/showcase-e2e/tests/contrast.spec.ts` | +2 cases (one per theme), **and `COMPONENTS` (`:22+`) extracts to `apps/showcase-e2e/tests/routes.ts`** so `geometry-baseline.spec.ts` imports the same array rather than copying it | ROUTES is 2 + 46×3 = 140 routes × 2 themes = 280 tests at 2 workers / 60s timeout (`playwright.config.ts:24,28`). +2 needs no config change. The extraction is a pure move with no behaviour change |
-| `apps/showcase-e2e/tests/geometry-baseline.spec.ts` (new) | adds **93 routes × 2 themes = 186 tests** to the same `e2e` job | Verified against the existing budget: 2 workers / 60s timeout, `showcase:serve-static`. **No `playwright.config.ts` change is needed** |
-| `apps/showcase/src/app/shared/example.component.ts` + ~48 page files | `<app-example>` gains a required `exampleId` input (§10.1) | Mechanical. A CI check should assert that on every route in `COMPONENTS` the count of `[data-example-id]` equals the count of `app-example`, or a demo goes silently ungated (§14 R24) |
+| `apps/showcase-e2e/tests/contrast.spec.ts` | +2 cases (one per theme). The `COMPONENTS` extraction is **dropped** — it served the golden baseline only. | ROUTES is 2 + 46×3 = 140 routes × 2 themes = 280 tests at 2 workers / 60s timeout (`playwright.config.ts:24,28`). +2 needs no config change. The extraction is a pure move with no behaviour change |
+| `apps/showcase-e2e/tests/geometry.spec.ts` (new) | adds **10 tests** (one per asserted route) to the same `e2e` job | Measured at **~9s** against `showcase:serve-static`. **No `playwright.config.ts` change is needed.** |
+| ~~`example.component.ts` + ~48 page files~~ | ~~`<app-example>` gains a required `exampleId`~~ | **DROPPED with the golden baseline (§9.2).** The named-value gate needs no anchor. `exampleId` was implemented and reverted; if deep-linkable examples are wanted, that is a standalone PR with its own rationale. |
 | the 8 form-field specs | new label-presence + size-class assertions | additive |
 
 ---
@@ -2065,7 +1810,6 @@ The gate is defined in exactly one place — `packages/core/jest.config.ts:23-30
 | 9 | `apps/showcase/src/app/pages/migrate/material-map.ts` | Add the `mat.density` row after the `Tree` row (`:61`) and **before** the CDK banner (`:63`), under its own comment banner. `match: 'partial'`, `pkg: 'material'` (mandatory — §9.5), `api: 'mat.density'` (must be unique; `api` is the identity key). Content per §11. |
 | 10 | `apps/showcase-e2e/tests/contrast.spec.ts` | Add `'/density'` to `ROUTES` after `:77`. **Do not touch `COMPONENTS`** — those are exploded into three `?tab=` URLs and a plain foundation page has no tabs. |
 | 11 | `packages/core/src/index.ts` | The barrel block from §3.4 (**PR 2**, retargeted from PR 1 — §1.2 M3). PR 1 would freeze three symbols into an api-snapshot-gated barrel while nothing reads the primitives they drive, and would land `src/lib/density/*.ts` inside `collectCoverageFrom` (`jest.config.ts:11-16`) ahead of their specs. Moving to PR 2 keeps PR 1 free of any `packages/core` TypeScript. |
-| 12 | `apps/showcase/src/app/shared/example.component.ts` + every `<app-example>` usage (~48 page files) | **New, PR 1.** `<app-example>` gains `readonly exampleId = input.required<string>();` stamped on its root as `[attr.data-example-id]="exampleId()"`, plus one id per usage (~100 mechanical lines). This is the **anchor the geometry key hangs off** (§9.2); without it the key falls back to positional `preview[n]` and inserting an example mid-page churns every later key on that route. It doubles as a deep-link anchor. **Must land in PR 1, before the baseline is first generated.** The collector throws on a duplicate id within a page rather than silently merging two demos' keys. |
 
 ### 10.2 The contrast-gate rule
 
@@ -2317,11 +2061,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 - [ ] The `verify-tokens` dedupe (§5.3) — **mandatory, not cosmetic**.
 - [ ] `packages/material-preset/src/styles/_density.scss` **created and wired but empty of per-component values** — `@use 'density'` from `_bridge.scss` (**not** `@forward` in `index.scss`: the file declares itself INTERNAL, and forwarding would publish `rhombus.density-levels()` as consumer-callable — §4.3), `'_density.scss'` added to `tools/copy-material-preset-assets.mjs:13`, `density-levels()` included from `material-bridge()` at `_bridge.scss:25` (§4.3).
 - [ ] The three **default-equal substitute-var keys** on existing bridge calls (§2.3): `mat.form-field-overrides()` `:168-180`, `mat.table-overrides()` `:216-221`, `mat.tabs-overrides()` `:248-260`. Each must be provably default-equal, so the baseline diff stays empty.
-- [ ] **The golden actually records a `margin-top`.** The nav-list rule that forced `margin-*` into `PROPS` is `.rhombus-nav-list__section + .rhombus-nav-list__section` (`rhombus-nav-list.component.scss:13-14`) — it only applies when **two adjacent** sections render. Assert the generated baseline contains ≥1 `margin-top` record under an `ex:nav-list-*` key; otherwise §1.2 H3(a) is closed in prose and empty in practice (v3 N4).
 - [ ] `tools/generate-tokens.test.mjs` + `"test:tokens"` script + CI step (§9.1 rows 1, 1b, 1c).
-- [ ] **`<app-example>` gains `exampleId`**, stamped as `data-example-id`, plus one id per usage across ~48 page files (§10.1 item 12). **Must precede the first baseline generation.**
-- [ ] `COMPONENTS` extracted from `contrast.spec.ts:22+` to `apps/showcase-e2e/tests/routes.ts` (§9.5).
-- [ ] `apps/showcase-e2e/tests/geometry-collector.ts` + `geometry-baseline.spec.ts` + `tools/geometry-baseline.mjs --regenerate` + the committed baseline and its `.gitattributes` entry (§9.2).
 - [ ] `'target-size': { enabled: false }` in `packages/core/src/testing/axe.ts` with the pointer comment (§8.8).
 - [ ] Regen chain (§10.3).
 
@@ -2332,7 +2072,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 1. `verify-tokens` reports **22** published primitives — not 15, not 37.
 2. `generate-tokens.test.mjs` green on **both halves of §9.1 row 1**: **A1** — three blocks, five names each, anchors match §4.4, every height ≥ 1.5rem, **no `default` block**; **A2** — `:root` is **additive-only** against `main` (`removed` empty, `changed` empty, `added` exactly the five). *Declaration order inside `:root` is out of scope; do not "fix" it.* Plus rows 1b (every level moves every value) and 1c (no `--mat-paginator-container-size` at `:root`).
 3. `design-tokens.json` types all five as `$type: 'dimension'`, and MCP `list_tokens` returns them.
-4. **The geometry baseline, regenerated from the merge-base with `main`, produces an empty diff against this branch.** This is the assertion the entire epic rests on. (Regeneration builds and serves `main`'s showcase in a temp worktree, so it runs in the PR-1 gate and on demand, not on every PR — on ordinary PRs the committed golden *is* the baseline.)
+4. **`geometry.spec.ts` is green against untouched `main`** — verified 10/10 before any density code exists, so the baseline it pins is genuinely `main`'s. Both failure modes were exercised deliberately: a wrong expected value fails with its source citation, and a selector matching nothing fails rather than skipping.
 5. `api-snapshot` diff is **`etc/tokens.api.md` only**; `etc/core.api.md` is untouched. Restore any unrelated union reordering to `main`'s order (§14, R4).
 6. `test:stackblitz` green.
 
@@ -2363,7 +2103,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 **Exit criteria**
 
 1. **The geometry baseline diff at default density is empty.** Any non-empty default delta is a defect, not a review item.
-2. The compact/comfortable baseline deltas are reviewed line by line against `geometry-baseline.report.md` and match §7's tables.
+2. `geometry.spec.ts` is still green. A row that legitimately has to change means a substitution was **not** default-equal — that is a design question to escalate, not a test to update.
 3. Playwright: every interactive host in compact measures ≥ 24×24; `touch-target-display` is never `none`; the form-field floating label has `display !== 'none'`; `getComputedStyle(field).fontSize` is identical across all three levels (the executable proof of box/type orthogonality).
 4. **Rule T gates green** (§9.1 row 7b): compact button touch targets equal their box; no `--mat-checkbox-touch-target-size` on `:root`; an out-of-scope `<rhombus-checkbox>` still measures 48px.
 5. `rhombus-density.providers.spec.ts` passes without naming the service (§9.1 row 4b), and the **Rule T gates** (§9.1 row 7b) are green.
@@ -2386,7 +2126,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 - [ ] The app-shell 56px `min-height` literal is untouched, and the pre-existing bug is filed separately.
 - [ ] The `/density` derivation uses `as keyof typeof` (§5.4) — this is a CI-red type error otherwise.
 - [ ] The nav entry keeps the exact single-line `{ path: '…', label: '…' }` form (§14, R7); grep `llms.txt` for `/density` after regen.
-- [ ] `provideRhombusDensity('default')` lands in `app.config.ts` **here**, and the geometry baseline is regenerated afterwards. The golden's `density` header goes `null` → `'default'`, and every prerendered page now emits `data-density="default"` on `<html>` — expected, and §9.2's guard 2 is what keeps it harmless.
+- [ ] `provideRhombusDensity('default')` lands in `app.config.ts` **here**, and `geometry.spec.ts` stays green — its precondition already accepts `data-density="default"` alongside `null`, so no edit is needed.
 - [ ] `docs/theming.md`'s `## Density` section carries the **`#migrating-from-mat-density`** anchor the dev-mode probe links to (§10.4) — the anchor is load-bearing, not decorative.
 - [ ] `nx run showcase-e2e:e2e` run locally before pushing (§10.2).
 
@@ -2423,7 +2163,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 - **The `dense` table header — CLOSED: 40px**, Material's own header clamp floor, not 36px (§7.3, §1.2 M6).
 - **PR 1's barrel timing — CLOSED: moves to PR 2.** A frozen symbol is harder to walk back than a delayed one (§1.2 M3).
 - **The three-line list ramp — CLOSED: dropped**, not shipped unverified (§7.4, §1.2 M5).
-- **The golden baseline's scope — CLOSED: demo subtrees plus chrome-once**, 93 routes, with theme as an assertion rather than a data axis (§9.2).
+- **The golden baseline — DROPPED entirely (§9.2)**, replaced by a named-value gate. It was disproportionate, and it rested on a false premise about `<app-example>` coverage that only surfaced on contact with the code.
 
 **Closed by the previous revision (v2) — recorded so they are not reopened:**
 
@@ -2459,16 +2199,11 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 | **R16** | **`theming.md` is a generator input** — editing it without a regen fails **both** `--check` gates | `generate-mcp-data.mjs:154` (v2 cited `:155`, which is `design-tokens.json`); `ci.yml:130-131`, `:138-139` | Docs edits are part of the same regen run (§10.3) |
 | **R17** | **stackblitz smoke gate** — a new `@angular/*` import in core that is not in core's `peerDependencies` fails with `ERR_MODULE_NOT_FOUND`, in a job far from the change | `ci.yml:160`, `tools/smoke-test-pack.mjs` | The service imports **`@angular/core` only** (`inject`, `signal`, `effect`, `DOCUMENT`, `InjectionToken`, `makeEnvironmentProviders`, `provideEnvironmentInitializer`) — `DOCUMENT` moved to `@angular/core` in v20 (`core.d.ts:9437`), so no `@angular/common` import is needed. Both are already peers regardless, so nothing can fail here; §1.1, §3.1, §12 PR-2 exit 10 and §15 all state core-only and are correct. *(v3: this row was stale from v2.)* Verify before pushing |
 | **R18** | **The e2e post-load write assumes the effect never re-runs.** If the implementation ever adds a second dependency (a media query, a resize listener, a route hook), the effect re-fires, clobbers the test's attribute, and the whole suite goes **green-but-meaningless** | `apps/showcase-e2e/tests/density.spec.ts` | Pin the assumption in a comment on `setDensity` and re-read the attribute after the last action in each test |
-| **R19** | **The geometry baseline becomes a rubber stamp** if anyone hand-edits it to make a red build green | `apps/showcase-e2e/tests/geometry-baseline.spec.ts` + its golden JSON | The golden is only ever produced by `tools/geometry-baseline.mjs --regenerate`, which builds it from a `main` worktree. Put that sentence in a header comment **inside the golden file itself** |
 | **R20** | **`tokens-page.component.ts:102-112` goes stale with no gate** — there is no spec file in that directory and the strings are hard-coded template literals, so nothing in CI fails | `apps/showcase/src/app/pages/tokens/tokens-page.component.ts` | It is item 6 of §10.1's change-set. Same silent-rot class as R2, and v1 missed it entirely |
 | **R21** | **A future refactor reintroduces `isPlatformBrowser` in the density service**, silently restoring the hydration layout shift. Or someone adds `TestBed.inject(RhombusDensityService)` to `rhombus-density.providers.spec.ts` and **re-blinds the B1 gate** — the test would then pass against a broken provider, exactly as v2's whole test plan did | `packages/core/src/lib/density/` | The prerender assertion (§9.1 row 7) fails on the first; the file-level docstring plus a grep in the PR checklist covers the second. **Note the residual:** `TestBed.createComponent` forcing the environment injector into existence is TestBed *internals*, not a documented contract — the prerender assertion is the independent backstop |
-| **R22** | **`FIXED_BOX` membership rots.** Its `width`/`height` probes are safe only because those boxes are **authored**, not content-derived. If someone makes `.rhombus-avatar` content-sized, its entry starts drifting CI-vs-local and the suite flakes with no obvious cause | `apps/showcase-e2e/tests/geometry-collector.ts` | A comment on `FIXED_BOX` stating the membership rule. `document.fonts.ready` does **not** de-risk this — it only sequences, it does not make a content-sized box deterministic across font stacks |
-| **R23** | **Overlay-only elements are outside the baseline corpus** — menu panels, dialogs, toasts, tooltips are closed at collection time, so their geometry is ungated | `apps/showcase-e2e/geometry-baseline/` | Stated as known coverage loss (§9.2). Closing it needs an interaction-driven follow-up suite, a different shape of test. Partially mitigated: §6.3 puts dialog, menu, toast and tooltip **out of scope** for density anyway |
-| **R24** | **Scoping the baseline to `.example__preview` makes coverage a function of showcase authorship discipline.** A component page shipping prose and no `<app-example>` is silently ungated — a real regression in *guaranteed* coverage versus the naive full-DOM design, traded for a reviewable artifact | `apps/showcase-e2e/tests/geometry-baseline.spec.ts` | A CI check that every route in `COMPONENTS` yields ≥1 `[data-example-id]`, and that the count matches the count of `app-example` on that route (§9.5) |
 | **R25** | **A case-(b) `mat.density` consumer gets no warning at all.** They use `mat.density`, use `[rhombusChip]`, and never adopt RhombusKit density — so `provideRhombusDensity()` never runs and the probe never fires. They get a silent +4px chip | §11.5.3 | Non-code only: a CHANGELOG line on the PR 2 MINOR and the §11.5 doc. **The alternative was considered and rejected** — gating `.rhombus-chip`'s height rebind behind `:root[data-density]` would break §2.3's bridge-independence for the component that most benefits from it, and the exposure is 4px on one component |
 | **R26** | **Rule T is stated but not mechanically enforced.** Nothing fails CI if a future contributor adds a Tier 3 component, shrinks a control below 48px and forgets the rebind; and **Rule T2 has no lint** — a `:root`-scoped `*-touch-target-size` in `_density.scss` would compile, ship, and pass every gate except the specific leak assertion in §9.1 row 7b, which covers only checkbox and radio | §8.3 | The per-component gates in §9.1 rows 7b are what exist today. A `stylelint` rule forbidding `touch-target-size` inside `:root` blocks would generalise T2 and is the recommended follow-up; a general T1 invariant would need a component registry the spec does not have |
 | **R27** | **The M6 header correction must land BEFORE the baseline is captured.** If PR 3's golden records `dense`'s header at 36px, the 40px correction reads as a regression on the next diff | §7.3 | Sequence the §7.3 edit ahead of baseline capture, or regenerate with a reviewed diff. Called out inline at §7.3's measured line |
-| **R28** | **`margin-inline-start` is covered only via physical `margin-left`** (`rhombus-stepper.component.scss:191`), because the showcase is LTR-only | `apps/showcase-e2e/tests/geometry-collector.ts` | Noted in a `PROPS` comment. An RTL story must revisit `PROPS` before it can rely on this gate |
 
 ---
 
@@ -2478,7 +2213,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 
 | PR | Contents | The gate that decides it |
 |---|---|---|
-| **1 — Foundation** | Token spec (typed) + generator scoped emission + three prefix registrations + `verify-tokens` dedupe + `_density.scss` wiring + `exampleId` + the geometry-baseline harness. **Zero component geometry change and zero `packages/core` TypeScript.** | Baseline regenerated from the merge-base with `main` produces an **empty diff**; `verify-tokens` reports **22**; §9.1 row 1's A1+A2 pair green; api-snapshot delta is `etc/tokens.api.md` only |
+| **1 — Foundation** | Token spec (typed) + generator scoped emission + three prefix registrations + `verify-tokens` dedupe + `_density.scss` wiring + the named-value geometry gate (§9.2). **Zero component geometry change and zero `packages/core` TypeScript.** | `geometry.spec.ts` green against untouched `main` (10/10, both failure modes exercised); `verify-tokens` reports **22**; §9.1 row 1's A1+A2 pair green; api-snapshot delta is `etc/tokens.api.md` only |
 | **2 — Tier 1** | service/provider/type + barrel + both specs · data-table (+ `density` input) · form-field family · selection-list · nav-list · button (padding ramp + Rule T) · segmented · chip | **Empty default-density baseline diff**; compact/comfortable deltas match §7 line by line; the Playwright a11y assertions; **the B1 jest gate** (row 4b); the Rule T leak gate (row 7b); branches ≥ 88%. *(The prerender assertion is PR 3 — its inputs land there; §12 PR 2 exit 5.)* |
 | **3 — Tier 2 + surface** | tabs · toolbar · pagination · accordion · stepper · nine docstrings · `/density` page + route + nav · tokens-page prose · roadmap promote-and-refill · migrate row · docs · full regen | Nine `--check` gates; `/density` passes the contrast gate in both themes; roadmap `next` non-empty |
 
