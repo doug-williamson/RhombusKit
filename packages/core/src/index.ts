@@ -394,3 +394,16 @@ export type {
 export { RhombusCarouselComponent } from './lib/carousel/rhombus-carousel.component';
 export { RhombusCarouselSlideComponent } from './lib/carousel/rhombus-carousel-slide.component';
 export type { RhombusCarouselTransition } from './lib/carousel/carousel.types';
+
+// Density — an app-wide geometry scale (compact / default / comfortable) set once
+// at bootstrap with `provideRhombusDensity()`, published as `data-density` on
+// <html> and consumed through five theme-invariant primitives from
+// @rhombuskit/tokens. Density owns the BOX (heights, padding, gaps) and changes no
+// font size — Material's own density scale changes none either. Omit the provider
+// and nothing is written, so an app that does not opt in renders unchanged.
+// Material-backed components additionally need the opt-in `material-bridge()`
+// mixin; without it density moves only RhombusKit's bespoke components.
+export { provideRhombusDensity } from './lib/density/rhombus-density.providers';
+export { RhombusDensityService, DENSITY_ATTRIBUTE } from './lib/density/rhombus-density.service';
+export { RHOMBUS_DENSITY } from './lib/density/rhombus-density.tokens';
+export type { RhombusDensity } from './lib/density/density.types';

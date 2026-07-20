@@ -1383,6 +1383,15 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusDensityService": {
+    "name": "RhombusDensityService",
+    "kind": "class",
+    "selector": null,
+    "description": "Writes the app-wide density level onto `<html>` as `data-density`.\n\nConstructed **eagerly** by `provideRhombusDensity()`'s environment\ninitializer — not lazily on first `inject()`. A `providedIn: 'root'` service\nthat nobody injects is never built, and there is no density UI component\nwhose rendering would construct it by accident, so without the initializer\nevery level would be a silent no-op.\n\nRuns on the **server** as well as the browser, deliberately. Unlike the theme\npreference — a per-user localStorage value, unknowable at prerender, which is\nwhy theming needs a pre-paint init script — density is a bootstrap constant\nsupplied through DI, so the correct value is already known at prerender time.\nWriting it through the injected document bakes it into the emitted HTML, so a\nstatic build paints at the right density and the browser's identical write on\nhydration is a no-op. An `isPlatformBrowser` guard here would trade that for a\nhydration-time layout shift, which is why there is none.",
+    "inputs": [],
+    "outputs": [],
+    "methods": []
+  },
   "RhombusDialogActionsDirective": {
     "name": "RhombusDialogActionsDirective",
     "kind": "class",
