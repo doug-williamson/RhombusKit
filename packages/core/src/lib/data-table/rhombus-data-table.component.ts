@@ -20,6 +20,7 @@ import {
 } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataSource } from '@angular/cdk/collections';
+import type { RhombusDensity } from '../density/density.types';
 import type { ColumnDef, SortState, PageState } from './data-table.types';
 import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
 
@@ -56,7 +57,7 @@ const INTERACTIVE_ELEMENT_SELECTOR =
   encapsulation: ViewEncapsulation.None,
   styleUrl: './rhombus-data-table.component.scss',
   template: `
-    <div class="rhombus-data-table">
+    <div class="rhombus-data-table" [attr.data-density]="density() ?? null">
       <div class="rhombus-data-table__scroll">
         <table
           mat-table
@@ -186,6 +187,17 @@ export class RhombusDataTableComponent<T> {
   readonly emptyTitle = input<string>('No data');
   /** Body text for the default empty state. */
   readonly emptyMessage = input<string>('There are no items to display.');
+
+  // --- Density ---
+  /**
+   * Table-local density. Overrides the app-wide `provideRhombusDensity()` level
+   * for this table only — including `'default'`, which restores default geometry
+   * inside a globally-compact app. `'dense'` is table-only (36px rows): it has no
+   * global equivalent because it drops below every other component's floor.
+   *
+   * Leave unset to inherit the app-wide level.
+   */
+  readonly density = input<RhombusDensity | 'dense' | undefined>(undefined);
 
   // --- Outputs ---
   /** Emits the new sort state whenever the active column or direction changes. */
