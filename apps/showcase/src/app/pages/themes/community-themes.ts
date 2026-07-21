@@ -2,7 +2,7 @@ import type { RegisteredTheme } from '@rhombuskit/theme-engine';
 import { tokens } from '@rhombuskit/tokens';
 
 /**
- * A community theme is a token map over the 58 CONTRACT names — no code, no
+ * A community theme is a token map over the 60 CONTRACT names — no code, no
  * selectors. Contributing one is a token-only change validated in CI for both
  * CONTRACT completeness AND WCAG AA contrast (see community-themes.spec.ts), so
  * it's the lowest-barrier first contribution that still can't dilute the
@@ -13,7 +13,7 @@ export interface CommunityTheme {
   label: string;
   author: string;
   mode: 'light' | 'dark';
-  /** Full map over the 58 CONTRACT token names. */
+  /** Full map over the 60 CONTRACT token names. */
   values: Record<string, string>;
 }
 

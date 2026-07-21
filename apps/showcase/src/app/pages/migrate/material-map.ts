@@ -125,7 +125,7 @@ export const COMPARISON: CompareRow[] = [
   },
   {
     feature: 'Components',
-    rhombuskit: '~46',
+    rhombuskit: '~48',
     material: '~35 + CDK',
     primeng: '80+',
     taiga: '130+',
