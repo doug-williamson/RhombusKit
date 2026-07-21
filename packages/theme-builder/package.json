@@ -1,0 +1,49 @@
+{
+  "name": "@rhombuskit/theme-builder",
+  "version": "1.14.0",
+  "license": "MIT",
+  "description": "Generate WCAG-AA-validated RhombusKit token-override themes from a few seed colours — a framework-agnostic seed→theme generator that emits both light and dark packs over the full 60-token CONTRACT.",
+  "keywords": [
+    "design-tokens",
+    "theming",
+    "color",
+    "oklch",
+    "wcag",
+    "accessibility",
+    "design-system",
+    "rhombuskit"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doug-williamson/RhombusKit.git",
+    "directory": "packages/theme-builder"
+  },
+  "homepage": "https://rhombuskit.online",
+  "funding": "https://github.com/sponsors/doug-williamson",
+  "bugs": {
+    "url": "https://github.com/doug-williamson/RhombusKit/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@rhombuskit/tokens": "workspace:*"
+  }
+}

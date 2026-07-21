@@ -105,6 +105,13 @@ const PACKAGES = [
     assert:
       "if (typeof m.createServer !== 'function') throw new Error('missing named export: createServer');",
   },
+  {
+    dir: 'theme-builder',
+    name: '@rhombuskit/theme-builder',
+    label: 'generateTheme',
+    assert:
+      "if (typeof m.generateTheme !== 'function') throw new Error('missing named export: generateTheme');",
+  },
 ];
 
 function die(msg) {

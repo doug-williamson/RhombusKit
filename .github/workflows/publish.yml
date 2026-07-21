@@ -89,6 +89,11 @@ jobs:
         run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish @rhombuskit/theme-builder
+        working-directory: packages/theme-builder
+        run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # Finalize the release ourselves (replaces release-please's github-release
       # step, whose component matching cannot round-trip this single-package repo):
       # create the tag + GitHub release, then clear the merged release PR's

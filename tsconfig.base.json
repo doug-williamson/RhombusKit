@@ -22,7 +22,8 @@
       "@rhombuskit/tokens": ["packages/tokens/src/index.ts"],
       "@rhombuskit/theme-engine": ["packages/theme-engine/src/index.ts"],
       "@rhombuskit/material-preset": ["packages/material-preset/src/index.ts"],
-      "@rhombuskit/core": ["packages/core/src/index.ts"]
+      "@rhombuskit/core": ["packages/core/src/index.ts"],
+      "@rhombuskit/theme-builder": ["packages/theme-builder/src/index.ts"]
     }
   }
 }
