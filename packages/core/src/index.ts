@@ -405,4 +405,4 @@ export type { RhombusCarouselTransition } from './lib/carousel/carousel.types';
 // mixin; without it density moves only RhombusKit's bespoke components.
 export { provideRhombusDensity } from './lib/density/rhombus-density.providers';
 export { RhombusDensityService } from './lib/density/rhombus-density.service';
-export type { RhombusDensity } from './lib/density/density.types';
+export type { RhombusDensity, RhombusTableDensity } from './lib/density/density.types';

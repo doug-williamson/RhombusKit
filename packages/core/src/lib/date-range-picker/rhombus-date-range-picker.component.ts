@@ -94,7 +94,7 @@ export class RhombusDateRangePickerComponent {
   readonly separator = input<string>('–');
   /** Form-field appearance, mapped to Material's `outline` (default) or `fill`. */
   readonly appearance = input<FormFieldAppearance>('outline');
-  /** Density scale applied via host classes; defaults to `md`. */
+  /** Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`. */
   readonly size = input<FormFieldSize>('md');
   /** Disables both endpoints in lightweight mode; ignored when `control` is set. */
   readonly disabled = input<boolean>(false);

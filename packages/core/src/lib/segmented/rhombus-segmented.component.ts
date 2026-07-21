@@ -127,7 +127,7 @@ export class RhombusSegmentedComponent<T = string> {
   readonly multiple = input(false, { transform: booleanAttribute });
   /** Disables the whole group in lightweight mode; ignored when `control` is set. Bare attribute. */
   readonly disabled = input(false, { transform: booleanAttribute });
-  /** Density preset applied via host class. Defaults to `md`. */
+  /** Type scale (font size only), applied via a host class; defaults to `md`. Box geometry is set app-wide by `provideRhombusDensity()`. */
   readonly size = input<SegmentedSize>('md');
   /** Stretch segments to equal widths filling the container. Bare attribute (`fullWidth`). */
   readonly fullWidth = input(false, { transform: booleanAttribute });
