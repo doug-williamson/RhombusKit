@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.0](https://github.com/doug-williamson/RhombusKit/compare/v1.12.0...v1.13.0) (2026-07-21)
+
+
+### Features
+
+* **core:** density modes — Tier 1 components (PR 2 of 3) ([#123](https://github.com/doug-williamson/RhombusKit/issues/123)) ([b1b037b](https://github.com/doug-williamson/RhombusKit/commit/b1b037b882e3a10c5de756aeb2d5bfa5c8dacc34))
+* **core:** v1.14 Rich interaction — Stepper, Reorder list, Carousel ([#120](https://github.com/doug-williamson/RhombusKit/issues/120)) ([f880443](https://github.com/doug-williamson/RhombusKit/commit/f880443028484a3cacd2cf08aaa3c4bb3710a32c))
+* density modes — foundation (PR 1 of 3) ([#121](https://github.com/doug-williamson/RhombusKit/issues/121)) ([e933c42](https://github.com/doug-williamson/RhombusKit/commit/e933c42661e729abe07d516117319c831e0c027c))
+
 ## [1.12.0](https://github.com/doug-williamson/RhombusKit/compare/v1.11.0...v1.12.0) (2026-07-19)
 
 
