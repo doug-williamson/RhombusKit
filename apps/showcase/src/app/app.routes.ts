@@ -314,6 +314,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/density/density-page.component'),
   },
   {
+    path: 'theme-builder',
+    title: 'Theme Builder',
+    loadComponent: () => import('./pages/theme-builder/theme-builder-page.component'),
+  },
+  {
     path: 'support',
     title: 'Support',
     loadComponent: () => import('./pages/support/support-page.component'),

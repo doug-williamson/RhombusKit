@@ -76,6 +76,10 @@ const ROUTES = [
   '/',
   '/theming',
   '/density',
+  // The theme builder renders its default generated theme in local data-theme
+  // subtrees; scanning it here is the AA positive control for the generator (its
+  // package owns the red-capable negative control via the nudge:false seam).
+  '/theme-builder',
   ...COMPONENTS.flatMap((c) => TABS.map((t) => `${c}?tab=${t}`)),
 ];
 

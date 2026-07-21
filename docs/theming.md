@@ -8,6 +8,7 @@ system with your own theme without breaking the contract.
 - [Switching themes at runtime](#switching-themes-at-runtime)
 - [No flash on first paint](#no-flash-on-first-paint)
 - [Custom themes](#custom-themes)
+- [Theme builder](#theme-builder)
 - [Overriding token values](#overriding-token-values)
 - [Density](#density)
 - [The Material bridge](#the-material-bridge)
@@ -180,6 +181,40 @@ so the pre-paint resolution matches.
 > This is the **sanctioned extensibility path** — it adds themes without changing the
 > CONTRACT, so it never breaks the semver contract. You're responsible for providing a
 > complete set of CONTRACT values; a missing name falls back to the inherited value.
+
+## Theme builder
+
+Writing all 60 CONTRACT values by hand — and keeping them AA-clean in both light and
+dark — is the slow part of the two steps above.
+[`@rhombuskit/theme-builder`](https://www.npmjs.com/package/@rhombuskit/theme-builder)
+does it from a seed: give it a brand accent (and, optionally, a neutral) and it derives
+a complete light + dark theme over every contract token, then **re-validates the WCAG AA
+contrast pairs and either returns an AA-clean theme or throws** — it never returns sub-AA
+output. It is pure TypeScript (no Angular peer), so it runs from a build script or a CLI:
+
+```ts
+import {
+  generateTheme,
+  serializeThemeCss,
+  toRegisteredThemes,
+  toAugmentation,
+} from '@rhombuskit/theme-builder';
+
+const theme = generateTheme({ accent: '#0ea5e9', name: 'sky' });
+
+serializeThemeCss(theme);   // the two [data-theme] blocks (step 2 above)
+toRegisteredThemes(theme);  // the provideRhombusThemes(...) metadata (step 1)
+toAugmentation(theme);      // the declare-module snippet
+```
+
+A bare `generateTheme()` (or the canonical `#7c3aed` / `#64748b` seeds) reproduces the
+shipped `rhombus-light` / `rhombus-dark` packs byte-for-byte. The fixed perceptual
+lightness ladder plus a small, bounded contrast nudge keep the accent axis AA-clean for
+every hue; only a pathological custom *neutral* can exhaust the nudge and throw.
+
+For an interactive version — pick seeds, watch a live light + dark preview, and copy or
+download the theme in any of the three forms — open the **[Theme builder](/theme-builder)**
+page. The preview is applied to a local subtree, so it never disturbs your own theme.
 
 ## Overriding token values
 
