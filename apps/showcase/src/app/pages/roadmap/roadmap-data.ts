@@ -112,10 +112,16 @@ export const ROADMAP: Roadmap = {
     // System depth and DX that advance in parallel with the component packs.
     now: [
       {
+        title: 'Theme builder',
+        detail:
+          'A pure-TypeScript generator (@rhombuskit/theme-builder) that turns one or two seed colours into a complete light + dark theme over all 60 contract tokens — re-validated for WCAG AA, so it returns an AA-clean theme or refuses. An interactive builder ships alongside for live preview and export.',
+        tag: 'v1.15',
+      },
+      {
         title: 'Density modes',
         detail:
           'Compact, default, and comfortable geometry under one runtime switch — provideRhombusDensity(). The highest-leverage gap enterprise Material migrators hit right after parity.',
-        tag: 'v1.15',
+        tag: 'v1.14',
       },
       {
         title: 'Motion: exit animations',
@@ -139,11 +145,6 @@ export const ROADMAP: Roadmap = {
       },
     ],
     considering: [
-      {
-        title: 'Theme builder',
-        detail:
-          'A visual generator that emits a token-override theme from a few seed colours, validated for AA contrast.',
-      },
       {
         title: 'RTL & logical properties',
         detail:
