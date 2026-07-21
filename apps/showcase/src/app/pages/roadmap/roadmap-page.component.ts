@@ -199,7 +199,7 @@ export default class RoadmapPageComponent {
       label: 'Components',
       blurb: 'The component library, shipped in themed release-train packs.',
       columns: this.columnsFor(ROADMAP.components, {
-        now: 'In the current release train (v1.14) — the last of the four packs.',
+        now: 'The last of the four planned packs (v1.14) — the component roadmap is complete.',
         next: 'The app-level Composite tier, on deck — community-shaped.',
         considering: 'Community-shaped — you decide.',
       }),

@@ -135,11 +135,6 @@ export const ROADMAP: Roadmap = {
     ],
     next: [
       {
-        title: 'Theme registry',
-        detail:
-          'Make custom and community themes first-class — registered, reflected, and persisted in the theme controls.',
-      },
-      {
         title: 'High-contrast theme',
         detail: 'A built-in high-contrast theme pack for low-vision and forced-colors users.',
       },
