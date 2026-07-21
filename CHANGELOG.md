@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/doug-williamson/RhombusKit/compare/v1.15.0...v1.16.0) (2026-07-21)
+
+
+### Features
+
+* **showcase:** theme builder page + AA e2e gate (Theme builder, PR 2 of 3) ([#128](https://github.com/doug-williamson/RhombusKit/issues/128)) ([1bcf7d9](https://github.com/doug-williamson/RhombusKit/commit/1bcf7d95f7726d3a7a5dbb468de6597fd5f5ad31))
+
 ## [1.15.0](https://github.com/doug-williamson/RhombusKit/compare/v1.14.0...v1.15.0) (2026-07-21)
 
 
