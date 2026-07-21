@@ -42,11 +42,11 @@
 /// Per-level Material companion values. Included once from `material-bridge()`,
 /// so it inherits whatever selector the consumer includes the bridge under.
 ///
-/// PR 2 populates the Tier 1 families: form-field, table (header + footer only)
-/// and list. Paginator and toolbar are Tier 2 and land in PR 3 — they are named
-/// in the design's illustrative listing but belong to components this PR does
-/// not otherwise touch, and a per-level value with no reviewed component brief
-/// behind it is exactly the "shipped on faith" pattern this epic keeps deleting.
+/// Tier 1 (PR 2): form-field, table (header + footer only) and list.
+/// Tier 2 (PR 3): paginator (bar height only) and toolbar (standard + mobile).
+/// Five `mat.*-overrides()` calls per level. Accordion and stepper are absent by
+/// design: both are hand-rolled and read no Material token, so their per-level
+/// values live in each component's own SCSS, not here.
 ///
 /// EVERY value here is transcribed from Material's own density ramp at the cited
 /// `_m3-*.scss` line, and every ramp was re-read from source rather than trusted
@@ -132,6 +132,32 @@
       list-item-leading-icon-end-space:    0.75rem, // lockstep with start, or
                                                     // the icon decentres
     ));
+
+    // PAGINATOR — the BAR height only. The inner page-size field is deliberately
+    // NOT touched: --mat-paginator-form-field-container-height is pinned at 40px
+    // across every level we expose (its ramp only moves at -5), and paginator.mjs
+    // re-declares --mat-form-field-container-height locally on .mat-mdc-paginator,
+    // so the global form-field height cannot leak in. Binding the field would put
+    // a 56px control inside this bar.
+    //
+    // This is the ONLY correct home for container-size. _bridge.scss's
+    // paginator-overrides is UNCONDITIONAL, so putting it there shrinks the bar
+    // 56 -> 52px at DEFAULT for every bridged app. Ramp at
+    // paginator/_m3-paginator.scss:40 (56,52,48,40,40,40).
+    @include mat.paginator-overrides((
+      container-size: 3.25rem, // 52px — Material -1
+    ));
+
+    // TOOLBAR — both height tokens, or neither (§7.9). Driving only the standard
+    // height shrinks desktop but not phones, the opposite of where density helps.
+    // Material swaps mobile-height in inside @media (max-width: 599px); the token
+    // only has to be set. Ramps at toolbar/_m3-toolbar.scss:38 (64,60,56,52) and
+    // :39 (56,52,48,44). The app-shell's own inert 56px min-height literal is a
+    // separate pre-existing bug and is NOT touched here.
+    @include mat.toolbar-overrides((
+      standard-height: 3.75rem, // 60px — Material -1
+      mobile-height:   3.25rem, // 52px — Material -1
+    ));
   }
 
   &[data-density='comfortable'] {
@@ -171,6 +197,17 @@
       list-item-two-line-container-height: 4.25rem, // 68px
       list-item-leading-icon-start-space:  1.25rem, // 20px
       list-item-leading-icon-end-space:    1.25rem,
+    ));
+
+    // Above Material's scale, like the rest of comfortable. +4 on the bar keeps
+    // it a notch above the default 56px; +8 on the toolbar heights tracks the
+    // control scale's own comfortable step.
+    @include mat.paginator-overrides((
+      container-size: 3.75rem, // 60px
+    ));
+    @include mat.toolbar-overrides((
+      standard-height: 4.5rem, // 72px
+      mobile-height:   4rem,   // 64px
     ));
   }
 }
