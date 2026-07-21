@@ -5,6 +5,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
+import type { RhombusDensity } from '../density/density.types';
 import type { ColumnDef, PageState, SortState } from './data-table.types';
 import { RhombusDataTableComponent } from './rhombus-data-table.component';
 
@@ -106,6 +107,7 @@ export class FakeDataSource<T> extends DataSource<T> {
       [totalCount]="totalCount()"
       [emptyTitle]="emptyTitle()"
       [emptyMessage]="emptyMessage()"
+      [density]="density()"
       (sortChange)="sortChanges.push($event)"
       (pageChange)="pageChanges.push($event)"
       (rowClick)="rowClicks.push($event)"
@@ -125,6 +127,7 @@ export class DataTableHostComponent {
   readonly totalCount = signal<number | null>(null);
   readonly emptyTitle = signal('No data');
   readonly emptyMessage = signal('There are no items to display.');
+  readonly density = signal<RhombusDensity | 'dense' | undefined>(undefined);
 
   readonly sortChanges: SortState[] = [];
   readonly pageChanges: PageState[] = [];

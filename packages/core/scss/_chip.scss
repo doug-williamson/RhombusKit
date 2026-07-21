@@ -4,6 +4,27 @@
 // colour / shadow / radius literals; no .mat-mdc-* selectors.
 
 .rhombus-chip {
+  // Density (default-equal). Material renders
+  //   .mat-mdc-standard-chip { height: var(--mat-chip-container-height, 32px) }
+  // as a HARD height, and --control-height-sm defaults to 2rem == 32px, so the
+  // chip is byte-identical at default. Ramp is (32,28,24) with the clamp at -2
+  // (chips/_m3-chip.scss:79), so compact lands on 28px = a true Material -1.
+  //
+  // Declared HERE, on the chip itself: the [rhombusChip] directive puts
+  // .rhombus-chip on mat-chip-option / mat-chip / mat-chip-row
+  // (rhombus-chip.directive.ts:38-43), which IS the .mat-mdc-standard-chip
+  // element — so this is a same-element rebind and needs no bridge edit.
+  //
+  // Consequence, intentional: density reaches chips carrying [rhombusChip]. A
+  // bare mat-chip-option stays 32px, which is correct — it never opted in.
+  //
+  // The chip's pointer target is .mdc-evolution-chip__action--primary at
+  // height: 100% of this box, so it tracks the chip and Rule T does not fire
+  // (chips render no touch-target element at all). Inline padding is left
+  // untouched: Material's own ramp moves container-height only, and reaching the
+  // padding would need nine .mdc-evolution-chip selectors for a <=4px gain.
+  --mat-chip-container-height: var(--control-height-sm, 2rem);
+
   // Variant: primary
   // Unselected: subtle tint over the nav-active surface (matches the
   // brand colour at a low intensity).
@@ -63,4 +84,25 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   font-family: var(--font-sans);
+}
+
+// --- Density: the chip-group gap (INTERNAL) ----------------------------------
+// per-level-override-only. The 0.5rem above is KEPT as a literal and the default
+// level emits nothing — an earlier draft substituted a --stack-gap whose default
+// was 0.75rem, a silent +4px at default density in every app that never opted in.
+//
+// Not tokenized: one scalar cannot serve a chip-group gap, a nav-list row gap
+// and a stepper layout gutter at once, so per-component gaps stay internal.
+// These rules emit no custom property and are invisible to /density, Figma, MCP
+// and verify-tokens.
+//
+// Ancestor-matched (0,2,0), not :root-anchored: it clears .rhombus-chip-group's
+// (0,1,0) on specificity alone, and it additionally fires inside a scoped
+// [data-density] subtree, which a :root-anchored rule never could.
+[data-density='compact'] .rhombus-chip-group {
+  gap: 0.375rem;
+}
+
+[data-density='comfortable'] .rhombus-chip-group {
+  gap: 0.75rem;
 }

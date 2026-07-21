@@ -42,17 +42,135 @@
 /// Per-level Material companion values. Included once from `material-bridge()`,
 /// so it inherits whatever selector the consumer includes the bridge under.
 ///
-/// PR 1 lands this wired but EMPTY of per-component values: the token layer and
-/// the plumbing ship first and provably move nothing, and the component values
-/// arrive in PR 2 alongside the components they belong to.
+/// PR 2 populates the Tier 1 families: form-field, table (header + footer only)
+/// and list. Paginator and toolbar are Tier 2 and land in PR 3 — they are named
+/// in the design's illustrative listing but belong to components this PR does
+/// not otherwise touch, and a per-level value with no reviewed component brief
+/// behind it is exactly the "shipped on faith" pattern this epic keeps deleting.
+///
+/// EVERY value here is transcribed from Material's own density ramp at the cited
+/// `_m3-*.scss` line, and every ramp was re-read from source rather than trusted
+/// from the design doc. Compact is Material's index-2 column verbatim, i.e. a
+/// true -1, which is upstream-validated. Comfortable is entirely ours (Material's
+/// scale has no positive direction), so its numbers carry their own derivation.
 @mixin density-levels() {
   &[data-density='compact'] {
-    // PR 2: form-field vertical padding in lockstep with --field-height,
-    // table header/footer heights, list per-line-count heights, paginator,
-    // toolbar. Empty here by design.
+    // FORM FIELD — three per-level keys, and they are not optional.
+    // `container-height` is a min-height on a BORDER-BOX infix, so the rendered
+    // height is max(H, padTop + padBottom + L). At the document root L is 24px
+    // (Material's line-height declaration is invalid at computed-value time, so
+    // the value INHERITS the unitless 1.5 from the tokens reset), and with the
+    // padding left at its default 32px sum the content floor is 56px — so a lower
+    // `container-height` NEVER BINDS and moving height alone is a silent no-op
+    // downward. Driving the padding in lockstep is the only thing that moves the
+    // box. Height itself is a substitute-var in _bridge.scss.
+    //
+    // L IS NOT UNIVERSALLY 24px, and the arithmetic below is stated at the root
+    // deliberately. Because the value inherits, it varies by ancestor: inside
+    // mat-dialog-content or a .mat-mdc-row — contexts this same bridge creates via
+    // --mat-sys-body-medium-line-height — L is 20px, so the content floor is 4px
+    // lower and `container-height` becomes the binding constraint instead of the
+    // padding. The lockstep pairing is correct either way (it is what makes the
+    // box move at all); only the "exactly content-sized" framing is root-specific.
+    // See the guard in tools/verify-component-styles.mjs for why L must stay
+    // inherited rather than being pinned to make this simpler.
+    //
+    // Ramps: (16,14,12,10,8,6) / (24,22,12,10,8,6) / (8,6,12,10,8,6)
+    // at form-field/_m3-form-field.scss:131, :132-133, :134-135.
+    //
+    // Both padding regimes total 28px, holding two invariants at once:
+    //   content floor  = 28 + 24 = 52 = container-height  (box is content-sized)
+    //   centring       = H/2 - padTop = 26 - 22 = 4px     (same as default)
+    // so compact introduces zero new label misalignment.
+    //
+    // 52px is Material's index 2. The -2 cliff at 48px is where
+    // form-field-filled-label-display flips to `none` and the floating label
+    // disappears (:130) — compact stops one step short of it, and we never emit
+    // that token anyway.
+    @include mat.form-field-overrides((
+      container-vertical-padding:                 0.875rem, // 14px — Material -1
+      filled-with-label-container-padding-top:    1.375rem, // 22px
+      filled-with-label-container-padding-bottom: 0.375rem, //  6px
+    ));
+
+    // TABLE — header and footer are two INDEPENDENT ramps with two different
+    // defaults (56 and 52). Never collapse them onto the row height: an earlier
+    // draft fed all three from one 48px value and silently shrank every shipped
+    // header by 8px and every footer by 4px at DEFAULT density.
+    // Row height is NOT restated here — it arrives free via --row-height's
+    // substitute-var in _bridge.scss. Ramps at table/_m3-table.scss:48, :49.
+    @include mat.table-overrides((
+      header-container-height: 3.25rem, // 52px — Material -1
+      footer-container-height: 3rem,    // 48px — Material -1
+    ));
+
+    // SELECTION LIST — the one per-level call for a component _bridge.scss does
+    // not already override. Two line-count ramps are driven independently
+    // because BOTH are reachable through the component's API: it emits
+    // matListItemTitle plus a conditional matListItemLine for `description`
+    // (rhombus-selection-list.component.ts:77-82, :109-114, :142-147), and
+    // Material swaps to the two-line token whenever that line is present.
+    // Feeding both from one value collapses every described row by 16px.
+    //
+    // NOTE THE DOUBLE PREFIX: `--mat-list-list-item-*`, not `--mat-list-item-*`.
+    // The shorter form does not exist in Material 21; an earlier draft used it
+    // for four names, which read as "" forever and left this whole ramp
+    // unmeasured while the gate reported green. All four verified consumed in
+    // fesm2022/list.mjs.
+    //
+    // three-line is deliberately NOT set. It is unreachable through this
+    // component's API, so nothing in the showcase renders it and no gate could
+    // see the value — the exact provenance of an earlier 88px -> 48px defect.
+    // It stays at Material's 88px default at every level; a direct mat-list
+    // consumer who needs it has a documented one-line override.
+    //
+    // Ramps at list/_m3-list.scss:84, :85, :86-87, :88-89.
+    @include mat.list-overrides((
+      list-item-one-line-container-height: 2.75rem, // 44px — Material -1
+      list-item-two-line-container-height: 3.75rem, // 60px — Material -1
+      list-item-leading-icon-start-space:  0.75rem, // 12px — must move in
+      list-item-leading-icon-end-space:    0.75rem, // lockstep with start, or
+                                                    // the icon decentres
+    ));
   }
 
   &[data-density='comfortable'] {
-    // PR 2: as above.
+    // Comfortable sits ABOVE Material's scale (which tops out at 0), so it has
+    // no upstream validation and every number is derived here.
+    //
+    // The padding sum is 40px, matching container-height 64px exactly, so the
+    // box stays content-sized and the content floor still equals the height.
+    //
+    // The filled pair is 28/12, NOT 32/8. Only padTop moves the resting label
+    // (it anchors to container-height: `top: calc(H/2)`), so the centring
+    // invariant is `H/2 - padTop = 4px` — and 32 gives 32 - 32 = 0, a visible
+    // 4px label drop. 28 is the only value that satisfies it. The sum is 40
+    // either way, so this choice does not disturb the content-floor arithmetic.
+    // The design's illustrative _density.scss listing still shows 32/8; the
+    // settled decision that supersedes it is the centring table in §7.2.
+    //
+    // Symmetric (outlined / no-label) padding is 20/20 for the same sum.
+    @include mat.form-field-overrides((
+      container-vertical-padding:                 1.25rem,  // 20px
+      filled-with-label-container-padding-top:    1.75rem,  // 28px — H/2 - 28 = 4
+      filled-with-label-container-padding-bottom: 0.75rem,  // 12px — sum stays 40
+    ));
+
+    // +8 on the header and footer, tracking --row-height's +8 (52 -> 60), so the
+    // header keeps its 4px lead over the row exactly as Material holds it at
+    // every index of its own ramp.
+    @include mat.table-overrides((
+      header-container-height: 4rem,    // 64px
+      footer-container-height: 3.75rem, // 60px
+    ));
+
+    // A uniform +4 on the two driven heights, so the two-line row keeps its 16px
+    // lead over one-line at every level.
+    @include mat.list-overrides((
+      list-item-one-line-container-height: 3.25rem, // 52px
+      list-item-two-line-container-height: 4.25rem, // 68px
+      list-item-leading-icon-start-space:  1.25rem, // 20px
+      list-item-leading-icon-end-space:    1.25rem,
+    ));
   }
 }

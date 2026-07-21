@@ -1025,6 +1025,16 @@ export const API_METADATA: Record<string, ApiEntry> = {
         "name": "emptyMessage",
         "type": "string",
         "description": "Body text for the default empty state."
+      },
+      {
+        "name": "density",
+        "type": "RhombusDensity | \"dense\"",
+        "description": "Table-local density. Overrides the app-wide `provideRhombusDensity()` level\nfor this table only — including `'default'`, which restores default geometry\ninside a globally-compact app. `'dense'` is table-only (36px rows): it has no\nglobal equivalent because it drops below every other component's floor.\n\nLeave unset to inherit the app-wide level.",
+        "enumValues": [
+          "compact",
+          "default",
+          "comfortable"
+        ]
       }
     ],
     "outputs": [

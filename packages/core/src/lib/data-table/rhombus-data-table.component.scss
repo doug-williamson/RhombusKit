@@ -141,3 +141,124 @@
 @media (max-width: 767.98px) {
   .rhombus-data-table__col--hide-md { display: none; }
 }
+
+// --- Table-local density -----------------------------------------------------
+// Bound to the inner .rhombus-data-table div, never the host: the component has
+// no `host:` block and is ViewEncapsulation.None, so neither a host binding nor
+// `:host` would match this selector.
+//
+// EVERY STEP REBINDS THE --mat-* TOKEN DIRECTLY, and that is not stylistic.
+// Re-declaring --row-height here would be INERT: the bridge substitutes
+// var(--row-height) at :root, custom properties resolve at computed-value time
+// on the declaring element, and only the already-resolved value inherits down.
+// A descendant cannot re-drive a substitution that happened above it. Global
+// density and scoped density are two different mechanisms.
+//
+// Header / footer / row are three INDEPENDENT Material ramps with three
+// different defaults (56 / 52 / 52). Never collapse them onto one value.
+//
+// Checkbox and radio touch targets are absolutely-positioned 48px squares
+// centred on the control. Below a 48px row they overhang, so adjacent rows'
+// targets OVERLAP and a click in the overlap band resolves by paint order to the
+// WRONG row. Only `dense` (36px) is below 48px, so per Rule T only `dense` needs
+// the rebind; the other three pin it at Material's own default for explicitness.
+// Scoped to this table's own attribute — never :root, where it would silently
+// shrink every checkbox and radio in the document.
+//
+// HOW THIS DIFFERS FROM UPSTREAM, stated correctly. `checkbox-touch-target-size`
+// is a BASE token (checkbox/_m3-checkbox.scss:23, radio/_m3-radio.scss:19), not a
+// density one — Material never shrinks it. Its density map carries
+// `touch-target-display: (block, block, none, none)` and `state-layer-size:
+// (40px, 36px, 32px, 28px)`, so at -2 Material DELETES the target outright rather
+// than letting it overlap. Shrinking the target to the row is therefore strictly
+// better than both alternatives: it keeps a real target (unlike upstream -2) and
+// it removes the overlap (unlike leaving 48px). Rule T3 is why we never emit the
+// display token.
+//
+// STATE LAYER MOVES WITH IT. The checkbox's own laid-out box is
+// `padding: calc((var(--mat-checkbox-state-layer-size, 40px) - 18px) / 2)` around
+// an 18px control = 40px. That is 4px TALLER than a 36px `dense` row, so without
+// rebinding it the control overflows the row it is supposed to sit inside. 36px
+// is Material's own -1 entry, so the value is on-ramp rather than invented.
+// (Not in the design's §7.3 — found by inventorying Material's density map
+// during implementation, which is also what corrected the paragraph above.)
+//
+// RhombusKit's own table renders NO checkbox or radio: the case being handled is
+// a CONSUMER projecting a <mat-checkbox> into a cell template, which is the
+// documented selection pattern.
+.rhombus-data-table {
+  // `default` MUST emit a real block rather than being a no-op: it is how one
+  // table escapes an app-wide provideRhombusDensity('compact'). These are
+  // Material's scale-0 literals, restated so they win over the inherited
+  // :root[data-density] values. This does NOT breach the byte-identical
+  // invariant — the block matches nothing unless the input is explicitly set.
+  &[data-density='default'] {
+    --mat-table-header-container-height:   3.5rem;  // 56px
+    --mat-table-footer-container-height:   3.25rem; // 52px
+    --mat-table-row-item-container-height: 3.25rem; // 52px
+    --mat-checkbox-touch-target-size:      3rem;    // 48px — Material default
+    --mat-radio-touch-target-size:         3rem;
+    --mat-checkbox-state-layer-size:       2.5rem;  // 40px — Material default
+    --mat-radio-state-layer-size:          2.5rem;
+  }
+
+  &[data-density='comfortable'] {
+    --mat-table-header-container-height:   4rem;    // 64px
+    --mat-table-footer-container-height:   3.75rem; // 60px
+    --mat-table-row-item-container-height: 3.75rem; // 60px
+    --mat-checkbox-touch-target-size:      3rem;
+    --mat-radio-touch-target-size:         3rem;
+    --mat-checkbox-state-layer-size:       2.5rem;
+    --mat-radio-state-layer-size:          2.5rem;
+  }
+
+  // TRUE Material -1 on all three ramps.
+  &[data-density='compact'] {
+    --mat-table-header-container-height:   3.25rem; // 52px
+    --mat-table-footer-container-height:   3rem;    // 48px
+    --mat-table-row-item-container-height: 3rem;    // 48px
+    // 48px row = 48px target: flush, zero overhang. Pinned anyway so the value
+    // is explicit rather than correct by luck.
+    --mat-checkbox-touch-target-size:      3rem;
+    --mat-radio-touch-target-size:         3rem;
+    --mat-checkbox-state-layer-size:       2.5rem;
+    --mat-radio-state-layer-size:          2.5rem;
+  }
+
+  // Table-only. TRUE Material -4 — the clamp floor of all three ramps
+  // (table/_m3-table.scss:44 clamps at -4). The header ramp (:48) is
+  // (56,52,48,44,40) and floors at 40px; the footer (:49) and row (:50) ramps are
+  // (52,48,44,40,36) and floor at 36px. So the header is 40px, NOT 36px — and
+  // 40px also preserves a property Material holds at EVERY index of its ramp:
+  // the header is 4px taller than the row. Collapsing them would make `dense`
+  // the only level where header == row, deleting the visual anchor exactly where
+  // the grid is tightest.
+  &[data-density='dense'] {
+    --mat-table-header-container-height:   2.5rem;  // 40px  <- Material -4 header
+    --mat-table-footer-container-height:   2.25rem; // 36px
+    --mat-table-row-item-container-height: 2.25rem; // 36px
+    // Rule T fires here, and only here. Pinned to the ROW height, not the
+    // header's — the checkboxes live in rows. A 36px row against a 48px target
+    // is 6px of overhang per side = 12px of cross-row overlap without this.
+    // 36px is well clear of the 24px SC 2.5.8 floor.
+    --mat-checkbox-touch-target-size:      2.25rem;
+    --mat-radio-touch-target-size:         2.25rem;
+    // The visible control box, moved in lockstep so it fits the row it sits in
+    // (40px default would overflow a 36px row by 2px per side). Material's own
+    // -1 entry; the ramp is (40,36,32,28) and clamps at -3.
+    --mat-checkbox-state-layer-size:       2.25rem;
+    --mat-radio-state-layer-size:          2.25rem;
+  }
+}
+
+// The paginator is body-local to the table but reads its own token, so a scoped
+// step must rebind it explicitly — the table's attribute cannot reach it through
+// --row-height for the same substitution reason as above. Only the two steps
+// that shrink the bar are emitted; default and comfortable inherit.
+.rhombus-data-table[data-density='compact'] .rhombus-data-table__paginator {
+  --mat-paginator-container-size: 3.25rem; // 52px — Material -1
+}
+
+.rhombus-data-table[data-density='dense'] .rhombus-data-table__paginator {
+  --mat-paginator-container-size: 3rem;    // 48px
+}

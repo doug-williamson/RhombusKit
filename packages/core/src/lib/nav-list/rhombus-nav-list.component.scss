@@ -148,7 +148,22 @@ button.rhombus-nav-list__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  // Density (default-equal): --control-height-sm defaults to 2rem, identical to
+  // the literal it replaces. The ONLY substitute-var in this file.
+  //
+  // Deliberately a WIDTH driven by a height primitive: the disclosure declares no
+  // height and stretches to the row from .rhombus-nav-list__parent
+  // { align-items: stretch } (:134), so its height already tracks density through
+  // the row's padding ramp. Driving the width from the same control scale keeps
+  // the two axes moving together instead of leaving a fixed-width control beside
+  // a shrinking row.
+  //
+  // NOT square, and the design doc's claim that this "keeps the control square"
+  // is wrong: the row is ~40px tall with an icon while this is 32px wide, so the
+  // control is 32x40 at default and stays non-square at every level. The
+  // substitution is still default-equal (2rem for 2rem) — only the rationale
+  // needed correcting.
+  width: var(--control-height-sm, 2rem);
   padding: 0;
   background: none;
   border: 0;
@@ -248,5 +263,100 @@ button.rhombus-nav-list__item {
   // Slightly larger trailing chevron so the row reads as tappable.
   .rhombus-nav-list__trailing-icon {
     color: var(--text-muted);
+  }
+}
+
+// --- Density (INTERNAL) ------------------------------------------------------
+// Every value in this file is per-level-override-only: the literals above are
+// KEPT and the default level emits NOTHING. That is not a stylistic choice — an
+// earlier draft substituted shared padding/gap tokens here and produced the
+// largest cluster of silent default-density regressions in the epic (gap 10px ->
+// 12px, root gap 4px -> 12px, --list padding 14/16 -> 8/16, and a min-height
+// that grew an icon row 8px and an icon-less row 14.5px).
+//
+// NO HEIGHT IS ADDED AT ANY LEVEL, on purpose. The nav item is content-derived
+// (8 + max(icon, label) + 8) and is the ONLY component in scope that is
+// structurally safe under WCAG SC 1.4.12 — a user stylesheet forcing line-height
+// 1.5 GROWS the row instead of clipping it. Adding a min-height at compact or
+// comfortable would trade that property away for nothing the padding ramp does
+// not already deliver.
+//
+// Focus rings here are INSET (outline-offset: -2px at :53, :102, :168), so these
+// gaps carry no ring-clearance floor and compact may safely reach 2px. The
+// outward-ring components elsewhere in the library have an 8px sibling-gap floor;
+// nav-list is exempt.
+//
+// SPECIFICITY. Plain item/root rules are (0,1,0), so an ancestor attribute gives
+// (0,2,0) and wins outright. Two rules need more: the section separator is
+// `.rhombus-nav-list__section + .rhombus-nav-list__section` (0,2,0), and every
+// `--list` override is (0,2,0) or nests one deeper. Those are written to (0,3,0)
+// — and the `--list` root gap is written as a compound `.rhombus-nav-list.rhombus-nav-list--list`
+// rather than relying on source order, so the two root-gap ramps can never invert.
+
+[data-density='compact'] {
+  .rhombus-nav-list {
+    gap: 2px;
+  }
+
+  .rhombus-nav-list__section + .rhombus-nav-list__section {
+    margin-top: 8px;
+  }
+
+  .rhombus-nav-list__heading {
+    // The 3-value asymmetry is intentional (the heading hugs the group below)
+    // and no scalar can express it — a second proof that a padding token was the
+    // wrong abstraction.
+    padding: 6px 10px 2px;
+  }
+
+  .rhombus-nav-list__item {
+    gap: 8px;
+    padding: 6px 10px;
+  }
+
+  // The group gap ships at 2px and has NO compact step available — 0px would
+  // merge the rows. Deliberately absent rather than restated; only comfortable
+  // can move it.
+
+  .rhombus-nav-list.rhombus-nav-list--list {
+    // Floor: --list rows carry a visible 1px border (:238), so the gap must stay
+    // wide enough that two adjacent borders do not read as a single divider.
+    // 6px is the practical floor.
+    gap: 6px;
+  }
+
+  .rhombus-nav-list--list .rhombus-nav-list__item {
+    padding: 10px 12px;
+  }
+}
+
+[data-density='comfortable'] {
+  .rhombus-nav-list {
+    gap: 6px;
+  }
+
+  .rhombus-nav-list__section + .rhombus-nav-list__section {
+    margin-top: 16px;
+  }
+
+  .rhombus-nav-list__heading {
+    padding: 10px 14px 6px;
+  }
+
+  .rhombus-nav-list__item {
+    gap: 12px;
+    padding: 10px 14px;
+  }
+
+  .rhombus-nav-list__group {
+    gap: 4px;
+  }
+
+  .rhombus-nav-list.rhombus-nav-list--list {
+    gap: 12px;
+  }
+
+  .rhombus-nav-list--list .rhombus-nav-list__item {
+    padding: 18px 20px;
   }
 }
