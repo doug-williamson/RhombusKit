@@ -417,6 +417,25 @@ test.describe('compact actually reaches each component — not just clears the f
       compact: '3.25rem',
       why: 'toolbar mobile-height token is driven too — the "both or neither" half',
     },
+    // Hand-rolled components (accordion, stepper). Their ramps are hand-derived
+    // and live ONLY in each component's own SCSS with no shared token or Material
+    // fallback behind them, so deleting a density block must go red HERE — the
+    // geometry gate pins only the default literals, which these overrides never
+    // touch, and nothing else measures them at a non-default level.
+    {
+      route: '/components/accordion',
+      sel: '.rhombus-accordion__trigger',
+      prop: 'padding-top',
+      compact: '10px',
+      why: 'accordion trigger per-level padding (own SCSS; default 14px)',
+    },
+    {
+      route: '/components/stepper',
+      sel: '.rhombus-stepper__indicator',
+      prop: 'width',
+      compact: '24px',
+      why: 'stepper indicator per-level box (own SCSS; default 28px)',
+    },
   ];
 
   for (const { route, sel, prop, compact, why } of MOVED) {

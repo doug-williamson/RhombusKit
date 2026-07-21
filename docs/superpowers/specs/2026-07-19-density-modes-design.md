@@ -1609,7 +1609,7 @@ v1's assertion forced only `line-height: 1.5` and probed `scrollHeight <= client
 |---|---|---|
 | `.rhombus-nav-list__label` | `el.scrollWidth <= el.clientWidth` | It carries `overflow: hidden; text-overflow: ellipsis; white-space: nowrap` (`:198-200`), so under letter/word-spacing a compact nav-list ellipsises sooner. This is the one element in the library where clipping is directly observable. |
 | button / segmented / chip labels | bounding-box comparison against the container | `overflow: visible` — text escapes rather than clipping, so only a geometric comparison detects it. |
-| table rows, list items, tabs | **inner content box vs row box** — `min(child top)` / `max(child bottom)` of the row's text element compared against the row's own rect | These use **hard `height`**, so content clips. `getBoundingClientRect()` returns a child's **unclipped** layout box even under `overflow: hidden` (`.mdc-list-item { overflow: hidden }`, `list.mjs`), so it measures exactly the pixels being cut off. This exposure exists on `main` already (§7.3, §7.4, §7.8); the test asserts **non-regression** rather than claiming a fix. |
+| ~~table rows~~, list items, tabs | **inner content box vs row box** — `min(child top)` / `max(child bottom)` of the row's *innermost growing text element* (not the fixed-height MDC content container around it) compared against the row's own rect | List items and tabs use **hard `height`**, so content clips; `getBoundingClientRect()` returns a child's **unclipped** layout box even under `overflow: hidden` (`.mdc-list-item { overflow: hidden }`, `list.mjs`). This exposure exists on `main` already (§7.4, §7.8); the test asserts **non-regression**. <br>**Corrected in PR 3:** the **data-table row was dropped**. RhombusKit renders a native `<table>`, so `.mat-mdc-row` is `display: table-row`, where `height` acts as a **minimum** — text-spacing *grows* the row instead of clipping it (verified: forced short → row stays ≥ content). It is structurally incapable of the regression, so a probe on it could not go red. The list/tab `textSel` was also corrected to the innermost growing span (`.mdc-list-item__primary-text` / `.mdc-tab__text-label`); the MDC content container is fixed-height and would make the probe vacuous. |
 
 > **v2's third probe was vacuous and is replaced.** It compared `getComputedStyle(row).height` against the very custom property `height` is declared from — an identity that cannot disagree, so it passed unconditionally. That is precisely the failure mode §8.4 itself diagnoses in v1's `scrollHeight <= clientHeight` (§1.2 H3).
 
@@ -2145,7 +2145,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 
 ### PR 3 — Tier 2 + surface
 
-**Scope** — §7.8 tabs · §7.9 toolbar (both height tokens; the 56px literal untouched) · §7.10 pagination (bar only) · §7.11 accordion · §7.12 stepper (incl. the local `em` glyph fix) · the nine docstring corrections (§3.3) · the `/density` page + route + nav (§10.1) · `tokens-page.component.ts:102-112` · roadmap promote-and-refill · the migrate row · `theming.md` §Density + READMEs · full regen.
+**Scope** — §7.8 tabs · §7.9 toolbar (both height tokens; the 56px literal untouched) · §7.10 pagination (bar only) · §7.11 accordion · §7.12 stepper (incl. the local per-level glyph box — the rem→em plan was dropped, see D1) · the nine docstring corrections (§3.3) · the `/density` page + route + nav (§10.1) · `tokens-page.component.ts:102-112` · roadmap promote-and-refill · the migrate row · `theming.md` §Density + READMEs · full regen.
 
 **Checklist**
 
@@ -2160,7 +2160,7 @@ Each is a **MINOR**. Each is independently shippable, independently verifiable, 
 
 **Exit criteria**
 
-1. Geometry baseline default diff empty, except the deliberate stepper glyph `rem`→`em` conversion, which is reviewed and noted.
+1. Geometry baseline default diff **fully empty** — the proposed stepper glyph `rem`→`em` conversion was dropped in favour of a compact/comfortable-only per-level `rhombus-icon` box (D1, §7.12), so default rendering is unchanged and there is no exception to note.
 2. All nine `--check` gates green (§10.3).
 3. `/density` renders `.showcase-page`, passes the contrast gate in both themes, and its table derives from `tokens.density` rather than hard-coded values.
 4. The roadmap `next` column is non-empty.

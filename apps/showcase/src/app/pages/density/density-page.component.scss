@@ -25,6 +25,11 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
+  // Narrow viewports scroll the columns horizontally rather than hiding the
+  // header row: `display: none` on the header would drop every columnheader from
+  // the accessibility tree and leave the values unlabelled (which level is this?)
+  // for screen-reader and sighted mobile users alike.
+  overflow-x: auto;
 }
 
 .density-table__row {
@@ -33,6 +38,9 @@
   align-items: center;
   gap: 16px;
   padding: 10px 16px;
+  // Floor the row width so the four columns stay legible; below it the whole
+  // table scrolls horizontally (see .density-table) with the header intact.
+  min-width: 34rem;
 
   & + & {
     border-top: 1px solid var(--border);
@@ -56,19 +64,4 @@
 .density-table__default {
   color: var(--text-primary);
   font-weight: 600;
-}
-
-@media (max-width: 640px) {
-  .density-table__row {
-    grid-template-columns: 1fr 1fr;
-    row-gap: 4px;
-  }
-
-  .density-table__row--head {
-    display: none;
-  }
-
-  .density-table__name {
-    grid-column: 1 / -1;
-  }
 }
