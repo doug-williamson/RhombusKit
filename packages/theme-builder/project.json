@@ -10,7 +10,7 @@
         "command": "pnpm run build",
         "cwd": "packages/theme-builder"
       },
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "inputs": ["production"],
       "outputs": ["{projectRoot}/dist"]
     },
