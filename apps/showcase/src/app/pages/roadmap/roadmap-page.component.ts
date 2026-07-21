@@ -40,10 +40,10 @@ interface Track {
           requests and upvotes. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          Recently shipped <strong>Dashboard &amp; surfaces</strong> — Skeleton,
-          Stat, and Sheet (v1.13) — and <strong>Rich interaction</strong> —
-          Stepper, Reorder List, and Carousel (v1.14), completing the component
-          roadmap. <strong>Density modes</strong> (v1.15) is shipping now below.
+          Recently shipped <strong>Rich interaction</strong> — Stepper, Reorder
+          List, and Carousel (v1.14) — completing the component roadmap, alongside
+          <strong>Density modes</strong> (v1.14) on the Foundations track. The
+          AA-validated <strong>Theme builder</strong> (v1.15) is shipping now below.
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>
@@ -209,7 +209,7 @@ export default class RoadmapPageComponent {
       label: 'Foundations',
       blurb: 'System depth, theming, and DX that advance in parallel with the components.',
       columns: this.columnsFor(ROADMAP.foundations, {
-        now: 'Active foundation work.',
+        now: 'The current release train, plus active foundation work.',
         next: 'Accepted; scheduled next.',
         considering: 'Under exploration.',
       }),

@@ -38,9 +38,9 @@ describe('RoadmapPageComponent', () => {
   });
 
   it('keeps the Foundations "Up next" column non-empty', () => {
-    // Density moved from foundations.next -> foundations.now (v1.15), so `next`
-    // had to be refilled by promoting items from `considering`. Without that
-    // refill the column renders empty; this is the test that catches it.
+    // Foundations `now` holds the tagged deliveries (Density v1.14, Theme builder
+    // v1.15), so `next` must stay refilled by promoting items from `considering`.
+    // Without that refill the column renders empty; this is the test that catches it.
     const el = render();
     const foundations = el.querySelector(
       '.track[data-track="foundations"]',
