@@ -75,6 +75,7 @@ const TABS = ['overview', 'examples', 'api'] as const;
 const ROUTES = [
   '/',
   '/theming',
+  '/density',
   ...COMPONENTS.flatMap((c) => TABS.map((t) => `${c}?tab=${t}`)),
 ];
 

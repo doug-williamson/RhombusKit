@@ -31,10 +31,12 @@ import { test, expect, type Page } from '@playwright/test';
  *    claim that makes this release non-breaking. Font-size being level-invariant
  *    is its executable form.
  *
- * The prerender assertion and the /density toggle test are deliberately NOT
- * here: both need the `/density` route and `provideRhombusDensity('default')` in
- * the showcase's app config, which land in the next PR. In this PR no showcase
- * page registers the provider, so there is nothing for them to assert against.
+ * PR 3 adds three more: the prerender assertion, the /density toggle test, and
+ * the SC 1.4.12 clip probes. The `/density` route and
+ * `provideRhombusDensity('default')` now exist in the showcase's app config, so
+ * the provider writes `data-density` into the prerendered HTML (the only check
+ * that fails if the provider is inert or reintroduces a platform guard) and the
+ * toggle drives the real service end to end.
  */
 
 type Density = 'compact' | 'default' | 'comfortable';
@@ -79,6 +81,58 @@ async function heightOf(page: Page, sel: string): Promise<number | null> {
     return el ? el.getBoundingClientRect().height : null;
   }, sel);
 }
+
+test.describe('provider wiring — the level is written at prerender and by the toggle', () => {
+  // THE prerender assertion, and the reason it is first. It is the ONLY check
+  // that fails if provideRhombusDensity() is inert, if the service reverts to the
+  // `document` global, or if a platform guard is reintroduced — every other test
+  // writes the attribute itself with page.evaluate, so all of them would keep
+  // passing over a completely broken provider. `request` is Playwright's
+  // APIRequestContext: it fetches the raw prerendered HTML and executes NO
+  // scripts, so a match proves the attribute was baked in on the server, not set
+  // by client-side hydration.
+  test('the prerendered /density HTML carries data-density="default" (no scripts run)', async ({
+    request,
+  }) => {
+    const res = await request.get('/density');
+    expect(res.ok(), `/density returned ${res.status()}`).toBe(true);
+    const html = await res.text();
+    expect(
+      html,
+      'the eager provider must write data-density onto <html> during prerender'
+    ).toMatch(/<html[^>]*\sdata-density="default"/);
+  });
+
+  // The signal -> attribute path through the real service. page.evaluate (used
+  // everywhere else) bypasses the service entirely, so this is the only test that
+  // would catch the toggle being wired to nothing. It runs on /density, the one
+  // page that injects the service, so it is NOT provider-wiring cover — that is
+  // the prerender assertion above and the jest providers spec.
+  test('the /density toggle writes the picked level onto <html>', async ({ page }) => {
+    await page.goto('/density', { waitUntil: 'networkidle' });
+    // Starts at the provider's bootstrapped default.
+    await page.waitForFunction(
+      () => document.documentElement.getAttribute('data-density') === 'default'
+    );
+
+    // The segmented control renders a radiogroup; each level is a role="radio".
+    await page.getByRole('radio', { name: 'Compact' }).click();
+    await page.waitForFunction(
+      () => document.documentElement.getAttribute('data-density') === 'compact'
+    );
+    expect(
+      await page.evaluate(() => document.documentElement.getAttribute('data-density'))
+    ).toBe('compact');
+
+    await page.getByRole('radio', { name: 'Comfortable' }).click();
+    await page.waitForFunction(
+      () => document.documentElement.getAttribute('data-density') === 'comfortable'
+    );
+    expect(
+      await page.evaluate(() => document.documentElement.getAttribute('data-density'))
+    ).toBe('comfortable');
+  });
+});
 
 test.describe('Rule T — compact button touch targets track their box', () => {
   // Material renders <span class="mat-mdc-button-touch-target"> on every
@@ -327,6 +381,41 @@ test.describe('compact actually reaches each component — not just clears the f
       prop: 'padding-left',
       compact: '10px',
       why: 'nav-list per-level rule (default 12px, so a deleted block reads 12)',
+    },
+    // Tier 2 (PR 3). tabs is a substitute-var (default == the 48px fallback),
+    // paginator is a per-level-override-only bar height; both are unmeasured at
+    // any non-default level without this block.
+    {
+      route: '/components/tabs',
+      sel: '.mat-mdc-tab',
+      prop: 'height',
+      compact: '44px',
+      why: 'tabs --control-height-lg substitute-var (=48 at default, = the fallback)',
+    },
+    {
+      route: '/components/pagination',
+      sel: '.mat-mdc-paginator-container',
+      prop: 'min-height',
+      compact: '52px',
+      why: 'paginator bar container-size (_density.scss; default 56, NOT in :root)',
+    },
+    // toolbar drives BOTH height tokens (§7.9). Desktop viewport renders the
+    // standard height; the mobile token is asserted as the driven custom property
+    // (it only applies <600px, below the e2e viewport) so "both or neither" is
+    // machine-checked without a viewport switch.
+    {
+      route: '/components/app-shell?tab=examples',
+      sel: '.mat-toolbar-single-row',
+      prop: 'height',
+      compact: '60px',
+      why: 'toolbar standard-height (_density.scss; default 64 from Material, NOT in :root)',
+    },
+    {
+      route: '/components/app-shell?tab=examples',
+      sel: '.mat-toolbar-single-row',
+      prop: '--mat-toolbar-mobile-height',
+      compact: '3.25rem',
+      why: 'toolbar mobile-height token is driven too — the "both or neither" half',
     },
   ];
 
@@ -589,4 +678,105 @@ test.describe('scoped density — a table-local level reaches its own subtree', 
     expect(global!.paddingLeft).toBe('14px');
     expect(global!.box).toBeCloseTo(36, 0);
   });
+});
+
+test.describe('SC 1.4.12 — compact must not clip text more than default', () => {
+  // Under a conforming text-spacing user stylesheet (line-height 1.5 plus letter
+  // and word spacing) a fixed-height row can clip its own label. The claim density
+  // makes is NON-REGRESSION: compact — a 4px-shorter row — must not clip MORE than
+  // default. Each probe compares the label's UNCLIPPED layout box
+  // (getBoundingClientRect returns it even under overflow:hidden) with the row box.
+  //
+  // The data-table is deliberately NOT probed. Measured against the real DOM its
+  // rows are `display: table-row`, which GROW with content rather than clipping (a
+  // forced short height is treated as a minimum, so content never overflows). It
+  // is structurally incapable of this regression, and a probe on it could not go
+  // red — worse than no probe. Only genuinely hard-height rows are covered, and
+  // each carries a positive control so a green is never a blind green.
+  const TEXT_SPACING = `
+    * { line-height: 1.5 !important; letter-spacing: 0.12em !important;
+        word-spacing: 0.16em !important; }
+    p { margin-block: 2em !important; }`;
+
+  type Clip = { rowH: number; contentH: number; overflow: number };
+
+  async function measureClip(page: Page, rowSel: string, textSel: string): Promise<Clip> {
+    return page.$eval(
+      rowSel,
+      (row: HTMLElement, sel: string) => {
+        const r = row.getBoundingClientRect();
+        const kids = Array.from(row.querySelectorAll<HTMLElement>(sel));
+        if (kids.length === 0) throw new Error(`probe blind: no ${sel} inside ${row.className}`);
+        const boxes = kids.map((k) => k.getBoundingClientRect());
+        const top = Math.min(...boxes.map((b) => b.top));
+        const bottom = Math.max(...boxes.map((b) => b.bottom));
+        return {
+          rowH: r.height,
+          contentH: bottom - top,
+          overflow: Math.max(0, r.top - top) + Math.max(0, bottom - r.bottom),
+        };
+      },
+      textSel
+    );
+  }
+
+  // The textSel is the innermost element that actually GROWS under the stylesheet
+  // (its line-height:1 is replaced by 1.5), NOT the fixed-height MDC content box
+  // around it, which never overflows the row and would make the probe vacuous.
+  const ROWS: ReadonlyArray<{ route: string; rowSel: string; textSel: string }> = [
+    { route: '/components/tabs', rowSel: '.mat-mdc-tab', textSel: '.mdc-tab__text-label' },
+    {
+      route: '/components/selection-list',
+      rowSel: '.mat-mdc-list-option',
+      textSel: '.mdc-list-item__primary-text',
+    },
+  ];
+
+  for (const { route, rowSel, textSel } of ROWS) {
+    test(`compact does not clip ${rowSel} more than default`, async ({ page }) => {
+      await page.goto(route, { waitUntil: 'networkidle' });
+      await page.addStyleTag({ content: TEXT_SPACING });
+
+      await setDensity(page, 'default');
+      const atDefault = await measureClip(page, rowSel, textSel);
+      await setDensity(page, 'compact');
+      const atCompact = await measureClip(page, rowSel, textSel);
+
+      // (a) POSITIVE CONTROL — force the row well below its label height and prove
+      //     the probe reports overflow. Without it the gate could pass while blind.
+      const forced = await page.evaluate(
+        ({ rs, ts }) => {
+          const style = document.createElement('style');
+          style.textContent = `${rs} { height: 8px !important; min-height: 8px !important; }`;
+          document.head.appendChild(style);
+          const row = document.querySelector<HTMLElement>(rs)!;
+          const r = row.getBoundingClientRect();
+          const boxes = Array.from(row.querySelectorAll<HTMLElement>(ts)).map((k) =>
+            k.getBoundingClientRect()
+          );
+          const top = Math.min(...boxes.map((b) => b.top));
+          const bottom = Math.max(...boxes.map((b) => b.bottom));
+          const out = {
+            rowH: r.height,
+            overflow: Math.max(0, r.top - top) + Math.max(0, bottom - r.bottom),
+          };
+          style.remove();
+          return out;
+        },
+        { rs: rowSel, ts: textSel }
+      );
+      expect(forced.rowH, 'positive control: the row did not shrink, so the probe is untested').toBeLessThan(16);
+      expect(forced.overflow, 'probe is blind — it cannot observe clipping at all').toBeGreaterThan(0);
+
+      // (b) Sanity — real boxes, not zeros (jsdom-style vacuity).
+      expect(atDefault.rowH).toBeGreaterThan(0);
+      expect(atDefault.contentH).toBeGreaterThan(0);
+
+      // (c) THE GATE — non-regression, 0.5px sub-pixel tolerance.
+      expect(
+        atCompact.overflow,
+        `compact clips ${rowSel} by ${(atCompact.overflow - atDefault.overflow).toFixed(1)}px more than default`
+      ).toBeLessThanOrEqual(atDefault.overflow + 0.5);
+    });
+  }
 });
