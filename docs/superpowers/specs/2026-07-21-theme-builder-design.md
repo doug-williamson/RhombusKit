@@ -305,13 +305,13 @@ A default-exported standalone `OnPush` component (clone `density-page.component.
 
 ## 12. Open decisions register
 
-**Genuinely open — need a maintainer call:**
+**Resolved by the maintainer (2026-07-21):**
 
-| # | Decision | Recommendation | Alternative |
-|---|---|---|---|
-| D2 | Low-fidelity seeds: **warn** or offer a `strict` reject? | **Warn only** (never reject a paying brand; B3 showed a reject metric is hard to calibrate). | Opt-in `strict: true` that throws when a fidelity warning fires. |
-| D3 | `FIDELITY_BUDGET` value. | **2**; confirm against a real brand corpus in PR1 (green needs 1 step; keep headroom). | 1 (tighter) / 3 (looser). |
-| D5 | De-dupe `community-themes.spec.ts` onto the shared `color-math` export? | **Optional PR2 cleanup** (adds a showcase jest `moduleNameMapper`; not required for correctness). | Leave its local copy; the package still has the single source of truth. |
+| # | Decision | Ruling |
+|---|---|---|
+| D2 | Low-fidelity seeds: warn or `strict` reject? | **Warn only** (never reject a brand). SETTLED. |
+| D3 | `FIDELITY_BUDGET` value. | **2** (confirm against the PR1 corpus; green needs 1 step, keep headroom). SETTLED. |
+| D5 | De-dupe `community-themes.spec.ts` onto the shared math? | **Optional** PR2 cleanup (not required for correctness). SETTLED. |
 
 **Closed by this spec:**
 - Scope/semver — **standalone `@rhombuskit/theme-builder` package** (maintainer chose 2026-07-21); ships **v1.16+** (density owns v1.15). SETTLED (C3).
