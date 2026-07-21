@@ -12,7 +12,6 @@ import {
 } from './color-math';
 import {
   RUNGS,
-  RAMPS,
   L_ACCENT_CURVE,
   CHROMA_ENV,
   L_NEUTRAL_CURVE,

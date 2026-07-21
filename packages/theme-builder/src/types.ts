@@ -27,3 +27,14 @@ export interface BuildOptions {
   /** Disable the AA-rescue nudge. Only for the red-gate test — a green seed then throws. */
   nudge?: boolean;
 }
+
+/**
+ * Structural match for `@rhombuskit/theme-engine`'s `RegisteredTheme` — declared locally so this
+ * package stays free of an Angular/theme-engine dependency. Assignable to `provideRhombusThemes()`.
+ */
+export interface RegisteredThemeMeta {
+  name: string;
+  label: string;
+  mode: 'light' | 'dark';
+  palette: string;
+}

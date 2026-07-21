@@ -36,6 +36,8 @@ describe('override recipes reproduce the shipped packs from verbatim ramps', () 
     const { '--status-scheduled-bg': baseBg, ...baseRest } = BASE.dark;
     expect(gotRest).toEqual(baseRest);
     expect(gotBg).toMatch(/^#[0-9a-f]{6}$/);
+    // The synthesized deep-tint differs from the shipped bespoke #1a0a3a.
+    expect(gotBg).not.toBe(baseBg);
   });
 
   it('neutral recipes with the slate ramp reproduce the base neutral tokens', () => {
@@ -126,5 +128,32 @@ describe('custom neutral', () => {
     expect(t.light['--bg']).not.toBe(BASE.light['--bg']);
     expect(validateThemeAA(t.light).ok).toBe(true);
     expect(validateThemeAA(t.dark).ok).toBe(true);
+  });
+});
+
+describe('seed validation, naming and options', () => {
+  it('throws on an unparseable accent or neutral', () => {
+    expect(() => build({ accent: 'not-a-colour' })).toThrow(/Invalid accent/);
+    expect(() => build({ neutral: 'nope' })).toThrow(/Invalid neutral/);
+  });
+
+  it('warns (does not throw) for a near-neutral accent with very low chroma', () => {
+    const t = build({ accent: '#9aa0a6' });
+    expect(validateThemeAA(t.light).ok).toBe(true);
+    expect(t.report.warnings.some((w) => /low chroma|close to neutral/i.test(w))).toBe(true);
+  });
+
+  it('derives a hue name for the default and a custom accent', () => {
+    expect(build().name).toBe('rhombus');
+    expect(build({ accent: '#16a34a' }).name).toBe('green');
+    expect(build({ accent: '#16a34a', name: 'forest', label: 'Forest' }).label).toBe('Forest');
+  });
+
+  it('accepts and clamps vividness without breaking AA', () => {
+    for (const vividness of [0.5, 1.5, 3, 0]) {
+      const t = build({ accent: '#2563eb', vividness });
+      expect(validateThemeAA(t.light).ok).toBe(true);
+      expect(validateThemeAA(t.dark).ok).toBe(true);
+    }
   });
 });

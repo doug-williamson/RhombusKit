@@ -40,6 +40,11 @@ const PACKAGES = [
     entry: 'packages/tokens/dist/index.d.mts',
     report: 'etc/tokens.api.md',
   },
+  {
+    name: '@rhombuskit/theme-builder',
+    entry: 'packages/theme-builder/dist/index.d.mts',
+    report: 'etc/theme-builder.api.md',
+  },
 ];
 
 const COMPILER_OPTIONS = {
