@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.16.1](https://github.com/doug-williamson/RhombusKit/compare/v1.16.0...v1.16.1) (2026-07-21)
+
+
+### Bug Fixes
+
+* **showcase:** correct stale counts and references in the guides ([#133](https://github.com/doug-williamson/RhombusKit/issues/133)) ([920c7ab](https://github.com/doug-williamson/RhombusKit/commit/920c7ab6724a58aff4d462f5efc19671ea14a12c))
+* **showcase:** emit absolute asset URLs to fix modulepreload errors on deep links ([#132](https://github.com/doug-williamson/RhombusKit/issues/132)) ([303371e](https://github.com/doug-williamson/RhombusKit/commit/303371e4c53af1404247a1664961676c0f528842))
+
 ## [1.16.0](https://github.com/doug-williamson/RhombusKit/compare/v1.15.0...v1.16.0) (2026-07-21)
 
 
