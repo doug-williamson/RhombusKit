@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/doug-williamson/RhombusKit/compare/v1.13.0...v1.14.0) (2026-07-21)
+
+
+### Features
+
+* **core:** density modes — Tier 2 + surface (PR 3 of 3) ([#124](https://github.com/doug-williamson/RhombusKit/issues/124)) ([078ee16](https://github.com/doug-williamson/RhombusKit/commit/078ee163d70b43be41159b8abdd0343b76adc57b))
+
 ## [1.13.0](https://github.com/doug-williamson/RhombusKit/compare/v1.12.0...v1.13.0) (2026-07-21)
 
 
