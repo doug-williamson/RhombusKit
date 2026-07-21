@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/doug-williamson/RhombusKit/compare/v1.14.0...v1.15.0) (2026-07-21)
+
+
+### Features
+
+* **theme-builder:** AA-validated seed→theme generator (Theme builder, PR 1 of 3) ([#126](https://github.com/doug-williamson/RhombusKit/issues/126)) ([7d4a19b](https://github.com/doug-williamson/RhombusKit/commit/7d4a19b218f07c5af597d34f5ecc23fa819d2d9d))
+
 ## [1.14.0](https://github.com/doug-williamson/RhombusKit/compare/v1.13.0...v1.14.0) (2026-07-21)
 
 
