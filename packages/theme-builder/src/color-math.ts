@@ -1,7 +1,8 @@
 // Hand-rolled colour math — zero dependency. Two halves:
-//   (A) WCAG contrast (parseColor / relativeLuminance / contrastRatio / alphaComposite),
-//       matching apps/showcase/src/app/pages/themes/community-themes.spec.ts so the builder
-//       and the showcase compute contrast identically.
+//   (A) WCAG contrast (parseColor / relativeLuminance / contrastRatio / alphaComposite). The
+//       core ratio maths match apps/showcase/src/app/pages/themes/community-themes.spec.ts; the
+//       validator additionally composites translucent values over --bg (see validate.ts) so a
+//       generated theme's true rendered contrast is measured, not a phantom raw-channel ratio.
 //   (B) OKLCH synthesis (toOKLCH / fromOKLCH / gamutClampToSrgb) via Björn Ottosson's matrices.
 // All operate on CSS value strings / channel tuples — no library, no runtime cost beyond the maths.
 

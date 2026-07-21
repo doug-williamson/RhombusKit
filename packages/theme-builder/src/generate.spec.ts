@@ -1,6 +1,6 @@
-import { build, buildRamp, deepTint, overrideAccent, overrideNeutral } from './generate';
+import { build, buildRamp, deepTint, overrideAccent, overrideNeutral, ownedTokens } from './generate';
 import { ThemeAAError } from './errors';
-import { BASE, RAMPS, L_ACCENT_CURVE, CHROMA_ENV, RUNGS } from './constants';
+import { BASE, RAMPS, L_ACCENT_CURVE, CHROMA_ENV, RUNGS, CONTRACT_KEYS } from './constants';
 import { validateThemeAA } from './validate';
 import { normalizeHex, toOKLCH } from './color-math';
 
@@ -27,17 +27,19 @@ describe('override recipes reproduce the shipped packs from verbatim ramps', () 
     const light = { ...BASE.light };
     overrideAccent(light, RAMPS.violet, 'light');
     expect(light).toEqual(BASE.light);
-    const dark = { ...BASE.dark };
-    overrideAccent(dark, RAMPS.violet, 'dark');
-    // Dark --status-scheduled-bg is a bespoke deep-tint (#1a0a3a) that no ramp step
-    // reproduces; a custom accent synthesizes it via deepTint(). Every OTHER dark
-    // accent token must match the shipped pack exactly.
-    const { '--status-scheduled-bg': gotBg, ...gotRest } = dark;
-    const { '--status-scheduled-bg': baseBg, ...baseRest } = BASE.dark;
-    expect(gotRest).toEqual(baseRest);
-    expect(gotBg).toMatch(/^#[0-9a-f]{6}$/);
-    // The synthesized deep-tint differs from the shipped bespoke #1a0a3a.
-    expect(gotBg).not.toBe(baseBg);
+    const dark = { ...BASE.dark } as Record<string, string>;
+    overrideAccent(dark as never, RAMPS.violet, 'dark');
+    const baseCopy = { ...BASE.dark } as Record<string, string>;
+    // Two dark accent backgrounds are deliberately SOLID deep-tints for a custom theme
+    // (measurable by a raw-channel guard) rather than the built-in's bespoke #1a0a3a /
+    // translucent alpha: --status-scheduled-bg and --nav-active-bg. Every OTHER dark accent
+    // token must match the shipped pack exactly.
+    for (const key of ['--status-scheduled-bg', '--nav-active-bg']) {
+      expect(dark[key]).toMatch(/^#[0-9a-f]{6}$/); // solid hex, not alpha/bespoke
+      delete dark[key];
+      delete baseCopy[key];
+    }
+    expect(dark).toEqual(baseCopy);
   });
 
   it('neutral recipes with the slate ramp reproduce the base neutral tokens', () => {
@@ -48,6 +50,26 @@ describe('override recipes reproduce the shipped packs from verbatim ramps', () 
     overrideNeutral(dark, RAMPS.slate, 'dark');
     expect(dark).toEqual(BASE.dark);
   });
+});
+
+describe('recipe-table completeness (drift guard)', () => {
+  // --ink-surface/--ink-on-surface are slate rungs but deliberately theme-invariant, never seed-tied.
+  const INVARIANT = new Set(['--ink-surface', '--ink-on-surface']);
+
+  it.each(['light', 'dark'] as const)(
+    'every %s base token equal to a violet/slate rung is owned by a recipe (guards future pack drift)',
+    (mode) => {
+      const violetVals = new Set(RUNGS.map((r) => RAMPS.violet[r]));
+      const slateVals = new Set(RUNGS.map((r) => RAMPS.slate[r]));
+      const { accent, neutral } = ownedTokens(mode);
+      for (const key of CONTRACT_KEYS) {
+        if (INVARIANT.has(key)) continue;
+        const value = BASE[mode][key];
+        if (violetVals.has(value)) expect(accent.has(key)).toBe(true);
+        if (slateVals.has(value)) expect(neutral.has(key)).toBe(true);
+      }
+    },
+  );
 });
 
 describe('buildRamp', () => {

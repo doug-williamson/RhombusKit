@@ -68,7 +68,10 @@ const ACCENT: Record<'light' | 'dark', Partial<Record<SemanticTokenName, Recipe>
     '--focus-border': { rung: 400 },
     '--btn-primary-bg': { rung: 600 },
     '--btn-primary-hover': { rung: 700 },
-    '--nav-active-bg': { fn: (r) => alpha(r[400], '0.14') },
+    // Solid deep-tint (not the built-in's translucent alpha) so the generated theme also
+    // clears a raw-channel contrast guard — matching the shipped community themes, which use a
+    // solid dark nav-active-bg for exactly this reason (community-themes.ts). See validate.ts.
+    '--nav-active-bg': { fn: (r) => deepTint(r[600]) },
     '--switch-track-on': { rung: 500 },
     '--status-scheduled-bg': { fn: (r) => deepTint(r[600]) },
     '--status-scheduled-text': { rung: 400 },
@@ -147,6 +150,14 @@ export function overrideAccent(rec: Rec, ramp: FullRamp, mode: 'light' | 'dark',
 
 export function overrideNeutral(rec: Rec, ramp: FullRamp, mode: 'light' | 'dark', prov?: Provenance): void {
   applyTable(rec, ramp, NEUTRAL[mode], prov);
+}
+
+/** The tokens each family recolours in a mode — used by the completeness drift-guard test. */
+export function ownedTokens(mode: 'light' | 'dark'): {
+  accent: Set<string>;
+  neutral: Set<string>;
+} {
+  return { accent: new Set(Object.keys(ACCENT[mode])), neutral: new Set(Object.keys(NEUTRAL[mode])) };
 }
 
 function anchorOf(curve: readonly number[], L: number): number {
