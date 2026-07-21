@@ -1,5 +1,6 @@
 import {
   parseColor,
+  normalizeHex,
   relativeLuminance,
   contrastRatio,
   alphaComposite,
@@ -7,6 +8,16 @@ import {
   fromOKLCH,
   gamutClampToSrgb,
 } from './color-math';
+
+describe('normalizeHex', () => {
+  it('lowercases, expands #rgb, and strips alpha', () => {
+    expect(normalizeHex('#FFF')).toBe('#ffffff');
+    expect(normalizeHex('#7C3AED')).toBe('#7c3aed');
+    expect(normalizeHex('#7c3aedff')).toBe('#7c3aed');
+    expect(normalizeHex('rgb(124 58 237 / 0.5)')).toBe('#7c3aed');
+    expect(normalizeHex('var(--x)')).toBeNull();
+  });
+});
 
 describe('parseColor', () => {
   it('parses 3-digit hex', () => {

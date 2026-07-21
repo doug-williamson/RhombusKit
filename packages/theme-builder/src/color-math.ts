@@ -50,6 +50,12 @@ export function parseColor(css: string): Rgba | null {
   return null; // var(), color-mix(), hsl(), named colours — not contrast-checkable
 }
 
+/** Normalise any parseable colour to lowercase `#rrggbb` (alpha stripped); null if unparseable. */
+export function normalizeHex(css: string): string | null {
+  const p = parseColor(css);
+  return p ? toHex(p[0], p[1], p[2]) : null;
+}
+
 /** WCAG 2.1 relative luminance (sRGB linearisation, 0.2126/0.7152/0.0722). */
 export function relativeLuminance([r, g, b]: readonly [number, number, number]): number {
   const channel = (v: number): number => {
