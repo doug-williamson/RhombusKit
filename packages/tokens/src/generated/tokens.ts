@@ -67,6 +67,22 @@ export const tokens = {
   "field-height": "3.5rem",
   "row-height": "3.25rem"
 } as const,
+  density: {
+  "compact": {
+    "control-height-sm": "1.75rem",
+    "control-height-md": "2.25rem",
+    "control-height-lg": "2.75rem",
+    "field-height": "3.25rem",
+    "row-height": "3rem"
+  },
+  "comfortable": {
+    "control-height-sm": "2.25rem",
+    "control-height-md": "3rem",
+    "control-height-lg": "3.5rem",
+    "field-height": "4rem",
+    "row-height": "3.75rem"
+  }
+} as const,
   themes: {
     'rhombus-light': {
     "--bg": "#f8fafc",

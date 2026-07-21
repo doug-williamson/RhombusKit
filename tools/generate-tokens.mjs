@@ -176,11 +176,22 @@ writeFileSync(resolve(generatedDir, 'index.scss'), indexSCSS);
 
 // --- Generate tokens.ts ---
 
+// tokens.primitives holds the DEFAULT density values (the five names arrive via
+// the densityDefaults spread in the primitives barrel), but only the default
+// column. The /density docs page needs the compact/comfortable columns too, so
+// emit a second `density` map — the flattened level scales, keyed the same bare
+// kebab way as `primitives`, so the page derives its 3-column table straight
+// from generated data (§5.4) rather than hand-authoring the scoped values.
+const densityTS = Object.fromEntries(
+  Object.entries(densityLevels).map(([level, scale]) => [level, flattenPrimitives(scale)])
+);
+
 const tokensTS = [
   BANNER,
   "import type { SemanticTokenName } from '../types';\n\n",
   `export const tokens = {\n`,
   `  primitives: ${JSON.stringify(flatPrimitives, null, 2)} as const,\n`,
+  `  density: ${JSON.stringify(densityTS, null, 2)} as const,\n`,
   `  themes: {\n`,
   ...Object.entries(themes).map(([packName, values]) =>
     `    '${packName}': ${JSON.stringify(values, null, 4)} as Record<SemanticTokenName, string>,\n`
