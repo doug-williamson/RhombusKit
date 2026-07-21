@@ -109,6 +109,39 @@
   line-height: 1.6;
 }
 
+// --- Density (INTERNAL) ------------------------------------------------------
+// Per-level-override-only: the base literals above are KEPT and the default
+// level emits NOTHING, so an accordion in an app that never opts in renders
+// exactly as before. The trigger is the control, so its padding and the
+// icon<->label gap track density; the disclosure body padding, the 2px
+// intra-label gap and the panel dividers are typographic/structural, out of scope.
+//
+// NO min-height at any level. With `font: inherit` the trigger is already
+// content-derived (~47-52px at a 16px base), so a floor would be inert or a
+// growth — and it would trade away the SC 1.4.12 property the padding ramp keeps.
+// The focus ring here is INSET (outline-offset: -2px, :45), so this gap carries
+// no outward-ring clearance floor and compact may tighten it freely.
+//
+// The gap has no shipped ramp to transcribe (accordion is hand-rolled and reads
+// no Material token), so it is derived to move +/-4px in lockstep with the
+// padding block axis: 12 -> 8 at compact, 12 -> 16 at comfortable.
+//
+// Specificity: base rules are (0,1,0); `[data-density] .class` is (0,2,0), so it
+// wins order-independently.
+[data-density='compact'] {
+  .rhombus-accordion__trigger {
+    gap: 0.5rem; // 8px (default 12px)
+    padding: 0.625rem 0.75rem; // 10/12 (default 14/16)
+  }
+}
+
+[data-density='comfortable'] {
+  .rhombus-accordion__trigger {
+    gap: 1rem; // 16px (default 12px)
+    padding: 1.125rem 1.25rem; // 18/20 (default 14/16)
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rhombus-accordion__region,
   .rhombus-accordion__chevron,

@@ -60,6 +60,9 @@ export const MATERIAL_MAP: MigrationRow[] = [
   { material: 'Tooltip', api: 'matTooltip', pkg: 'material', rk: 'Tooltip', match: 'full', note: 'rhombusTooltip is a direct hover/focus tooltip equivalent.' },
   { material: 'Tree', api: 'mat-tree', pkg: 'material', rk: '', match: 'gap', note: 'No hierarchical tree-view component.' },
 
+  // ── Density (a system, not a single component) ──────────────────────────────
+  { material: 'Density', api: 'mat.density', pkg: 'material', rk: 'provideRhombusDensity()', match: 'partial', note: 'Runtime attribute + provider vs a Sass-time mixin; three named levels (adds a comfortable direction) vs four numeric; value-identical to mat.density(-1) on 12 of 13 components, with no -2/-3 target/label cliff and the low end deliberately unreachable.' },
+
   // ── Angular CDK (utilities / primitives) ───────────────────────────────────
   { material: 'Drag and Drop', api: 'cdkDrag', pkg: 'cdk', rk: 'Reorder List', match: 'partial', note: 'rhombus-reorder-list wraps cdkDrag for single-list reordering with a full keyboard + LiveAnnouncer a11y layer; connected/cross-list drag-drop still uses @angular/cdk directly.' },
   { material: 'Overlay', api: 'OverlayModule', pkg: 'cdk', rk: 'Popover', match: 'partial', note: 'Used internally (Popover/Menu/Tooltip/Dialog); no general positioning service is exposed.' },

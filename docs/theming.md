@@ -9,12 +9,13 @@ system with your own theme without breaking the contract.
 - [No flash on first paint](#no-flash-on-first-paint)
 - [Custom themes](#custom-themes)
 - [Overriding token values](#overriding-token-values)
+- [Density](#density)
 - [The Material bridge](#the-material-bridge)
 
 ## How theming works
 
-RhombusKit's colour, shadow, radius, and font decisions live in a three-tier token
-system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
+RhombusKit's colour, shadow, radius, geometry, and font decisions live in a three-tier
+token system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
 
 1. **Primitives** — the raw palette (`violet-600`, `slate-100`, …). Internal.
 2. **CONTRACT** — semantic names that are the public, versioned API: `--bg`,
@@ -195,6 +196,135 @@ properties under the existing `data-theme` selector (load after the tokens layer
 Because everything resolves through `var(--…)`, this re-tints RhombusKit components and
 Material components alike. Keep an eye on contrast — RhombusKit's defaults are tuned to
 WCAG 2.1 AA in both themes.
+
+## Density
+
+Density is a single app-wide choice of control **geometry** — `compact`, `default`, or
+`comfortable` — set once at bootstrap. It owns the box (heights, padding, gaps) and never
+the type: each component's `size` input still owns font size, so density and size are
+orthogonal and adding density is non-breaking. An app that never opts in renders exactly
+as before.
+
+```ts
+import { provideRhombusDensity } from '@rhombuskit/core';
+
+bootstrapApplication(App, {
+  providers: [
+    provideRhombusDensity('compact'), // 'compact' | 'default' | 'comfortable'
+  ],
+});
+```
+
+The provider is eager: registering it constructs `RhombusDensityService`, which writes the
+level onto `<html>` as `data-density`. It is theme-invariant (a 40px control is 40px in
+every theme), so it lives in the palette-level primitives — five frozen names,
+`--control-height-sm|md|lg`, `--field-height`, `--row-height` — not the semantic CONTRACT.
+Every level clears the WCAG 2.2 24×24 target floor; there is deliberately no equivalent of
+Material's `-2`/`-3` steps, which drop touch targets and the floating label.
+
+Switch at runtime through the same service:
+
+```ts
+private readonly density = inject(RhombusDensityService);
+onCompact() { this.density.density.set('compact'); }
+```
+
+**The Material bridge is required for Material-backed controls.** Density reaches
+RhombusKit's own components (button, segmented, chip, chip group, nav list, accordion,
+stepper) with no extra setup, but the **form-field family, data table, selection list,
+tabs, toolbar, and paginator** only move when the [Material bridge](#the-material-bridge)
+is included — once, on `:root` or `html`:
+
+```scss
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+:root {
+  @include rhombus.material-bridge();
+}
+```
+
+> Include the bridge on `:root`/`html`, not on an app-level wrapper. The service writes
+> `data-density` on `<html>`, so a bridge included at `.app` compiles a
+> `.app[data-density='…']` selector that never matches.
+
+**What density leaves alone.** It does not touch checkbox, radio, or switch state layers;
+slider, menu, dialog, datepicker, card, or snackbar (Angular Material no-ops density on
+those too); or any font size. Those are stated exclusions, not gaps — a compact app keeps
+them at their default size.
+
+### SSR and prerendering
+
+Unlike the theme preference — a per-user `localStorage` value that is unknowable at
+prerender, which is why theming needs the [pre-paint init script](#no-flash-on-first-paint)
+— density is a bootstrap constant supplied through DI, so the correct level is already
+known when a page is rendered on the server. The service writes it through the injected
+document, so statically rendered pages ship the right `data-density` in their HTML and the
+browser's identical write on hydration is a no-op. **That is why density needs no pre-paint
+script**: there is no wrong-value first paint to prevent.
+
+### Limitations
+
+- **One level per build for static/SSR pages.** The level is baked in at render time. A
+  page prerendered with `provideRhombusDensity('compact')` ships compact markup; switching
+  at runtime is a client-side reflow after hydration.
+- **No persistence.** There is no stored preference and nothing reads one; reload returns
+  to the bootstrapped level. If you offer a user toggle, persist and re-apply it yourself.
+- **Client-only apps paint once at the bootstrapped level**, then the service's first write
+  runs during bootstrap — before first paint in practice, but if you need a guaranteed
+  value in the initial HTML, set `<html data-density="…">` in your index template.
+
+### Migrating from mat-density
+
+Coming off Angular Material's `mat.density($scale)`? `provideRhombusDensity('compact')` is
+**value-identical to `mat.theme((density: -1))` on twelve of the thirteen in-scope
+components** (the one exception, the segmented control, becomes 36px where `mat.density`
+leaves it at 40px, because Material's button-toggle ramp is flat at `-1` — that is the
+feature, not a regression). You also gain a `comfortable` direction, runtime switching, no
+`-2` accessibility cliff, and a fix for Material's sub-48px touch-target overlap.
+
+The swap:
+
+```scss
+// BEFORE
+html { @include mat.theme((color: (…), typography: Roboto, density: -1)); }
+
+// AFTER — delete the `density` key (do not leave it at 0; delete it).
+@use '@rhombuskit/tokens/scss';
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+html { @include mat.theme((color: (…), typography: Roboto)); }
+:root { @include rhombus.material-bridge(); } // required — see above
+```
+
+```ts
+bootstrapApplication(App, { providers: [provideRhombusDensity('compact')] });
+```
+
+Density is scoped, so **restore the components it leaves out by hand** — or accept +4px on
+them. These names are declared nowhere in RhombusKit, so there is no conflict:
+
+```scss
+:root {
+  @include mat.checkbox-overrides((state-layer-size: 36px)); // was -1
+  @include mat.radio-overrides((state-layer-size: 36px));
+  @include mat.expansion-overrides((
+    header-collapsed-state-height: 44px,
+    header-expanded-state-height: 60px,
+  ));
+  @include mat.tree-overrides((node-min-height: 44px));
+  @include mat.select-overrides((arrow-transform: translateY(-8px)));
+}
+```
+
+`rhombus-checkbox` and `rhombus-radio` are shipped RhombusKit components, so this is a real,
+visible change, not hypothetical.
+
+> **Running both at once is unsupported.** A component-class rebind beats any
+> `mat.theme((density: …))` value unconditionally, so an app that keeps a Material density
+> scale *and* adopts RhombusKit density gets a partial, un-opt-out-able shift — for example
+> a table row and header collapsing to the same height. `provideRhombusDensity()` detects a
+> live `mat.density` scale in dev mode and warns. Remove the Material density scale and use
+> `provideRhombusDensity()` alone.
 
 ## The Material bridge
 

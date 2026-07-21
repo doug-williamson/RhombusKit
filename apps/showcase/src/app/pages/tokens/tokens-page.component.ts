@@ -101,14 +101,16 @@ import { TOKENS_STACKBLITZ_STARTER } from '../../shared/tokens-stackblitz-starte
       <section class="showcase-section">
         <h2>Geometry &amp; motion primitives</h2>
         <p class="tokens-lead">
-          Radius, border-width, and motion are
+          Radius, border-width, motion, and the
+          <a routerLink="/density">density</a> control heights are
           <strong>theme-invariant primitives</strong> — identical in light and
           dark — so they form one geometry/motion layer shared by RhombusKit's
           components and your own surfaces. They're part of the published token
           API (the MCP <code>list_tokens</code> returns them), and RhombusKit's
           components consume them internally, so overriding one re-themes the
           matching components too. There's no need to define a parallel
-          <code>--r-*</code> / <code>--motion-*</code> scale.
+          <code>--r-*</code> / <code>--motion-*</code> /
+          <code>--control-height-*</code> scale.
         </p>
 
         <h3>Corner radius</h3>

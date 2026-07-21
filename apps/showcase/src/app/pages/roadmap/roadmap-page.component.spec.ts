@@ -37,6 +37,20 @@ describe('RoadmapPageComponent', () => {
     expect(el.querySelectorAll('.card').length).toBeGreaterThan(5);
   });
 
+  it('keeps the Foundations "Up next" column non-empty', () => {
+    // Density moved from foundations.next -> foundations.now (v1.15), so `next`
+    // had to be refilled by promoting items from `considering`. Without that
+    // refill the column renders empty; this is the test that catches it.
+    const el = render();
+    const foundations = el.querySelector(
+      '.track[data-track="foundations"]',
+    ) as HTMLElement;
+    const next = foundations.querySelector(
+      '.board__col[data-col="next"]',
+    ) as HTMLElement;
+    expect(next.querySelectorAll('.card').length).toBeGreaterThan(0);
+  });
+
   it('gives every column header a unique id (no duplicate ids across tracks)', () => {
     const el = render();
     const ids = Array.from(el.querySelectorAll('.board__title')).map((t) => t.id);

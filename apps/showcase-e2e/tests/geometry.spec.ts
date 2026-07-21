@@ -243,6 +243,21 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
       },
     ],
   },
+  {
+    route: '/components/app-shell?tab=examples',
+    rows: [
+      // Toolbar height is Material's own (64px on desktop) — PR 3 drives it only
+      // at compact/comfortable in _density.scss, so default must stay Material's.
+      // The app-shell's own inert 56px min-height literal is a separate,
+      // pre-existing bug that this epic deliberately does not touch.
+      {
+        sel: '.mat-toolbar-single-row',
+        prop: 'height',
+        expect: '64px',
+        why: '_m3-toolbar.scss:38 (Material default; no density override at default)',
+      },
+    ],
+  },
 ];
 
 for (const { route, rows } of CASES) {

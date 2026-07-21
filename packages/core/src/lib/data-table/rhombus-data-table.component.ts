@@ -20,7 +20,7 @@ import {
 } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataSource } from '@angular/cdk/collections';
-import type { RhombusDensity } from '../density/density.types';
+import type { RhombusTableDensity } from '../density/density.types';
 import type { ColumnDef, SortState, PageState } from './data-table.types';
 import { RhombusEmptyStateDirective } from './rhombus-empty-state.directive';
 
@@ -197,7 +197,7 @@ export class RhombusDataTableComponent<T> {
    *
    * Leave unset to inherit the app-wide level.
    */
-  readonly density = input<RhombusDensity | 'dense' | undefined>(undefined);
+  readonly density = input<RhombusTableDensity | undefined>(undefined);
 
   // --- Outputs ---
   /** Emits the new sort state whenever the active column or direction changes. */

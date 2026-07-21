@@ -266,7 +266,45 @@ for (const [label, source] of [
   }
 }
 
+// ---------------------------------------------------------------------------
+// A4 — tokens.density, the generated data the /density page derives from (§5.4).
+// ---------------------------------------------------------------------------
+// The docs table is built from `tokens.primitives` (default column + the five
+// names) plus `tokens.density.{compact,comfortable}` — NOT hand-authored. So the
+// generated const must carry the same five names per level, with bare kebab keys
+// (no `--`), matching the values emitted into primitives.css above. tokens.ts is
+// a pure data module (no side effects), so importing the committed artefact is
+// itself the check — the same "assert the shipped file" philosophy as the rest.
+const { tokens } = await import('../packages/tokens/src/generated/tokens.ts');
+
+const DENSITY_KEYS = DENSITY_NAMES.map((n) => n.slice(2)); // strip '--'
+
+assert.ok(tokens.density, 'tokens.density must exist for the /density page derivation (§5.4)');
+for (const level of ['compact', 'comfortable']) {
+  assert.ok(tokens.density[level], `tokens.density.${level} is missing`);
+  assert.deepEqual(
+    Object.keys(tokens.density[level]).sort(),
+    [...DENSITY_KEYS].sort(),
+    `tokens.density.${level} must carry exactly the five density names as bare kebab keys`
+  );
+  for (const key of DENSITY_KEYS) {
+    assert.equal(
+      tokens.density[level][key],
+      expected[`:root[data-density='${level}']`][`--${key}`],
+      `tokens.density.${level}.${key} must equal the emitted primitives.css value`
+    );
+  }
+}
+// The default column the page reads from tokens.primitives must agree too.
+for (const key of DENSITY_KEYS) {
+  assert.equal(
+    tokens.primitives[key],
+    expected[':root'][`--${key}`],
+    `tokens.primitives.${key} must equal the default primitives.css value`
+  );
+}
+
 console.log(
   `generate-tokens: OK — 3 blocks × 3 artefacts, ${DENSITY_NAMES.length} density names, ` +
-    `${new Set(published).size} published primitives`
+    `${new Set(published).size} published primitives, tokens.density × 2 levels`
 );

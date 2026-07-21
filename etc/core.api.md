@@ -312,7 +312,7 @@
 ### RhombusDataTableComponent (class)
   readonly columns: _angular_core.InputSignal<ColumnDef<T>[]>
   readonly data: _angular_core.InputSignal<DataSource<T> | T[]>
-  readonly density: _angular_core.InputSignal<RhombusDensity | "dense">
+  readonly density: _angular_core.InputSignal<RhombusTableDensity>
   readonly emptyMessage: _angular_core.InputSignal<string>
   readonly emptyTitle: _angular_core.InputSignal<string>
   readonly loading: _angular_core.InputSignal<boolean>
@@ -782,6 +782,9 @@
 
 ### RhombusTabGroupDirective (class)
   readonly tabChange: _angular_core.OutputEmitterRef<number>
+
+### RhombusTableDensity (type)
+  type RhombusTableDensity = 'compact' | 'default' | 'comfortable' | 'dense'
 
 ### RhombusTagComponent (class)
   readonly size: _angular_core.InputSignal<TagSize>

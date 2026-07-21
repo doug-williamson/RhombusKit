@@ -240,7 +240,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -1028,12 +1028,13 @@ export const API_METADATA: Record<string, ApiEntry> = {
       },
       {
         "name": "density",
-        "type": "RhombusDensity | \"dense\"",
+        "type": "RhombusTableDensity",
         "description": "Table-local density. Overrides the app-wide `provideRhombusDensity()` level\nfor this table only — including `'default'`, which restores default geometry\ninside a globally-compact app. `'dense'` is table-only (36px rows): it has no\nglobal equivalent because it drops below every other component's floor.\n\nLeave unset to inherit the app-wide level.",
         "enumValues": [
           "compact",
           "default",
-          "comfortable"
+          "comfortable",
+          "dense"
         ]
       }
     ],
@@ -1225,7 +1226,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -1318,7 +1319,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -1629,7 +1630,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -1938,7 +1939,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -2579,7 +2580,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "SegmentedSize",
-        "description": "Density preset applied via host class. Defaults to `md`.",
+        "description": "Type scale (font size only), applied via a host class; defaults to `md`. Box geometry is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -2679,7 +2680,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -3616,7 +3617,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",
@@ -3726,7 +3727,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
       {
         "name": "size",
         "type": "FormFieldSize",
-        "description": "Density scale applied via host classes; defaults to `md`.",
+        "description": "Type scale (font size only), applied via host classes; defaults to `md`. Box geometry — heights, padding, gaps — is set app-wide by `provideRhombusDensity()`.",
         "enumValues": [
           "sm",
           "md",

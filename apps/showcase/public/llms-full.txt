@@ -381,7 +381,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 ### RhombusDataTableComponent (class)
   readonly columns: _angular_core.InputSignal<ColumnDef<T>[]>
   readonly data: _angular_core.InputSignal<DataSource<T> | T[]>
-  readonly density: _angular_core.InputSignal<RhombusDensity | "dense">
+  readonly density: _angular_core.InputSignal<RhombusTableDensity>
   readonly emptyMessage: _angular_core.InputSignal<string>
   readonly emptyTitle: _angular_core.InputSignal<string>
   readonly loading: _angular_core.InputSignal<boolean>
@@ -852,6 +852,9 @@ See the **Theming** section at the end for the full provider + SCSS setup.
 ### RhombusTabGroupDirective (class)
   readonly tabChange: _angular_core.OutputEmitterRef<number>
 
+### RhombusTableDensity (type)
+  type RhombusTableDensity = 'compact' | 'default' | 'comfortable' | 'dense'
+
 ### RhombusTagComponent (class)
   readonly size: _angular_core.InputSignal<TagSize>
   readonly variant: _angular_core.InputSignal<TagVariant>
@@ -1085,7 +1088,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   values: Record<"--bg" | "--bg-subtle" | "--surface-0" | "--surface-1" | "--surface-2" | "--surface-3" | "--text-primary" | "--text-secondary" | "--text-muted" | "--text-disabled" | "--text-accent" | "--text-on-accent" | "--border" | "--border-strong" | "--border-accent" | "--focus-ring" | "--focus-border" | "--error" | "--error-bg" | "--btn-primary-bg" | "--btn-primary-text" | "--btn-primary-hover" | "--nav-active-bg" | "--nav-active-text" | "--switch-track-off" | "--switch-track-on" | "--tooltip-bg" | "--tooltip-text" | "--toast-info-bg" | "--toast-info-text" | "--toast-success-bg" | "--toast-success-text" | "--toast-warning-bg" | "--toast-warning-text" | "--toast-error-bg" | "--toast-error-text" | "--shadow-sm" | "--shadow-md" | "--shadow-lg" | "--shadow-xl" | "--shadow-btn-primary" | "--font-sans" | "--font-mono" | "--font-prose" | "--status-draft-bg" | "--status-draft-text" | "--status-published-bg" | "--status-published-text" | "--status-scheduled-bg" | "--status-scheduled-text" | "--status-archived-bg" | "--status-archived-text" | "--ink-surface" | "--ink-on-surface" | "--code-keyword" | "--code-string" | "--code-function" | "--code-number" | "--code-comment" | "--code-punctuation", string>
 
 ### tokens (const)
-  tokens: { readonly primitives: { readonly "slate-50": "#f8fafc"; readonly "slate-100": "#f1f5f9"; readonly "slate-200": "#e2e8f0"; readonly "slate-300": "#cbd5e1"; readonly "slate-400": "#94a3b8"; readonly "slate-500": "#64748b"; readonly "slate-600": "#475569"; readonly "slate-700": "#334155"; readonly "slate-800": "#1e293b"; readonly "slate-900": "#0f172a"; readonly "slate-950": "#020617"; readonly "violet-50": "#f5f3ff"; readonly "violet-100": "#ede9fe"; readonly "violet-200": "#ddd6fe"; readonly "violet-300": "#c4b5fd"; readonly "violet-400": "#a78bfa"; readonly "violet-500": "#8b5cf6"; readonly "violet-600": "#7c3aed"; readonly "violet-700": "#6d28d9"; readonly "violet-800": "#5b21b6"; readonly "violet-900": "#4c1d95"; readonly "violet-950": "#2e1065"; readonly "green-50": "#f0fdf4"; readonly "green-100": "#dcfce7"; readonly "green-500": "#22c55e"; readonly "green-600": "#16a34a"; readonly "green-700": "#15803d"; readonly "amber-50": "#fffbeb"; readonly "amber-100": "#fef3c7"; readonly "amber-500": "#f59e0b"; readonly "amber-600": "#d97706"; readonly "amber-700": "#b45309"; readonly "red-50": "#fef2f2"; readonly "red-100": "#fee2e2"; readonly "red-500": "#ef4444"; readonly "red-600": "#dc2626"; readonly "red-700": "#b91c1c"; readonly "font-family-sans": "\"Inter Variable\", \"Inter\", system-ui, sans-serif"; readonly "font-family-mono": "\"JetBrains Mono Variable\", \"JetBrains Mono\", monospace"; readonly "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif"; readonly "radius-none": "0"; readonly "radius-sm": "0.125rem"; readonly "radius-xs": "0.25rem"; readonly "radius-md": "0.375rem"; readonly "radius-lg": "0.5rem"; readonly "radius-xl": "0.75rem"; readonly "radius-full": "9999px"; readonly "motion-duration-instant": "0ms"; readonly "motion-duration-fast": "120ms"; readonly "motion-duration-base": "150ms"; readonly "motion-duration-slow": "240ms"; readonly "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)"; readonly "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)"; readonly "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)"; readonly "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"; readonly "border-width": "1px"; readonly "border-width-strong": "2px"; readonly "control-height-sm": "2rem"; readonly "control-height-md": "2.5rem"; readonly "control-height-lg": "3rem"; readonly "field-height": "3.5rem"; readonly "row-height": "3.25rem"; }; readonly themes: { readonly "rhombus-light": Record<SemanticTokenName, string>; readonly "rhombus-dark": Record<SemanticTokenName, string>; }; }
+  tokens: { readonly primitives: { readonly "slate-50": "#f8fafc"; readonly "slate-100": "#f1f5f9"; readonly "slate-200": "#e2e8f0"; readonly "slate-300": "#cbd5e1"; readonly "slate-400": "#94a3b8"; readonly "slate-500": "#64748b"; readonly "slate-600": "#475569"; readonly "slate-700": "#334155"; readonly "slate-800": "#1e293b"; readonly "slate-900": "#0f172a"; readonly "slate-950": "#020617"; readonly "violet-50": "#f5f3ff"; readonly "violet-100": "#ede9fe"; readonly "violet-200": "#ddd6fe"; readonly "violet-300": "#c4b5fd"; readonly "violet-400": "#a78bfa"; readonly "violet-500": "#8b5cf6"; readonly "violet-600": "#7c3aed"; readonly "violet-700": "#6d28d9"; readonly "violet-800": "#5b21b6"; readonly "violet-900": "#4c1d95"; readonly "violet-950": "#2e1065"; readonly "green-50": "#f0fdf4"; readonly "green-100": "#dcfce7"; readonly "green-500": "#22c55e"; readonly "green-600": "#16a34a"; readonly "green-700": "#15803d"; readonly "amber-50": "#fffbeb"; readonly "amber-100": "#fef3c7"; readonly "amber-500": "#f59e0b"; readonly "amber-600": "#d97706"; readonly "amber-700": "#b45309"; readonly "red-50": "#fef2f2"; readonly "red-100": "#fee2e2"; readonly "red-500": "#ef4444"; readonly "red-600": "#dc2626"; readonly "red-700": "#b91c1c"; readonly "font-family-sans": "\"Inter Variable\", \"Inter\", system-ui, sans-serif"; readonly "font-family-mono": "\"JetBrains Mono Variable\", \"JetBrains Mono\", monospace"; readonly "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif"; readonly "radius-none": "0"; readonly "radius-sm": "0.125rem"; readonly "radius-xs": "0.25rem"; readonly "radius-md": "0.375rem"; readonly "radius-lg": "0.5rem"; readonly "radius-xl": "0.75rem"; readonly "radius-full": "9999px"; readonly "motion-duration-instant": "0ms"; readonly "motion-duration-fast": "120ms"; readonly "motion-duration-base": "150ms"; readonly "motion-duration-slow": "240ms"; readonly "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)"; readonly "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)"; readonly "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)"; readonly "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"; readonly "border-width": "1px"; readonly "border-width-strong": "2px"; readonly "control-height-sm": "2rem"; readonly "control-height-md": "2.5rem"; readonly "control-height-lg": "3rem"; readonly "field-height": "3.5rem"; readonly "row-height": "3.25rem"; }; readonly density: { readonly compact: { readonly "control-height-sm": "1.75rem"; readonly "control-height-md": "2.25rem"; readonly "control-height-lg": "2.75rem"; readonly "field-height": "3.25rem"; readonly "row-height": "3rem"; }; readonly comfortable: { readonly "control-height-sm": "2.25rem"; readonly "control-height-md": "3rem"; readonly "control-height-lg": "3.5rem"; readonly "field-height": "4rem"; readonly "row-height": "3.75rem"; }; }; readonly themes: { readonly "rhombus-light": Record<SemanticTokenName, string>; readonly "rhombus-dark": Record<SemanticTokenName, string>; }; }
 
 ---
 
@@ -1111,12 +1114,13 @@ system with your own theme without breaking the contract.
 - [No flash on first paint](#no-flash-on-first-paint)
 - [Custom themes](#custom-themes)
 - [Overriding token values](#overriding-token-values)
+- [Density](#density)
 - [The Material bridge](#the-material-bridge)
 
 ## How theming works
 
-RhombusKit's colour, shadow, radius, and font decisions live in a three-tier token
-system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
+RhombusKit's colour, shadow, radius, geometry, and font decisions live in a three-tier
+token system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
 
 1. **Primitives** — the raw palette (`violet-600`, `slate-100`, …). Internal.
 2. **CONTRACT** — semantic names that are the public, versioned API: `--bg`,
@@ -1297,6 +1301,135 @@ properties under the existing `data-theme` selector (load after the tokens layer
 Because everything resolves through `var(--…)`, this re-tints RhombusKit components and
 Material components alike. Keep an eye on contrast — RhombusKit's defaults are tuned to
 WCAG 2.1 AA in both themes.
+
+## Density
+
+Density is a single app-wide choice of control **geometry** — `compact`, `default`, or
+`comfortable` — set once at bootstrap. It owns the box (heights, padding, gaps) and never
+the type: each component's `size` input still owns font size, so density and size are
+orthogonal and adding density is non-breaking. An app that never opts in renders exactly
+as before.
+
+```ts
+import { provideRhombusDensity } from '@rhombuskit/core';
+
+bootstrapApplication(App, {
+  providers: [
+    provideRhombusDensity('compact'), // 'compact' | 'default' | 'comfortable'
+  ],
+});
+```
+
+The provider is eager: registering it constructs `RhombusDensityService`, which writes the
+level onto `<html>` as `data-density`. It is theme-invariant (a 40px control is 40px in
+every theme), so it lives in the palette-level primitives — five frozen names,
+`--control-height-sm|md|lg`, `--field-height`, `--row-height` — not the semantic CONTRACT.
+Every level clears the WCAG 2.2 24×24 target floor; there is deliberately no equivalent of
+Material's `-2`/`-3` steps, which drop touch targets and the floating label.
+
+Switch at runtime through the same service:
+
+```ts
+private readonly density = inject(RhombusDensityService);
+onCompact() { this.density.density.set('compact'); }
+```
+
+**The Material bridge is required for Material-backed controls.** Density reaches
+RhombusKit's own components (button, segmented, chip, chip group, nav list, accordion,
+stepper) with no extra setup, but the **form-field family, data table, selection list,
+tabs, toolbar, and paginator** only move when the [Material bridge](#the-material-bridge)
+is included — once, on `:root` or `html`:
+
+```scss
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+:root {
+  @include rhombus.material-bridge();
+}
+```
+
+> Include the bridge on `:root`/`html`, not on an app-level wrapper. The service writes
+> `data-density` on `<html>`, so a bridge included at `.app` compiles a
+> `.app[data-density='…']` selector that never matches.
+
+**What density leaves alone.** It does not touch checkbox, radio, or switch state layers;
+slider, menu, dialog, datepicker, card, or snackbar (Angular Material no-ops density on
+those too); or any font size. Those are stated exclusions, not gaps — a compact app keeps
+them at their default size.
+
+### SSR and prerendering
+
+Unlike the theme preference — a per-user `localStorage` value that is unknowable at
+prerender, which is why theming needs the [pre-paint init script](#no-flash-on-first-paint)
+— density is a bootstrap constant supplied through DI, so the correct level is already
+known when a page is rendered on the server. The service writes it through the injected
+document, so statically rendered pages ship the right `data-density` in their HTML and the
+browser's identical write on hydration is a no-op. **That is why density needs no pre-paint
+script**: there is no wrong-value first paint to prevent.
+
+### Limitations
+
+- **One level per build for static/SSR pages.** The level is baked in at render time. A
+  page prerendered with `provideRhombusDensity('compact')` ships compact markup; switching
+  at runtime is a client-side reflow after hydration.
+- **No persistence.** There is no stored preference and nothing reads one; reload returns
+  to the bootstrapped level. If you offer a user toggle, persist and re-apply it yourself.
+- **Client-only apps paint once at the bootstrapped level**, then the service's first write
+  runs during bootstrap — before first paint in practice, but if you need a guaranteed
+  value in the initial HTML, set `<html data-density="…">` in your index template.
+
+### Migrating from mat-density
+
+Coming off Angular Material's `mat.density($scale)`? `provideRhombusDensity('compact')` is
+**value-identical to `mat.theme((density: -1))` on twelve of the thirteen in-scope
+components** (the one exception, the segmented control, becomes 36px where `mat.density`
+leaves it at 40px, because Material's button-toggle ramp is flat at `-1` — that is the
+feature, not a regression). You also gain a `comfortable` direction, runtime switching, no
+`-2` accessibility cliff, and a fix for Material's sub-48px touch-target overlap.
+
+The swap:
+
+```scss
+// BEFORE
+html { @include mat.theme((color: (…), typography: Roboto, density: -1)); }
+
+// AFTER — delete the `density` key (do not leave it at 0; delete it).
+@use '@rhombuskit/tokens/scss';
+@use '@rhombuskit/material-preset/scss' as rhombus;
+
+html { @include mat.theme((color: (…), typography: Roboto)); }
+:root { @include rhombus.material-bridge(); } // required — see above
+```
+
+```ts
+bootstrapApplication(App, { providers: [provideRhombusDensity('compact')] });
+```
+
+Density is scoped, so **restore the components it leaves out by hand** — or accept +4px on
+them. These names are declared nowhere in RhombusKit, so there is no conflict:
+
+```scss
+:root {
+  @include mat.checkbox-overrides((state-layer-size: 36px)); // was -1
+  @include mat.radio-overrides((state-layer-size: 36px));
+  @include mat.expansion-overrides((
+    header-collapsed-state-height: 44px,
+    header-expanded-state-height: 60px,
+  ));
+  @include mat.tree-overrides((node-min-height: 44px));
+  @include mat.select-overrides((arrow-transform: translateY(-8px)));
+}
+```
+
+`rhombus-checkbox` and `rhombus-radio` are shipped RhombusKit components, so this is a real,
+visible change, not hypothetical.
+
+> **Running both at once is unsupported.** A component-class rebind beats any
+> `mat.theme((density: …))` value unconditionally, so an app that keeps a Material density
+> scale *and* adopts RhombusKit density gets a partial, un-opt-out-able shift — for example
+> a table row and header collapsing to the same height. `provideRhombusDensity()` detects a
+> live `mat.density` scale in dev mode and warns. Remove the Material density scale and use
+> `provideRhombusDensity()` alone.
 
 ## The Material bridge
 

@@ -205,6 +205,67 @@
   border: 0;
 }
 
+// --- Density (INTERNAL) ------------------------------------------------------
+// Per-level-override-only: the base literals above are KEPT and the default
+// level emits NOTHING. The tablist<->panel gutter, the tab padding and the
+// indicator bubble track density; the label gaps and connector geometry are
+// typographic/structural and are left alone.
+//
+// FLOOR: the header/tablist gap is 0.5rem = 8px at default, and the tab's focus
+// ring is OUTWARD (outline: strong solid; outline-offset: 2px, :62-65), extending
+// ~4px past the border box. Two adjacent focused tabs therefore already have 0px
+// of ring clearance at 8px, so compact MUST NOT reduce it — the compact block
+// leaves the header gap unchanged and only comfortable (which grows it) moves it.
+//
+// Specificity: base rules are (0,1,0); `[data-density] .class` is (0,2,0).
+[data-density='compact'] {
+  .rhombus-stepper {
+    gap: 1.25rem; // default 1.5rem — the tablist/panel gutter
+  }
+  // header/tablist gap deliberately NOT set — 0.5rem is the outward-ring floor.
+  .rhombus-stepper__tab {
+    padding: 0.375rem 0.625rem; // default 0.5rem 0.75rem
+  }
+  .rhombus-stepper__indicator {
+    width: 1.5rem; // default 1.75rem
+    height: 1.5rem;
+  }
+  // The state glyph (edit/done/error) must shrink with the bubble or it looks
+  // cramped inside the smaller circle. The base rule sizes the <rhombus-icon> box
+  // in rem, and the icon's inner span flex-shrinks to that box, so a per-level box
+  // moves the glyph. (An `em` conversion does NOT work here: `em` on width is
+  // own-font-size-relative, and the bubble's font-size — the step number — is
+  // level-invariant by design, so an em glyph would not track the box at all. The
+  // design doc's proposed rem->em is corrected to this per-level box.) Default is
+  // left untouched, so default rendering is unchanged.
+  .rhombus-stepper__indicator rhombus-icon {
+    font-size: 1rem; // default 1.125rem (18px), tracks the 28 -> 24 bubble
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+[data-density='comfortable'] {
+  .rhombus-stepper {
+    gap: 2rem;
+  }
+  .rhombus-stepper__header {
+    gap: 0.75rem; // default 0.5rem — grows, safely above the 8px ring floor
+  }
+  .rhombus-stepper__tab {
+    padding: 0.75rem 1rem;
+  }
+  .rhombus-stepper__indicator {
+    width: 2rem;
+    height: 2rem;
+  }
+  .rhombus-stepper__indicator rhombus-icon {
+    font-size: 1.25rem; // 20px, tracks the 28 -> 32 bubble
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rhombus-stepper__tab,
   .rhombus-stepper__indicator {
