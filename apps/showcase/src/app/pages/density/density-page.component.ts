@@ -132,8 +132,8 @@ const ROWS: DensityRow[] = NAMES.map((k) => ({
         </p>
         <rhombus-code-block language="typescript" [code]="providerSetup" />
         <p>
-          For Material-backed controls (the form-field family, data table, tabs,
-          toolbar, and paginator) the opt-in Material bridge is
+          For Material-backed controls (the form-field family, data table,
+          selection list, tabs, toolbar, and paginator) the opt-in Material bridge is
           <strong>required</strong> — include it once on <code>:root</code> or
           <code>html</code>. Without it, density still moves RhombusKit's own
           components (button, segmented, chip, nav list, accordion, stepper) but

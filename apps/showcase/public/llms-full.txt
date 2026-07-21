@@ -1206,7 +1206,7 @@ this.theme.toggle();                 // cycles light → dark → system → lig
 ```
 
 The preference is persisted to `localStorage` under the key
-**`rhombuskit:theme-preference`** (exported as `STORAGE_KEY`). The stored value is the
+**`rhombuskit:theme-preference`** (exported as `THEME_STORAGE_KEY`). The stored value is the
 *literal* preference — including `'system'` — so "follow the OS" survives reloads. When
 the preference is `'system'`, the service tracks `prefers-color-scheme` and re-resolves
 `current()` if the OS theme changes mid-session.
@@ -1241,7 +1241,7 @@ import { THEME_INIT_SCRIPT, getThemeInitScript } from '@rhombuskit/theme-engine'
 </head>
 ```
 
-Guarantee: the script and the service use the same `STORAGE_KEY` and `data-theme`
+Guarantee: the script and the service use the same `THEME_STORAGE_KEY` and `data-theme`
 attribute and the same resolution rules, so the pre-paint theme always matches what the
 service settles on.
 

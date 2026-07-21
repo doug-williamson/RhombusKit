@@ -35,7 +35,7 @@ import { TOKENS_STACKBLITZ_STARTER } from '../../shared/tokens-stackblitz-starte
       <section class="showcase-section">
         <h2>Install</h2>
         <rhombus-code-block language="bash" [code]="install" />
-        <p class="tokens-lead">The package ships four ways to consume it:</p>
+        <p class="tokens-lead">The package ships three ways to consume it:</p>
         <ul class="tokens-list">
           <li>
             <code>&#64;rhombuskit/tokens/css</code> — the light + dark theme
