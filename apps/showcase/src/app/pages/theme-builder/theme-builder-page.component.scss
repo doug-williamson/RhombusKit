@@ -1,0 +1,293 @@
+// The page chrome always renders in the app's own (rhombus) theme, so it has the
+// full shipped AA palette to draw on. The PREVIEW subtrees below carry a generated
+// theme, so they read only the token pairs the generator itself validates
+// (constants.ts TEXT_PAIRS / BADGE_PAIRS) — never text-secondary-on-surface-1 etc.
+
+.tb-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.tb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label,
+  .tb-field__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  &--wide {
+    grid-column: 1 / -1;
+    max-width: 32rem;
+  }
+}
+
+.tb-field__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tb-field__hex {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+}
+
+.tb-field__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+// Native color input, restyled to a tidy swatch. The picker chrome varies by OS;
+// we only own the frame.
+.tb-swatch {
+  inline-size: 44px;
+  block-size: 32px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: none;
+  cursor: pointer;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 2px;
+  }
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: calc(var(--radius-md) - 2px);
+  }
+}
+
+.tb-text {
+  inline-size: 100%;
+  max-inline-size: 16rem;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: var(--surface-0);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--focus-border);
+    outline-offset: 1px;
+  }
+}
+
+// --- AA status + warnings ---------------------------------------------------
+
+.tb-status {
+  margin: 4px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border-inline-start: 3px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+
+  strong {
+    color: var(--text-primary);
+  }
+
+  &--pass {
+    border-inline-start-color: var(--status-published-text);
+  }
+  &--error {
+    border-inline-start-color: var(--toast-error-text);
+  }
+}
+
+.tb-warnings {
+  margin: 12px 0 0;
+  padding-inline-start: 20px;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+
+  li + li {
+    margin-top: 6px;
+  }
+}
+
+// --- Live preview -----------------------------------------------------------
+
+.tb-previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+// Each panel is a local data-theme subtree: its background/text read the GENERATED
+// theme, isolated from the page's own theme.
+.tb-preview {
+  position: relative;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.tb-preview__mode {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 14px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.tb-preview__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tb-preview__title {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: var(--text-primary);
+}
+
+.tb-preview__secondary {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.tb-preview__muted {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.tb-preview__link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tb-preview__surface {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+}
+
+.tb-preview__accent {
+  font-weight: 600;
+  color: var(--text-accent);
+}
+
+.tb-preview__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.tb-preview__btn {
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.tb-preview__chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 999px);
+  background: var(--status-published-bg);
+  color: var(--status-published-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+// --- Export -----------------------------------------------------------------
+
+.tb-export {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tb-export__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.tb-copy {
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-3);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--focus-border);
+    outline-offset: 1px;
+  }
+}
+
+.tb-export__pre {
+  margin: 0;
+  padding: 14px;
+  max-block-size: 22rem;
+  overflow: auto;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.tb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.tb-applied {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}

@@ -25,6 +25,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/themes', label: 'Themes' },
       { path: '/motion', label: 'Motion' },
       { path: '/density', label: 'Density' },
+      { path: '/theme-builder', label: 'Theme Builder' },
       { path: '/accessibility', label: 'Accessibility' },
       { path: '/support', label: 'Support' },
     ],
