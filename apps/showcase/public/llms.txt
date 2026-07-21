@@ -79,6 +79,7 @@ Install: `pnpm add @rhombuskit/core @rhombuskit/tokens @rhombuskit/theme-engine`
 - [Design tokens](https://rhombuskit.online/tokens)
 - [Themes](https://rhombuskit.online/themes)
 - [Motion](https://rhombuskit.online/motion)
+- [Density](https://rhombuskit.online/density)
 - [Accessibility](https://rhombuskit.online/accessibility)
 - [Support](https://rhombuskit.online/support)
 

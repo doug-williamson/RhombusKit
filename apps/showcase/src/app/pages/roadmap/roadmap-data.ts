@@ -112,6 +112,12 @@ export const ROADMAP: Roadmap = {
     // System depth and DX that advance in parallel with the component packs.
     now: [
       {
+        title: 'Density modes',
+        detail:
+          'Compact, default, and comfortable geometry under one runtime switch — provideRhombusDensity(). The highest-leverage gap enterprise Material migrators hit right after parity.',
+        tag: 'v1.15',
+      },
+      {
         title: 'Motion: exit animations',
         detail:
           'Extend the motion foundation beyond enter-only — overlay/popover exit transitions and Tier 2 component motion.',
@@ -123,25 +129,20 @@ export const ROADMAP: Roadmap = {
     ],
     next: [
       {
-        title: 'Density modes',
-        detail:
-          'Compact / comfortable density scales across components — the highest-leverage gap enterprise Material migrators hit right after parity.',
-      },
-    ],
-    considering: [
-      {
         title: 'Theme registry',
         detail:
           'Make custom and community themes first-class — registered, reflected, and persisted in the theme controls.',
       },
       {
+        title: 'High-contrast theme',
+        detail: 'A built-in high-contrast theme pack for low-vision and forced-colors users.',
+      },
+    ],
+    considering: [
+      {
         title: 'Theme builder',
         detail:
           'A visual generator that emits a token-override theme from a few seed colours, validated for AA contrast.',
-      },
-      {
-        title: 'High-contrast theme',
-        detail: 'A built-in high-contrast theme pack for low-vision and forced-colors users.',
       },
       {
         title: 'RTL & logical properties',

@@ -35,15 +35,15 @@ interface Track {
         <p class="roadmap__lead">
           You help build this roadmap. It runs on two tracks —
           <strong>Components</strong> (shipped in themed release-train packs) and
-          <strong>Foundations</strong> (density, theming, RTL, and tooling). The
+          <strong>Foundations</strong> (theming, motion, RTL, and tooling). The
           <strong>Considering</strong> columns are shaped by what the community
           requests and upvotes. Items track release trains, not calendar dates.
         </p>
         <p class="roadmap__shipped">
-          Recently shipped <strong>Selection &amp; entry</strong> — Autocomplete,
-          Selection List, and Number Input (v1.12) — and
-          <strong>Dashboard &amp; surfaces</strong> — Skeleton, Stat, and Sheet
-          (v1.13). Rich interaction (v1.14) is shipping now below.
+          Recently shipped <strong>Dashboard &amp; surfaces</strong> — Skeleton,
+          Stat, and Sheet (v1.13) — and <strong>Rich interaction</strong> —
+          Stepper, Reorder List, and Carousel (v1.14), completing the component
+          roadmap. <strong>Density modes</strong> (v1.15) is shipping now below.
         </p>
         <p class="roadmap__cta">
           <a [href]="suggestUrl" target="_blank" rel="noopener">Suggest a feature →</a>

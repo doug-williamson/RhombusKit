@@ -73,6 +73,9 @@ inline` (the `inline` keyword keeps the `var()` live, so utilities re-theme with
 
 Subpath exports: `./css`, `./css/primitives`, `./css/contract`, `./scss`, `./scss/*`.
 
+The density level blocks (`:root[data-density='compact'|'comfortable']`) ride inside
+`./css/primitives` and `./scss/primitives` — there is no separate density subpath.
+
 More framework recipes (React, Tailwind, vanilla JS) and a live, no-build demo:
 **[rhombuskit.online/tokens](https://rhombuskit.online/tokens)**.
 

@@ -15,7 +15,7 @@ Nx + pnpm monorepo for RhombusKit — a framework-agnostic design token system a
 
 - **Component reference** — the live showcase at **[rhombuskit.online](https://rhombuskit.online)**: a page per component with variants, states, and accessibility notes.
 - **For AI assistants** — [`/llms.txt`](https://rhombuskit.online/llms.txt) (curated index) and [`/llms-full.txt`](https://rhombuskit.online/llms-full.txt) (full API surface + design-token contract), generated from the CI-guarded snapshots so they never drift. For **interactive** access from Claude Code, Cursor, and other MCP clients, run the docs server — `npx -y @rhombuskit/mcp` (see [@rhombuskit/mcp](./packages/mcp)).
-- **Theming guide** — [docs/theming.md](./docs/theming.md): setup, runtime switching, custom themes, and the Material bridge.
+- **Theming guide** — [docs/theming.md](./docs/theming.md): setup, runtime switching, custom themes, density, and the Material bridge.
 - **Release history** — [docs/release-history.md](./docs/release-history.md): a curated, human-readable narrative of every release (the machine-generated [CHANGELOG.md](./CHANGELOG.md) is the exhaustive commit-level record).
 - **Per-package guides** — install + quick start live in each package's README (linked in the table above).
 - **Public-surface contract** — the [`etc/*.api.md`](./etc) reports are the CI-guarded snapshot of every package's public exports. They're the machine-readable *surface contract*, not a tutorial — a diff there is a deliberate API-change review signal (see [How the surface is guarded](#how-the-surface-is-guarded)).

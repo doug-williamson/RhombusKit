@@ -24,6 +24,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/tokens', label: 'Design tokens' },
       { path: '/themes', label: 'Themes' },
       { path: '/motion', label: 'Motion' },
+      { path: '/density', label: 'Density' },
       { path: '/accessibility', label: 'Accessibility' },
       { path: '/support', label: 'Support' },
     ],

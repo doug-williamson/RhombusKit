@@ -1,0 +1,74 @@
+.density__a11y-note,
+.density__note {
+  color: var(--text-secondary);
+}
+
+.density__note {
+  margin-top: 12px;
+}
+
+.density-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+}
+
+.density-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.density-table__row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.6fr) 1fr 1fr 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+
+  & + & {
+    border-top: 1px solid var(--border);
+  }
+
+  &--head {
+    background: var(--surface-1);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+}
+
+.density-table__name {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+}
+
+// The default column is the value an app that never opts in renders at.
+.density-table__default {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .density-table__row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 4px;
+  }
+
+  .density-table__row--head {
+    display: none;
+  }
+
+  .density-table__name {
+    grid-column: 1 / -1;
+  }
+}

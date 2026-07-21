@@ -101,6 +101,7 @@ function warnOnMaterialDensity(doc: Document): void {
       'mat.all-component-densities()) is active alongside ' +
       'provideRhombusDensity(). The two emit competing values for the same ' +
       'components. Remove the Material density and use provideRhombusDensity() ' +
-      'alone.'
+      'alone. See ' +
+      'https://github.com/doug-williamson/RhombusKit/blob/main/docs/theming.md#migrating-from-mat-density'
   );
 }

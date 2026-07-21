@@ -42,11 +42,16 @@ pnpm add @rhombuskit/core @rhombuskit/material-preset
 ```ts
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRhombusTheme } from '@rhombuskit/theme-engine';
+// import { provideRhombusDensity } from '@rhombuskit/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
     provideRhombusTheme(), // defaults to rhombus-light / rhombus-dark / system
+    // Optional app-wide density (compact | default | comfortable). Needs the
+    // Material bridge above for Material-backed controls; register it here in
+    // bootstrapApplication — route-level registration is ignored (warns in dev).
+    // provideRhombusDensity('compact'),
   ],
 };
 ```
