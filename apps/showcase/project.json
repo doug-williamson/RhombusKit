@@ -15,6 +15,7 @@
         "browser": "apps/showcase/src/main.ts",
         "server": "apps/showcase/src/main.server.ts",
         "outputMode": "static",
+        "deployUrl": "/",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/showcase/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
