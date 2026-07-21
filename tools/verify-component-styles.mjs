@@ -76,22 +76,38 @@ if (stylesScanned === 0) {
 // place. Declaring either token converts an inherited, context-dependent value
 // into a fixed one and silently changes rendering for nested form fields: it grew
 // a rows="3" textarea inside a dialog from 92px to 95px at DEFAULT density.
-const bridgePath = resolve(__dirname, '../packages/material-preset/src/styles/_bridge.scss');
-const bridgeLines = readFileSync(bridgePath, 'utf8').split(/\r?\n/);
-for (const banned of ['container-text-line-height', '--mat-sys-body-large-line-height']) {
-  // Comment lines name both deliberately, in the explanation above the override.
-  const declared = bridgeLines.some(
-    (line) => !line.trim().startsWith('//') && line.includes(banned)
-  );
-  if (declared) {
-    errors.push(
-      '✗ _bridge.scss declares `' +
-        banned +
-        "`. The form field's line-height must stay INHERITED — pinning it changes " +
-        'rendering for form fields nested under an ancestor with an absolute ' +
-        'line-height (dialog content, table rows), at DEFAULT density. See the ' +
-        'comment above mat.form-field-overrides() in _bridge.scss.'
+//
+// BOTH _bridge.scss AND _density.scss are scanned. The bridge holds the
+// unconditional form-field-overrides(); _density.scss holds the per-level ones,
+// and a container-text-line-height pinned inside a level block is the same
+// hazard reached a different way (it would fix the line-height whenever that
+// level is active). Scanning only the bridge would leave that door open now that
+// per-level form-field-overrides() live in _density.scss.
+const guardedScssPaths = [
+  '../packages/material-preset/src/styles/_bridge.scss',
+  '../packages/material-preset/src/styles/_density.scss',
+];
+for (const rel of guardedScssPaths) {
+  const scssPath = resolve(__dirname, rel);
+  const scssLines = readFileSync(scssPath, 'utf8').split(/\r?\n/);
+  const fileName = rel.split('/').pop();
+  for (const banned of ['container-text-line-height', '--mat-sys-body-large-line-height']) {
+    // Comment lines name both deliberately, in the explanation above the override.
+    const declared = scssLines.some(
+      (line) => !line.trim().startsWith('//') && line.includes(banned)
     );
+    if (declared) {
+      errors.push(
+        '✗ ' +
+          fileName +
+          ' declares `' +
+          banned +
+          "`. The form field's line-height must stay INHERITED — pinning it changes " +
+          'rendering for form fields nested under an ancestor with an absolute ' +
+          'line-height (dialog content, table rows), at DEFAULT density. See the ' +
+          'comment above mat.form-field-overrides() in _bridge.scss.'
+      );
+    }
   }
 }
 

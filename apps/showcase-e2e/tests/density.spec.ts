@@ -259,6 +259,100 @@ test.describe('box/type orthogonality — density never touches font-size', () =
   });
 });
 
+test.describe('compact actually reaches each component — not just clears the floor', () => {
+  // WHY THIS EXISTS, and it is the sharpest lesson in the suite. The geometry
+  // gate pins DEFAULT values, and the SC 2.5.8 sweep pins a FLOOR. Neither can
+  // tell "the rebind works" from "the rebind was deleted" for a substitute-var
+  // whose default equals Material's own fallback:
+  //   - chip default is 32px; Material's --mat-chip-container-height fallback is
+  //     also 32px. Delete the rebind and the default gate still reads 32, and
+  //     the floor gate still reads 32 >= 24. Both stay green over a dead feature.
+  //   - segmented is the same shape at 40px.
+  // The only assertion that discriminates is the actual MOVED value at a
+  // non-default level. Each row here is a value that appears ONLY if the rebind
+  // exists AND density reaches the element.
+  //
+  // Per the standing rule, each row names the property density DRIVES, not a
+  // rendered box that merely depends on it (segmented is line-height, not the
+  // font-metric-dependent 41.5px box).
+  const MOVED: ReadonlyArray<{
+    route: string;
+    sel: string;
+    prop: string;
+    compact: string;
+    why: string;
+  }> = [
+    // substitute-vars whose default == Material fallback (the deletable ones):
+    { route: '/components/chip', sel: '.mat-mdc-standard-chip', prop: 'height', compact: '28px', why: 'chip rebind (=32 at default, indistinguishable from fallback there)' },
+    {
+      route: '/components/segmented',
+      sel: '.mat-button-toggle-appearance-standard .mat-button-toggle-label-content',
+      prop: 'line-height',
+      compact: '36px',
+      why: 'segmented rebind (=40 at default, = the fallback)',
+    },
+    // per-level-override-only families — driven from _density.scss, unmeasured
+    // at any non-default level before this block:
+    {
+      route: '/components/selection-list',
+      sel: '.mat-mdc-list-option:not(.mdc-list-item--with-two-lines)',
+      prop: 'height',
+      compact: '44px',
+      why: 'list one-line ramp (_density.scss)',
+    },
+    {
+      route: '/components/selection-list',
+      sel: '.mat-mdc-list-option.mdc-list-item--with-two-lines',
+      prop: 'height',
+      compact: '60px',
+      why: 'list two-line ramp — independent of one-line',
+    },
+    {
+      route: '/components/data-table',
+      sel: '.mat-mdc-header-row',
+      prop: 'height',
+      compact: '52px',
+      why: 'table header ramp (_density.scss global path, NOT the scoped input)',
+    },
+    {
+      route: '/components/data-table',
+      sel: '.mat-mdc-row',
+      prop: 'height',
+      compact: '48px',
+      why: 'table row via --row-height substitute-var under global compact',
+    },
+    {
+      route: '/components/nav-list',
+      sel: '.rhombus-nav-list__item',
+      prop: 'padding-left',
+      compact: '10px',
+      why: 'nav-list per-level rule (default 12px, so a deleted block reads 12)',
+    },
+  ];
+
+  for (const { route, sel, prop, compact, why } of MOVED) {
+    test(`${why}`, async ({ page }) => {
+      await page.goto(route, { waitUntil: 'networkidle' });
+      await setDensity(page, 'compact');
+
+      const value = await page.evaluate(
+        ({ s, p }) => {
+          const el = document.querySelector(s);
+          if (!el) return null;
+          return getComputedStyle(el).getPropertyValue(p).trim();
+        },
+        { s: sel, p: prop }
+      );
+
+      expect(value, `${sel} matched no element on ${route}`).not.toBeNull();
+      // Goes red if the rebind/level rule is deleted, misspelled, or fails to
+      // reach the element — the exact regressions the default and floor gates
+      // cannot see.
+      expect(value, `${why}: compact should move ${sel} { ${prop} } to ${compact}`).toBe(compact);
+    });
+  }
+});
+
 test.describe('SC 2.5.8 — every control this PR shrinks clears 24x24 at compact', () => {
   // Compact is the level that can breach the floor, so it is the one swept. The
   // smallest box the system produces anywhere is --control-height-sm at compact

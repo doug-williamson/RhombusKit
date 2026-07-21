@@ -121,9 +121,12 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
       { sel: '.rhombus-nav-list__item', prop: 'padding-left', expect: '12px', why: 'scss:81' },
       { sel: '.rhombus-nav-list__item', prop: 'padding-top', expect: '8px', why: 'scss:81' },
       { sel: '.rhombus-nav-list__item', prop: 'column-gap', expect: '10px', why: 'scss:80' },
-      // The root gap and the --list gap are a MATCHED PAIR: if their ramps ever
-      // invert, the two appearances swap density at some level. Pinning the root
-      // at default is what makes a future inversion visible.
+      // The base root gap at default. This pins ONE endpoint of ONE ramp — it is
+      // NOT a gate on the base-vs---list inversion the SCSS comment worries
+      // about (that needs both gaps compared at compact and comfortable, which
+      // no row here does). Its job is narrower: catch a default-density
+      // regression of the base root gap, the value most likely to be
+      // accidentally tokenized.
       { sel: '.rhombus-nav-list', prop: 'row-gap', expect: '4px', why: 'scss:9' },
     ],
   },
