@@ -1,8 +1,10 @@
 // Components whose showcase pages are scanned by the axe color-contrast gate in
-// BOTH themes on every PR. Mirrors the COMPONENTS list in
-// apps/showcase-e2e/tests/contrast.spec.ts — keep the two in sync (the spec is
-// the source of truth; this drives the honest coverage table on /accessibility).
-// Verified by a11y-coverage.spec.ts: every slug here must be a real component route.
+// BOTH themes on every PR. This is the SINGLE SOURCE OF TRUTH for that set:
+// apps/showcase-e2e/tests/contrast.spec.ts derives its scanned COMPONENTS from
+// this list, and the /accessibility page renders its coverage table from it — so
+// the scan and the table can never drift. accessibility-page.component.spec.ts
+// asserts this stays EXACTLY the set of real /components/* routes, so adding a
+// component page forces adding it here (or the gate goes red).
 export interface CoveredComponent {
   slug: string;
   label: string;
@@ -14,6 +16,7 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'card', label: 'Card' },
   { slug: 'chip', label: 'Chip' },
   { slug: 'tag', label: 'Tag' },
+  { slug: 'icon', label: 'Icon' },
   { slug: 'divider', label: 'Divider' },
   { slug: 'checkbox', label: 'Checkbox' },
   { slug: 'radio', label: 'Radio Group' },
@@ -38,6 +41,8 @@ export const CONTRAST_VERIFIED: CoveredComponent[] = [
   { slug: 'sheet', label: 'Sheet' },
   { slug: 'tabs', label: 'Tabs' },
   { slug: 'menu', label: 'Menu' },
+  { slug: 'popover', label: 'Popover' },
+  { slug: 'bottom-nav', label: 'Bottom Nav' },
   { slug: 'nav-list', label: 'Nav List' },
   { slug: 'breadcrumbs', label: 'Breadcrumbs' },
   { slug: 'pagination', label: 'Pagination' },
