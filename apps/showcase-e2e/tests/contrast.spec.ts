@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { CONTRAST_VERIFIED } from '../../showcase/src/app/pages/accessibility/a11y-coverage';
 
 /**
  * Colour-contrast pass. For every showcase page, in BOTH themes, run axe's
@@ -17,56 +18,14 @@ const THEMES = [
   { name: 'dark', preference: 'rhombus-dark' },
 ] as const;
 
-// One entry per component route in apps/showcase/src/app/app.routes.ts. Keep in
-// sync when a component page is added — a missing entry means it is never scanned.
-const COMPONENTS = [
-  '/components/button',
-  '/components/badge',
-  '/components/card',
-  '/components/chip',
-  '/components/tag',
-  '/components/divider',
-  '/components/checkbox',
-  '/components/radio',
-  '/components/segmented',
-  '/components/switch',
-  '/components/slider',
-  '/components/input',
-  '/components/textarea',
-  '/components/select',
-  '/components/autocomplete',
-  '/components/selection-list',
-  '/components/number-input',
-  '/components/date-picker',
-  '/components/date-range-picker',
-  '/components/tag-input',
-  '/components/data-table',
-  '/components/overflow-menu',
-  '/components/tooltip',
-  '/components/toast',
-  '/components/dialog',
-  '/components/confirm-dialog',
-  '/components/sheet',
-  '/components/tabs',
-  '/components/menu',
-  '/components/nav-list',
-  '/components/breadcrumbs',
-  '/components/pagination',
-  '/components/progress',
-  '/components/skeleton',
-  '/components/stat',
-  '/components/avatar',
-  '/components/alert',
-  '/components/theme-toggle',
-  '/components/app-shell',
-  '/components/page-header',
-  '/components/empty-state',
-  '/components/code-block',
-  '/components/accordion',
-  '/components/stepper',
-  '/components/reorder-list',
-  '/components/carousel',
-] as const;
+// The scanned component set is DERIVED from the single source of truth — the
+// CONTRAST_VERIFIED list in apps/showcase/src/app/pages/accessibility/a11y-coverage.ts,
+// which also drives the /accessibility coverage table. Deriving both from one list
+// means the axe scan and the published coverage table can never drift apart, and a
+// component is scanned the moment it's added there. accessibility-page.component.spec.ts
+// asserts that list stays exactly the set of real /components/* routes, so a new
+// component page can't silently escape this scan.
+const COMPONENTS = CONTRAST_VERIFIED.map((c) => `/components/${c.slug}`);
 
 // Each component page splits content across Overview / Examples / API tabs; the
 // inactive tabs are hidden (so a single scan misses them). Scan all three via the

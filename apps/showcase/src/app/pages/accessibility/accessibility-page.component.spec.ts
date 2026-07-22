@@ -26,13 +26,19 @@ describe('AccessibilityPageComponent', () => {
 });
 
 describe('CONTRAST_VERIFIED coverage list', () => {
-  it('only references real component routes (no typos / stale slugs)', () => {
-    const routes = new Set(
-      NAV_COMMANDS.filter((c) => c.path.startsWith('/components/')).map((c) =>
-        c.path.replace('/components/', ''),
-      ),
-    );
-    const unknown = CONTRAST_VERIFIED.filter((c) => !routes.has(c.slug)).map((c) => c.slug);
-    expect(unknown).toEqual([]);
+  // This list is the single source of truth for the contrast gate: the e2e
+  // (apps/showcase-e2e/tests/contrast.spec.ts) derives its scanned component set
+  // from it, so the /accessibility coverage table and the axe scan can never
+  // drift apart. This test enforces the other axis — that the list stays EXACTLY
+  // the set of real /components/* routes — so a newly-added component can't
+  // silently escape the contrast scan (the audit that hardened this found the
+  // list had quietly fallen three components behind).
+  const routeSlugs = NAV_COMMANDS.filter((c) => c.path.startsWith('/components/'))
+    .map((c) => c.path.replace('/components/', ''))
+    .sort();
+  const verifiedSlugs = CONTRAST_VERIFIED.map((c) => c.slug).sort();
+
+  it('covers every component route exactly (no stale slugs, no missing components)', () => {
+    expect(verifiedSlugs).toEqual(routeSlugs);
   });
 });
