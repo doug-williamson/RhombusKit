@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.2](https://github.com/doug-williamson/RhombusKit/compare/v1.16.1...v1.16.2) (2026-07-22)
+
+
+### Bug Fixes
+
+* **core:** make nav-list section headers distinct from items ([#136](https://github.com/doug-williamson/RhombusKit/issues/136)) ([7848862](https://github.com/doug-williamson/RhombusKit/commit/784886232c761c748f6ba89ca0a52a6727e60f71))
+
 ## [1.16.1](https://github.com/doug-williamson/RhombusKit/compare/v1.16.0...v1.16.1) (2026-07-21)
 
 

@@ -10,17 +10,25 @@
   font-family: var(--font-sans);
 }
 
+// A hairline rule caps each group after the first, so a section header reads as
+// the start of a new block rather than blurring into the item above it. The
+// header can't be lightened to a quieter grey (muted fails AA at 11px on the
+// sidenav surface — see below), so the distinction is carried structurally by
+// this rule + the extra breathing room, and typographically by the wider
+// tracking on the label.
 .rhombus-nav-list__section + .rhombus-nav-list__section {
   margin-top: 12px;
+  padding-top: 12px;
+  border-top: var(--border-width) solid var(--border);
 }
 
 .rhombus-nav-list__heading {
   margin: 0;
-  padding: 8px 12px 4px;
+  padding: 8px 12px 6px;
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   // --text-secondary (not the lighter --text-muted): the nav-list's home is the
   // app-shell sidenav (surface-1), where muted slate-500 on slate-100 lands at
   // 4.34:1 and fails WCAG AA for this 11px label. Secondary clears it (6.92:1);
