@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.3](https://github.com/doug-williamson/RhombusKit/compare/v1.16.2...v1.16.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* **core:** join the number-input +/- buttons into one stepper ([#138](https://github.com/doug-williamson/RhombusKit/issues/138)) ([4d97fed](https://github.com/doug-williamson/RhombusKit/commit/4d97fedc94f7bf2c4e6f01289d051c97bc28dbbc))
+
 ## [1.16.2](https://github.com/doug-williamson/RhombusKit/compare/v1.16.1...v1.16.2) (2026-07-22)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@rhombuskit/material-preset",
-  "version": "1.16.2",
+  "version": "1.16.3",
   "license": "MIT",
   "description": "SCSS bridge mapping Angular Material's M3 system tokens (--mat-sys-*) onto the RhombusKit token contract, so Material components follow the active theme.",
   "keywords": [
