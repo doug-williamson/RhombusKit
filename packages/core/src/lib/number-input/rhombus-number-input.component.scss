@@ -20,11 +20,16 @@
   margin: 0;
 }
 
+// The ± sit in one joined pill: a single border + radius on the spinner, a
+// hairline divider between the halves (the Segmented idiom). Clipping the halves
+// to the rounded container keeps the outer corners clean.
 .rhombus-number-input__spinner {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
   margin-inline-start: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .rhombus-number-input__btn {
@@ -34,29 +39,29 @@
   width: 1.75rem;
   height: 1.75rem;
   padding: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-1);
+  border: 0;
+  background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition:
     background-color 120ms ease,
-    color 120ms ease,
-    border-color 120ms ease;
+    color 120ms ease;
 
   &:hover:not(:disabled) {
     background: var(--surface-2);
     color: var(--text-primary);
-    border-color: var(--border-strong);
   }
 
   &:active:not(:disabled) {
     background: var(--surface-3);
   }
 
+  // tabindex="-1" keeps these out of the tab order (the input is the spinbutton),
+  // so this only shows on mouse-focus — an inset ring survives the container clip
+  // that would crop an outline.
   &:focus-visible {
-    outline: 2px solid var(--focus-border);
-    outline-offset: 1px;
+    outline: 0;
+    box-shadow: inset 0 0 0 2px var(--focus-border);
   }
 
   &:disabled {
@@ -64,6 +69,11 @@
     cursor: not-allowed;
     opacity: 0.6;
   }
+}
+
+// Divider between the two halves.
+.rhombus-number-input__btn--dec {
+  border-inline-end: 1px solid var(--border);
 }
 
 .rhombus-number-input__glyph {
