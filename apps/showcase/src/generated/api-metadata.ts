@@ -1768,6 +1768,31 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ]
   },
+  "RhombusModeMenuComponent": {
+    "name": "RhombusModeMenuComponent",
+    "kind": "class",
+    "selector": "rhombus-mode-menu",
+    "description": "Mode menu: a standalone Light / Dark / System picker (the mode axis on its\nown). The items set the MODE within the active palette (`setMode`), so\nchoosing one never discards a non-default palette. The active mode is\nhighlighted and exposed as `aria-checked`; the trigger icon reflects it.\n\nThis is the mode half of the split theme controls — pair it with\n`<rhombus-palette-picker>` for the palette axis. For a single combined\ncontrol, use `<rhombus-theme-menu>`; for a compact icon cycle, use\n`<rhombus-theme-toggle>`.",
+    "inputs": [
+      {
+        "name": "lightIcon",
+        "type": "string",
+        "description": "Icon for the Light item and the trigger in light mode; defaults to `'light_mode'`."
+      },
+      {
+        "name": "darkIcon",
+        "type": "string",
+        "description": "Icon for the Dark item and the trigger in dark mode; defaults to `'dark_mode'`."
+      },
+      {
+        "name": "systemIcon",
+        "type": "string",
+        "description": "Icon for the System item and the trigger when following the OS; defaults to `'contrast'`."
+      }
+    ],
+    "outputs": [],
+    "methods": []
+  },
   "RhombusNavListComponent": {
     "name": "RhombusNavListComponent",
     "kind": "class",
@@ -2216,6 +2241,26 @@ export const API_METADATA: Record<string, ApiEntry> = {
         ]
       }
     ]
+  },
+  "RhombusPalettePickerComponent": {
+    "name": "RhombusPalettePickerComponent",
+    "kind": "class",
+    "selector": "rhombus-palette-picker",
+    "description": "Palette picker: a standalone switcher for the palette (colour-family) axis.\nItems call `setPalette`, which switches family while keeping the current mode\n(and preserving \"follow OS\" if active). The active palette is highlighted and\nexposed as `aria-checked`.\n\nRenders nothing until more than one palette is registered (via\n`provideRhombusThemes()`), so an app with a single palette shows no control\nat all — pair it with `<rhombus-mode-menu>` and the header degrades to just\nthe mode picker. For a single combined control, use `<rhombus-theme-menu>`.",
+    "inputs": [
+      {
+        "name": "themeIcons",
+        "type": "Record<string, string>",
+        "description": "Optional per-palette icon overrides, keyed by palette id (items + trigger)."
+      },
+      {
+        "name": "defaultIcon",
+        "type": "string",
+        "description": "Trigger icon when the active palette has no `themeIcons` entry; defaults to `'palette'`."
+      }
+    ],
+    "outputs": [],
+    "methods": []
   },
   "RhombusPopoverCloseDirective": {
     "name": "RhombusPopoverCloseDirective",

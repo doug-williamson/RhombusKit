@@ -437,6 +437,11 @@
   readonly iconButton: _angular_core.InputSignal<boolean>
   readonly items: _angular_core.InputSignal<MenuItem[]>
 
+### RhombusModeMenuComponent (class)
+  readonly darkIcon: _angular_core.InputSignal<string>
+  readonly lightIcon: _angular_core.InputSignal<string>
+  readonly systemIcon: _angular_core.InputSignal<string>
+
 ### RhombusNavItem (interface)
   action?: () => void
   active?: boolean
@@ -505,6 +510,10 @@
   readonly pageSize: _angular_core.InputSignal<number>
   readonly pageSizeOptions: _angular_core.InputSignal<number[]>
   readonly showFirstLastButtons: _angular_core.InputSignal<boolean>
+
+### RhombusPalettePickerComponent (class)
+  readonly defaultIcon: _angular_core.InputSignal<string>
+  readonly themeIcons: _angular_core.InputSignal<Record<string, string>>
 
 ### RhombusPopoverCloseDirective (class)
   // (no public members)

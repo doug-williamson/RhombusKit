@@ -7,8 +7,9 @@ import {
   RhombusIconComponent,
   RhombusMenuComponent,
   RhombusNavListComponent,
+  RhombusModeMenuComponent,
+  RhombusPalettePickerComponent,
   RhombusShellFooterDirective,
-  RhombusThemeMenuComponent,
   type MenuItem,
   type RhombusNavSection,
 } from '@rhombuskit/core';
@@ -46,7 +47,8 @@ const GUIDES_GROUP = 'Get started';
     RhombusMenuComponent,
     RhombusNavListComponent,
     RhombusShellFooterDirective,
-    RhombusThemeMenuComponent,
+    RhombusModeMenuComponent,
+    RhombusPalettePickerComponent,
     CommandPaletteComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,7 +85,8 @@ const GUIDES_GROUP = 'Get started';
         <kbd class="showcase-shell__search-kbd">⌘K</kbd>
       </button>
 
-      <rhombus-theme-menu shellHeaderActions />
+      <rhombus-mode-menu shellHeaderActions />
+      <rhombus-palette-picker shellHeaderActions />
 
       <router-outlet />
       <app-command-palette #palette />
