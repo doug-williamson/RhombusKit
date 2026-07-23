@@ -237,6 +237,13 @@ export type { AlertVariant } from './lib/alert/rhombus-alert.component';
 export { RhombusThemeToggleComponent } from './lib/theme-toggle/rhombus-theme-toggle.component';
 export { RhombusThemeMenuComponent } from './lib/theme-toggle/rhombus-theme-menu.component';
 
+// Split theme controls. Two composable dropdowns over the same
+// RhombusThemeService: the mode menu picks Light/Dark/System; the palette
+// picker switches palette family and renders nothing until >1 palette is
+// registered. The combined RhombusThemeMenuComponent above still ships.
+export { RhombusModeMenuComponent } from './lib/theme-toggle/rhombus-mode-menu.component';
+export { RhombusPalettePickerComponent } from './lib/theme-toggle/rhombus-palette-picker.component';
+
 // 0.x — app shell. A slotted layout primitive (mat-sidenav-container +
 // mat-toolbar): header / collapsible sidenav / content / optional aside, with a
 // responsive overlay↔rail↔side contract. Structure only — consumers project

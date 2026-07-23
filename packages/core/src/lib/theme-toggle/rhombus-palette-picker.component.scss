@@ -1,0 +1,62 @@
+.rhombus-palette-picker {
+  &__trigger {
+    --mat-icon-button-icon-color: var(--text-secondary);
+
+    &:hover {
+      --mat-icon-button-icon-color: var(--text-primary);
+    }
+
+    // Trigger icon renders as inline SVG (fill: currentColor); route its colour
+    // through the same token Material applies to <mat-icon>, incl. hover above.
+    .rhombus-icon {
+      color: var(--mat-icon-button-icon-color);
+    }
+  }
+
+  &__item--active {
+    --mat-menu-item-label-text-color: var(--text-accent);
+    // Colour the leading icon with the label: the panel routes icon colour
+    // through this token for both the inline SVG and the mat-icon fallback.
+    --mat-menu-item-icon-color: var(--text-accent);
+  }
+}
+
+// matIconButton is inline-block (line-height: normal), so the inline-flex
+// <rhombus-icon> aligns to the text baseline and seats ~4px below centre.
+// Flex-centre the button content. Top-level + `button.` (0,1,1) deterministically
+// out-specifies Material's .mat-mdc-icon-button (0,1,0) — no !important, no
+// .mat-mdc-* selector. (Kept out of the nested block above so it isn't rewritten
+// into a `.rhombus-palette-picker <descendant>` selector — the host is a tag.)
+button.rhombus-palette-picker__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// The menu panel renders in the CDK overlay, outside this component's DOM, so
+// its tokens are scoped through the overlay container rather than the host.
+.cdk-overlay-container .rhombus-palette-picker__panel {
+  --mat-menu-container-color: var(--surface-0);
+  --mat-menu-item-label-text-color: var(--text-primary);
+  --mat-menu-item-icon-color: var(--text-secondary);
+
+  // <rhombus-icon> is the menu item's flex child (where Material would place
+  // <mat-icon>), so it carries the leading-icon gap. Mirror Material's own
+  // .mat-icon spacing — verified against Material 21.2.12.
+  rhombus-icon {
+    flex-shrink: 0;
+    margin-inline-end: var(--mat-menu-item-spacing, 12px);
+  }
+
+  // Default items render inline SVG (fill: currentColor) — colour it like a
+  // native menu-item icon.
+  .rhombus-icon {
+    color: var(--mat-menu-item-icon-color);
+  }
+
+  // A custom (non-default) item icon falls back to <mat-icon>; the host already
+  // carries the gap, so cancel Material's own margin to avoid doubling.
+  rhombus-icon .mat-icon {
+    margin: 0;
+  }
+}
