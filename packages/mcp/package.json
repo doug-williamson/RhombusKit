@@ -1,6 +1,6 @@
 {
   "name": "@rhombuskit/mcp",
-  "version": "1.16.3",
+  "version": "1.17.0",
   "license": "MIT",
   "description": "Model Context Protocol (MCP) server for RhombusKit — serves the component API surface and the design-token CONTRACT to AI coding assistants. The interactive companion to llms.txt.",
   "keywords": [

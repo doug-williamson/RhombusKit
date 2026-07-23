@@ -1,6 +1,6 @@
 {
   "name": "@rhombuskit/theme-builder",
-  "version": "1.16.3",
+  "version": "1.17.0",
   "license": "MIT",
   "description": "Generate WCAG-AA-validated RhombusKit token-override themes from a few seed colours — a framework-agnostic seed→theme generator that emits both light and dark packs over the full 60-token CONTRACT.",
   "keywords": [
