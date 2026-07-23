@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/doug-williamson/RhombusKit/compare/v1.16.3...v1.17.0) (2026-07-23)
+
+
+### Features
+
+* **core:** split theme controls into mode-menu + palette-picker ([#140](https://github.com/doug-williamson/RhombusKit/issues/140)) ([5a60f47](https://github.com/doug-williamson/RhombusKit/commit/5a60f473616ff21cffec07d199e5fa9dd050f022))
+
 ## [1.16.3](https://github.com/doug-williamson/RhombusKit/compare/v1.16.2...v1.16.3) (2026-07-22)
 
 
