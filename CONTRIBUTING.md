@@ -130,6 +130,7 @@ last three — they only fire when you change the public surface.
 | `build` → component styles | `tools/verify-component-styles.mjs` (no Sass `//` line-comment leaks in emitted CSS) | use `/* … */` block comments in component SCSS |
 | `build` → public API | `tools/api-snapshot.mjs` vs `etc/*.api.md` | build first, then `node tools/api-snapshot.mjs --update` |
 | `a11y` | Playwright color-contrast over the showcase, both themes | fix the token pair / contrast |
+| `a11y` → rendered outcomes | Playwright computed-style gates for visual inputs whose effect jsdom cannot cascade — every `ButtonVariant × ButtonAppearance` label ratio (`button-contrast.spec.ts`), box geometry (`geometry.spec.ts`), density (`density.spec.ts`) | a visual input (`variant`, `appearance`, `size`, …) is only "verified" once its showcase page renders every value and a Playwright row measures the outcome; add the row with the fix, RED first |
 
 So if you intentionally change a public export or a token, the fix is to
 **regenerate and commit the snapshot** — that diff is the signal reviewers
