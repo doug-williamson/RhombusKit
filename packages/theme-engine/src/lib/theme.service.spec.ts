@@ -119,3 +119,42 @@ describe('RhombusThemeService — configured names (provideRhombusTheme)', () =>
     expect(localStorage.getItem(STORAGE_KEY)).toBe('aurora-night');
   });
 });
+
+describe('RhombusThemeService — host without window.matchMedia', () => {
+  // jsdom (Angular's default unit-test environment) ships no matchMedia, and
+  // neither do some embedded browser hosts. THEME_INIT_SCRIPT and the carousel
+  // already guard the call; the service must degrade the same way its docblock
+  // and DEFAULT_RESOLVED_THEME promise ("when matchMedia is unavailable"),
+  // instead of throwing at construction for every consumer spec that renders
+  // a themed control.
+  function setupWithoutMatchMedia(opts: SetupOptions = {}): RhombusThemeService {
+    TestBed.resetTestingModule();
+    localStorage.clear();
+    if (opts.stored != null) {
+      localStorage.setItem(STORAGE_KEY, opts.stored);
+    }
+    delete (window as { matchMedia?: unknown }).matchMedia;
+    TestBed.configureTestingModule({ providers: opts.providers ?? [] });
+    return TestBed.inject(RhombusThemeService);
+  }
+
+  it('constructs without throwing', () => {
+    expect(() => setupWithoutMatchMedia()).not.toThrow();
+  });
+
+  it('resolves the system preference to the configured light theme', () => {
+    const service = setupWithoutMatchMedia();
+    expect(service.preference()).toBe('system');
+    expect(service.current()).toBe('rhombus-light');
+  });
+
+  it('still applies data-theme to the document and honours setTheme', () => {
+    const service = setupWithoutMatchMedia();
+    flush();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('rhombus-light');
+    service.setTheme('rhombus-dark');
+    flush();
+    expect(service.current()).toBe('rhombus-dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('rhombus-dark');
+  });
+});
