@@ -9,10 +9,18 @@ interface RhombusGlyph {
 /**
  * Built-in default glyphs the library renders inline (Material Icons "filled",
  * 24px), keyed by their Material ligature name. Pre-seeded into every
- * {@link RhombusIconRegistry} so the library's own frame components
- * (overflow-menu, bottom-nav, theme controls) render without any consumer
- * registration and without the Material Icons font. Extend this map when a new
- * built-in default icon appears.
+ * {@link RhombusIconRegistry} so the library's own components render without
+ * any consumer registration and without the Material Icons font.
+ *
+ * Guarantee: every icon name a kit template or an `*Icon` input default hands
+ * to `<rhombus-icon>` is a key of this map. `kit-glyph-coverage.spec.ts` scans
+ * the authored templates and enforces it, so a new component that asks for an
+ * unregistered glyph fails `nx test core` instead of printing the literal word
+ * on a font-less host. A consumer's own `provideRhombusIcons()` registration
+ * runs after this seeding and wins, so seeding a name is never breaking.
+ *
+ * Path data is from Google's Material Icons (Apache License 2.0) — see
+ * THIRD_PARTY_NOTICES.md.
  */
 const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
   more_vert: {
@@ -72,6 +80,22 @@ const RHOMBUS_DEFAULT_GLYPHS: Record<string, RhombusGlyph> = {
   arrow_downward: {
     viewBox: '0 0 24 24',
     path: 'M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z',
+  },
+  // Disclosure chevron: accordion-panel, nav-list (section, disclosure and
+  // parent-row toggles). Rotated by CSS for the open state.
+  chevron_right: {
+    viewBox: '0 0 24 24',
+    path: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z',
+  },
+  // nav-list `locked` item marker.
+  lock: {
+    viewBox: '0 0 24 24',
+    path: 'M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z',
+  },
+  // palette-picker's default trigger glyph.
+  palette: {
+    viewBox: '0 0 24 24',
+    path: 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
   },
 };
 

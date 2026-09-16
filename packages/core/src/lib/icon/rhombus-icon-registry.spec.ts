@@ -20,6 +20,11 @@ const BUILT_INS = [
   'drag_indicator',
   'arrow_upward',
   'arrow_downward',
+  // Disclosure chevron (accordion-panel, nav-list), nav-list lock marker and
+  // palette-picker's default trigger — every name a kit template renders.
+  'chevron_right',
+  'lock',
+  'palette',
 ];
 
 describe('RhombusIconRegistry', () => {
@@ -82,5 +87,18 @@ describe('provideRhombusIcons', () => {
     expect(registry.has('custom_x')).toBe(true);
     // Built-ins remain available alongside the registered set.
     expect(registry.has('more_vert')).toBe(true);
+  });
+
+  it('lets a consumer registration win over a pre-seeded built-in', () => {
+    // Seeding runs in the registry constructor; provideRhombusIcons registers
+    // afterwards, so a consumer that already ships its own chevron keeps it.
+    // This is what makes seeding a new built-in name a non-breaking change.
+    TestBed.configureTestingModule({
+      providers: [provideRhombusIcons({ chevron_right: '<svg id="mine"></svg>' })],
+    });
+    const registry = TestBed.inject(RhombusIconRegistry);
+    const sanitizer = TestBed.inject(DomSanitizer);
+    const svg = sanitizer.sanitize(SecurityContext.HTML, registry.get('chevron_right') ?? null);
+    expect(svg).toContain('id="mine"');
   });
 });
