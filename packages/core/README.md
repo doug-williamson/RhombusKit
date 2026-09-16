@@ -40,14 +40,14 @@ pnpm add @rhombuskit/core @rhombuskit/material-preset
 **2. Providers** (`app.config.ts`):
 
 ```ts
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideRhombusIcons } from '@rhombuskit/core';
 import { provideRhombusTheme } from '@rhombuskit/theme-engine';
 // import { provideRhombusDensity } from '@rhombuskit/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAnimationsAsync(),
     provideRhombusTheme(), // defaults to rhombus-light / rhombus-dark / system
+    provideRhombusIcons({}), // your inline-SVG icon set (built-in glyphs are pre-seeded)
     // Optional app-wide density (compact | default | comfortable). Needs the
     // Material bridge above for Material-backed controls; register it here in
     // bootstrapApplication — route-level registration is ignored (warns in dev).
@@ -55,6 +55,11 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 ```
+
+That is exactly what `ng add @rhombuskit/core` wires. RhombusKit needs **no
+animations provider**: every transition is a CSS transition driven by the
+motion tokens, `@angular/animations` is not a peer dependency, and Angular
+Material 21 does not require it either.
 
 **3. Flash-free theme** — drop `THEME_INIT_SCRIPT` into `<head>` (see
 [@rhombuskit/theme-engine](https://www.npmjs.com/package/@rhombuskit/theme-engine)).

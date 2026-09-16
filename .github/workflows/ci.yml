@@ -127,6 +127,8 @@ jobs:
         run: pnpm test:tokens
       - name: Verify emitted component styles (no Sass `//` leaks)
         run: node tools/verify-component-styles.mjs
+      - name: Verify setup docs (no @angular/animations; README providers == ng add)
+        run: node tools/verify-setup-docs.mjs
       - name: Verify public API surface (export snapshots)
         run: node tools/api-snapshot.mjs
       - name: Verify llms.txt / llms-full.txt are in sync

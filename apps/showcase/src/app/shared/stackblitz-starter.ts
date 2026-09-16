@@ -12,7 +12,6 @@ const PACKAGE_JSON = JSON.stringify(
     version: '0.0.0',
     scripts: { start: 'ng serve', build: 'ng build' },
     dependencies: {
-      '@angular/animations': '^21.0.0',
       '@angular/cdk': '^21.0.0',
       '@angular/common': '^21.0.0',
       '@angular/compiler': '^21.0.0',
@@ -121,12 +120,11 @@ const INDEX_HTML = `<!doctype html>
 `;
 
 const MAIN_TS = `import { bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRhombusTheme } from '@rhombuskit/theme-engine';
 import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent, {
-  providers: [provideAnimationsAsync(), provideRhombusTheme()],
+  providers: [provideRhombusTheme()],
 }).catch((err) => console.error(err));
 `;
 
