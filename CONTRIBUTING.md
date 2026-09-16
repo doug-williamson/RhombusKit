@@ -17,11 +17,29 @@ showcase example are all real, credited contributions.
 | Propose a brand-new component | Open a **New component proposal** issue |
 | Report something broken | Open a **Bug report** (with a reproduction) |
 | Report an a11y / WCAG / screen-reader problem | Open an **Accessibility issue** |
+| Report something you had to work around in a real app built on the kit | Open a **Downstream gap** issue (see below) |
 | Ask a question or float a half-formed idea | Start a **Discussion** (and 👍 ideas you like) |
 | Report a security vulnerability | **Privately** — see [SECURITY.md](./SECURITY.md) |
 
 Voting (👍) on an existing issue or Discussion is itself a contribution — it's
 how we decide what to build next, so it beats a duplicate.
+
+### Consumer findings: the downstream lane
+
+The showcase is a documentation site. It cannot reproduce how the kit behaves as
+a real app's own chrome — a phone-first shell with the toolbar off, a sheet
+opened inside a capped column, a validated form in a flow, an icon on a host
+that loads no icon font. Those gaps surface in *your* app, usually as an
+override in your global stylesheet or a rule in your project notes, and they
+only reach the kit if you file them.
+
+The **Downstream gap** issue form asks for the four things a maintainer needs to
+act without re-deriving your work: the exact version pin, the public surface
+touched, what you measured, and the workaround you shipped. They are labelled
+[`downstream`](https://github.com/doug-williamson/RhombusKit/labels/downstream)
+and batched into "downstream-adoption gaps" releases — the pattern behind
+1.8.0 (#106), 1.9.0 (#110), 1.10.0 (#112) and the 1.19 cycle. One gap per issue;
+the workaround you paste is usually the spec for the fix.
 
 ## Sponsoring
 

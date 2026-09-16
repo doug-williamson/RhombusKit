@@ -1,0 +1,74 @@
+name: 🧭 Downstream gap (from a consuming app)
+description: Something you had to work around while building a real app on RhombusKit — a missing lever, a wrong default, a trap nothing warned you about.
+title: "[downstream]: "
+labels: ["downstream", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A gap you hit in a real app is the most valuable kind of report we get —
+        the showcase is a docs site and cannot reproduce how the kit behaves as an
+        app's own chrome. File the workaround you shipped, not just the wish: the
+        override you wrote is usually the spec for the fix. One gap per issue.
+  - type: input
+    id: version
+    attributes:
+      label: RhombusKit version (exact pin)
+      placeholder: "@rhombuskit/core 1.19.0"
+    validations:
+      required: true
+  - type: input
+    id: surface
+    attributes:
+      label: Public surface touched
+      description: The component, input, token, service or CSS class involved.
+      placeholder: "rhombus-app-shell — toolbar; --rhombus-app-shell-toolbar-height"
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host / platform where it showed up
+      multiple: true
+      options:
+        - Desktop browser
+        - Android Chrome
+        - iOS Safari (incl. home-screen / standalone)
+        - Installed PWA
+        - SSR / prerender
+        - Unit tests (jsdom / Vitest / Jest)
+        - Other (say which below)
+    validations:
+      required: false
+  - type: textarea
+    id: measured
+    attributes:
+      label: What you measured or observed
+      description: Rendered values beat adjectives — a computed style, a contrast ratio, a bounding box, a DOM shape, a console error.
+      placeholder: "ghost + outlined label measured 1.00:1 (color rgba(0,0,0,0) on #fff) — accessible name intact, so axe reported nothing."
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: The workaround you shipped
+      description: The override, wrapper component, guard list or rule your app now carries because of this. Paste the code.
+      render: scss
+    validations:
+      required: true
+  - type: textarea
+    id: ask
+    attributes:
+      label: What the kit should own instead
+      description: The input, token, default or behaviour that would let you delete the workaround.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and this isn't a duplicate.
+          required: true
+        - label: This is one gap (I'll file others separately so each can be triaged and released on its own).
+          required: true
