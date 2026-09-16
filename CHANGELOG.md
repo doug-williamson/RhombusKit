@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.18.0](https://github.com/doug-williamson/RhombusKit/compare/v1.17.0...v1.18.0) (2026-09-16)
+
+
+### Features
+
+* **tokens:** m3 foundations wave A — type/space/state primitives, M3 corner ramp ([#142](https://github.com/doug-williamson/RhombusKit/issues/142)) ([f90bcc4](https://github.com/doug-williamson/RhombusKit/commit/f90bcc4e7381ae1fe063b1f3ad8a7618596e9007))
+
+
+### Bug Fixes
+
+* **button:** bind label tokens per variant so secondary/ghost outlined/text labels clear AA ([#144](https://github.com/doug-williamson/RhombusKit/issues/144)) ([8d62cf3](https://github.com/doug-williamson/RhombusKit/commit/8d62cf364b97ffa0d7d51b322cbbc9ad41a4b7c6))
+* **core:** drop provideAnimationsAsync from the README, showcase config and StackBlitz starter ([#147](https://github.com/doug-williamson/RhombusKit/issues/147)) ([b5aa59f](https://github.com/doug-williamson/RhombusKit/commit/b5aa59fd182142075b2c2c2ee482d2d8623ed862))
+* **icon:** seed chevron_right, lock and palette; gate kit templates against unseeded glyphs ([#145](https://github.com/doug-williamson/RhombusKit/issues/145)) ([d2000fa](https://github.com/doug-williamson/RhombusKit/commit/d2000fa058230196ff8cfe94377864b9a387cd76))
+* **theme-engine:** guard window.matchMedia in RhombusThemeService ([#146](https://github.com/doug-williamson/RhombusKit/issues/146)) ([02a58d9](https://github.com/doug-williamson/RhombusKit/commit/02a58d9064a46c1683deb2ad5e0e0ffbecd9d985))
+
 ## [1.17.0](https://github.com/doug-williamson/RhombusKit/compare/v1.16.3...v1.17.0) (2026-07-23)
 
 
