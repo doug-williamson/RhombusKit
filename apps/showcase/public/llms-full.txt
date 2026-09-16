@@ -1097,7 +1097,7 @@ See the **Theming** section at the end for the full provider + SCSS setup.
   values: Record<"--bg" | "--bg-subtle" | "--surface-0" | "--surface-1" | "--surface-2" | "--surface-3" | "--text-primary" | "--text-secondary" | "--text-muted" | "--text-disabled" | "--text-accent" | "--text-on-accent" | "--border" | "--border-strong" | "--border-accent" | "--focus-ring" | "--focus-border" | "--error" | "--error-bg" | "--btn-primary-bg" | "--btn-primary-text" | "--btn-primary-hover" | "--nav-active-bg" | "--nav-active-text" | "--switch-track-off" | "--switch-track-on" | "--tooltip-bg" | "--tooltip-text" | "--toast-info-bg" | "--toast-info-text" | "--toast-success-bg" | "--toast-success-text" | "--toast-warning-bg" | "--toast-warning-text" | "--toast-error-bg" | "--toast-error-text" | "--shadow-sm" | "--shadow-md" | "--shadow-lg" | "--shadow-xl" | "--shadow-btn-primary" | "--font-sans" | "--font-mono" | "--font-prose" | "--status-draft-bg" | "--status-draft-text" | "--status-published-bg" | "--status-published-text" | "--status-scheduled-bg" | "--status-scheduled-text" | "--status-archived-bg" | "--status-archived-text" | "--ink-surface" | "--ink-on-surface" | "--code-keyword" | "--code-string" | "--code-function" | "--code-number" | "--code-comment" | "--code-punctuation", string>
 
 ### tokens (const)
-  tokens: { readonly primitives: { readonly "slate-50": "#f8fafc"; readonly "slate-100": "#f1f5f9"; readonly "slate-200": "#e2e8f0"; readonly "slate-300": "#cbd5e1"; readonly "slate-400": "#94a3b8"; readonly "slate-500": "#64748b"; readonly "slate-600": "#475569"; readonly "slate-700": "#334155"; readonly "slate-800": "#1e293b"; readonly "slate-900": "#0f172a"; readonly "slate-950": "#020617"; readonly "violet-50": "#f5f3ff"; readonly "violet-100": "#ede9fe"; readonly "violet-200": "#ddd6fe"; readonly "violet-300": "#c4b5fd"; readonly "violet-400": "#a78bfa"; readonly "violet-500": "#8b5cf6"; readonly "violet-600": "#7c3aed"; readonly "violet-700": "#6d28d9"; readonly "violet-800": "#5b21b6"; readonly "violet-900": "#4c1d95"; readonly "violet-950": "#2e1065"; readonly "green-50": "#f0fdf4"; readonly "green-100": "#dcfce7"; readonly "green-500": "#22c55e"; readonly "green-600": "#16a34a"; readonly "green-700": "#15803d"; readonly "amber-50": "#fffbeb"; readonly "amber-100": "#fef3c7"; readonly "amber-500": "#f59e0b"; readonly "amber-600": "#d97706"; readonly "amber-700": "#b45309"; readonly "red-50": "#fef2f2"; readonly "red-100": "#fee2e2"; readonly "red-500": "#ef4444"; readonly "red-600": "#dc2626"; readonly "red-700": "#b91c1c"; readonly "font-family-sans": "\"Inter Variable\", \"Inter\", system-ui, sans-serif"; readonly "font-family-mono": "\"JetBrains Mono Variable\", \"JetBrains Mono\", monospace"; readonly "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif"; readonly "radius-none": "0"; readonly "radius-sm": "0.125rem"; readonly "radius-xs": "0.25rem"; readonly "radius-md": "0.375rem"; readonly "radius-lg": "0.5rem"; readonly "radius-xl": "0.75rem"; readonly "radius-full": "9999px"; readonly "motion-duration-instant": "0ms"; readonly "motion-duration-fast": "120ms"; readonly "motion-duration-base": "150ms"; readonly "motion-duration-slow": "240ms"; readonly "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)"; readonly "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)"; readonly "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)"; readonly "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"; readonly "border-width": "1px"; readonly "border-width-strong": "2px"; readonly "control-height-sm": "2rem"; readonly "control-height-md": "2.5rem"; readonly "control-height-lg": "3rem"; readonly "field-height": "3.5rem"; readonly "row-height": "3.25rem"; }; readonly density: { readonly compact: { readonly "control-height-sm": "1.75rem"; readonly "control-height-md": "2.25rem"; readonly "control-height-lg": "2.75rem"; readonly "field-height": "3.25rem"; readonly "row-height": "3rem"; }; readonly comfortable: { readonly "control-height-sm": "2.25rem"; readonly "control-height-md": "3rem"; readonly "control-height-lg": "3.5rem"; readonly "field-height": "4rem"; readonly "row-height": "3.75rem"; }; }; readonly themes: { readonly "rhombus-light": Record<SemanticTokenName, string>; readonly "rhombus-dark": Record<SemanticTokenName, string>; }; }
+  tokens: { readonly primitives: { readonly "slate-50": "#f8fafc"; readonly "slate-100": "#f1f5f9"; readonly "slate-200": "#e2e8f0"; readonly "slate-300": "#cbd5e1"; readonly "slate-400": "#94a3b8"; readonly "slate-500": "#64748b"; readonly "slate-600": "#475569"; readonly "slate-700": "#334155"; readonly "slate-800": "#1e293b"; readonly "slate-900": "#0f172a"; readonly "slate-950": "#020617"; readonly "violet-50": "#f5f3ff"; readonly "violet-100": "#ede9fe"; readonly "violet-200": "#ddd6fe"; readonly "violet-300": "#c4b5fd"; readonly "violet-400": "#a78bfa"; readonly "violet-500": "#8b5cf6"; readonly "violet-600": "#7c3aed"; readonly "violet-700": "#6d28d9"; readonly "violet-800": "#5b21b6"; readonly "violet-900": "#4c1d95"; readonly "violet-950": "#2e1065"; readonly "green-50": "#f0fdf4"; readonly "green-100": "#dcfce7"; readonly "green-500": "#22c55e"; readonly "green-600": "#16a34a"; readonly "green-700": "#15803d"; readonly "amber-50": "#fffbeb"; readonly "amber-100": "#fef3c7"; readonly "amber-500": "#f59e0b"; readonly "amber-600": "#d97706"; readonly "amber-700": "#b45309"; readonly "red-50": "#fef2f2"; readonly "red-100": "#fee2e2"; readonly "red-500": "#ef4444"; readonly "red-600": "#dc2626"; readonly "red-700": "#b91c1c"; readonly "font-family-sans": "\"Inter Variable\", \"Inter\", system-ui, sans-serif"; readonly "font-family-mono": "\"JetBrains Mono Variable\", \"JetBrains Mono\", monospace"; readonly "font-family-prose": "\"Lora Variable\", \"Lora\", Georgia, serif"; readonly "radius-none": "0"; readonly "radius-xs": "0.25rem"; readonly "radius-sm": "0.5rem"; readonly "radius-md": "0.75rem"; readonly "radius-lg": "1rem"; readonly "radius-xl": "1.75rem"; readonly "radius-full": "9999px"; readonly "type-weight-regular": "400"; readonly "type-weight-medium": "500"; readonly "type-weight-bold": "700"; readonly "type-display-large-size": "3.5625rem"; readonly "type-display-large-line-height": "4rem"; readonly "type-display-large-weight": "400"; readonly "type-display-large-tracking": "-0.015625rem"; readonly "type-display-medium-size": "2.8125rem"; readonly "type-display-medium-line-height": "3.25rem"; readonly "type-display-medium-weight": "400"; readonly "type-display-medium-tracking": "0"; readonly "type-display-small-size": "2.25rem"; readonly "type-display-small-line-height": "2.75rem"; readonly "type-display-small-weight": "400"; readonly "type-display-small-tracking": "0"; readonly "type-headline-large-size": "2rem"; readonly "type-headline-large-line-height": "2.5rem"; readonly "type-headline-large-weight": "400"; readonly "type-headline-large-tracking": "0"; readonly "type-headline-medium-size": "1.75rem"; readonly "type-headline-medium-line-height": "2.25rem"; readonly "type-headline-medium-weight": "400"; readonly "type-headline-medium-tracking": "0"; readonly "type-headline-small-size": "1.5rem"; readonly "type-headline-small-line-height": "2rem"; readonly "type-headline-small-weight": "400"; readonly "type-headline-small-tracking": "0"; readonly "type-title-large-size": "1.375rem"; readonly "type-title-large-line-height": "1.75rem"; readonly "type-title-large-weight": "400"; readonly "type-title-large-tracking": "0"; readonly "type-title-medium-size": "1rem"; readonly "type-title-medium-line-height": "1.5rem"; readonly "type-title-medium-weight": "500"; readonly "type-title-medium-tracking": "0.009375rem"; readonly "type-title-small-size": "0.875rem"; readonly "type-title-small-line-height": "1.25rem"; readonly "type-title-small-weight": "500"; readonly "type-title-small-tracking": "0.00625rem"; readonly "type-body-large-size": "1rem"; readonly "type-body-large-line-height": "1.5rem"; readonly "type-body-large-weight": "400"; readonly "type-body-large-tracking": "0.03125rem"; readonly "type-body-medium-size": "0.875rem"; readonly "type-body-medium-line-height": "1.25rem"; readonly "type-body-medium-weight": "400"; readonly "type-body-medium-tracking": "0.015625rem"; readonly "type-body-small-size": "0.75rem"; readonly "type-body-small-line-height": "1rem"; readonly "type-body-small-weight": "400"; readonly "type-body-small-tracking": "0.025rem"; readonly "type-label-large-size": "0.875rem"; readonly "type-label-large-line-height": "1.25rem"; readonly "type-label-large-weight": "500"; readonly "type-label-large-tracking": "0.00625rem"; readonly "type-label-large-weight-prominent": "700"; readonly "type-label-medium-size": "0.75rem"; readonly "type-label-medium-line-height": "1rem"; readonly "type-label-medium-weight": "500"; readonly "type-label-medium-tracking": "0.03125rem"; readonly "type-label-medium-weight-prominent": "700"; readonly "type-label-small-size": "0.6875rem"; readonly "type-label-small-line-height": "1rem"; readonly "type-label-small-weight": "500"; readonly "type-label-small-tracking": "0.03125rem"; readonly "space-0": "0"; readonly "space-1": "0.25rem"; readonly "space-2": "0.5rem"; readonly "space-3": "0.75rem"; readonly "space-4": "1rem"; readonly "space-5": "1.25rem"; readonly "space-6": "1.5rem"; readonly "space-8": "2rem"; readonly "space-10": "2.5rem"; readonly "space-12": "3rem"; readonly "space-16": "4rem"; readonly "state-hover-opacity": "0.08"; readonly "state-focus-opacity": "0.12"; readonly "state-pressed-opacity": "0.12"; readonly "state-dragged-opacity": "0.16"; readonly "motion-duration-instant": "0ms"; readonly "motion-duration-fast": "120ms"; readonly "motion-duration-base": "150ms"; readonly "motion-duration-slow": "240ms"; readonly "motion-ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)"; readonly "motion-ease-emphasized": "cubic-bezier(0.2, 0, 0, 1)"; readonly "motion-ease-decelerate": "cubic-bezier(0, 0, 0.2, 1)"; readonly "motion-ease-accelerate": "cubic-bezier(0.4, 0, 1, 1)"; readonly "border-width": "1px"; readonly "border-width-strong": "2px"; readonly "control-height-sm": "2rem"; readonly "control-height-md": "2.5rem"; readonly "control-height-lg": "3rem"; readonly "field-height": "3.5rem"; readonly "row-height": "3.25rem"; }; readonly density: { readonly compact: { readonly "control-height-sm": "1.75rem"; readonly "control-height-md": "2.25rem"; readonly "control-height-lg": "2.75rem"; readonly "field-height": "3.25rem"; readonly "row-height": "3rem"; }; readonly comfortable: { readonly "control-height-sm": "2.25rem"; readonly "control-height-md": "3rem"; readonly "control-height-lg": "3.5rem"; readonly "field-height": "4rem"; readonly "row-height": "3.75rem"; }; }; readonly themes: { readonly "rhombus-light": Record<SemanticTokenName, string>; readonly "rhombus-dark": Record<SemanticTokenName, string>; }; }
 
 ---
 
@@ -1125,11 +1125,13 @@ system with your own theme without breaking the contract.
 - [Theme builder](#theme-builder)
 - [Overriding token values](#overriding-token-values)
 - [Density](#density)
+- [Foundations: type, spacing, shape, state](#foundations-type-spacing-shape-state)
 - [The Material bridge](#the-material-bridge)
 
 ## How theming works
 
-RhombusKit's colour, shadow, radius, geometry, and font decisions live in a three-tier
+RhombusKit's colour, shadow, type, spacing, shape, state-layer, geometry, and font
+decisions live in a three-tier
 token system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
 
 1. **Primitives** — the raw palette (`violet-600`, `slate-100`, …). Internal.
@@ -1475,6 +1477,104 @@ visible change, not hypothetical.
 > live `mat.density` scale in dev mode and warns. Remove the Material density scale and use
 > `provideRhombusDensity()` alone.
 
+## Foundations: type, spacing, shape, state
+
+Four more scales sit beside [Density](#density) in the palette-level primitives — the M3
+**type** ramp, a **spacing** grid, the **corner radius** ramp, and **state-layer**
+opacities. Like density and motion they are theme-independent (a 14px label is 14px in
+every theme), so they are primitives rather than semantic CONTRACT names. Their names are
+frozen append-only and CI-guarded by `primitives.snapshot.json`, exactly like the CONTRACT.
+
+Browse them as live specimens on the **[Foundations](/foundations)** page.
+
+### Type scale
+
+The 15 Material 3 roles, each emitted as
+`--type-<role>-{size,line-height,weight,tracking}`, plus M3's two prominent-weight
+variants and the three named weight constants `--type-weight-{regular,medium,bold}`.
+
+| role | size | line-height | weight | tracking |
+| --- | --- | --- | --- | --- |
+| `display-large` | 3.5625rem | 4rem | 400 | -0.015625rem |
+| `display-medium` | 2.8125rem | 3.25rem | 400 | 0 |
+| `display-small` | 2.25rem | 2.75rem | 400 | 0 |
+| `headline-large` | 2rem | 2.5rem | 400 | 0 |
+| `headline-medium` | 1.75rem | 2.25rem | 400 | 0 |
+| `headline-small` | 1.5rem | 2rem | 400 | 0 |
+| `title-large` | 1.375rem | 1.75rem | 400 | 0 |
+| `title-medium` | 1rem | 1.5rem | 500 | 0.009375rem |
+| `title-small` | 0.875rem | 1.25rem | 500 | 0.00625rem |
+| `body-large` | 1rem | 1.5rem | 400 | 0.03125rem |
+| `body-medium` | 0.875rem | 1.25rem | 400 | 0.015625rem |
+| `body-small` | 0.75rem | 1rem | 400 | 0.025rem |
+| `label-large` | 0.875rem | 1.25rem | 500 | 0.00625rem |
+| `label-medium` | 0.75rem | 1rem | 500 | 0.03125rem |
+| `label-small` | 0.6875rem | 1rem | 500 | 0.03125rem |
+
+Use a role's three values together — the M3 read comes from size, weight and tracking
+travelling as a set, and a bare size scale discards exactly the part that makes it look
+like M3.
+
+Font **family** is deliberately not part of this scale. Family is themed
+(`--font-sans` / `--font-mono` / `--font-prose` are CONTRACT names), so freezing it into
+a primitive would stop a theme from changing it.
+
+### Spacing
+
+A 4px grid on a numeric multiplier: `--space-0` (0), `-1` (4px), `-2` (8px), `-3` (12px),
+`-4` (16px), `-5` (20px), `-6` (24px), `-8` (32px), `-10` (40px), `-12` (48px),
+`-16` (64px). Authored in rem so it scales with the user's root font size. The odd steps
+are deliberately absent — a complete 4px ladder is a utility framework, not a design
+system, and published primitives are append-only forever, so a missing step can be added
+later but a shipped one can never be removed.
+
+### State layers
+
+`--state-hover-opacity` (0.08), `--state-focus-opacity` (0.12),
+`--state-pressed-opacity` (0.12), `--state-dragged-opacity` (0.16) — the translucent
+overlays M3 paints on interaction. Their absence is what makes controls feel flat and
+un-Material even when the colours are right.
+
+> Focus and pressed are **0.12**, not the 0.10 in the current M3 spec. Angular Material
+> through v21 hard-codes 0.12 in its own `_md-sys-state.scss`. RhombusKit wraps Material
+> primitives, so matching Material is what keeps a wrapped control and an unwrapped one
+> looking the same.
+
+Disabled-state opacities are intentionally absent: 0.38 content / 0.12 container is a
+per-component M3 convention rather than a system token — Angular Material has no
+`--mat-sys-*` disabled opacity at all, and the filled form field is a real exception at
+0.04. Disabled is handled per component.
+
+### Corner radius
+
+`--radius-*` is the M3 corner ramp and maps one-to-one onto Angular Material's
+`--mat-sys-corner-*` scale, which is what lets the bridge express Material's whole shape
+system in tokens instead of hard-coded pixels:
+
+| token | value | M3 role |
+| --- | --- | --- |
+| `--radius-none` | 0 | `corner-none` |
+| `--radius-xs` | 0.25rem (4px) | `corner-extra-small` |
+| `--radius-sm` | 0.5rem (8px) | `corner-small` |
+| `--radius-md` | 0.75rem (12px) | `corner-medium` |
+| `--radius-lg` | 1rem (16px) | `corner-large` |
+| `--radius-xl` | 1.75rem (28px) | `corner-extra-large` |
+| `--radius-full` | 9999px | `corner-full` |
+
+> **Migrating:** these **values were retuned** to the M3 ramp — the names did not change,
+> and generated values are not covered by semver (see the
+> [stability note](#how-theming-works)). The retune also removed an old inversion where
+> `--radius-sm` (2px) was *smaller* than `--radius-xs` (4px); the ramp is now strictly
+> monotonic. If you referenced a rung for its pixel value, shift down one step to keep it:
+>
+> | was | old value | now use |
+> | --- | --- | --- |
+> | `--radius-xs` | 4px | `--radius-xs` (unchanged) |
+> | `--radius-lg` | 8px | `--radius-sm` |
+> | `--radius-xl` | 12px | `--radius-md` |
+> | `--radius-sm` | 2px | no exact successor — nearest is `--radius-xs` (4px) |
+> | `--radius-md` | 6px | no exact successor — `--radius-xs` (4px) or `--radius-sm` (8px) |
+
 ## The Material bridge
 
 [`@rhombuskit/material-preset`](https://www.npmjs.com/package/@rhombuskit/material-preset)
@@ -1501,6 +1601,29 @@ subtree; note that components rendered in the body-level CDK overlay (menu, tool
 toast, datepicker and select panels) are only reached by a `:root` / `html` include.
 Before v1.9 the bridge auto-applied at `:root` on import; that auto-apply was removed, so
 existing consumers must add the `@include` line above.
+
+### What the bridge maps
+
+| Material system tokens | sourced from |
+| --- | --- |
+| colour + elevation roles | the semantic CONTRACT (`--surface-0`, `--text-primary`, …) |
+| `--mat-sys-*-state-layer-opacity` (4) | `--state-*-opacity` |
+| `--mat-sys-corner-*` (all 12, including the 5 directional composites) | `--radius-*` |
+| `--mat-sys-<role>-*` typography (14 of the 15 M3 roles) | `--type-*` |
+
+Because every value is a `var()` into a token, retuning a token re-themes RhombusKit's own
+components and Material's identically — that is the whole point of the layer, and it is why
+the preset holds no literal values of its own.
+
+> **`body-large` is deliberately unset — do not "complete" it.** Material resolves the form
+> field's container text, the select trigger, and selection-list rows through the
+> `--mat-sys-body-large-*` longhands. The bridge sets *none* of them, which makes those
+> declarations invalid at computed-value time so the values **inherit** — 24px at the
+> document root, 20px inside `mat-dialog-content` or a `.mat-mdc-row`. Every height
+> calculation in the density design depends on that context-dependence. Declaring any
+> `body-large` longhand pins it and silently regrows nested form fields; an earlier attempt
+> grew a `rows="3"` textarea inside a dialog from 92px to 95px. This is CI-guarded in
+> `tools/verify-component-styles.mjs`.
 
 **Support model:** the bridge tracks Angular Material **21.x** and uses the official
 `mat.*-overrides()` mixins for shape/typography that `--mat-sys-*` can't express.

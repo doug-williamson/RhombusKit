@@ -60,17 +60,20 @@ export const fontFamily = {
   prose: '"Lora Variable", "Lora", Georgia, serif',
 } as const;
 
+// Corner radius — the M3 baseline shape scale (0 / 4 / 8 / 12 / 16 / 28 / pill).
+// RETUNED to M3: RhombusKit's own components and the Angular Material bridge
+// previously ran two different corner ramps (this scale vs. the bridge's literal
+// --mat-sys-corner-* values), which is why shape never read as M3. The NAMES are
+// frozen and unchanged — only the values moved, which types.ts explicitly places
+// outside the semver contract. The scale is now strictly monotonic, retiring the
+// old `sm` (2px) < `xs` (4px) inversion.
 export const radius = {
   none: '0',
-  sm:   '0.125rem',
-  // `xs` is the form-control corner (4px). NOTE: by value it sits *between* `sm`
-  // (2px) and `md` (6px) — `sm` is an unusually tight 2px — so the scale is not
-  // strictly monotonic by name. It exists so form fields can consume a radius
-  // token at their native Material corner with zero pixel change.
-  xs:   '0.25rem',
-  md:   '0.375rem',
-  lg:   '0.5rem',
-  xl:   '0.75rem',
+  xs:   '0.25rem', //  4px — M3 corner-extra-small (form-control corner)
+  sm:   '0.5rem',  //  8px — M3 corner-small
+  md:   '0.75rem', // 12px — M3 corner-medium (cards)
+  lg:   '1rem',    // 16px — M3 corner-large
+  xl:   '1.75rem', // 28px — M3 corner-extra-large (dialogs)
   full: '9999px',
 } as const;
 
@@ -168,5 +171,89 @@ export const densityLevels: Record<'compact' | 'comfortable', DensityScale> = {
   },
 };
 
-export const primitives = { slate, violet, green, amber, red, fontFamily, radius, motion, borderWidth, borderWidthStrong, ...densityDefaults } as const;
+// M3 typescale — 15 roles x {size, line-height, weight, tracking}, plus the two
+// `weight-prominent` variants Angular Material reads. Type geometry is
+// theme-independent (a 14px label is 14px in every theme), so like radius / motion /
+// border-width / density it lives here as a PRIMITIVE, not in the themed CONTRACT.
+// The font FAMILY is themed (--font-sans is a CONTRACT alias); the ramp is not. That
+// split is also what keeps @rhombuskit/theme-builder — a colour tool — working
+// untouched: it derives a theme from seed colours and has no way to derive a ramp.
+//
+// Values are the M3 baseline in exact rem at a 16px root. Angular Material emits the
+// same ramp rounded to three decimals (0.031rem for body-large tracking, i.e. 0.496px
+// against a 0.5px spec), so ours are strictly more faithful and the bridge overrides
+// Material's rounding rather than inheriting it.
+//
+// Authored as a 15-row table of plain object literals so `as const` survives into
+// etc/tokens.api.md. flattenPrimitives + toKebab in tools/generate-tokens.mjs turn each
+// row into --type-<role>-{size,line-height,weight,tracking} with NO generator changes;
+// role keys are already kebab-case for exactly that reason.
+//
+// NOTE: title-large is weight 400, not 500. It is the one that trips people up.
+export const typeScale = {
+  // M3's three named weight constants. Angular Material reads these as
+  // --mat-sys-{regular,medium,bold}-font-weight independently of any role, so they
+  // are system constants rather than a property of one role — sourcing them from a
+  // role (say title-medium's weight) would make the global "medium" weight move
+  // whenever that role was retuned. Namespaced under `type` so they flatten to
+  // --type-weight-*; no role is named `weight`, so there is no collision.
+  weight: { regular: '400', medium: '500', bold: '700' },
+
+  'display-large':   { size: '3.5625rem', lineHeight: '4rem',    weight: '400', tracking: '-0.015625rem' },
+  'display-medium':  { size: '2.8125rem', lineHeight: '3.25rem', weight: '400', tracking: '0'           },
+  'display-small':   { size: '2.25rem',   lineHeight: '2.75rem', weight: '400', tracking: '0'           },
+  'headline-large':  { size: '2rem',      lineHeight: '2.5rem',  weight: '400', tracking: '0'           },
+  'headline-medium': { size: '1.75rem',   lineHeight: '2.25rem', weight: '400', tracking: '0'           },
+  'headline-small':  { size: '1.5rem',    lineHeight: '2rem',    weight: '400', tracking: '0'           },
+  'title-large':     { size: '1.375rem',  lineHeight: '1.75rem', weight: '400', tracking: '0'           },
+  'title-medium':    { size: '1rem',      lineHeight: '1.5rem',  weight: '500', tracking: '0.009375rem' },
+  'title-small':     { size: '0.875rem',  lineHeight: '1.25rem', weight: '500', tracking: '0.00625rem'  },
+  'body-large':      { size: '1rem',      lineHeight: '1.5rem',  weight: '400', tracking: '0.03125rem'  },
+  'body-medium':     { size: '0.875rem',  lineHeight: '1.25rem', weight: '400', tracking: '0.015625rem' },
+  'body-small':      { size: '0.75rem',   lineHeight: '1rem',    weight: '400', tracking: '0.025rem'    },
+  'label-large':     { size: '0.875rem',  lineHeight: '1.25rem', weight: '500', tracking: '0.00625rem',  weightProminent: '700' },
+  'label-medium':    { size: '0.75rem',   lineHeight: '1rem',    weight: '500', tracking: '0.03125rem',  weightProminent: '700' },
+  'label-small':     { size: '0.6875rem', lineHeight: '1rem',    weight: '500', tracking: '0.03125rem'  },
+} as const;
+
+// Spacing rhythm — a 4px grid on a numeric multiplier scale. Theme-independent box
+// geometry, so it belongs here alongside radius and density rather than in CONTRACT.
+// There is deliberately no `7` or other odd step: if a component needs 14px, the
+// component is wrong. Authored in rem so it scales with the user's root font size.
+export const space = {
+  0:  '0',
+  1:  '0.25rem', //  4px
+  2:  '0.5rem',  //  8px
+  3:  '0.75rem', // 12px
+  4:  '1rem',    // 16px
+  5:  '1.25rem', // 20px
+  6:  '1.5rem',  // 24px
+  8:  '2rem',    // 32px
+  10: '2.5rem',  // 40px
+  12: '3rem',    // 48px
+  16: '4rem',    // 64px
+} as const;
+
+// Interaction state-layer opacities. Their absence is what makes controls feel flat
+// and un-Material even when the colours are right.
+//
+// WHY 0.12 AND NOT 0.10 for focus/pressed: current M3 (the Compose token set) specifies
+// 0.10, but Angular Material through v21 hard-codes 0.12 in its own
+// core/tokens/m3/_md-sys-state.scss — its token file is stamped against an older
+// design-system version. RhombusKit WRAPS Material primitives, so matching Material is
+// what keeps an unwrapped control and a wrapped one visually consistent. This will look
+// like a bug to whoever reads it next; it is not. Revisit if Angular resyncs to 0.10.
+//
+// Disabled-state opacities are deliberately absent: 0.38 content / 0.12 container is a
+// per-component M3 convention, not a system token (Angular Material has no --mat-sys-*
+// disabled opacity at all, and the filled form-field container is a real exception at
+// 0.04). Disabled is handled in the per-component mat.*-overrides() blocks.
+export const state = {
+  hoverOpacity:   '0.08',
+  focusOpacity:   '0.12',
+  pressedOpacity: '0.12',
+  draggedOpacity: '0.16',
+} as const;
+
+export const primitives = { slate, violet, green, amber, red, fontFamily, radius, type: typeScale, space, state, motion, borderWidth, borderWidthStrong, ...densityDefaults } as const;
 export type Primitives = typeof primitives;

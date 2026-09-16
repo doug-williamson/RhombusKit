@@ -3,7 +3,7 @@
   flex-direction: column;
   background-color: var(--surface-0);
   border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md); // 12px — a table container, not a dialog surface
   overflow: hidden;
   font-family: var(--font-sans);
 

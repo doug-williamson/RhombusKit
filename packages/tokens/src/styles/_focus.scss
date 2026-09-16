@@ -16,6 +16,6 @@
   &:focus-visible {
     outline: 1px solid var(--focus-border);
     box-shadow: 0 0 0 4px var(--focus-ring);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm); // 8px — a generic ring on arbitrary elements
   }
 }

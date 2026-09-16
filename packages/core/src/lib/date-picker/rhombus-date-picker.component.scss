@@ -13,7 +13,7 @@
 .cdk-overlay-container {
   --mat-datepicker-calendar-container-background-color: var(--surface-0);
   --mat-datepicker-calendar-container-text-color: var(--text-primary);
-  --mat-datepicker-calendar-container-shape: var(--radius-xl);
+  --mat-datepicker-calendar-container-shape: var(--radius-md); // 12px — deliberately tighter than Material's corner-large default
   --mat-datepicker-calendar-date-text-color: var(--text-primary);
   --mat-datepicker-calendar-date-selected-state-background-color: var(--btn-primary-bg);
   --mat-datepicker-calendar-date-selected-state-text-color: var(--btn-primary-text);

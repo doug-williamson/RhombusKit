@@ -65,77 +65,153 @@
   // Focus halo (Material reads this for its focus state layer)
   --mat-sys-secondary-fixed-dim:    var(--focus-ring);
 
-  // State-layer opacities (M3 defaults). These are scalar values, not role
-  // colours — without them, Material's per-component state layers default
-  // to opacity 1 and paint an opaque overlay on hover / focus / press,
-  // making button labels unreadable. Numbers match
-  // @angular/material/core/tokens/m3/_md-sys-state.scss.
-  --mat-sys-hover-state-layer-opacity:   0.08;
-  --mat-sys-focus-state-layer-opacity:   0.12;
-  --mat-sys-pressed-state-layer-opacity: 0.12;
-  --mat-sys-dragged-state-layer-opacity: 0.16;
+  // State-layer opacities. Sourced from the --state-* primitives; without them,
+  // Material's per-component state layers default to opacity 1 and paint an opaque
+  // overlay on hover / focus / press, making button labels unreadable. The values
+  // (and the reason focus/pressed are 0.12 rather than current M3's 0.10) are
+  // documented at the definition site in @rhombuskit/tokens' primitives spec.
+  --mat-sys-hover-state-layer-opacity:   var(--state-hover-opacity);
+  --mat-sys-focus-state-layer-opacity:   var(--state-focus-opacity);
+  --mat-sys-pressed-state-layer-opacity: var(--state-pressed-opacity);
+  --mat-sys-dragged-state-layer-opacity: var(--state-dragged-opacity);
 
-  // Corner / shape scale (M3 defaults). Component tokens like
-  // --mat-badge-container-shape default to var(--mat-sys-corner-full);
-  // without these declared, badge / card / dialog containers fall back to
-  // border-radius: 0 (boxy). Numbers match
-  // @angular/material/core/tokens/m3/_md-sys-shape.scss.
-  --mat-sys-corner-none:        0;
-  --mat-sys-corner-extra-small: 4px;
-  --mat-sys-corner-small:       8px;
-  --mat-sys-corner-medium:      12px;
-  --mat-sys-corner-large:       16px;
-  --mat-sys-corner-extra-large: 28px;
-  --mat-sys-corner-full:        9999px;
+  // Corner / shape scale, sourced from the --radius-* primitives. Component tokens
+  // like --mat-badge-container-shape default to var(--mat-sys-corner-full); without
+  // these declared, badge / card / dialog containers fall back to border-radius: 0
+  // (boxy). The --radius-* ramp IS the M3 corner ramp — those two scales used to be
+  // forked, with literal M3 values here and a tighter ramp in tokens, which is why
+  // RhombusKit's own components and Material's never agreed on shape.
+  --mat-sys-corner-none:        var(--radius-none);
+  --mat-sys-corner-extra-small: var(--radius-xs);
+  --mat-sys-corner-small:       var(--radius-sm);
+  --mat-sys-corner-medium:      var(--radius-md);
+  --mat-sys-corner-large:       var(--radius-lg);
+  --mat-sys-corner-extra-large: var(--radius-xl);
+  --mat-sys-corner-full:        var(--radius-full);
 
-  // Typography scale (M3 defaults). Component tokens (e.g. badge text,
-  // chip label, card title) read from these. Without them, text falls
-  // back to the host's inherited font-size, which is typically too large
-  // and produces cramped or oversized labels. Numbers match
-  // @angular/material/core/tokens/m3/_md-sys-typescale.scss.
+  // Directional composites. Angular Material emits exactly these five and no generic
+  // per-size set, so they are composed from the scalars above rather than adding
+  // directional token names. Bottom-sheet, expansion panel, and button-toggle group
+  // ends read them; until now they were unset, so those corners rendered square.
+  --mat-sys-corner-extra-small-top: var(--radius-xs) var(--radius-xs) 0 0;
+  --mat-sys-corner-large-top:       var(--radius-lg) var(--radius-lg) 0 0;
+  --mat-sys-corner-extra-large-top: var(--radius-xl) var(--radius-xl) 0 0;
+  --mat-sys-corner-large-start:     var(--radius-lg) 0 0 var(--radius-lg);
+  --mat-sys-corner-large-end:       0 var(--radius-lg) var(--radius-lg) 0;
+
+  // --- M3 typescale -----------------------------------------------------
+  // Every metric is sourced from the --type-* primitives in @rhombuskit/tokens, so a
+  // theme or an app can retune the ramp in one place. Fourteen of the fifteen M3 roles
+  // are declared here in the five DECOMPOSED forms Material actually reads.
   //
-  // Font family is sourced through the RhombusKit CONTRACT so all M3
-  // surfaces inherit the same family as the rest of the app.
-  // label-small drives badge content, suffix indicators, etc.
-  // label-large drives button labels, chip text.
-  // body-medium / title-* drive card content + heads (Phase 3 surfaces).
-  --mat-sys-plain-family:           var(--font-sans);
-  --mat-sys-brand-family:           var(--font-sans);
-  --mat-sys-bold-font-weight:       700;
-  --mat-sys-medium-font-weight:     500;
-  --mat-sys-regular-font-weight:    400;
+  // The `font` SHORTHAND (--mat-sys-<role>, no suffix) is deliberately not set. Checked
+  // against Material 21.2.12: its only runtime readers are four mat-grid-list fallbacks
+  // that consume it as a *-text-size value — where a font shorthand is invalid whether
+  // we set it or not — and the opt-in .mat-body-* classes from mat.typography-hierarchy(),
+  // which nothing in this repo emits. It would buy nothing, and `font:` additionally
+  // resets font-style / font-variant / font-stretch. If it is ever added, note that the
+  // shorthand carries NO tracking, so every use must set the -tracking part alongside it.
+  //
+  // body-large IS DELIBERATELY ABSENT — all six forms, not just line-height. See the
+  // form-field note further down this file: Material resolves
+  //   line-height: var(--mat-form-field-container-text-line-height,
+  //                    var(--mat-sys-body-large-line-height))
+  // and this bridge sets NEITHER, so the declaration is invalid at computed-value time
+  // and line-height INHERITS — 24px at the document root, 20px inside a dialog or a
+  // table row. Every height calculation in the density design depends on that. Declaring
+  // body-large in any form (the shorthand included, since it embeds line-height) pins it
+  // and silently regrows nested form fields. Do not "complete" the scale.
+  --mat-sys-plain-family:        var(--font-sans);
+  --mat-sys-brand-family:        var(--font-sans);
+  --mat-sys-bold-font-weight:    var(--type-weight-bold);
+  --mat-sys-medium-font-weight:  var(--type-weight-medium);
+  --mat-sys-regular-font-weight: var(--type-weight-regular);
 
-  --mat-sys-label-large-font:       var(--font-sans);
-  --mat-sys-label-large-line-height: 1.25rem;
-  --mat-sys-label-large-size:       0.875rem;
-  --mat-sys-label-large-tracking:   0.006rem;
-  --mat-sys-label-large-weight:     500;
-  --mat-sys-label-large-weight-prominent: 700;
+  --mat-sys-display-large-font:        var(--font-sans);
+  --mat-sys-display-large-size:        var(--type-display-large-size);
+  --mat-sys-display-large-line-height: var(--type-display-large-line-height);
+  --mat-sys-display-large-weight:      var(--type-display-large-weight);
+  --mat-sys-display-large-tracking:    var(--type-display-large-tracking);
 
-  --mat-sys-label-medium-font:      var(--font-sans);
-  --mat-sys-label-medium-line-height: 1rem;
-  --mat-sys-label-medium-size:      0.75rem;
-  --mat-sys-label-medium-tracking:  0.031rem;
-  --mat-sys-label-medium-weight:    500;
-  --mat-sys-label-medium-weight-prominent: 700;
+  --mat-sys-display-medium-font:        var(--font-sans);
+  --mat-sys-display-medium-size:        var(--type-display-medium-size);
+  --mat-sys-display-medium-line-height: var(--type-display-medium-line-height);
+  --mat-sys-display-medium-weight:      var(--type-display-medium-weight);
+  --mat-sys-display-medium-tracking:    var(--type-display-medium-tracking);
 
-  --mat-sys-label-small-font:       var(--font-sans);
-  --mat-sys-label-small-line-height: 1rem;
-  --mat-sys-label-small-size:       0.688rem;
-  --mat-sys-label-small-tracking:   0.031rem;
-  --mat-sys-label-small-weight:     500;
+  --mat-sys-display-small-font:        var(--font-sans);
+  --mat-sys-display-small-size:        var(--type-display-small-size);
+  --mat-sys-display-small-line-height: var(--type-display-small-line-height);
+  --mat-sys-display-small-weight:      var(--type-display-small-weight);
+  --mat-sys-display-small-tracking:    var(--type-display-small-tracking);
 
-  --mat-sys-body-medium-font:       var(--font-sans);
-  --mat-sys-body-medium-line-height: 1.25rem;
-  --mat-sys-body-medium-size:       0.875rem;
-  --mat-sys-body-medium-tracking:   0.016rem;
-  --mat-sys-body-medium-weight:     400;
+  --mat-sys-headline-large-font:        var(--font-sans);
+  --mat-sys-headline-large-size:        var(--type-headline-large-size);
+  --mat-sys-headline-large-line-height: var(--type-headline-large-line-height);
+  --mat-sys-headline-large-weight:      var(--type-headline-large-weight);
+  --mat-sys-headline-large-tracking:    var(--type-headline-large-tracking);
 
-  --mat-sys-title-medium-font:      var(--font-sans);
-  --mat-sys-title-medium-line-height: 1.5rem;
-  --mat-sys-title-medium-size:      1rem;
-  --mat-sys-title-medium-tracking:  0.009rem;
-  --mat-sys-title-medium-weight:    500;
+  --mat-sys-headline-medium-font:        var(--font-sans);
+  --mat-sys-headline-medium-size:        var(--type-headline-medium-size);
+  --mat-sys-headline-medium-line-height: var(--type-headline-medium-line-height);
+  --mat-sys-headline-medium-weight:      var(--type-headline-medium-weight);
+  --mat-sys-headline-medium-tracking:    var(--type-headline-medium-tracking);
+
+  --mat-sys-headline-small-font:        var(--font-sans);
+  --mat-sys-headline-small-size:        var(--type-headline-small-size);
+  --mat-sys-headline-small-line-height: var(--type-headline-small-line-height);
+  --mat-sys-headline-small-weight:      var(--type-headline-small-weight);
+  --mat-sys-headline-small-tracking:    var(--type-headline-small-tracking);
+
+  --mat-sys-title-large-font:        var(--font-sans);
+  --mat-sys-title-large-size:        var(--type-title-large-size);
+  --mat-sys-title-large-line-height: var(--type-title-large-line-height);
+  --mat-sys-title-large-weight:      var(--type-title-large-weight);
+  --mat-sys-title-large-tracking:    var(--type-title-large-tracking);
+
+  --mat-sys-title-medium-font:        var(--font-sans);
+  --mat-sys-title-medium-size:        var(--type-title-medium-size);
+  --mat-sys-title-medium-line-height: var(--type-title-medium-line-height);
+  --mat-sys-title-medium-weight:      var(--type-title-medium-weight);
+  --mat-sys-title-medium-tracking:    var(--type-title-medium-tracking);
+
+  --mat-sys-title-small-font:        var(--font-sans);
+  --mat-sys-title-small-size:        var(--type-title-small-size);
+  --mat-sys-title-small-line-height: var(--type-title-small-line-height);
+  --mat-sys-title-small-weight:      var(--type-title-small-weight);
+  --mat-sys-title-small-tracking:    var(--type-title-small-tracking);
+
+  --mat-sys-body-medium-font:        var(--font-sans);
+  --mat-sys-body-medium-size:        var(--type-body-medium-size);
+  --mat-sys-body-medium-line-height: var(--type-body-medium-line-height);
+  --mat-sys-body-medium-weight:      var(--type-body-medium-weight);
+  --mat-sys-body-medium-tracking:    var(--type-body-medium-tracking);
+
+  --mat-sys-body-small-font:        var(--font-sans);
+  --mat-sys-body-small-size:        var(--type-body-small-size);
+  --mat-sys-body-small-line-height: var(--type-body-small-line-height);
+  --mat-sys-body-small-weight:      var(--type-body-small-weight);
+  --mat-sys-body-small-tracking:    var(--type-body-small-tracking);
+
+  --mat-sys-label-large-font:             var(--font-sans);
+  --mat-sys-label-large-size:             var(--type-label-large-size);
+  --mat-sys-label-large-line-height:      var(--type-label-large-line-height);
+  --mat-sys-label-large-weight:           var(--type-label-large-weight);
+  --mat-sys-label-large-tracking:         var(--type-label-large-tracking);
+  --mat-sys-label-large-weight-prominent: var(--type-label-large-weight-prominent);
+
+  --mat-sys-label-medium-font:             var(--font-sans);
+  --mat-sys-label-medium-size:             var(--type-label-medium-size);
+  --mat-sys-label-medium-line-height:      var(--type-label-medium-line-height);
+  --mat-sys-label-medium-weight:           var(--type-label-medium-weight);
+  --mat-sys-label-medium-tracking:         var(--type-label-medium-tracking);
+  --mat-sys-label-medium-weight-prominent: var(--type-label-medium-weight-prominent);
+
+  --mat-sys-label-small-font:        var(--font-sans);
+  --mat-sys-label-small-size:        var(--type-label-small-size);
+  --mat-sys-label-small-line-height: var(--type-label-small-line-height);
+  --mat-sys-label-small-weight:      var(--type-label-small-weight);
+  --mat-sys-label-small-tracking:    var(--type-label-small-tracking);
 
   // --- Component-level overrides ----------------------------------------
   // Use the official mat.*-overrides() mixins for shape / radius / behaviour
@@ -144,20 +220,38 @@
 
   // Corner radius + outline width flow through @rhombuskit/tokens geometry
   // primitives (--radius-* / --border-width) so overriding a token re-themes the
-  // control. The default token values equal the current literals (8px = --radius-lg,
-  // 12px = --radius-xl, 9999px = --radius-full, 1px = --border-width), so this is a
-  // zero pixel change — it only makes the previously-hardcoded geometry overridable.
+  // control.
+  //
+  // NOTE ON THE RUNGS: --radius-* was retuned to the M3 corner ramp
+  // (0/4/8/12/16/28/pill), so every rung moved. Each block below names the rung that
+  // carries the INTENDED pixel value, which is not always the rung it named before:
+  //   button, form-field  → --radius-sm  (8px, held — 16px reads near-stadium on a
+  //                         40px button and crowds the form field's label notch)
+  //   card                → --radius-md  (12px — M3 corner-medium, held)
+  //   datepicker          → --radius-lg  (16px — M3 corner-large; was 12px)
+  //   dialog              → --radius-xl  (28px — M3 corner-extra-large; was 12px)
+  // The last two are the retune paying off: those two surfaces are M3-correct for the
+  // first time. Do not "simplify" these back to a single rung.
   @include mat.button-overrides((
-    filled-container-shape:   var(--radius-lg),
-    outlined-container-shape: var(--radius-lg),
-    text-container-shape:     var(--radius-lg),
+    filled-container-shape:   var(--radius-sm),
+    outlined-container-shape: var(--radius-sm),
+    text-container-shape:     var(--radius-sm),
     outlined-outline-width:   var(--border-width),
   ));
 
   @include mat.card-overrides((
-    elevated-container-shape: var(--radius-xl),
-    outlined-container-shape: var(--radius-xl),
+    elevated-container-shape: var(--radius-md),
+    outlined-container-shape: var(--radius-md),
     outlined-outline-width:   var(--border-width),
+    // Card title. Material resolves --mat-card-title-text-size to
+    // var(--mat-sys-title-large-size), which was INERT while the typescale was
+    // incomplete — the title simply inherited 16px. Completing the scale makes that
+    // default bind and would silently jump every <rhombus-card> title to 22px/28px.
+    // Pin to title-medium, which is what v1.17 actually rendered. The 600 weight
+    // comes from rhombus-card.component.scss and still wins on specificity.
+    title-text-size:        var(--mat-sys-title-medium-size),
+    title-text-line-height: var(--mat-sys-title-medium-line-height),
+    title-text-tracking:    var(--mat-sys-title-medium-tracking),
   ));
 
   @include mat.chips-overrides((
@@ -170,14 +264,11 @@
     error-text-color:                var(--error),
     outlined-label-text-color:       var(--text-secondary),
     outlined-focus-label-text-color: var(--text-accent),
-    outlined-container-shape:        var(--radius-lg),
-    filled-container-shape:          var(--radius-lg),
+    outlined-container-shape:        var(--radius-sm),
+    filled-container-shape:          var(--radius-sm),
     outlined-outline-width:          var(--border-width),
     outlined-focus-outline-width:    var(--border-width-strong),
-    // Subscript (hint/error) size — the bridge supplies Material's colour roles
-    // but not the M3 typography tokens, so this would otherwise inherit the 16px
-    // root size. Body-small = 12px.
-    subscript-text-size:             0.75rem,
+    subscript-text-size:             var(--mat-sys-body-small-size),
     // Density (default-equal — moves nothing until a consumer opts in).
     // --field-height defaults to 3.5rem == Material's shipped 56px.
     // DO NOT add `container-text-line-height` here, and DO NOT complete the M3
@@ -216,7 +307,7 @@
   @include mat.datepicker-overrides((
     calendar-container-background-color:            var(--surface-0),
     calendar-container-text-color:                  var(--text-primary),
-    calendar-container-shape:                       var(--radius-xl),
+    calendar-container-shape:                       var(--radius-lg),
     calendar-date-text-color:                       var(--text-primary),
     calendar-date-selected-state-background-color:  var(--btn-primary-bg),
     calendar-date-selected-state-text-color:        var(--btn-primary-text),
@@ -251,10 +342,8 @@
   @include mat.paginator-overrides((
     container-background-color: transparent,
     container-text-color:       var(--text-secondary),
-    // Text sizes — without the M3 type tokens these inherit the 16px root size
-    // (too large for a paginator). Body-small = 12px.
-    container-text-size:        0.75rem,
-    select-trigger-text-size:   0.75rem,
+    container-text-size:        var(--mat-sys-body-small-size),
+    select-trigger-text-size:   var(--mat-sys-body-small-size),
   ));
 
   @include mat.sort-overrides((
@@ -287,8 +376,11 @@
     // 48px Material ships, and tabs carry no RhombusKit SCSS at all, so this
     // single key is the component's entire density story.
     container-height:              var(--control-height-lg, 3rem),
-    // Label size — without the M3 type tokens this inherits 16px. Title-small = 14px.
-    label-text-size:               0.875rem,
+    label-text-size:               var(--mat-sys-title-small-size),
+    // Pinned for the same reason as the card title: --mat-tab-label-text-weight
+    // resolves to var(--mat-sys-title-small-weight) (500), inert until now, so
+    // completing the typescale would take tab labels from the inherited 400 to 500.
+    label-text-weight:             var(--mat-sys-body-medium-weight),
   ));
 
   // Menu (Phase 3b) — global defaults. The overflow-menu panel renders in the
@@ -307,6 +399,9 @@
     subhead-color:         var(--text-primary),
     // Title size/weight — without the M3 type tokens the headline falls back to
     // its 1rem (16px) hard default. RhombusKit dialog title = 1.125rem / 600.
+    // Deliberately OFF the M3 ramp (18px sits between title-medium 16 and
+    // title-large 22) — a RhombusKit choice, not a gap left by the old
+    // incomplete typescale, so it does not collapse into a --mat-sys-* token.
     subhead-size:          1.125rem,
     subhead-weight:        600,
     supporting-text-color: var(--text-secondary),
@@ -320,8 +415,8 @@
   @include mat.tooltip-overrides((
     container-color:             var(--tooltip-bg),
     supporting-text-color:       var(--tooltip-text),
-    supporting-text-size:        0.75rem,
-    supporting-text-line-height: 1rem,
+    supporting-text-size:        var(--mat-sys-body-small-size),
+    supporting-text-line-height: var(--mat-sys-body-small-line-height),
   ));
 
   // Toast (snackbar) — renders in the CDK overlay. RhombusToastService applies a

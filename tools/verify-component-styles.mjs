@@ -91,7 +91,7 @@ for (const rel of guardedScssPaths) {
   const scssPath = resolve(__dirname, rel);
   const scssLines = readFileSync(scssPath, 'utf8').split(/\r?\n/);
   const fileName = rel.split('/').pop();
-  for (const banned of ['container-text-line-height', '--mat-sys-body-large-line-height']) {
+  for (const banned of ['container-text-line-height', '--mat-sys-body-large']) {
     // Comment lines name both deliberately, in the explanation above the override.
     const declared = scssLines.some(
       (line) => !line.trim().startsWith('//') && line.includes(banned)
@@ -102,7 +102,9 @@ for (const rel of guardedScssPaths) {
           fileName +
           ' declares `' +
           banned +
-          "`. The form field's line-height must stay INHERITED — pinning it changes " +
+          "`. Material resolves the form field's container text, the select trigger, and " +
+          'selection-list rows through the --mat-sys-body-large-* longhands, so their ' +
+          'line-height must stay INHERITED — pinning any of them changes ' +
           'rendering for form fields nested under an ancestor with an absolute ' +
           'line-height (dialog content, table rows), at DEFAULT density. See the ' +
           'comment above mat.form-field-overrides() in _bridge.scss.'

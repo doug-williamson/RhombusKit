@@ -1,0 +1,189 @@
+.foundations {
+  &__note {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    border-inline-start: var(--border-width-strong) solid var(--border);
+    padding-inline-start: var(--space-3);
+    margin-block: var(--space-4);
+  }
+}
+
+/* --- Type ---------------------------------------------------------------- */
+
+.type-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.type-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+
+  &__name {
+    color: var(--text-accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  /* Specimens run to 57px, so they must be allowed to wrap rather than push the
+     page into a horizontal scroll on narrow viewports. */
+  &__specimen {
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+
+  &__metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: 0;
+
+    div {
+      display: flex;
+      gap: var(--space-1);
+      align-items: baseline;
+    }
+
+    dt {
+      color: var(--text-muted);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    dd {
+      margin: 0;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+  }
+}
+
+/* --- Spacing ------------------------------------------------------------- */
+
+.space-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.space-row {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) 9rem;
+  align-items: center;
+  gap: var(--space-3);
+
+  &__name,
+  &__value {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  &__track {
+    background: var(--surface-1);
+    border-radius: var(--radius-xs);
+    padding: var(--space-1);
+  }
+
+  /* min-width keeps --space-0 visible as a hairline instead of vanishing. */
+  &__bar {
+    min-width: var(--border-width);
+    height: 1.25rem;
+    background: var(--text-accent);
+    border-radius: var(--radius-xs);
+  }
+
+  @media (max-width: 639.98px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+}
+
+/* --- Radius -------------------------------------------------------------- */
+
+.radius-table {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.radius-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+
+  &__swatch {
+    width: 5rem;
+    height: 5rem;
+    background: var(--surface-2);
+    border: var(--border-width) solid var(--border-strong);
+  }
+
+  &__name {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  &__value {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+  }
+}
+
+/* --- State layers -------------------------------------------------------- */
+
+.state-table {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.state-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+
+  &__swatch {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    background: var(--surface-1);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  /* The layer is painted in the on-surface ink, which is exactly how Material
+     composites a state layer: the same colour as the content above it. */
+  &__layer {
+    position: absolute;
+    inset: 0;
+    background: var(--text-primary);
+  }
+
+  &__name {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+  }
+
+  &__value {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+  }
+}
