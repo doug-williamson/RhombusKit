@@ -95,6 +95,10 @@ function groupByPalette(
  *
  * SSR-safe. On the server, all operations are no-ops; the service resolves to
  * the configured light theme and never touches localStorage or matchMedia.
+ * On a browser-like host without `window.matchMedia` (jsdom, some embedded
+ * webviews) the OS branch degrades the same way — 'system' resolves to the
+ * configured light theme — so unit tests need no matchMedia stub just to
+ * construct the service.
  *
  * Persistence: the LITERAL preference is stored (including 'system'), not the
  * resolved theme. This preserves the user's "follow system" intent across
@@ -372,6 +376,13 @@ export class RhombusThemeService {
   }
 
   private subscribeToSystemTheme(): void {
+    // jsdom and some embedded hosts ship no matchMedia. Leave systemPrefersDark
+    // at false so 'system' resolves to config.light — the same degrade the
+    // server branch and DEFAULT_RESOLVED_THEME document — instead of throwing at
+    // construction for every consumer spec that renders a themed control.
+    if (typeof window.matchMedia !== 'function') {
+      return;
+    }
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
     this.systemPrefersDark.set(mql.matches);
 
