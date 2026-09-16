@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -349,6 +351,52 @@ describe('rhombus-button', () => {
       host.label = 'Go to dashboard';
       fixture.detectChanges();
       expect(await axe(el)).toHaveNoViolations();
+    });
+  });
+  describe('variant label colour (outlined / text appearances)', () => {
+    // Material paints the outlined/text LABEL from
+    // `--mat-button-outlined-label-text-color` / `--mat-button-text-label-text-color`,
+    // each defaulting to `--mat-sys-primary` at (0,2,0). Rebinding --mat-sys-primary to
+    // carry a variant's FILL (surface-2, transparent, --error) therefore paints the
+    // label in the fill colour too — 1.23:1 for secondary, 1.00:1 for ghost — unless
+    // the two label tokens are bound per variant. jsdom cannot cascade Material's
+    // runtime-injected CSS, so assert on the authored SCSS; the rendered ratio is
+    // gated by apps/showcase-e2e/tests/button-contrast.spec.ts.
+    const scss = readFileSync(
+      join(__dirname, 'rhombus-button.component.scss'),
+      'utf8'
+    );
+    const LABEL_TOKENS = [
+      '--mat-button-outlined-label-text-color',
+      '--mat-button-text-label-text-color',
+    ];
+
+    function variantBlock(variant: ButtonVariant): string {
+      const start = scss.indexOf(`&--${variant} {`);
+      if (start === -1) {
+        throw new Error(`no "&--${variant} {" block in rhombus-button.component.scss`);
+      }
+      // Variant blocks sit at one indent inside `.rhombus-button {` and close with
+      // "\n  }"; nested state blocks close deeper, so this captures the whole block.
+      const end = scss.indexOf('\n  }', start);
+      return scss.slice(start, end);
+    }
+
+    it.each<ButtonVariant>(['primary', 'secondary', 'ghost', 'danger'])(
+      'binds both Material label tokens for the %s variant',
+      (variant) => {
+        const block = variantBlock(variant);
+        const missing = LABEL_TOKENS.filter((t) => !block.includes(`${t}:`));
+        expect(missing).toEqual([]);
+      }
+    );
+
+    it('does not rely on a plain `color:` declaration Material outranks', () => {
+      // `color: var(--text-accent)` at (0,1,0) loses to Material's (0,2,0) label
+      // rule regardless of source order — a dead declaration that reads as a fix.
+      expect(variantBlock('ghost')).not.toMatch(
+        /\n\s*color:\s*var\(--text-accent\)/
+      );
     });
   });
 });

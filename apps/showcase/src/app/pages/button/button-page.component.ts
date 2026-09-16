@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
+  ButtonAppearance,
+  ButtonVariant,
   RhombusButtonComponent,
   RhombusCodeBlockComponent,
 } from '@rhombuskit/core';
@@ -172,6 +174,38 @@ import { ExampleComponent } from '../../shared/example.component';
         </section>
 
         <section class="showcase-section">
+          <h2>Variant × appearance</h2>
+          <p>
+            Every variant renders in every appearance; each cell's label clears
+            WCAG AA (4.5:1) on <code>--surface-0</code> in both themes. The
+            <code>data-cell</code> handles are read by the rendered-contrast
+            gate in <code>apps/showcase-e2e/tests/button-contrast.spec.ts</code>.
+          </p>
+          <div class="button-matrix">
+            @for (variant of variants; track variant) {
+              <div class="showcase-row">
+                @for (appearance of appearances; track appearance) {
+                  <rhombus-button
+                    [variant]="variant"
+                    [appearance]="appearance"
+                    [attr.data-cell]="variant + '/' + appearance"
+                  >
+                    {{ variant }} {{ appearance }}
+                  </rhombus-button>
+                }
+              </div>
+            }
+            <div class="showcase-row">
+              @for (variant of variants; track variant) {
+                <rhombus-button [variant]="variant" [disabled]="true">
+                  {{ variant }} disabled
+                </rhombus-button>
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="showcase-section">
           <h2>Sizes</h2>
           <div class="showcase-row">
             <rhombus-button size="sm">Small</rhombus-button>
@@ -283,9 +317,23 @@ import { ExampleComponent } from '../../shared/example.component';
       margin: 0 0 1rem 0;
       max-width: 70ch;
     }
+    /* The matrix sits on --surface-0 (a card surface) so the contrast gate
+       measures the pair the backlog's acceptance names, not the page --bg. */
+    .button-matrix {
+      display: grid;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--surface-0);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
   `,
 })
 export default class ButtonPageComponent {
+  /** The full public variant × appearance matrix rendered in the Examples tab. */
+  protected readonly variants: ButtonVariant[] = ['primary', 'secondary', 'ghost', 'danger'];
+  protected readonly appearances: ButtonAppearance[] = ['filled', 'outlined', 'text'];
+
   /** Icon-button snippet shown in the Examples tab. */
   protected readonly iconUsage = `<!-- iconButton + a single leadingIcon + ariaLabel → compact square icon button -->
 <rhombus-button iconButton ariaLabel="Edit" variant="ghost" leadingIcon="edit"

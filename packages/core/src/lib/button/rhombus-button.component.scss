@@ -86,30 +86,53 @@
   // Each variant locally rebinds the --mat-sys-* roles that Material reads
   // at paint time, so the button picks up our colours without us touching
   // .mat-mdc-* selectors.
+  //
+  // Two Material reads of --mat-sys-primary matter here. For the FILLED
+  // appearance it is the container fill (label = --mat-sys-on-primary). For the
+  // OUTLINED and TEXT appearances it is the LABEL colour, through
+  // `--mat-button-outlined-label-text-color` / `--mat-button-text-label-text-color`,
+  // whose defaults are var(--mat-sys-primary) at (0,2,0):
+  //   .mat-mdc-outlined-button:not(:disabled) { color: var(--mat-button-outlined-label-text-color, var(--mat-sys-primary)) }
+  //   .mat-mdc-button:not(:disabled)          { color: var(--mat-button-text-label-text-color,     var(--mat-sys-primary)) }
+  // So a variant that carries its fill in --mat-sys-primary (surface-2,
+  // transparent, --error) paints its outlined/text label in the fill colour —
+  // 1.23:1 for secondary, 1.00:1 for ghost — and a plain `color:` at (0,1,0)
+  // cannot win it back. Every variant therefore binds the two label tokens
+  // explicitly, so the label never derives from the fill. Rendered ratios are
+  // gated by apps/showcase-e2e/tests/button-contrast.spec.ts (both themes, all
+  // twelve cells, plus rhombus-confirm-dialog's Cancel).
 
   // Filled primary draws its label (white) on the --btn-primary-bg fill, which
   // is tuned for white-on-fill AA. The text/outlined appearances instead render
   // the label from --mat-sys-primary as on-surface text, where that fill colour
   // misses AA on dark surfaces. Repoint --mat-sys-primary at the AA-tuned accent
   // for those two appearances only (scoped via RhombusKit's own classes, never
-  // .mat-mdc-*); the filled appearance keeps its fill colour untouched.
+  // .mat-mdc-*), so the state layer and ripple follow the label; the filled
+  // appearance keeps its fill colour untouched.
   &--primary.rhombus-button--text,
   &--primary.rhombus-button--outlined {
     --mat-sys-primary: var(--text-accent);
   }
 
+  &--primary {
+    --mat-button-outlined-label-text-color: var(--text-accent);
+    --mat-button-text-label-text-color:     var(--text-accent);
+  }
+
   &--secondary {
     --mat-sys-primary:    var(--surface-2);
     --mat-sys-on-primary: var(--text-primary);
+    --mat-button-outlined-label-text-color: var(--text-primary);
+    --mat-button-text-label-text-color:     var(--text-primary);
   }
 
   &--ghost {
-    // Transparent base; explicit accent text so contrast clears WCAG AA
-    // in both themes (filled-ghost otherwise inherits on-primary which
-    // is tuned for filled surfaces, not transparent).
+    // Transparent base; the label tokens carry the AA-tuned accent because a
+    // plain `color:` here is outranked by Material's (0,2,0) label rule.
     --mat-sys-primary:    transparent;
     --mat-sys-on-primary: var(--text-accent);
-    color: var(--text-accent);
+    --mat-button-outlined-label-text-color: var(--text-accent);
+    --mat-button-text-label-text-color:     var(--text-accent);
 
     &:hover:not(:disabled):not([aria-disabled='true']) {
       --mat-sys-primary: var(--surface-1);
@@ -119,6 +142,8 @@
   &--danger {
     --mat-sys-primary:    var(--error);
     --mat-sys-on-primary: var(--bg);
+    --mat-button-outlined-label-text-color: var(--error);
+    --mat-button-text-label-text-color:     var(--error);
 
     &:hover:not(:disabled):not([aria-disabled='true']) {
       --mat-sys-primary: var(--error-bg);

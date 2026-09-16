@@ -12,9 +12,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { Params, RouterLink } from '@angular/router';
 
 /**
- * Visual variant — picks the colour role applied to the button.
- * `primary` and `secondary` use the system token bridge defaults;
- * `ghost` and `danger` locally rebind `--mat-sys-primary` for their look.
+ * Visual variant — picks the colour role applied to the button. Every variant
+ * binds its fill through `--mat-sys-primary` and its outlined/text label
+ * through Material's `--mat-button-outlined-label-text-color` /
+ * `--mat-button-text-label-text-color`, so all twelve variant × appearance
+ * pairings render an AA label (≥ 4.5:1 on `--surface-0`) in both themes.
  */
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
