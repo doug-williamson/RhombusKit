@@ -1,0 +1,26 @@
+// Ergonomic layer over the 4px spacing grid published by @rhombuskit/tokens.
+//
+// The point of the function (over writing `var(--space-4)` inline) is the
+// compile-time step check: `space(7)` is a build error, not a custom property that
+// resolves to nothing and silently collapses a gap to 0. That check is what keeps
+// the grid a grid — if a component needs 14px, the component is wrong.
+//
+// INTERNAL for now. See the note in _type.scss about going public.
+
+@use 'sass:list';
+
+// Mirrors the spacing scale in @rhombuskit/tokens' primitives spec. Dense at the
+// bottom, coarse above 6; the omitted steps (7, 9, 11, 13-15) are deliberate.
+$steps: (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16);
+
+/// A spacing token by step. The step IS the 4px multiplier: space(4) == 16px.
+///
+/// @example scss
+///   .thing { padding: space.space(4) space.space(6); }
+@function space($step) {
+  @if not list.index($steps, $step) {
+    @error 'Unknown spacing step `#{$step}`. Valid steps are #{$steps} ' +
+           '(a 4px grid — the step is the multiplier, so space(4) is 16px).';
+  }
+  @return var(--space-#{$step});
+}

@@ -11,11 +11,13 @@ system with your own theme without breaking the contract.
 - [Theme builder](#theme-builder)
 - [Overriding token values](#overriding-token-values)
 - [Density](#density)
+- [Foundations: type, spacing, shape, state](#foundations-type-spacing-shape-state)
 - [The Material bridge](#the-material-bridge)
 
 ## How theming works
 
-RhombusKit's colour, shadow, radius, geometry, and font decisions live in a three-tier
+RhombusKit's colour, shadow, type, spacing, shape, state-layer, geometry, and font
+decisions live in a three-tier
 token system in [`@rhombuskit/tokens`](https://www.npmjs.com/package/@rhombuskit/tokens):
 
 1. **Primitives** — the raw palette (`violet-600`, `slate-100`, …). Internal.
@@ -361,6 +363,104 @@ visible change, not hypothetical.
 > live `mat.density` scale in dev mode and warns. Remove the Material density scale and use
 > `provideRhombusDensity()` alone.
 
+## Foundations: type, spacing, shape, state
+
+Four more scales sit beside [Density](#density) in the palette-level primitives — the M3
+**type** ramp, a **spacing** grid, the **corner radius** ramp, and **state-layer**
+opacities. Like density and motion they are theme-independent (a 14px label is 14px in
+every theme), so they are primitives rather than semantic CONTRACT names. Their names are
+frozen append-only and CI-guarded by `primitives.snapshot.json`, exactly like the CONTRACT.
+
+Browse them as live specimens on the **[Foundations](/foundations)** page.
+
+### Type scale
+
+The 15 Material 3 roles, each emitted as
+`--type-<role>-{size,line-height,weight,tracking}`, plus M3's two prominent-weight
+variants and the three named weight constants `--type-weight-{regular,medium,bold}`.
+
+| role | size | line-height | weight | tracking |
+| --- | --- | --- | --- | --- |
+| `display-large` | 3.5625rem | 4rem | 400 | -0.015625rem |
+| `display-medium` | 2.8125rem | 3.25rem | 400 | 0 |
+| `display-small` | 2.25rem | 2.75rem | 400 | 0 |
+| `headline-large` | 2rem | 2.5rem | 400 | 0 |
+| `headline-medium` | 1.75rem | 2.25rem | 400 | 0 |
+| `headline-small` | 1.5rem | 2rem | 400 | 0 |
+| `title-large` | 1.375rem | 1.75rem | 400 | 0 |
+| `title-medium` | 1rem | 1.5rem | 500 | 0.009375rem |
+| `title-small` | 0.875rem | 1.25rem | 500 | 0.00625rem |
+| `body-large` | 1rem | 1.5rem | 400 | 0.03125rem |
+| `body-medium` | 0.875rem | 1.25rem | 400 | 0.015625rem |
+| `body-small` | 0.75rem | 1rem | 400 | 0.025rem |
+| `label-large` | 0.875rem | 1.25rem | 500 | 0.00625rem |
+| `label-medium` | 0.75rem | 1rem | 500 | 0.03125rem |
+| `label-small` | 0.6875rem | 1rem | 500 | 0.03125rem |
+
+Use a role's three values together — the M3 read comes from size, weight and tracking
+travelling as a set, and a bare size scale discards exactly the part that makes it look
+like M3.
+
+Font **family** is deliberately not part of this scale. Family is themed
+(`--font-sans` / `--font-mono` / `--font-prose` are CONTRACT names), so freezing it into
+a primitive would stop a theme from changing it.
+
+### Spacing
+
+A 4px grid on a numeric multiplier: `--space-0` (0), `-1` (4px), `-2` (8px), `-3` (12px),
+`-4` (16px), `-5` (20px), `-6` (24px), `-8` (32px), `-10` (40px), `-12` (48px),
+`-16` (64px). Authored in rem so it scales with the user's root font size. The odd steps
+are deliberately absent — a complete 4px ladder is a utility framework, not a design
+system, and published primitives are append-only forever, so a missing step can be added
+later but a shipped one can never be removed.
+
+### State layers
+
+`--state-hover-opacity` (0.08), `--state-focus-opacity` (0.12),
+`--state-pressed-opacity` (0.12), `--state-dragged-opacity` (0.16) — the translucent
+overlays M3 paints on interaction. Their absence is what makes controls feel flat and
+un-Material even when the colours are right.
+
+> Focus and pressed are **0.12**, not the 0.10 in the current M3 spec. Angular Material
+> through v21 hard-codes 0.12 in its own `_md-sys-state.scss`. RhombusKit wraps Material
+> primitives, so matching Material is what keeps a wrapped control and an unwrapped one
+> looking the same.
+
+Disabled-state opacities are intentionally absent: 0.38 content / 0.12 container is a
+per-component M3 convention rather than a system token — Angular Material has no
+`--mat-sys-*` disabled opacity at all, and the filled form field is a real exception at
+0.04. Disabled is handled per component.
+
+### Corner radius
+
+`--radius-*` is the M3 corner ramp and maps one-to-one onto Angular Material's
+`--mat-sys-corner-*` scale, which is what lets the bridge express Material's whole shape
+system in tokens instead of hard-coded pixels:
+
+| token | value | M3 role |
+| --- | --- | --- |
+| `--radius-none` | 0 | `corner-none` |
+| `--radius-xs` | 0.25rem (4px) | `corner-extra-small` |
+| `--radius-sm` | 0.5rem (8px) | `corner-small` |
+| `--radius-md` | 0.75rem (12px) | `corner-medium` |
+| `--radius-lg` | 1rem (16px) | `corner-large` |
+| `--radius-xl` | 1.75rem (28px) | `corner-extra-large` |
+| `--radius-full` | 9999px | `corner-full` |
+
+> **Migrating:** these **values were retuned** to the M3 ramp — the names did not change,
+> and generated values are not covered by semver (see the
+> [stability note](#how-theming-works)). The retune also removed an old inversion where
+> `--radius-sm` (2px) was *smaller* than `--radius-xs` (4px); the ramp is now strictly
+> monotonic. If you referenced a rung for its pixel value, shift down one step to keep it:
+>
+> | was | old value | now use |
+> | --- | --- | --- |
+> | `--radius-xs` | 4px | `--radius-xs` (unchanged) |
+> | `--radius-lg` | 8px | `--radius-sm` |
+> | `--radius-xl` | 12px | `--radius-md` |
+> | `--radius-sm` | 2px | no exact successor — nearest is `--radius-xs` (4px) |
+> | `--radius-md` | 6px | no exact successor — `--radius-xs` (4px) or `--radius-sm` (8px) |
+
 ## The Material bridge
 
 [`@rhombuskit/material-preset`](https://www.npmjs.com/package/@rhombuskit/material-preset)
@@ -387,6 +487,29 @@ subtree; note that components rendered in the body-level CDK overlay (menu, tool
 toast, datepicker and select panels) are only reached by a `:root` / `html` include.
 Before v1.9 the bridge auto-applied at `:root` on import; that auto-apply was removed, so
 existing consumers must add the `@include` line above.
+
+### What the bridge maps
+
+| Material system tokens | sourced from |
+| --- | --- |
+| colour + elevation roles | the semantic CONTRACT (`--surface-0`, `--text-primary`, …) |
+| `--mat-sys-*-state-layer-opacity` (4) | `--state-*-opacity` |
+| `--mat-sys-corner-*` (all 12, including the 5 directional composites) | `--radius-*` |
+| `--mat-sys-<role>-*` typography (14 of the 15 M3 roles) | `--type-*` |
+
+Because every value is a `var()` into a token, retuning a token re-themes RhombusKit's own
+components and Material's identically — that is the whole point of the layer, and it is why
+the preset holds no literal values of its own.
+
+> **`body-large` is deliberately unset — do not "complete" it.** Material resolves the form
+> field's container text, the select trigger, and selection-list rows through the
+> `--mat-sys-body-large-*` longhands. The bridge sets *none* of them, which makes those
+> declarations invalid at computed-value time so the values **inherit** — 24px at the
+> document root, 20px inside `mat-dialog-content` or a `.mat-mdc-row`. Every height
+> calculation in the density design depends on that context-dependence. Declaring any
+> `body-large` longhand pins it and silently regrows nested form fields; an earlier attempt
+> grew a `rows="3"` textarea inside a dialog from 92px to 95px. This is CI-guarded in
+> `tools/verify-component-styles.mjs`.
 
 **Support model:** the bridge tracks Angular Material **21.x** and uses the official
 `mat.*-overrides()` mixins for shape/typography that `--mat-sys-*` can't express.

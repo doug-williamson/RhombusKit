@@ -11,14 +11,15 @@ const tokensRoot = resolve(__dirname, '../packages/tokens');
 const typesUrl = new URL('../packages/tokens/src/types.ts', import.meta.url).href;
 const { CONTRACT } = await tsImport(typesUrl, import.meta.url);
 
-// radius / motion / border-width are theme-independent primitives, but they are a
-// PUBLISHED part of the token API: the MCP server's list_tokens surfaces them and
-// app-level surfaces consume them. Freeze their NAMES append-only, exactly like
-// the semantic CONTRACT. The raw colour palette and font-family primitives stay
-// internal (not frozen). Names are read from the generated primitives.css — the
-// same generated-artifact posture as the theme-pack check below (and avoids a
-// brittle tsx import of the multi-export primitives spec).
-const PUBLISHED_PRIMITIVE_PREFIXES = ['--radius-', '--motion-duration-', '--motion-ease-', '--border-width', '--control-height-', '--field-height', '--row-height'];
+// radius / type / space / state / motion / border-width are theme-independent
+// primitives, but they are a PUBLISHED part of the token API: the MCP server's
+// list_tokens surfaces them and app-level surfaces consume them. Freeze their
+// NAMES append-only, exactly like the semantic CONTRACT. The raw colour palette
+// and font-family primitives stay internal (not frozen). Names are read from
+// the generated primitives.css — the same generated-artifact posture as the
+// theme-pack check below (and avoids a brittle tsx import of the multi-export
+// primitives spec).
+const PUBLISHED_PRIMITIVE_PREFIXES = ['--radius-', '--type-', '--space-', '--state-', '--motion-duration-', '--motion-ease-', '--border-width', '--control-height-', '--field-height', '--row-height'];
 const primitivesCss = readFileSync(
   resolve(tokensRoot, 'src/generated/primitives.css'),
   'utf8'

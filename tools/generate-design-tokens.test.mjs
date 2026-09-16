@@ -77,6 +77,48 @@ assert.equal(doc.primitives['border-width'].$type, 'dimension', 'border-width �
 assert.equal(doc.primitives['border-width'].$value, '1px', 'border-width value');
 assert.equal(doc.primitives['border-width-strong'].$value, '2px', 'border-width-strong value');
 
+// 7b. Wave A families carry a real DTCG $type.
+//
+// primitiveType() ends in `return 'color'`, so a family nobody classified does not
+// fail — it ships to Figma as a colour with a value like "0.875rem" while every gate
+// stays green. This loop is the only thing standing between that and a release.
+for (const [key, tok] of Object.entries(doc.primitives)) {
+  if (/^(type|space|state)-/.test(key)) {
+    assert.notEqual(tok.$type, 'color', `${key} fell through to the colour default`);
+  }
+}
+
+assert.equal(doc.primitives['type-display-large-size'].$type, 'dimension', 'type size → dimension');
+assert.equal(doc.primitives['type-display-large-size'].$value, '3.5625rem', 'exact M3 rem, not Material\'s 3dp rounding');
+assert.equal(doc.primitives['type-display-large-tracking'].$value, '-0.015625rem', 'negative tracking survives');
+assert.equal(doc.primitives['type-body-medium-line-height'].$type, 'dimension');
+assert.equal(doc.primitives['type-title-large-weight'].$value, '400', 'title-large is 400, not 500');
+
+// Every spelling of "weight" in the type family must classify as fontWeight — the
+// plain suffix, M3's prominent variant, AND the standalone --type-weight-* constants,
+// which do NOT end in "-weight" and were briefly typed as dimensions.
+assert.equal(doc.primitives['type-label-large-weight'].$type, 'fontWeight', '-weight → fontWeight');
+assert.equal(doc.primitives['type-label-large-weight-prominent'].$type, 'fontWeight', '-weight-prominent → fontWeight');
+assert.equal(doc.primitives['type-weight-bold'].$type, 'fontWeight', 'type-weight-* → fontWeight');
+assert.equal(doc.primitives['type-weight-bold'].$value, '700');
+
+assert.equal(doc.primitives['space-4'].$type, 'dimension', 'space → dimension');
+assert.equal(doc.primitives['space-4'].$value, '1rem');
+assert.equal(doc.primitives['space-0'].$value, '0');
+
+assert.equal(doc.primitives['state-hover-opacity'].$type, 'number', 'state → number');
+assert.equal(
+  doc.primitives['state-focus-opacity'].$value,
+  '0.12',
+  'Angular Material 21 hardcodes 0.12; the M3 spec says 0.10 and we deliberately follow Material',
+);
+
+// 7c. The retuned M3 corner ramp — values, not just names.
+assert.equal(doc.primitives['radius-sm'].$value, '0.5rem', 'radius-sm retuned to M3 corner-small (8px)');
+assert.equal(doc.primitives['radius-md'].$value, '0.75rem', 'radius-md retuned to M3 corner-medium (12px)');
+assert.equal(doc.primitives['radius-lg'].$value, '1rem', 'radius-lg retuned to M3 corner-large (16px)');
+assert.equal(doc.primitives['radius-xl'].$value, '1.75rem', 'radius-xl retuned to M3 corner-extra-large (28px)');
+
 // 8. Pure / deterministic — same inputs, structurally equal output.
 const again = buildDesignTokens({
   primitives,

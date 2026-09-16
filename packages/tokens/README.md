@@ -86,10 +86,36 @@ ship in the box, switched via the `data-theme` attribute on `<html>`. To registe
 own theme pack or override values, see the
 [Theming guide](https://github.com/doug-williamson/RhombusKit/blob/main/docs/theming.md).
 
+## What's in the box
+
+Beyond the 60 semantic CONTRACT tokens, the package publishes a set of **theme-independent
+primitives** — values that are the same in every theme:
+
+| family | count | names |
+| --- | --- | --- |
+| Type scale | 65 | `--type-<role>-{size,line-height,weight,tracking}` over the 15 M3 roles, 2 prominent weights, 3 weight constants |
+| Spacing | 11 | `--space-0` … `--space-16` (4px grid) |
+| Corner radius | 7 | `--radius-none` … `--radius-full` (the M3 corner ramp) |
+| State layers | 4 | `--state-{hover,focus,pressed,dragged}-opacity` |
+| Motion | 8 | `--motion-duration-*`, `--motion-ease-*` |
+| Border width | 2 | `--border-width`, `--border-width-strong` |
+| Density | 5 | `--control-height-*`, `--field-height`, `--row-height` |
+
+Live specimens for all of these are at
+[rhombuskit.online/foundations](https://rhombuskit.online/foundations).
+
 ## Stability
 
 Token CONTRACT **names** are covered by semver and CI-guarded (a snapshot diff is a
-review event); generated **values** are not. See the
+review event); generated **values** are not. The published **primitive** names above are
+frozen append-only on the same terms, guarded by `primitives.snapshot.json`.
+
+> The `--radius-*` **values** were retuned to the Material 3 corner ramp. The names did not
+> change, so this is not a breaking change under the policy above — but if you referenced a
+> rung for its pixel value, see the migration table in the
+> [Theming guide](https://github.com/doug-williamson/RhombusKit/blob/main/docs/theming.md#corner-radius).
+
+See the
 [versioning & semver policy](https://github.com/doug-williamson/RhombusKit/blob/main/README.md#versioning--stability).
 
 ## License

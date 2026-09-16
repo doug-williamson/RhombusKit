@@ -22,6 +22,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/migrate', label: 'Migrate from Material' },
       { path: '/theming', label: 'Theming' },
       { path: '/tokens', label: 'Design tokens' },
+      { path: '/foundations', label: 'Foundations' },
       { path: '/themes', label: 'Themes' },
       { path: '/motion', label: 'Motion' },
       { path: '/density', label: 'Density' },

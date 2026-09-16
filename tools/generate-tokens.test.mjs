@@ -204,11 +204,46 @@ const PRE_DENSITY = [
   '--radius-xs',
 ];
 
+// Wave A — the M3 type ramp, the spacing scale, and the state-layer opacities.
+// Same append-only contract as PRE_DENSITY above, and spelled out for the same
+// reason: the role/step lists below are authored HERE, independently of
+// packages/tokens/src/spec/primitives.ts and of primitives.snapshot.json, so a
+// misspelled role in the spec fails this assertion instead of propagating into
+// the snapshot the moment someone runs --update-snapshot. Derived from the lists
+// rather than typed out 77 times, which keeps the independence without the wall
+// of text; extending the lists is allowed, editing an existing entry is not.
+const TYPE_ROLES = [
+  'display-large', 'display-medium', 'display-small',
+  'headline-large', 'headline-medium', 'headline-small',
+  'title-large', 'title-medium', 'title-small',
+  'body-large', 'body-medium', 'body-small',
+  'label-large', 'label-medium', 'label-small',
+];
+const TYPE_PROPS = ['size', 'line-height', 'weight', 'tracking'];
+const SPACE_STEPS = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16];
+
+const WAVE_A_NAMES = [
+  ...TYPE_ROLES.flatMap((role) => TYPE_PROPS.map((prop) => `--type-${role}-${prop}`)),
+  // Only these two roles carry a prominent weight — Angular Material reads exactly
+  // this pair and no others.
+  '--type-label-large-weight-prominent',
+  '--type-label-medium-weight-prominent',
+  // M3's three named weight constants — system-level, not a property of any role.
+  '--type-weight-regular',
+  '--type-weight-medium',
+  '--type-weight-bold',
+  ...SPACE_STEPS.map((step) => `--space-${step}`),
+  '--state-hover-opacity',
+  '--state-focus-opacity',
+  '--state-pressed-opacity',
+  '--state-dragged-opacity',
+];
+
 const rootNames = Object.keys(parsed[':root']);
 const published = [
   ...new Set(
     rootNames.filter((n) =>
-      /^--(radius-|motion-|border-width|control-height-|field-height|row-height)/.test(n)
+      /^--(radius-|type-|space-|state-|motion-|border-width|control-height-|field-height|row-height)/.test(n)
     )
   ),
 ].sort();
@@ -218,8 +253,8 @@ assert.deepEqual(missing, [], 'no previously published primitive may disappear f
 
 assert.deepEqual(
   published,
-  [...PRE_DENSITY, ...DENSITY_NAMES].sort(),
-  'the published surface is exactly the pre-density 17 plus the five density names'
+  [...PRE_DENSITY, ...DENSITY_NAMES, ...WAVE_A_NAMES].sort(),
+  'the published surface is exactly the pre-density 17, the five density names, and the 80 Wave A names'
 );
 
 // And the committed snapshot must agree, so a spec edit without a
@@ -229,6 +264,84 @@ assert.deepEqual(
   published,
   'primitives.snapshot.json is stale — run `tsx tools/verify-tokens.mjs --update-snapshot`'
 );
+
+// ---------------------------------------------------------------------------
+// A2b — Wave A VALUE invariants.
+//
+// Everything above asserts NAMES. The Wave A names are derived from role/step
+// lists, so a transposed row in the spec's type table is a wrong value behind a
+// right name and sails straight through. These are the shape invariants that
+// catch that — same argument the density block below makes for control heights.
+// ---------------------------------------------------------------------------
+const rootDecls = parsed[':root'];
+const remPx = (v) => (v.endsWith('rem') ? Number.parseFloat(v) * 16 : Number.parseFloat(v));
+
+// The corner ramp is the M3 scale and is strictly monotonic by name. This is the
+// assertion that stops the old sm(2px) < xs(4px) inversion from creeping back.
+const RADIUS_RAMP = ['--radius-none', '--radius-xs', '--radius-sm', '--radius-md', '--radius-lg', '--radius-xl'];
+assert.deepEqual(
+  RADIUS_RAMP.map((n) => remPx(rootDecls[n])),
+  [0, 4, 8, 12, 16, 28],
+  'the radius ramp must be M3 0/4/8/12/16/28 — the bridge maps --mat-sys-corner-* onto it 1:1'
+);
+assert.equal(rootDecls['--radius-full'], '9999px', '--radius-full is a pill, not a rem value');
+
+// Spacing: a real 4px grid, strictly ascending.
+let prevSpace = -1;
+for (const step of SPACE_STEPS) {
+  const name = `--space-${step}`;
+  const px = remPx(rootDecls[name]);
+  assert.ok(Number.isInteger(px / 4), `${name} = ${rootDecls[name]} is off the 4px grid`);
+  assert.ok(px > prevSpace, `${name} must exceed the previous step`);
+  assert.equal(px, step * 4, `${name} must equal ${step} x 4px — the name IS the multiplier`);
+  prevSpace = px;
+}
+
+// Type: sizes and line-heights authored in rem so they respect an enlarged root
+// font size; weights bare 100-900; tracking rem or the unitless zero.
+for (const role of TYPE_ROLES) {
+  for (const prop of TYPE_PROPS) {
+    const name = `--type-${role}-${prop}`;
+    const v = rootDecls[name];
+    assert.ok(v !== undefined, `${name} missing from :root`);
+    if (prop === 'size' || prop === 'line-height') {
+      assert.match(v, /^\d+(\.\d+)?rem$/, `${name} = ${v} must be authored in rem`);
+    } else if (prop === 'weight') {
+      assert.match(v, /^[1-9]00$/, `${name} = ${v} must be a bare 100-900 weight`);
+    } else {
+      assert.match(v, /^(0|-?\d+(\.\d+)?rem)$/, `${name} = ${v} must be rem or the unitless 0`);
+    }
+  }
+  // A line-height below its own size clips glyphs — catches a transposed row.
+  assert.ok(
+    remPx(rootDecls[`--type-${role}-line-height`]) >= remPx(rootDecls[`--type-${role}-size`]),
+    `--type-${role}-line-height must not be below --type-${role}-size`
+  );
+}
+
+// The ramp descends: display-large is the biggest role, label-small the smallest.
+assert.ok(
+  remPx(rootDecls['--type-display-large-size']) > remPx(rootDecls['--type-body-large-size']),
+  'display-large must outrank body-large'
+);
+assert.ok(
+  remPx(rootDecls['--type-label-small-size']) < remPx(rootDecls['--type-body-medium-size']),
+  'label-small must be the tail of the ramp'
+);
+// The one everybody gets wrong.
+assert.equal(rootDecls['--type-title-large-weight'], '400', 'M3 title-large is weight 400, not 500');
+
+// State layers: unitless 0-1, and the interaction ramp escalates.
+for (const n of ['--state-hover-opacity', '--state-focus-opacity', '--state-pressed-opacity', '--state-dragged-opacity']) {
+  assert.match(rootDecls[n], /^0\.\d+$/, `${n} = ${rootDecls[n]} must be a unitless 0-1 opacity`);
+}
+assert.ok(
+  Number(rootDecls['--state-hover-opacity']) < Number(rootDecls['--state-pressed-opacity']),
+  'hover must be a lighter touch than pressed'
+);
+// Deliberately Angular Material 21's value, not the M3 spec's 0.10. If Angular ever
+// resyncs to 0.10 this fails, which is exactly when we want to be told.
+assert.equal(rootDecls['--state-focus-opacity'], '0.12', 'matches Angular Material 21, not M3 spec 0.10');
 
 // The scoped blocks re-declare names already in :root. verify-tokens.mjs scrapes
 // primitives.css line-by-line and is block-unaware, so without a dedupe its

@@ -42,7 +42,7 @@
     font-size: 0.875em;
     background-color: var(--surface-1);
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs); // 4px — an inline chip, not a card
     padding: 0.125em 0.375em;
   }
 

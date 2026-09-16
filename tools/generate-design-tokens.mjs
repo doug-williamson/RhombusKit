@@ -48,6 +48,18 @@ function primitiveType(flatKey) {
   if (flatKey === 'field-height' || flatKey === 'row-height') return 'dimension';
   if (flatKey.startsWith('motion-duration-')) return 'duration';
   if (flatKey.startsWith('motion-ease-')) return 'cubicBezier';
+  // Wave A families. These MUST be classified before the colour fallback below:
+  // primitiveType() ends in `return 'color'`, so an unclassified family ships into
+  // the Figma/Tokens-Studio export typed as a colour rather than failing loudly.
+  if (flatKey.startsWith('space-')) return 'dimension';
+  if (flatKey.startsWith('type-')) {
+    // `includes`, not `endsWith`: this family has --type-weight-{regular,medium,bold}
+    // and --type-label-large-weight-prominent as well as the plain -weight suffix.
+    if (flatKey.includes('-weight')) return 'fontWeight';
+    return 'dimension'; // size / line-height / tracking, all authored in rem
+  }
+  // Unitless 0–1 opacities; DTCG models these as plain numbers, not dimensions.
+  if (flatKey.startsWith('state-')) return 'number';
   return 'color'; // slate / violet / green / amber / red scales
 }
 

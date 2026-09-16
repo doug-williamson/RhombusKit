@@ -299,6 +299,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./pages/tokens/tokens-page.component'),
   },
   {
+    path: 'foundations',
+    title: 'Foundations',
+    loadComponent: () => import('./pages/foundations/foundations-page.component'),
+  },
+  {
     path: 'accessibility',
     title: 'Accessibility',
     loadComponent: () => import('./pages/accessibility/accessibility-page.component'),
