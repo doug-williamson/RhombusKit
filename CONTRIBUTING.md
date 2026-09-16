@@ -129,6 +129,7 @@ last three — they only fire when you change the public surface.
 | `build` → token CONTRACT | `tools/verify-tokens.mjs` vs the committed snapshot | `node tools/verify-tokens.mjs --update-snapshot` |
 | `build` → component styles | `tools/verify-component-styles.mjs` (no Sass `//` line-comment leaks in emitted CSS) | use `/* … */` block comments in component SCSS |
 | `build` → public API | `tools/api-snapshot.mjs` vs `etc/*.api.md` | build first, then `node tools/api-snapshot.mjs --update` |
+| `build` → setup docs | `tools/verify-setup-docs.mjs`: no source or setup surface prescribes `@angular/animations` (the kit needs no animations provider), and the README's "Providers" snippet names exactly what `ng add` wires | change the schematic and the README together |
 | `a11y` | Playwright color-contrast over the showcase, both themes | fix the token pair / contrast |
 | `a11y` → rendered outcomes | Playwright computed-style gates for visual inputs whose effect jsdom cannot cascade — every `ButtonVariant × ButtonAppearance` label ratio (`button-contrast.spec.ts`), box geometry (`geometry.spec.ts`), density (`density.spec.ts`) | a visual input (`variant`, `appearance`, `size`, …) is only "verified" once its showcase page renders every value and a Playwright row measures the outcome; add the row with the fix, RED first |
 
