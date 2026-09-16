@@ -141,6 +141,17 @@ describe('RhombusPalettePickerComponent', () => {
     expect(triggerIconName(fixture)).toBe('grid_view');
   });
 
+  it('draws the default trigger glyph as an inline SVG, never a font ligature', () => {
+    // `palette` must be pre-seeded: a consumer that registers nothing and loads
+    // no icon font would otherwise see the literal word "palette" as the trigger.
+    const fixture = render();
+    const trigger = fixture.nativeElement.querySelector(
+      '.rhombus-palette-picker__trigger',
+    ) as HTMLElement;
+    expect(trigger.querySelector('rhombus-icon .rhombus-icon svg')).toBeTruthy();
+    expect(trigger.querySelector('mat-icon')).toBeNull();
+  });
+
   it('renders an item icon only for palettes present in themeIcons', () => {
     const fixture = render();
     fixture.componentRef.setInput('themeIcons', { teal: 'grid_view' });

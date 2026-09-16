@@ -74,6 +74,14 @@ describe('rhombus-accordion', () => {
     expect(c.textContent).toContain('Three');
   });
 
+  it('draws the disclosure chevron as an inline SVG, never a font ligature', () => {
+    // `chevron_right` must be pre-seeded: on a host without the Material Icons
+    // font an unseeded name renders the literal word where the arrow belongs.
+    const { el } = setup();
+    expect(el.querySelector('.rhombus-accordion__chevron .rhombus-icon svg')).toBeTruthy();
+    expect(el.querySelector('.rhombus-accordion__chevron mat-icon')).toBeNull();
+  });
+
   it('toggles aria-expanded and the region inert state on click', () => {
     const { fixture, el } = setup();
     const [first] = triggers(el);

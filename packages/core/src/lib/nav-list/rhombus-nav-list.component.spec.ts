@@ -213,6 +213,18 @@ describe('rhombus-nav-list', () => {
       expect(el.querySelector('rhombus-icon.rhombus-nav-list__lock')).toBeTruthy();
     });
 
+    it('draws the lock as an inline SVG, never a font ligature', () => {
+      // `lock` must be pre-seeded: on a font-less host an unseeded name renders
+      // the literal word "lock" beside the label.
+      const { el } = setup([
+        { items: [{ label: 'Pro feature', locked: true }] },
+      ]);
+      expect(
+        el.querySelector('rhombus-icon.rhombus-nav-list__lock .rhombus-icon svg')
+      ).toBeTruthy();
+      expect(el.querySelector('rhombus-icon.rhombus-nav-list__lock mat-icon')).toBeNull();
+    });
+
     it('fires both item.action and (itemAction) on click, without navigating', () => {
       let actionCalls = 0;
       const item: RhombusNavItem = {
@@ -312,6 +324,23 @@ describe('rhombus-nav-list', () => {
   });
 
   describe('nested children', () => {
+    it('draws the disclosure chevron as an inline SVG, never a font ligature', () => {
+      // `chevron_right` must be pre-seeded (same failure class as the lock).
+      const { el } = setup([
+        {
+          items: [
+            {
+              label: 'AppShell',
+              routerLink: '/dashboard',
+              children: [{ label: 'API Reference', routerLink: '/settings' }],
+            },
+          ],
+        },
+      ]);
+      expect(el.querySelector('.rhombus-nav-list__chevron .rhombus-icon svg')).toBeTruthy();
+      expect(el.querySelector('.rhombus-nav-list__chevron mat-icon')).toBeNull();
+    });
+
     it('renders a navigable parent: a link row PLUS a disclosure toggle wired to the nested group', () => {
       const { el } = setup([
         {
