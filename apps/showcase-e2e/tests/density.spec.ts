@@ -436,6 +436,13 @@ test.describe('compact actually reaches each component — not just clears the f
       compact: '24px',
       why: 'stepper indicator per-level box (own SCSS; default 28px)',
     },
+    {
+      route: '/components/quantity-input?tab=examples',
+      sel: '.rhombus-quantity-input__btn--inc',
+      prop: 'width',
+      compact: '36px',
+      why: 'quantity-input round ± on --control-height-md (=40 at default)',
+    },
   ];
 
   for (const { route, sel, prop, compact, why } of MOVED) {
@@ -477,6 +484,7 @@ test.describe('SC 2.5.8 — every control this PR shrinks clears 24x24 at compac
     { route: '/components/selection-list', sel: '.mat-mdc-list-option', what: 'selection-list option — the row IS the target' },
     { route: '/components/nav-list', sel: '.rhombus-nav-list__item', what: 'nav-list item (content-derived)' },
     { route: '/components/data-table', sel: '.mat-mdc-row', what: 'data-table row (48px at compact)' },
+    { route: '/components/quantity-input?tab=examples', sel: '.rhombus-quantity-input__btn--inc', what: 'quantity-input round ± (36px at compact)' },
   ];
 
   for (const { route, sel, what } of CONTROLS) {

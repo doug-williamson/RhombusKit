@@ -258,6 +258,26 @@ const CASES: ReadonlyArray<{ route: string; rows: readonly Row[] }> = [
       },
     ],
   },
+  {
+    route: '/components/quantity-input?tab=examples',
+    rows: [
+      // The host class replaces an inert `:host` — a regression to a `:host`
+      // rule collapses the row with nothing else noticing. `display` itself is
+      // NOT assertable: the host is a flex item of the page's `.qi-row` and
+      // blockifies to `flex` at computed-value time. `align-items` and
+      // `column-gap` are the rule's other declarations and both read `normal`
+      // if the rule is dead.
+      { sel: '.rhombus-quantity-input', prop: 'align-items', expect: 'center', why: 'scss host row' },
+      { sel: '.rhombus-quantity-input', prop: 'column-gap', expect: '8px', why: 'space.space(2)' },
+      // The circles take --control-height-md on BOTH axes (M3's 40px icon-button
+      // box); the fallback literal equals the default, per the density promise.
+      { sel: '.rhombus-quantity-input__btn--inc', prop: 'width', expect: '40px', why: 'var(--control-height-md) default 2.5rem' },
+      { sel: '.rhombus-quantity-input__btn--inc', prop: 'height', expect: '40px', why: 'var(--control-height-md) default 2.5rem' },
+      { sel: '.rhombus-quantity-input__btn--inc', prop: 'border-top-left-radius', expect: '9999px', why: 'var(--radius-full)' },
+      { sel: '.rhombus-quantity-input__field', prop: 'height', expect: '40px', why: 'var(--control-height-md) default 2.5rem' },
+      { sel: '.rhombus-quantity-input__field', prop: 'width', expect: '48px', why: 'scss 3rem — 3–4 tabular digits' },
+    ],
+  },
 ];
 
 for (const { route, rows } of CASES) {
