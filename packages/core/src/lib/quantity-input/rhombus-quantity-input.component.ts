@@ -7,6 +7,7 @@ import {
   input,
   model,
   output,
+  signal,
   viewChild,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +20,7 @@ let nextId = 0;
  * `<rhombus-quantity-input>` — a compact, chrome-less count control:
  * `label · (−) n (+)`. A visible inline label, a round − button, a borderless
  * editable number and a round + button in one row. For quantities that live in
- * rows, cards, lists and toolbars (cart quantity, seats, sets/reps).
+ * rows, cards, lists and toolbars (cart quantity, sets/reps).
  *
  * It is deliberately NOT a form field: no floating label, hint, error subscript,
  * currency prefix or `appearance`. For labelled numeric entry inside a form use
@@ -27,12 +28,14 @@ let nextId = 0;
  * ({@link createSpinbox}), so stepping, clamping and the keyboard map are identical.
  *
  * The native `type="number"` input is the single tab stop and an implicit ARIA
- * `spinbutton` (`aria-valuemin/max/now` derive from `min` / `max` / `step`), so no
- * manual `role`/`aria-*` is added to it. The host is a `group` named by the label,
- * so the − and + buttons announce with context. The buttons are `tabindex="-1"`
- * pointer/touch helpers; after every click focus returns to the input so the
- * keyboard set (Arrow ±step · PageUp/PageDown ±largeStep · Home/End → bounds) is
- * live and a screen reader hears the new value.
+ * `spinbutton` (`aria-valuemin`/`aria-valuemax` derive from `min`/`max` and
+ * `aria-valuenow` from the value), so no manual `role`/`aria-*` is added to it.
+ * The host is a `group` named by the label, so the − and + buttons announce with
+ * context. The buttons are `tabindex="-1"` pointer/touch helpers; after every
+ * click focus returns to the input so the keyboard set (Arrow ±step ·
+ * PageUp/PageDown ±largeStep · Home/End → bounds) is live and a screen reader
+ * hears the new value (touch taps announce the value through a polite live
+ * region instead of refocusing, so the keypad stays down).
  *
  *   <rhombus-quantity-input label="Quantity" [min]="0" [max]="10" [(value)]="qty" />
  *
@@ -64,6 +67,7 @@ let nextId = 0;
       tabindex="-1"
       [attr.aria-label]="decrementLabel()"
       [disabled]="fieldDisabled()"
+      (pointerdown)="onPointerDown($event)"
       (mousedown)="$event.preventDefault()"
       (click)="decrement()"
     >
@@ -92,6 +96,7 @@ let nextId = 0;
       tabindex="-1"
       [attr.aria-label]="incrementLabel()"
       [disabled]="fieldDisabled()"
+      (pointerdown)="onPointerDown($event)"
       (mousedown)="$event.preventDefault()"
       (click)="increment()"
     >
@@ -99,6 +104,10 @@ let nextId = 0;
         <path d="M12 5v14M5 12h14" />
       </svg>
     </button>
+
+    <span class="rhombus-quantity-input__live" aria-live="polite" aria-atomic="true">{{
+      announced()
+    }}</span>
   `,
 })
 export class RhombusQuantityInputComponent {
@@ -150,14 +159,20 @@ export class RhombusQuantityInputComponent {
   /** Disabled state surfaced to the ± buttons (the mirror disables the input silently). */
   protected readonly fieldDisabled = this.spin.fieldDisabled;
 
+  /** Text of the visually-hidden polite live region (touch-only announcements). */
+  protected readonly announced = signal('');
+
+  /** Pointer type of the most recent pointerdown on a ± button, used by afterStep(). */
+  private lastPointerType: string | null = null;
+
   protected increment(): void {
     this.spin.increment();
-    this.focusField();
+    this.afterStep();
   }
 
   protected decrement(): void {
     this.spin.decrement();
-    this.focusField();
+    this.afterStep();
   }
 
   protected onKeydown(event: KeyboardEvent): void {
@@ -168,10 +183,22 @@ export class RhombusQuantityInputComponent {
     this.spin.onBlur();
   }
 
-  // The buttons are tabindex=-1 and their mousedown is default-prevented, so a
-  // click never takes focus away; if the input was not focused, put it there so
-  // the keyboard set is live and assistive tech reads the new value.
-  private focusField(): void {
+  protected onPointerDown(event: PointerEvent): void {
+    this.lastPointerType = event.pointerType;
+  }
+
+  // Pointer helpers never take focus themselves (tabindex=-1 + mousedown default
+  // prevented). After a mouse/pen/keyboard-driven click, put focus on the input so
+  // the keyboard set is live and assistive tech reads the new value. After a TOUCH
+  // tap, do NOT refocus — that would raise the on-screen keypad on every tap — and
+  // announce the new value through the polite live region instead.
+  private afterStep(): void {
+    const touch = this.lastPointerType === 'touch';
+    this.lastPointerType = null;
+    if (touch) {
+      this.announced.set(String(this.internal.value ?? ''));
+      return;
+    }
     this.field().nativeElement.focus({ preventScroll: true });
   }
 }

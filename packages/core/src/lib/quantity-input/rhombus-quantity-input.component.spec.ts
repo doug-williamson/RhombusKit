@@ -113,12 +113,19 @@ describe('rhombus-quantity-input', () => {
     expect(incBtn(el).getAttribute('tabindex')).toBe('-1');
     expect(decBtn(el).getAttribute('type')).toBe('button');
     expect(incBtn(el).querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(decBtn(el).querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('orders the DOM label → − → input → + (reading order = visual order)', () => {
+  it('orders the DOM label → − → input → + → live region (reading order = visual order)', () => {
     const { el } = setup();
     const kids = Array.from(root(el).children);
-    expect(kids.map((c) => c.tagName.toLowerCase())).toEqual(['label', 'button', 'input', 'button']);
+    expect(kids.map((c) => c.tagName.toLowerCase())).toEqual([
+      'label',
+      'button',
+      'input',
+      'button',
+      'span',
+    ]);
     expect(kids[1]).toBe(decBtn(el));
     expect(kids[2]).toBe(input(el));
     expect(kids[3]).toBe(incBtn(el));
@@ -158,6 +165,37 @@ describe('rhombus-quantity-input', () => {
     input(el).blur();
     decBtn(el).click();
     expect(document.activeElement).toBe(input(el));
+  });
+
+  function pointerDown(target: HTMLElement, pointerType: string): void {
+    let ev: Event;
+    if (typeof PointerEvent !== 'undefined') {
+      ev = new PointerEvent('pointerdown', { pointerType, bubbles: true });
+    } else {
+      ev = new MouseEvent('pointerdown', { bubbles: true });
+      Object.defineProperty(ev, 'pointerType', { value: pointerType });
+    }
+    target.dispatchEvent(ev);
+  }
+
+  it('does not move focus after a touch tap, and announces the value instead', () => {
+    const { fixture, host, el } = setup();
+    pointerDown(incBtn(el), 'touch');
+    incBtn(el).click();
+    fixture.detectChanges();
+    expect(host.value).toBe(6);
+    expect(document.activeElement).not.toBe(input(el));
+    expect(el.querySelector('.rhombus-quantity-input__live')?.textContent?.trim()).toBe('6');
+  });
+
+  it('moves focus after a mouse click and leaves the live region empty', () => {
+    const { fixture, host, el } = setup();
+    pointerDown(incBtn(el), 'mouse');
+    incBtn(el).click();
+    fixture.detectChanges();
+    expect(host.value).toBe(6);
+    expect(document.activeElement).toBe(input(el));
+    expect(el.querySelector('.rhombus-quantity-input__live')?.textContent?.trim()).toBe('');
   });
 
   it('prevents the default of mousedown on the ± buttons so a focused input never blurs', () => {

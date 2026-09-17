@@ -111,3 +111,17 @@
     color: var(--text-disabled);
   }
 }
+
+// Visually-hidden polite live region: announces the new value on a touch tap,
+// which skips the refocus (that would raise the on-screen keypad every time).
+.rhombus-quantity-input__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
