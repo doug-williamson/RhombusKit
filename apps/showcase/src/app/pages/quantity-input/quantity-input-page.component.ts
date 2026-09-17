@@ -67,7 +67,7 @@ interface CartLine {
           <ul>
             <li>
               For a <strong>count in a row, card, list or toolbar</strong> — cart
-              quantity, seats, sets and reps — where a full form field would be
+              quantity, sets and reps — where a full form field would be
               too heavy.
             </li>
             <li>
