@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/doug-williamson/RhombusKit/compare/v1.18.0...v1.19.0) (2026-09-17)
+
+
+### Features
+
+* **core:** rhombus-quantity-input — round − / + count control ([#151](https://github.com/doug-williamson/RhombusKit/issues/151)) ([#152](https://github.com/doug-williamson/RhombusKit/issues/152)) ([839c9be](https://github.com/doug-williamson/RhombusKit/commit/839c9be00591ed1226d41d4b3bdf6ebce53cc763))
+
 ## [1.18.0](https://github.com/doug-williamson/RhombusKit/compare/v1.17.0...v1.18.0) (2026-09-16)
 
 
