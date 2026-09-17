@@ -64,34 +64,25 @@ jobs:
         run: node tools/verify-component-styles.mjs
       - name: Smoke-test packed artifacts
         run: node tools/smoke-test-pack.mjs
-      - name: Publish @rhombuskit/tokens
-        working-directory: packages/tokens
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @rhombuskit/theme-engine
-        working-directory: packages/theme-engine
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @rhombuskit/material-preset
-        working-directory: packages/material-preset
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @rhombuskit/core
-        working-directory: packages/core
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @rhombuskit/mcp
-        working-directory: packages/mcp
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @rhombuskit/theme-builder
-        working-directory: packages/theme-builder
-        run: pnpm publish --access public --no-git-checks
+      # Publish every package in dependency order through npm trusted publishing
+      # (OIDC: `id-token: write` above; each package lists this workflow as a
+      # trusted publisher on npmjs.com). Idempotent per package: a version already
+      # on the registry is skipped, so a run that failed part-way (as v1.18.0 did
+      # after two of six) can be re-dispatched without tripping "cannot publish
+      # over the previously published version" on the ones that got through.
+      - name: Publish packages (skips versions already on npm)
+        run: |
+          set -euo pipefail
+          VERSION="${{ needs.prepare.outputs.version }}"
+          for pkg in tokens theme-engine material-preset core mcp theme-builder; do
+            if npm view "@rhombuskit/$pkg@$VERSION" version >/dev/null 2>&1; then
+              echo "::notice::@rhombuskit/$pkg@$VERSION is already on npm — skipping."
+              continue
+            fi
+            echo "::group::Publish @rhombuskit/$pkg@$VERSION"
+            (cd "packages/$pkg" && pnpm publish --access public --no-git-checks)
+            echo "::endgroup::"
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # Finalize the release ourselves (replaces release-please's github-release
