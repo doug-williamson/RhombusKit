@@ -4,11 +4,9 @@ import {
   ViewEncapsulation,
   booleanAttribute,
   computed,
-  effect,
   input,
   model,
   output,
-  signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +15,7 @@ import {
   FormFieldAppearance,
   FormFieldSize,
 } from '../form-field/form-field.types';
-import { mirrorControl } from '../forms/mirror-control';
+import { createSpinbox } from '../forms/spinbox';
 
 /**
  * `<rhombus-number-input>` — a numeric spinbox: Material's `<mat-form-field>` +
@@ -27,13 +25,12 @@ import { mirrorControl } from '../forms/mirror-control';
  * The native `type="number"` input is an implicit ARIA `spinbutton` and derives
  * `aria-valuemin/max/now` for free from the reflected `min` / `max` / `step`
  * attributes, so no manual `role`/`aria-*` is added. The public `[control]` /
- * `[(value)]` is mirrored to a private `FormControl<number | null>` bound to the
- * input via the shared {@link mirrorControl} helper (identity mapping) — a spinbox
- * must read the current value to clamp and write the stepped one back, so a single
- * internal control is the natural home for that. Clamping runs on blur and on a
- * step, never per keystroke.
+ * `[(value)]`, the ± / step / clamp logic and the keyboard
+ * map all come from the shared {@link createSpinbox} core (one owner for every
+ * RhombusKit spinbox, so this and `rhombus-quantity-input` cannot drift). Clamping
+ * runs on blur and on a step, never per keystroke.
  *
- *   <rhombus-number-input label="Quantity" [min]="0" [max]="99" [(value)]="qty" />
+ *   <rhombus-number-input label="Seats" [min]="0" [max]="99" [(value)]="seats" />
  *
  * Projected slots: `[rhombusError]` (error subscript), `[matTextPrefix]` /
  * `[matIconPrefix]` (unit / currency — the ± live in the trailing region).
@@ -157,15 +154,23 @@ export class RhombusNumberInputComponent {
   /** Emits on each user change in lightweight mode (completes `[(value)]`). */
   readonly valueChange = output<number | null>();
 
+  /** The shared numeric core: control mirror, value seed, disabled tracking, step/clamp/keys. */
+  private readonly spin = createSpinbox({
+    control: this.control,
+    value: this.value,
+    disabled: this.disabled,
+    min: this.min,
+    max: this.max,
+    step: this.step,
+    largeStep: this.largeStep,
+    valueChange: this.valueChange,
+  });
+
   /** The control bound to the inner input; the public `control` / `value` mirror onto it. */
-  protected readonly internal = new FormControl<number | null>(null);
+  protected readonly internal = this.spin.internal;
 
   /** Disabled state surfaced to the ± buttons (the mirror disables the input silently). */
-  protected readonly fieldDisabled = signal(false);
-
-  private readonly largeStepValue = computed(
-    () => this.largeStep() ?? this.step() * 10
-  );
+  protected readonly fieldDisabled = this.spin.fieldDisabled;
 
   protected readonly hostClasses = computed(() =>
     [
@@ -175,118 +180,19 @@ export class RhombusNumberInputComponent {
     ].join(' ')
   );
 
-  constructor() {
-    mirrorControl<number, number>({
-      external: this.control,
-      internal: this.internal,
-      toInternal: (value) => value,
-      toExternal: (value) => value,
-      onExternalChange: (value) => this.emitAndSync(value),
-      disabled: this.disabled,
-    });
-
-    // Seed the internal control from the lightweight value model (the mirror only
-    // seeds from a bound control). Silent write — no echo back through emitAndSync.
-    effect(() => {
-      if (this.control()) return;
-      const value = this.value();
-      if (this.internal.value !== value) {
-        this.internal.setValue(value, { emitEvent: false });
-      }
-    });
-
-    // Track disabled for the ± buttons: reflect the lightweight input, or the
-    // bound control's status (re-subscribing when its instance swaps).
-    effect((onCleanup) => {
-      const control = this.control();
-      if (!control) {
-        this.fieldDisabled.set(this.disabled());
-        return;
-      }
-      this.fieldDisabled.set(control.disabled);
-      const sub = control.statusChanges.subscribe(() =>
-        this.fieldDisabled.set(control.disabled)
-      );
-      onCleanup(() => sub.unsubscribe());
-    });
-  }
-
   protected increment(): void {
-    this.stepBy(this.step());
+    this.spin.increment();
   }
 
   protected decrement(): void {
-    this.stepBy(-this.step());
+    this.spin.decrement();
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'ArrowUp':
-        event.preventDefault();
-        this.stepBy(this.step());
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        this.stepBy(-this.step());
-        break;
-      case 'PageUp':
-        event.preventDefault();
-        this.stepBy(this.largeStepValue());
-        break;
-      case 'PageDown':
-        event.preventDefault();
-        this.stepBy(-this.largeStepValue());
-        break;
-      case 'Home':
-        event.preventDefault();
-        this.toBound(this.min());
-        break;
-      case 'End':
-        event.preventDefault();
-        this.toBound(this.max());
-        break;
-    }
+    this.spin.onKeydown(event);
   }
 
   protected onBlur(): void {
-    const current = this.internal.value;
-    if (current != null) {
-      this.commit(this.clamp(current));
-    }
-  }
-
-  private stepBy(delta: number): void {
-    const current = this.internal.value;
-    const base = current == null ? (this.min() ?? 0) : current + delta;
-    this.commit(this.clamp(base));
-  }
-
-  private toBound(bound: number | null): void {
-    if (bound != null) {
-      this.commit(bound);
-    }
-  }
-
-  private clamp(value: number): number {
-    const min = this.min();
-    const max = this.max();
-    let result = value;
-    if (min != null) result = Math.max(min, result);
-    if (max != null) result = Math.min(max, result);
-    return result;
-  }
-
-  private commit(value: number): void {
-    if (this.internal.value !== value) {
-      this.internal.setValue(value);
-    }
-  }
-
-  private emitAndSync(value: number | null): void {
-    // In control mode the bound control is the source of truth (the mirror
-    // already wrote to it); value / valueChange belong to lightweight mode.
-    if (this.control()) return;
-    this.value.set(value);
-    this.valueChange.emit(value);
+    this.spin.onBlur();
   }
 }
