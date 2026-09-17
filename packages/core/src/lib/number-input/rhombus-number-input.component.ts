@@ -22,9 +22,9 @@ import { createSpinbox } from '../forms/spinbox';
  * `<input matInput type="number">` for the field chrome, plus a bespoke ± / step
  * / clamp / keyboard layer Material doesn't ship (**D7**).
  *
- * The native `type="number"` input is an implicit ARIA `spinbutton` and derives
- * `aria-valuemin/max/now` for free from the reflected `min` / `max` / `step`
- * attributes, so no manual `role`/`aria-*` is added. The public `[control]` /
+ * The native `type="number"` input is an implicit ARIA `spinbutton`;
+ * `aria-valuemin`/`aria-valuemax` derive from `min`/`max` and `aria-valuenow`
+ * from the value, so no manual `role`/`aria-*` is added. The public `[control]` /
  * `[(value)]`, the ± / step / clamp logic and the keyboard
  * map all come from the shared {@link createSpinbox} core (one owner for every
  * RhombusKit spinbox, so this and `rhombus-quantity-input` cannot drift). Clamping

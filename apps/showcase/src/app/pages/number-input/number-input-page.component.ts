@@ -76,13 +76,13 @@ import { ExampleComponent } from '../../shared/example.component';
             </li>
             <li>
               For <strong>unbounded numeric text</strong> with no stepper (e.g. a
-              free-form quantity), a plain
+              free-form amount), a plain
               <a routerLink="/components/input">Input</a> with
               <code>type="number"</code> is enough.
             </li>
             <li>
               For a <strong>compact count without form-field chrome</strong> — a
-              cart row, seats, sets and reps — use a
+              cart row, sets and reps — use a
               <a routerLink="/components/quantity-input">Quantity Input</a>.
             </li>
           </ul>

@@ -161,10 +161,15 @@ interface CartLine {
             min/max. The round buttons are pointer and touch helpers
             (<code>tabindex="-1"</code> with <code>aria-label</code>s); after every
             click focus returns to the input, so the keyboard set stays live and
-            a screen reader hears the new value. Buttons are 40 × 40 px at the
-            default density (36 px compact), above the 24 px WCAG 2.2 target
-            floor. The ring uses <code>--border-strong</code>; the high-contrast
-            glyph is what identifies the control.
+            a screen reader hears the new value. On touch devices the tap does
+            not refocus the number (that would raise the keypad every time); the
+            new value is announced through a polite live region instead. Buttons
+            are 40 × 40 px at the default density (36 px compact), above the
+            24 px WCAG 2.2 target floor. The ring uses
+            <code>--border-strong</code> and measures about 2.3–2.6:1 in the
+            light theme — below WCAG 1.4.11's 3:1 non-text floor, which the
+            17:1 glyph carries instead; the design floor of 2.25:1 is gated by a
+            Playwright row in both themes.
           </p>
         </section>
       </div>
@@ -210,15 +215,15 @@ interface CartLine {
           </p>
           <div class="qi-form">
             <rhombus-quantity-input
-              label="Seats"
+              label="Players"
               [min]="1"
               [max]="8"
-              [control]="seats"
+              [control]="players"
             />
-            <button mat-flat-button type="button" (click)="toggleSeats()">
-              {{ seats.disabled ? 'Enable' : 'Disable' }}
+            <button mat-flat-button type="button" (click)="togglePlayers()">
+              {{ players.disabled ? 'Enable' : 'Disable' }}
             </button>
-            <p class="qi-output">Control value: <strong>{{ seats.value ?? '(empty)' }}</strong></p>
+            <p class="qi-output">Control value: <strong>{{ players.value ?? '(empty)' }}</strong></p>
           </div>
         </section>
 
@@ -337,7 +342,7 @@ export class CartLineComponent {
   protected readonly tickets = signal<number | null>(4);
   protected readonly lastValue = signal<number | null>(null);
 
-  protected readonly seats = new FormControl<number | null>(2);
+  protected readonly players = new FormControl<number | null>(2);
 
   protected readonly cart: readonly CartLine[] = [
     { name: 'Resistance band', qty: signal<number | null>(2) },
@@ -345,11 +350,11 @@ export class CartLineComponent {
     { name: 'Lifting straps', qty: signal<number | null>(1) },
   ];
 
-  protected toggleSeats(): void {
-    if (this.seats.disabled) {
-      this.seats.enable();
+  protected togglePlayers(): void {
+    if (this.players.disabled) {
+      this.players.enable();
     } else {
-      this.seats.disable();
+      this.players.disable();
     }
   }
 }

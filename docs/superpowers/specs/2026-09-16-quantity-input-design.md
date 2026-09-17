@@ -18,7 +18,7 @@ A compact, chrome-less count control: **`label · (−) n (+)`**. A visible inli
 | | Number Input | Quantity Input |
 |---|---|---|
 | Shell | Material `mat-form-field` (outline/fill, floating label, hint, error subscript, currency prefix) | none — label text, two circles, a number |
-| Use | precise numeric entry **inside forms** | a **count** in a row, card, list, or toolbar (cart quantity, seats, sets/reps) |
+| Use | precise numeric entry **inside forms** | a **count** in a row, card, list, or toolbar (cart quantity, sets/reps) |
 | ± | joined pill in the trailing suffix (#138) | round outlined buttons *before* and *after* the number |
 | Height | `--field-height` (56 px) | `--control-height-md` (40 px) |
 
