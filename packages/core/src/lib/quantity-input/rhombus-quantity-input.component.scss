@@ -1,0 +1,113 @@
+// Quantity input — label · round − · borderless number · round +. Chrome-less on
+// purpose: Number Input owns the form-field shell. Density owns every box below
+// (--control-height-md on both axes of the circles and the field); nothing here
+// is sized by type. All colour flows through CONTRACT tokens, every dimension
+// through published primitives, and each fallback equals the primitive's default.
+@use '../../styles/space';
+
+.rhombus-quantity-input {
+  display: inline-flex;
+  align-items: center;
+  gap: space.space(2);
+  color: var(--text-primary);
+}
+
+.rhombus-quantity-input__label {
+  color: var(--text-secondary);
+  margin-inline-end: space.space(1);
+}
+
+// The kit's round outlined icon button (the carousel-arrow recipe) with a
+// transparent rest fill so the circle adopts whatever surface it sits on. The
+// ring is --border-strong: --border on a white page is ~1.2:1 and would vanish.
+.rhombus-quantity-input__btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height-md, 2.5rem);
+  height: var(--control-height-md, 2.5rem);
+  padding: 0;
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+
+  &:hover:not(:disabled) {
+    background: var(--surface-2);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--surface-3);
+  }
+
+  // tabindex=-1 keeps these out of the tab order, so this only ever shows for
+  // programmatic focus; kept for parity with every other kit icon button. The
+  // global --focus-ring halo paints beneath the outline on purpose.
+  &:focus-visible {
+    outline: var(--border-width-strong) solid var(--focus-border);
+    outline-offset: 2px;
+  }
+
+  // One disabled mechanism: colour + native [disabled]. No opacity.
+  &:disabled {
+    color: var(--text-disabled);
+    border-color: var(--border);
+    cursor: not-allowed;
+  }
+}
+
+// Same paths as number-input's ±; 1.25rem = rhombus-icon `sm`, so the planned
+// font-less-icons swap to <rhombus-icon> is geometry-neutral.
+.rhombus-quantity-input__glyph {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// A bare number between two buttons reads as static text; the hover wash and
+// the focus ring are what say "you can type here". 3rem fits 3–4 tabular digits —
+// wider counts belong in Number Input.
+.rhombus-quantity-input__field {
+  width: 3rem;
+  height: var(--control-height-md, 2.5rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  // Hide the native spinner — the ± buttons replace it.
+  appearance: textfield;
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--surface-1);
+  }
+
+  &:focus-visible {
+    outline: var(--border-width-strong) solid var(--focus-border);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    color: var(--text-disabled);
+  }
+}
