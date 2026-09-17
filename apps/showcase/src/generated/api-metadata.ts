@@ -1940,7 +1940,7 @@ export const API_METADATA: Record<string, ApiEntry> = {
     "name": "RhombusNumberInputComponent",
     "kind": "class",
     "selector": "rhombus-number-input",
-    "description": "`<rhombus-number-input>` — a numeric spinbox: Material's `<mat-form-field>` +\n`<input matInput type=\"number\">` for the field chrome, plus a bespoke ± / step\n/ clamp / keyboard layer Material doesn't ship (**D7**).\n\nThe native `type=\"number\"` input is an implicit ARIA `spinbutton` and derives\n`aria-valuemin/max/now` for free from the reflected `min` / `max` / `step`\nattributes, so no manual `role`/`aria-*` is added. The public `[control]` /\n`[(value)]` is mirrored to a private `FormControl<number | null>` bound to the\ninput via the shared {@link mirrorControl } helper (identity mapping) — a spinbox\nmust read the current value to clamp and write the stepped one back, so a single\ninternal control is the natural home for that. Clamping runs on blur and on a\nstep, never per keystroke.\n\n  <rhombus-number-input label=\"Quantity\" [min]=\"0\" [max]=\"99\" [(value)]=\"qty\" />\n\nProjected slots: `[rhombusError]` (error subscript), `[matTextPrefix]` /\n`[matIconPrefix]` (unit / currency — the ± live in the trailing region).",
+    "description": "`<rhombus-number-input>` — a numeric spinbox: Material's `<mat-form-field>` +\n`<input matInput type=\"number\">` for the field chrome, plus a bespoke ± / step\n/ clamp / keyboard layer Material doesn't ship (**D7**).\n\nThe native `type=\"number\"` input is an implicit ARIA `spinbutton`;\n`aria-valuemin`/`aria-valuemax` derive from `min`/`max` and `aria-valuenow`\nfrom the value, so no manual `role`/`aria-*` is added. The public `[control]` /\n`[(value)]`, the ± / step / clamp logic and the keyboard\nmap all come from the shared {@link createSpinbox } core (one owner for every\nRhombusKit spinbox, so this and `rhombus-quantity-input` cannot drift). Clamping\nruns on blur and on a step, never per keystroke.\n\n  <rhombus-number-input label=\"Seats\" [min]=\"0\" [max]=\"99\" [(value)]=\"seats\" />\n\nProjected slots: `[rhombusError]` (error subscript), `[matTextPrefix]` /\n`[matIconPrefix]` (unit / currency — the ± live in the trailing region).",
     "inputs": [
       {
         "name": "label",
@@ -2393,6 +2393,73 @@ export const API_METADATA: Record<string, ApiEntry> = {
       }
     ],
     "outputs": [],
+    "methods": []
+  },
+  "RhombusQuantityInputComponent": {
+    "name": "RhombusQuantityInputComponent",
+    "kind": "class",
+    "selector": "rhombus-quantity-input",
+    "description": "`<rhombus-quantity-input>` — a compact, chrome-less count control:\n`label · (−) n (+)`. A visible inline label, a round − button, a borderless\neditable number and a round + button in one row. For quantities that live in\nrows, cards, lists and toolbars (cart quantity, sets/reps).\n\nIt is deliberately NOT a form field: no floating label, hint, error subscript,\ncurrency prefix or `appearance`. For labelled numeric entry inside a form use\n`<rhombus-number-input>`; both components share one numeric core\n({@link createSpinbox }), so stepping, clamping and the keyboard map are identical.\n\nThe native `type=\"number\"` input is the single tab stop and an implicit ARIA\n`spinbutton` (`aria-valuemin`/`aria-valuemax` derive from `min`/`max` and\n`aria-valuenow` from the value), so no manual `role`/`aria-*` is added to it.\nThe host is a `group` named by the label, so the − and + buttons announce with\ncontext. The buttons are `tabindex=\"-1\"` pointer/touch helpers; after every\nclick focus returns to the input so the keyboard set (Arrow ±step ·\nPageUp/PageDown ±largeStep · Home/End → bounds) is live and a screen reader\nhears the new value (touch taps announce the value through a polite live\nregion instead of refocusing, so the keypad stays down).\n\n  <rhombus-quantity-input label=\"Quantity\" [min]=\"0\" [max]=\"10\" [(value)]=\"qty\" />\n\nClamping runs on blur and on a step, never per keystroke. In RTL the row mirrors\nwith the reading direction: − stays *before* the number, + *after* it.",
+    "inputs": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible label rendered before the − button; also the accessible name of the input and of the group. Required.",
+        "required": true
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Minimum value; `null` (default) for no lower bound."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Maximum value; `null` (default) for no upper bound."
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "description": "Increment for the ± buttons and arrow keys. Defaults to `1`."
+      },
+      {
+        "name": "largeStep",
+        "type": "number",
+        "description": "Increment for PageUp / PageDown; `null` (default) uses `step * 10`."
+      },
+      {
+        "name": "value",
+        "type": "number",
+        "description": "Value in lightweight (`[(value)]`) mode; ignored when `control` is set."
+      },
+      {
+        "name": "control",
+        "type": "FormControl<number>",
+        "description": "Reactive-forms `FormControl<number | null>`; when set, `value`/`disabled` are ignored."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the control in lightweight mode; ignored when `control` is set. Defaults to `false`."
+      },
+      {
+        "name": "incrementLabel",
+        "type": "string",
+        "description": "Accessible name for the + button. Defaults to `'Increment'`."
+      },
+      {
+        "name": "decrementLabel",
+        "type": "string",
+        "description": "Accessible name for the − button. Defaults to `'Decrement'`."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "valueChange",
+        "type": "number",
+        "description": "Emits on each user change in lightweight mode (completes `[(value)]`)."
+      }
+    ],
     "methods": []
   },
   "RhombusRadioGroupComponent": {

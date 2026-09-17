@@ -110,6 +110,12 @@ export const appRoutes: Route[] = [
           import('./pages/number-input/number-input-page.component'),
       },
       {
+        path: 'quantity-input',
+        title: 'Quantity Input',
+        loadComponent: () =>
+          import('./pages/quantity-input/quantity-input-page.component'),
+      },
+      {
         path: 'tag-input',
         title: 'Tag Input',
         loadComponent: () =>

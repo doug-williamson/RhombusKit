@@ -44,7 +44,7 @@ import { ExampleComponent } from '../../shared/example.component';
           <h2>Example</h2>
           <app-example [code]="usage">
             <rhombus-number-input
-              label="Quantity"
+              label="Seats"
               [min]="0"
               [max]="10"
               [(value)]="qty"
@@ -57,7 +57,7 @@ import { ExampleComponent } from '../../shared/example.component';
           <ul>
             <li>
               For a <strong>precise numeric entry</strong> where the exact value
-              matters — quantities, ages, counts, prices.
+              matters — seats, ages, prices, years.
             </li>
             <li>
               When <strong>stepping by a fixed amount</strong> (± buttons, arrow
@@ -76,9 +76,14 @@ import { ExampleComponent } from '../../shared/example.component';
             </li>
             <li>
               For <strong>unbounded numeric text</strong> with no stepper (e.g. a
-              free-form quantity), a plain
+              free-form amount), a plain
               <a routerLink="/components/input">Input</a> with
               <code>type="number"</code> is enough.
+            </li>
+            <li>
+              For a <strong>compact count without form-field chrome</strong> — a
+              cart row, sets and reps — use a
+              <a routerLink="/components/quantity-input">Quantity Input</a>.
             </li>
           </ul>
         </section>
@@ -88,6 +93,7 @@ import { ExampleComponent } from '../../shared/example.component';
           <ul>
             <li><a routerLink="/components/slider">Slider</a> — pick a value along a draggable range.</li>
             <li><a routerLink="/components/input">Input</a> — free-form text (including <code>type="number"</code>).</li>
+            <li><a routerLink="/components/quantity-input">Quantity Input</a> — the same spinbox without the form-field shell.</li>
           </ul>
         </section>
       </div>
@@ -148,7 +154,7 @@ import { ExampleComponent } from '../../shared/example.component';
           <h2>Basic</h2>
           <div class="ni-grid">
             <rhombus-number-input
-              label="Quantity"
+              label="Seats"
               [min]="0"
               [max]="10"
               [(value)]="qty"
@@ -278,19 +284,19 @@ export default class NumberInputPageComponent {
   protected readonly usage = `import { RhombusNumberInputComponent } from '@rhombuskit/core';
 
 @Component({
-  selector: 'app-quantity',
+  selector: 'app-seats',
   imports: [RhombusNumberInputComponent],
   template: \`
     <rhombus-number-input
-      label="Quantity"
+      label="Seats"
       [min]="0"
       [max]="10"
-      [(value)]="qty"
+      [(value)]="seats"
     />
   \`,
 })
-export class QuantityComponent {
-  qty = signal<number | null>(1);
+export class SeatsComponent {
+  seats = signal<number | null>(1);
 }`;
 
   protected readonly qty = signal<number | null>(1);

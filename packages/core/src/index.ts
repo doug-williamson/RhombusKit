@@ -92,11 +92,21 @@ export type {
 
 // Number input — a numeric spinbox: mat-form-field chrome + a bespoke ± / step /
 // clamp / keyboard layer over a native <input type=number> (an implicit ARIA
-// spinbutton). [control]/[(value)] control model via the internal mirrorControl
-// helper; min/max/step/largeStep, clamp-on-blur, and inline ± glyphs. Exposes no
-// new public type (reuses FormFieldAppearance/FormFieldSize). Distinct from Slider
-// (a draggable bounded range) and a plain Input type=number (unbounded free text).
+// spinbutton). [control]/[(value)] control model and the ± / clamp / keyboard
+// behaviour come from the internal createSpinbox core; min/max/step/largeStep,
+// clamp-on-blur, and inline ± glyphs. Exposes no new public type (reuses
+// FormFieldAppearance/FormFieldSize). Distinct from Slider (a draggable bounded
+// range), a plain Input type=number (unbounded free text), and Quantity input
+// (the same spinbox without the form-field shell — a compact count).
 export { RhombusNumberInputComponent } from './lib/number-input/rhombus-number-input.component';
+
+// Quantity input — a compact, chrome-less count: visible inline label · round −
+// button · borderless native <input type=number> (the implicit spinbutton and the
+// single tab stop) · round + button, with role=group on the host. Same numeric
+// core as Number input (createSpinbox), no form-field shell: no floating label,
+// hint, error subscript, prefix or appearance — for labelled entry inside forms
+// use Number input. Exposes no new public type.
+export { RhombusQuantityInputComponent } from './lib/quantity-input/rhombus-quantity-input.component';
 
 export type {
   FormFieldAppearance,
