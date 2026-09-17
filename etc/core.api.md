@@ -543,6 +543,19 @@
   readonly mode: _angular_core.InputSignal<ProgressBarMode>
   readonly value: _angular_core.InputSignal<number>
 
+### RhombusQuantityInputComponent (class)
+  readonly control: _angular_core.InputSignal<FormControl<number>>
+  readonly decrementLabel: _angular_core.InputSignal<string>
+  readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>
+  readonly incrementLabel: _angular_core.InputSignal<string>
+  readonly label: _angular_core.InputSignal<string>
+  readonly largeStep: _angular_core.InputSignal<number>
+  readonly max: _angular_core.InputSignal<number>
+  readonly min: _angular_core.InputSignal<number>
+  readonly step: _angular_core.InputSignal<number>
+  readonly value: _angular_core.ModelSignal<number>
+  readonly valueChange: _angular_core.OutputEmitterRef<number>
+
 ### RhombusRadioGroupComponent (class)
   readonly ariaLabel: _angular_core.InputSignal<string>
   readonly control: _angular_core.InputSignal<FormControl<T>>
